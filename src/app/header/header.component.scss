@@ -1,0 +1,74 @@
+@import "../../styles.scss";
+
+html, body {
+    min-height: 100%;
+}
+
+.container-fluid{
+    height: 100vh;
+    background-color: $principal-color;
+}
+
+.txt-center{
+    text-align: center;
+    
+}
+
+.PrincipalContainer{
+    height: 100%;
+    background-color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin: 0px 0px 10px 10px;}
+
+.background-header{
+    padding: 5px;
+    color: white;
+    background-color: $principal-color;
+}
+
+.tifi-title{
+    width: 100%;
+}
+
+.white-border{
+    border-radius: 10px;
+    padding-top: 5px;
+    border-style: solid;
+    border-color: white;
+    border-width: 1px;
+}
+
+.div-center{
+    align-self: center;
+    width: 400px;
+    height: 100%;
+    margin-top: 8%;
+    align-content: center;
+}
+
+.button-style{
+    width: 30%;
+    background-color: $principal-color;
+    padding: 4px;
+    margin-left: 36%;
+    color: white;
+    margin-top: 5%;
+}
+
+.back-white{
+    padding: 0.5px;
+    border-radius: 20px;
+    color: black;
+    width: 180px;
+    margin-left: 20%;
+    background-color: white;
+}
+.icon-style{
+    width: 20px;
+    margin-right: 15px;
+}
+
+.margin-sides{
+    margin: 5px;
+}

@@ -1,0 +1,238 @@
+@import "../../../styles.scss";
+
+p {
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+.text-table{
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 9px;
+}
+
+
+.text-table2{
+    text-align: center;
+    font-size: 9px;
+}
+
+.checkbox-style{
+    width: 20px;
+}
+
+.border-color{
+    border-color: green;
+}
+
+.style-div{
+    padding: 0px;
+    margin: 0px;
+}
+.calendar-margin{
+    margin-top: 83px;
+    margin-left: 20px;
+}
+
+.calendar-margin2{
+    margin-top: 83px;
+    margin-left: 7px;
+}
+
+.col-size{
+    
+margin-top: 10px;
+text-align: center;
+width: 70px;
+}
+
+.table-data{
+    margin-left: 10px;
+    margin-top: 30px;
+    width: 100%;
+    height: 420px;
+    
+}
+
+.border-radius{
+    border-radius: 20px;
+}
+
+.container-fluid{
+    height: 100vh;
+    padding: 0px;
+    background-color: $principal-color;
+}
+
+.PrincipalContainer{
+    height: 100%;
+    background-color: white;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+::ng-deep .progress{
+    height: 3px;
+}
+
+::ng-deep .table td, .table th{
+    padding: 2px;
+}
+
+.line{
+    width: 100%;
+    height: 5px;
+    background-color: green;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    margin-left: 6px;
+    padding: 5px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgba($color: gray, $alpha: 0.5);
+    border-radius: 10px;
+    height: 120px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $principal-color;
+    border-radius: 10px;
+    height: 120px;
+  }
+
+  .container-time{
+      padding: 3px;
+      padding-left: 3px;
+      margin-left: 30px;
+      width: 100%;
+
+  }
+
+  .container-time2{
+    padding: 3px;
+    padding-left: 3px;
+    width: 100%;
+
+}
+
+.back-gray{
+    
+    background-color: rgb(214, 211, 211);
+}
+
+.back-green{
+    background-color: green;
+}
+  .text-time{
+      font-size: 10px;
+      text-align: center;
+      width: 0px;
+  }
+
+  .center-text{
+      margin-top: 30px;
+      text-align: center;
+  }
+
+  .center-text2{
+    margin-left: 65px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.center-btn{
+    color: white;
+    background-color: $principal-color;
+    margin-left: 100px;
+}
+
+.background-white{
+    background-color: white;
+}
+
+::ng-deep .table-success, .table-success > td, .table-success > th {
+    /* background-color: #c3e6cb; */
+    border-radius: 20px;
+    background-color: white;
+}
+
+::ng-deep .table-warning, .table-warning > td, .table-warning > th {
+    /* background-color: #c3e6cb; */
+
+    border-radius: 20px;
+    background-color: white;
+}
+
+::ng-deep .table-info, .table-info > td, .table-info > th {
+    /* background-color: #c3e6cb; */
+
+    border-radius: 20px;
+    background-color: white;
+}
+
+ ::ng-deep .modal-footer{
+     justify-content: center;
+ }
+
+.center-btn2{
+    color: white;
+    background-color: $principal-color;
+    margin-left: 185px;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .collapsible:hover {
+    background-color: #ccc;
+  }
+  
+  /* Style the collapsible content. Note: hidden by default */
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+  }
+
+  .active{
+      background-color: red;
+  }
+  .title-hour{
+      margin-left:50%;
+  }
+
+  .title-people{
+      margin-top: 40%;
+  }
+
+  .text-center{
+      width: 100%;
+      text-align: center;
+  }
+
+  .font-size{
+      font-size: 11px;
+  }
+
+  .acceptbtn{
+      margin-right: 30%;
+  }

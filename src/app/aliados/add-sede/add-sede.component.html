@@ -1,0 +1,231 @@
+<app-header></app-header>
+<div class="row margin-container ">
+    <div class="col-1">
+        <div class="row justify-content-center">  <img src="assets/icons/back-button.png" height="30px" width="30px" alt=""> </div>
+       
+    </div>
+
+    <div class="col-4 align-items-center">
+        <div class="filter-container  margin">
+            <div class="row">
+                <div class="col-5 align-items-center"> <label>Nombre de la sede</label></div>
+                <div class="col align-items-center"><input [(ngModel)]="sede.name" class="width-defined" type="text"></div>     
+              </div>
+        </div>
+        <div class="filter-container  margin">
+            <div class="row">
+                <div class="col-5"><label>Ubicacion</label></div>
+                <div class="col"><input [(ngModel)]="sede.location" class="width-defined" type="text" ></div>
+              </div>
+
+        </div>
+        <div class="filter-container  margin">
+            <div class="row">
+                <div class="col-5"><label >Direccion</label></div>
+                <div class="col"><input [(ngModel)]="sede.direction" class="width-defined" type="text" ></div>
+              </div>
+
+        </div>
+
+        <div class="filter-container margin">
+                <div class="row">
+                        <div class="col-5"><label >Piso</label> </div>
+                        <div class="col"> <input [(ngModel)]="sede.piso" class="width-defined" type="text"> </div>
+                        
+                    </div>
+        </div>
+
+        <div class="filter-container margin">
+                <div class="row">
+                        <div class="col-5"><label >Local</label> </div>
+                        <div class="col"> <input [(ngModel)]="sede.local" type="text" class="width-defined"> </div>
+                        
+                    </div>
+        </div>
+
+
+        <div class="filter-container margin">
+            <div class="row">
+                    <div class="col-5"><label >Contacto general</label> </div>
+                    <div class="col"> <input [(ngModel)]="sede.contacto" type="text" class="width-defined"> </div>
+                    
+                </div>
+    </div>
+
+    <div class="filter-container margin">
+        <div class="row">
+                <div class="col-5"><label >Cargo</label> </div>
+                <div class="col"> <input [(ngModel)]="sede.cargo" type="text" class="width-defined"> </div>
+                
+            </div>
+    </div>
+
+    <div class="filter-container margin">
+        <div class="row">
+                <div class="col-5"><label >Celular</label> </div>
+                <div class="col"> <input [(ngModel)]="sede.celular" type="text" class="width-defined"> </div>
+                
+            </div>
+    </div>
+
+    <div class="filter-container margin">
+        <div class="row">
+                <div class="col-5"><label >Fijo</label> </div>
+                <div class="col"> <input [(ngModel)]="sede.fijo" type="text" class="width-defined"> </div>
+                
+            </div>
+    </div>
+
+    <div class="filter-container margin">
+        <div class="row">
+                <div class="col-5"><label >Correo</label> </div>
+                <div class="col"> <input [(ngModel)]="sede.correo" type="text" class="width-defined"> </div>
+                
+            </div>
+    </div>
+
+
+        <div class="filter-container margin">
+                <div class="row">
+                        <div class="col-5"><label >Codigo sede</label> </div>
+                        <div class="col">  <input [(ngModel)]="sede.code" class="width-defined" type="text"> </div>
+                        
+                    </div>
+        </div>
+
+    </div>
+
+
+    <div class="col">
+
+            <div class="filter-container margin-top margin">
+                    <div class="row">
+                        <div class="col-3"> <label>Servicios prestados</label> </div>
+                        <div class="col">
+                        <div class="row">
+                            <img src="assets/icons/shop.png" height="30px" width="30px">
+                            <mat-checkbox class="checkbox" ></mat-checkbox>
+                            <img src="assets/icons/calendar.png" height="30px" width="30px">
+                            <mat-checkbox class="checkbox"></mat-checkbox>
+                            <img src="assets/icons/delivery-bike.png" height="30px" width="30px">
+                            <mat-checkbox class="checkbox"></mat-checkbox>
+                        </div>    
+                        </div>  </div>
+                    </div>
+
+                    <div class="filter-container margin-top  margin">
+                            <div class="row">
+                                <div class="col-3"> <label>Costo por reserva</label> </div>
+                                <div class="col">
+                                <div class="row">
+                                    <img src="assets/icons/shop.png" height="30px" width="30px">
+                                    <input  class="reserva" type="text" placeholder="$2500" >
+                                    <img src="assets/icons/calendar.png" height="30px" width="30px">
+                                    <input class="reserva" type="text" placeholder="$2500" >
+                                    <img src="assets/icons/delivery-bike.png" height="30px" width="30px">
+                                    <input class="reserva" type="text" placeholder="$2500" >
+                                </div>    
+                                </div>  </div>
+                            </div>
+        
+                            
+                            <div class="filter-container  margin margin-top">
+                                    <div class="row">
+                                        <div class="col-3"> <label>Servicios prestados</label> </div>
+                                        <div class="col">
+                                        <div class="row margin">
+                                            <img src="assets/icons/parking.png" height="25px" width="25px">
+                                            <label class="servicio">Parqueadero</label>
+                                            <mat-checkbox class="checkbox"></mat-checkbox>
+                                            <img src="assets/icons/cocktail.png" height="25px" width="25px">
+                                            <label class="servicio">Barra de tragos</label>
+                                            <mat-checkbox class="checkbox"></mat-checkbox>
+                                            <img src="assets/icons/wi-fi-zone.png" height="25px" width="25px">
+                                            <label class="servicio">Wifi</label>
+                                            <mat-checkbox class="checkbox"></mat-checkbox>
+                                            <img src="assets/icons/people-table.png" height="25px" width="25px">
+                                            <label class="servicio">Mesa exterior</label>
+                                            <mat-checkbox class="checkbox"></mat-checkbox>
+
+                                        </div> 
+                                        
+                                        <div class="row margin">
+                                                <img src="assets/icons/discapacity.png" height="25px" width="25px">
+                                                <label class="servicio">Discapacitados</label>
+                                                <mat-checkbox class="checkbox"></mat-checkbox>
+                                                <img src="assets/icons/dance.png" height="25px" width="25px">
+                                                <label class="servicio">Show</label>
+                                                <mat-checkbox class="checkbox"></mat-checkbox>
+                                                <img src="assets/icons/no-smoking.png" height="25px" width="25px">
+                                                <label class="servicio">Zona fumador</label>
+                                                <mat-checkbox class="checkbox"></mat-checkbox>
+                                                <img src="assets/icons/braille.png" height="25px" width="25px">
+                                                <label class="servicio">Carta braile</label>
+                                                <mat-checkbox class="checkbox"></mat-checkbox>
+    
+                                            </div> 
+
+                                        
+                                        </div>  </div>
+                                    </div>
+
+                    
+                                    <div class="filter-container  margin">
+                                            <div class="row">
+                                                <div class="col-3"> <label>Tiempo promedio de entrega</label> </div>
+                                                <div class="col align-items-center">
+                                                <div class="row align-items-center">
+                                                    <input [(ngModel)]="sede.time" class="reserva" type="number" placeholder="45" >
+                                                    <label class="servicio" >Minutos</label>
+                                                </div>    
+                                                </div>  </div>
+                                            </div>
+
+
+                                
+        <div class="filter-container  margin-top">
+                <div class="row">
+                        <div class="col-3"><label >Contacto sede</label> </div>
+                        <div class="col"> <input [(ngModel)]="sede.contactoSede" type="text" class="width-defined"> </div>
+                        
+                    </div>
+        </div>
+    
+        <div class="filter-container margin margin-top">
+            <div class="row">
+                    <div class="col-3"><label >Cargo</label> </div>
+                    <div class="col"> <input [(ngModel)]="sede.cargo" type="text" class="width-defined"> </div>
+                    
+                </div>
+        </div>
+    
+        <div class="filter-container margin margin-top">
+            <div class="row">
+                    <div class="col-3"><label >Celular</label> </div>
+                    <div class="col"> <input [(ngModel)]="sede.celularSede" type="text" class="width-defined"> </div>
+                     
+                </div>
+        </div>
+    
+        <div class="filter-container margin">
+            <div class="row">
+                    <div class="col-3"><label >Fijo</label> </div>
+                    <div class="col"> <input [(ngModel)]="sede.fijoSede" type="text" class="width-defined"> </div>
+                    
+                </div>
+        </div>
+    
+        <div class="filter-container margin">
+            <div class="row">
+                    <div class="col-3"><label >Correo</label> </div>
+                    <div class="col"> <input [(ngModel)]="sede.correoSede" type="text" class="width-defined"> </div>
+                    
+                </div>
+        </div>
+
+
+
+                      </div>
+                      
+        
+    </div>
