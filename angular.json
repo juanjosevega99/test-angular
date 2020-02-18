@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "TifiApp"
+  "defaultProject": "TifiApp",
+  "cli": {
+    "analytics": "e3a7ead7-2a54-4244-8acf-bc214ca9fcb5"
+  }
 }

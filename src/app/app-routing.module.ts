@@ -11,10 +11,12 @@ import { AddSedeComponent } from './aliados/add-sede/add-sede.component';
 import { MenuAliadoComponent } from './aliados/menu-aliado/menu-aliado.component';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component'
+import { LoginComponent } from './shared/login/login.component';
 
 const routes: Routes = [
+  {path:"log", component:LoginComponent},
   {path:"login", component:LoginPageComponent},
-  {path:"", redirectTo:"/login", pathMatch:'full'},
+  {path:"", redirectTo:"/log", pathMatch:'full'},
   {path:"recovery_password", component: PasswordRecoveryComponent},
   {path:"reset_password", component: NewPasswordComponent},
   {path:"principal", component:PrincipalPageComponent},

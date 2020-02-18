@@ -1,0 +1,33 @@
+
+.links-tifi{
+    color: #afafaf;
+    font-size: 0.8rem;
+}
+
+.text-with-out{
+    margin-bottom: 0;
+}
+
+.margin-padding-tifi{
+    margin-top: 3rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+}
+
+.border-tifi {
+    border-color: #572483;
+    border: solid #572483;
+}
+
+.color-tifi{
+    color: #572483;
+}
+
+.btn-outline-primary:hover {
+    background-color:#fff;
+    border-color: #572483;
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show > .btn-outline-primary.dropdown-toggle {
+    background-color:#fff;
+    border-color:#572483;
+}
