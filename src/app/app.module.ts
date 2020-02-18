@@ -27,7 +27,8 @@ import { MenuAliadoComponent } from './aliados/menu-aliado/menu-aliado.component
 import { NgImageSliderModule } from 'ng-image-slider';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component';
-import { MatRadioModule } from '@angular/material/radio'
+import { MatRadioModule } from '@angular/material/radio';
+import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component'
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { MatRadioModule } from '@angular/material/radio'
     AddSedeComponent,
     MenuAliadoComponent,
     ListSedesComponent,
-    AddMenuComponent
+    AddMenuComponent,
+    AppNavbarComponent
   ],
   imports: [
     HttpClientModule,
