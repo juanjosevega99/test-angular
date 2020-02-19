@@ -28,7 +28,9 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
-import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component'
+import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
+import { ComponentsComponent } from './modules/options/components/components.component';
+import { OptionsComponent } from './modules/options/components/options/options.component'
 
 
 @NgModule({
@@ -46,7 +48,9 @@ import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component'
     MenuAliadoComponent,
     ListSedesComponent,
     AddMenuComponent,
-    AppNavbarComponent
+    AppNavbarComponent,
+    ComponentsComponent,
+    OptionsComponent
   ],
   imports: [
     HttpClientModule,
