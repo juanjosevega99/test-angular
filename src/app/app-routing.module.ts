@@ -16,7 +16,7 @@ import { LoginComponent } from './shared/login/login.component';
 const routes: Routes = [
   {path:"log", component:LoginComponent},
   {path:"login", component:LoginPageComponent},
-  {path:"", redirectTo:"/log", pathMatch:'full'},
+  {path:"", redirectTo:"/login", pathMatch:'full'},
   {path:"recovery_password", component: PasswordRecoveryComponent},
   {path:"reset_password", component: NewPasswordComponent},
   {path:"principal", component:PrincipalPageComponent},
