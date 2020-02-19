@@ -12,10 +12,12 @@ import { MenuAliadoComponent } from './aliados/menu-aliado/menu-aliado.component
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component'
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
+import { OptionsComponent } from './modules/options/components/options/options.component';
 
 const routes: Routes = [
   {path:"login", component:LoginPageComponent},
   {path:"navbar", component:AppNavbarComponent},
+  {path:"options", component:OptionsComponent},
   {path:"", redirectTo:"/login", pathMatch:'full'},
   {path:"recovery_password", component: PasswordRecoveryComponent},
   {path:"reset_password", component: NewPasswordComponent},
