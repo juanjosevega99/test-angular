@@ -28,7 +28,8 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
-import { LoginComponent } from './shared/login/login.component'
+import { LoginComponent } from './shared/login/login.component';
+import { ClockComponent } from './shared/clock/clock.component'
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { LoginComponent } from './shared/login/login.component'
     MenuAliadoComponent,
     ListSedesComponent,
     AddMenuComponent,
-    LoginComponent
+    LoginComponent,
+    ClockComponent
   ],
   imports: [
     HttpClientModule,
