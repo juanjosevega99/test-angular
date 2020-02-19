@@ -10,8 +10,7 @@ export class ClockComponent implements OnInit {
   date:String;
   time:String;
   today:Date;
-  year:number = new Date().getFullYear();
-
+  
   constructor() { }
 
   ngOnInit() {

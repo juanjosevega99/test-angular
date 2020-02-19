@@ -34,6 +34,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { ClockComponent } from './shared/clock/clock.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
+import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { SideBarComponent } from './shared/side-bar/side-bar.component';
     LoginComponent,
     ClockComponent,
     LoginFormComponent,
-    SideBarComponent
+    SideBarComponent,
+    LoginForgetComponent
   ],
   imports: [
     HttpClientModule,
