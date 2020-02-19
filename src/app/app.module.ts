@@ -30,6 +30,7 @@ import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { OptionsComponent } from './modules/options/components/options/options.component'
+import { SideBarComponent } from './shared/side-bar/side-bar.component'
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { OptionsComponent } from './modules/options/components/options/options.c
     ListSedesComponent,
     AddMenuComponent,
     AppNavbarComponent,
-    OptionsComponent
+    OptionsComponent,
+    SideBarComponent
   ],
   imports: [
     HttpClientModule,

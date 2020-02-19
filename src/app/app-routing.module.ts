@@ -12,6 +12,8 @@ import { MenuAliadoComponent } from './aliados/menu-aliado/menu-aliado.component
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component'
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
+import { SideBarComponent } from './shared/side-bar/side-bar.component';
+
 
 const routes: Routes = [
   {path:"login", component:LoginPageComponent},
@@ -26,7 +28,9 @@ const routes: Routes = [
   {path:"add-sede", component:AddSedeComponent},
   {path:"menu-aliado",component:MenuAliadoComponent },
   {path:"sedes",component:ListSedesComponent },
-  {path:"add-menu", component:AddMenuComponent}
+  {path:"add-menu", component:AddMenuComponent},
+  {path:"side-bar", component:SideBarComponent}
+
 ];
 
 @NgModule({
