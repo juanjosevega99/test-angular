@@ -1,0 +1,28 @@
+
+.links-tifi{
+    color: #afafaf;
+    font-size: 0.8rem;
+}
+
+.border-tifi {
+    border-color: #572483;
+    border: solid #572483;
+}
+
+.color-tifi{
+    color: #572483;
+}
+
+.btn-outline-primary:hover {
+    background-color:#fff;
+    border-color: #572483;
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show > .btn-outline-primary.dropdown-toggle {
+    background-color:#fff;
+    border-color:#572483;
+}
+
+.tifi-icon{
+    width: 100%;
+    height: 100%;
+}

@@ -30,6 +30,9 @@ import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { OptionsComponent } from './modules/options/components/options/options.component'
+import { LoginComponent } from './shared/login/login.component';
+import { ClockComponent } from './shared/clock/clock.component';
+import { LoginFormComponent } from './shared/login-form/login-form.component';
 
 
 @NgModule({
@@ -48,7 +51,10 @@ import { OptionsComponent } from './modules/options/components/options/options.c
     ListSedesComponent,
     AddMenuComponent,
     AppNavbarComponent,
-    OptionsComponent
+    OptionsComponent,
+    LoginComponent,
+    ClockComponent,
+    LoginFormComponent
   ],
   imports: [
     HttpClientModule,
