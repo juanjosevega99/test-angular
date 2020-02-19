@@ -29,7 +29,8 @@ import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { LoginComponent } from './shared/login/login.component';
-import { ClockComponent } from './shared/clock/clock.component'
+import { ClockComponent } from './shared/clock/clock.component';
+import { LoginFormComponent } from './shared/login-form/login-form.component'
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { ClockComponent } from './shared/clock/clock.component'
     ListSedesComponent,
     AddMenuComponent,
     LoginComponent,
-    ClockComponent
+    ClockComponent,
+    LoginFormComponent
   ],
   imports: [
     HttpClientModule,
