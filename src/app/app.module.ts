@@ -28,7 +28,6 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
-import { SideBarComponent } from './shared/side-bar/side-bar.component'
 
 
 @NgModule({
@@ -46,7 +45,6 @@ import { SideBarComponent } from './shared/side-bar/side-bar.component'
     MenuAliadoComponent,
     ListSedesComponent,
     AddMenuComponent,
-    SideBarComponent
   ],
   imports: [
     HttpClientModule,
