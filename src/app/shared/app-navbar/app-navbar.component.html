@@ -1,33 +1,33 @@
+<nav class="navbar navbar-light" style="background-color: #572483">
 
+    <section class="d-flex align-items-center  navbar-brand col-6" href="#">
 
-        <nav class="navbar navbar-light" style="background-color: #572483">
-      
-            <section class="d-flex align-items-center  navbar-brand col-6" href="#">
-                
-                <img src="assets/img/logotifi.png" class="img-logotifi">
+        <img src="assets/img/logotifi.png" class="img-logotifi">
 
-                <button class="btn btn-link" type="button">  
-                        <i style="color: white; font-size: 30px;" class="fas fa-bars"></i>
-                </button>
-        
-                <div href="#" class=" img-round1">
-                    <img class="img-allyLogo " src='https://www.stickpng.com/assets/images/58429977a6515b1e0ad75ade.png'>
-                        <div  href="#" class=" notification">
-                            <span class="badge">2</span>
-                         </div>
-                </div>
-                
-                
-                <div>
-                    <p class="text-with-out textLyrics1 ">KFC</p>
-                    <p class="text-with-out textLyrics2 ">Sede: galerías</p>
-                </div>
-            </section> 
+          
+        <!-- <button class="btn btn-link" type="button">
+            <i style="color: white; font-size: 30px;" class="fas fa-bars"></i>
+        </button> -->
+        <app-side-bar></app-side-bar>
 
-            <section class="col-3 d-flex justify-content-start">
-             <div class=' align-date ' aria-controls="navbarSupportedContent" aria-expanded="false">
-                     <p class="text-with-out textLyrics1">{{time}}</p>
-                     <p class="text-with-out textLyrics2">{{date}}</p>
+        <div href="#" class=" img-round1">
+            <img class="img-allyLogo " src='https://www.stickpng.com/assets/images/58429977a6515b1e0ad75ade.png'>
+            <div href="#" class=" notification">
+                <span class="badge">2</span>
             </div>
-        </section>
-        </nav>
+        </div>
+
+
+        <div>
+            <p class="text-with-out textLyrics1 ">KFC</p>
+            <p class="text-with-out textLyrics2 ">Sede: galerías</p>
+        </div>
+    </section>
+
+    <section class="col-3 d-flex justify-content-start">
+        <div class=' align-date ' aria-controls="navbarSupportedContent" aria-expanded="false">
+            <p class="text-with-out textLyrics1">{{time}}</p>
+            <p class="text-with-out textLyrics2">{{date}}</p>
+        </div>
+    </section>
+</nav>

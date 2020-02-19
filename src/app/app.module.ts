@@ -33,6 +33,7 @@ import { OptionsComponent } from './modules/options/components/options/options.c
 import { LoginComponent } from './shared/login/login.component';
 import { ClockComponent } from './shared/clock/clock.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
+import { SideBarComponent } from './shared/side-bar/side-bar.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { LoginFormComponent } from './shared/login-form/login-form.component';
     OptionsComponent,
     LoginComponent,
     ClockComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    SideBarComponent
   ],
   imports: [
     HttpClientModule,

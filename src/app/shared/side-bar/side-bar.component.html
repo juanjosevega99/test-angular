@@ -1,0 +1,150 @@
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+
+        <div id="dismiss">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+
+        <div class="sidebar-header ">
+            <img src="https://www.stickpng.com/assets/images/58429977a6515b1e0ad75ade.png" alt="..."
+                class="rounded-circle img">
+            <div class="d-flex mt-2 flex-column">
+                <p class="text-center text-Margin-botton textStablishment"> {{Stablishment}} </p>
+                <p class="text-Margin-botton">Sede: {{headquarters}} </p>
+            </div>
+            <button type="button" class="btn btn-link colorBackGround" style="margin-top: 15px;">Editar</button>
+        </div>
+        <ul class="list-unstyled components" style="text-align: center; width: 100%; ">
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
+                <a href="#" class="notification" style="margin-right: 40px;">
+                    <i class="fas fa-envelope icon-style icon"></i>
+                    <span class="badge">3</span>
+                </a>
+                <a href="#" class="notification">
+                    <i class="fas fa-bell icon"></i>
+                    <span class="badge">3</span>
+                </a>
+            </div>
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
+                    <div class="col-11 ">
+                        Home
+                    </div>
+                    <div class="col-1 iconArrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="#">Home 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#about" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
+                    <div class="col-11 ">
+                        About
+                    </div>
+                    <div class="col-1 iconArrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse list-unstyled" id="about">
+                    <li>
+                        <a href="#">Page 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
+                    <div class="col-11">
+                        Pages
+                    </div>
+                    <div class="col-1 iconArrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="#">Page 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#portafolio" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
+                    <div class="col-11">
+                        Portfolio
+                    </div>
+                    <div class="col-1 iconArrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse list-unstyled" id="portafolio">
+                    <li>
+                        <a href="#">Home 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#contact" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
+                    <div class="col-11">
+                        Contact
+                    </div>
+                    <div class="col-1 iconArrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+                <ul class="collapse list-unstyled" id="contact">
+                    <li>
+                        <a href="#">Home 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 3</a>
+                    </li>
+                </ul>
+            </li>
+            <a href="#" aria-expanded="false">
+                <button type="button" class="btn btn-link btnLougOut colorBackGround">Cerrar Sesión</button>
+            </a>
+
+        </ul>
+
+    </nav>
+
+    <!-- Page Content -->
+
+    <button type="button" id="sidebarCollapse" class="btn btn-light">
+        <i style="color: white; font-size: 30px;" class="fas fa-bars"></i>
+    </button>
+
+    <!-- Dark Overlay element -->
+    <div class="overlay"></div>
+</div>
