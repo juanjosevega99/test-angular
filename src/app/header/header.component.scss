@@ -1,37 +1,37 @@
 @import "../../styles.scss";
-
-html, body {
+html,
+body {
     min-height: 100%;
 }
 
-.container-fluid{
+.container-fluid {
     height: 100vh;
     background-color: $principal-color;
 }
 
-.txt-center{
+.txt-center {
     text-align: center;
-    
 }
 
-.PrincipalContainer{
+.PrincipalContainer {
     height: 100%;
     background-color: white;
     margin-left: 5px;
     margin-right: 5px;
-    margin: 0px 0px 10px 10px;}
+    margin: 0px 0px 10px 10px;
+}
 
-.background-header{
+.background-header {
     padding: 5px;
     color: white;
     background-color: $principal-color;
 }
 
-.tifi-title{
+.tifi-title {
     width: 100%;
 }
 
-.white-border{
+.white-border {
     border-radius: 10px;
     padding-top: 5px;
     border-style: solid;
@@ -39,7 +39,7 @@ html, body {
     border-width: 1px;
 }
 
-.div-center{
+.div-center {
     align-self: center;
     width: 400px;
     height: 100%;
@@ -47,7 +47,7 @@ html, body {
     align-content: center;
 }
 
-.button-style{
+.button-style {
     width: 30%;
     background-color: $principal-color;
     padding: 4px;
@@ -56,7 +56,7 @@ html, body {
     margin-top: 5%;
 }
 
-.back-white{
+.back-white {
     padding: 0.5px;
     border-radius: 20px;
     color: black;
@@ -64,11 +64,12 @@ html, body {
     margin-left: 20%;
     background-color: white;
 }
-.icon-style{
+
+.icon-style {
     width: 20px;
     margin-right: 15px;
 }
 
-.margin-sides{
+.margin-sides {
     margin: 5px;
 }
