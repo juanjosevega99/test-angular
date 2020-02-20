@@ -14,6 +14,7 @@ import { AddMenuComponent } from './add-menu/add-menu.component'
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { LoginComponent } from './shared/login/login.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
+import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
 
 
 const routes: Routes = [
@@ -31,7 +32,8 @@ const routes: Routes = [
   {path:"menu-aliado",component:MenuAliadoComponent },
   {path:"sedes",component:ListSedesComponent },
   {path:"add-menu", component:AddMenuComponent},
-  {path:"side-bar", component:SideBarComponent}
+  {path:"side-bar", component:SideBarComponent},
+  {path:"log/forget", component:LoginForgetComponent},
 
 ];
 

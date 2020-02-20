@@ -35,6 +35,7 @@ import { ClockComponent } from './shared/clock/clock.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
+import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { LoginForgetComponent } from './shared/login-forget/login-forget.compone
     ClockComponent,
     LoginFormComponent,
     SideBarComponent,
-    LoginForgetComponent
+    LoginForgetComponent,
+    ResestPasswordComponent
   ],
   imports: [
     HttpClientModule,
