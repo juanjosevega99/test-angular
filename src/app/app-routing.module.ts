@@ -11,9 +11,15 @@ import { AddSedeComponent } from './aliados/add-sede/add-sede.component';
 import { MenuAliadoComponent } from './aliados/menu-aliado/menu-aliado.component';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component'
+import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
+import { LoginComponent } from './shared/login/login.component';
+import { SideBarComponent } from './shared/side-bar/side-bar.component';
+
 
 const routes: Routes = [
+  {path:"log", component:LoginComponent},
   {path:"login", component:LoginPageComponent},
+  {path:"navbar", component:AppNavbarComponent},
   {path:"", redirectTo:"/login", pathMatch:'full'},
   {path:"recovery_password", component: PasswordRecoveryComponent},
   {path:"reset_password", component: NewPasswordComponent},
@@ -24,7 +30,9 @@ const routes: Routes = [
   {path:"add-sede", component:AddSedeComponent},
   {path:"menu-aliado",component:MenuAliadoComponent },
   {path:"sedes",component:ListSedesComponent },
-  {path:"add-menu", component:AddMenuComponent}
+  {path:"add-menu", component:AddMenuComponent},
+  {path:"side-bar", component:SideBarComponent}
+
 ];
 
 @NgModule({
