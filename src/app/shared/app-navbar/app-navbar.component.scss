@@ -1,8 +1,8 @@
 .img-round1 {
     width: 50px;
     height: 50px;
-    border: 2px solid white;
-    border-radius: 45px;
+    border: 0.07rem solid white;
+    border-radius:2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,16 +11,16 @@
 }
 
 .img-allyLogo {
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
     border-radius: 40px;
 }
 
 .img-logotifi {
     width: 105px;
     height: 50px;
-    margin-left: 100px;
-    margin-right: 15px;
+    margin-left: 20%;
+    margin-right: 5%;
 }
 
 .textLyrics1 {
@@ -34,7 +34,7 @@
 }
 
 .text-with-out {
-    margin-bottom: 0px;
+    margin-bottom: 0rem;
 }
 
 .align-date {
@@ -52,8 +52,8 @@
   
   .notification .badge {
     position: absolute;
-    bottom: -25px;
-    right: -10px;
+    bottom: -1.6rem;
+    right: -0.1rem;
     padding: 2px 5px;
     border-radius: 50%;
     background:#00ffcc;

@@ -10,7 +10,7 @@ export class SideBarComponent implements OnInit {
   
   Stablishment:String="KFC"; 
   headquarters:String ="Galerías";
-
+  
   constructor() { }
 
   ngOnInit(): void {
