@@ -1,205 +1,530 @@
-<ngx-spinner
-bdOpacity = 0.6
-bdColor = "rgba(255,255,255,0.6)"
-size = "medium"
-color = "rgb(207,44,126)"
-type = "ball-atom"
-[fullScreen] = "true"
->
+<ngx-spinner bdOpacity=0.6 bdColor="rgba(255,255,255,0.6)" size="medium" color="rgb(207,44,126)" type="ball-atom"
+  [fullScreen]="true">
 </ngx-spinner>
 <div class="container-fluid">
-    <div class="PrincipalContainer">
-<app-header></app-header>
-<div class="row">
-<div class="col-7 col-md-7">
+  <div class="PrincipalContainer">
+    <app-app-navbar></app-app-navbar>
+    <div class="row">
+      <div class="col-7 col-md-7">
 
-<table class="table table-bordered text-table">
-    <thead >
-      <tr class="border-radius">
-        <th class="align-middle" scope="col"><p class="col-size">Código de pedido</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Cliente</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Modo de entrega</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Valor pedido</p></th>
-        <th class="align-middle" scope="col"><p class="col-size">Fecha y hora que reservo</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Valor y hora de entrega</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Cronometro</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Estado pedido</p> </th>
-        <th class="align-middle" scope="col"><p class="col-size">Entregado?</p> </th>
-    </tr>
-    </thead>
-  </table>
-<div class="table-data overflow-auto" >
-  <div class="style-div" *ngFor="let item of pedidos">
-    <p class="heigth-bar"><ngb-progressbar  [type]="item.color" [value]="item.val"></ngb-progressbar></p>
-    <table (click)="item.isShow = !item.isShow" class="table table-bordered text-table2 ">
-      <thead  >
-        <tr *ngIf="item.type == 'llevalo'" class="border-radius border-color table-success">
-          <th class="align-middle" scope="col"><p class="col-size"> {{item.codPedido}}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"> {{item.cliente}}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"> {{item.modEntrega}}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size">$ {{item.valPedido}}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"> {{ item.dateReserva | date:'dd/MM/yyyy' }}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"> {{item.dateEntrega | date:'dd/MM/yyyy' }}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"> {{item.cronometro}} Min</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"> {{item.statePedido}}</p></th>
-          <th class="align-middle" scope="col"><p class="col-size"><input  (click)="openCheckbox(content3,item)" *ngIf ="item.val===100"  class="checkbox-style" type="checkbox" value=""><input *ngIf ="item.val!=100"  disabled class="checkbox-style" type="checkbox" value=""></p></th>
-      </tr>
-
-      <tr *ngIf="item.type == 'reservalo'" class="border-radius border-color table-warning">
-        <th class="align-middle" scope="col"><p class="col-size"> {{item.codPedido}}</p></th>
-        <th class="align-middle" scope="col"><p class="col-size"> {{item.cliente}}</p></th>
-        <th class="align-middle" scope="col"><p class="col-size"> {{item.modEntrega}}</p></th>
-        <th class="align-middle" scope="col"><p class="col-size">$ {{item.valPedido}}</p><img src="assets/icons/people-table.png" height="20px" width="20px"></th>
-        <th class="align-middle" scope="col"><p class="col-size"> {{ item.dateReserva | date:'dd/MM/yyyy' }}</p></th>
-        <th class="align-middle" scope="col"><p class="col-size"> {{item.dateEntrega | date:'dd/MM/yyyy' }}</p></th>
-        <th class="align-middle" scope="col"><p class="col-size"> {{item.cronometro}} Min</p></th>
-        <th class="align-middle" scope="col"><p class="col-size"> {{item.statePedido}}</p></th>
-        <th class="align-middle" scope="col"><p class="col-size"><input (click)="openCheckbox(content3,item)" *ngIf ="item.val===100"  class="checkbox-style" type="checkbox" value=""><input  *ngIf ="item.val!=100" disabled class="checkbox-style" type="checkbox" value=""></p></th>
-    </tr>
-
-    <tr  *ngIf="item.type == 'pidelo'" class="border-radius border-color table-info">
-      <th class="align-middle" scope="col"><p class="col-size"> {{item.codPedido}}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"> {{item.cliente}}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"> {{item.modEntrega}}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size">$ {{item.valPedido}}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"> {{ item.dateReserva | date:'dd/MM/yyyy' }}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"> {{item.dateEntrega | date:'dd/MM/yyyy' }}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"> {{item.cronometro}} Min</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"> {{item.statePedido}}</p></th>
-      <th class="align-middle" scope="col"><p class="col-size"><input (click)="openCheckbox(content3,item)" *ngIf ="item.val===100"  class="checkbox-style" type="checkbox" value=""><input *ngIf ="item.val!=100" disabled  class="checkbox-style" type="checkbox" value=""></p></th>
-  </tr>
-      </thead>
-    </table>
-
-    <!-- empieza tabla de detalle -->
-
-    <table *ngIf="item.isShow"  class="table table-striped font-size">
-      <thead>
-        <tr>
-          <th scope="col"><p class="table-info">Cantidad</p></th>
-          <th scope="col"><p class="table-info">Nombre del plato</p></th>
-          <th scope="col"><p class="table-info">Detalle del plato</p></th>
-          <th scope="col"><p class="table-info">Tiempo preparación</p></th>
-          <th scope="col"><p class="table-info">Valor</p></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let element of item.items">
-          <td>{{element.amount}}</td>
-          <td>{{element.name}}</td>
-          <td>{{element.detail}}</td>
-          <td>{{element.time}}</td>
-          <td>{{element.price}}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- finaliza table de detalle -->
-</div>
-</div>
-</div>
-<div class="col-5 col-md-5">
-
-  <div class="row">
-    
-  <div class="calendar-margin">
-      <ng-template #t let-date let-currentMonth="currentMonth" 
-      let-selected="selected" let-disabled="disabled"
-      let-focused="focused"
-      let-currentMonth="currentMonth" let-currentYear="currentYear"
-      >
-          <p  [ngStyle]="{ 'color': reservacionesFiltered.includes(date.day+'/'+date.month+'/'+date.year)? 'rgb(63,247,4)': 'rgb(0,0,0)'}" [class.bg-info]="selected" style=" text-align: center; width:2rem; height: 2rem; font-weight: 500;">{{date.day}}</p>
-        </ng-template>
-      <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)" (navigate)="date = $event.next"></ngb-datepicker>
-      <p class="center-text">MESA</p>
-      <table class="table table-borderless">
-          <tbody>
-            <tr>
-              <td id="1"><div  (click)="onTableSelect(1,'1')" [ngStyle]="{ 'background-color': tables.includes(1)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  class="border  container-time2"><p class="text-time">1</p></div></td>
-              <td id="2"><div (click)="onTableSelect(2,'2')" [ngStyle]="{ 'background-color': tables.includes(2)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time2"><p class="text-time">2</p></div></td>
-              <td id="3"><div (click)="onTableSelect(3,'3')" [ngStyle]="{ 'background-color': tables.includes(3)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border container-time2"><p class="text-time">3</p></div></td>
-              <td id="4"><div (click)="onTableSelect(4,'4')" [ngStyle]="{ 'background-color': tables.includes(4)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border container-time2"><p class="text-time">4</p></div></td>
-              <td id="5"><div (click)="onTableSelect(5,'5')" [ngStyle]="{ 'background-color': tables.includes(5)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time2"><p class="text-time">5</p></div></td>
+        <table class="table table-bordered text-table">
+          <thead>
+            <tr class="border-radius">
+              <th class="align-middle" scope="col">
+                <p class="col-size">Código de pedido</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Cliente</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Modo de entrega</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Valor pedido</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Fecha y hora que reservo</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Valor y hora de entrega</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Cronometro</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Estado pedido</p>
+              </th>
+              <th class="align-middle" scope="col">
+                <p class="col-size">Entregado?</p>
+              </th>
             </tr>
-            <tr>
-                <td id="6"><div (click)="onTableSelect(6,'6')" [ngStyle]="{ 'background-color': tables.includes(6)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time2"><p class="text-time">6</p></div></td>
-                <td id="7"><div (click)="onTableSelect(7,'7')" [ngStyle]="{ 'background-color': tables.includes(7)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border container-time2"><p class="text-time">7</p></div></td>
-                <td id="8"><div (click)="onTableSelect(8,'8')" [ngStyle]="{ 'background-color': tables.includes(8)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time2"><p class="text-time">8</p></div></td>
-                <td id="9"><div (click)="onTableSelect(9,'9')" [ngStyle]="{ 'background-color': tables.includes(9)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time2"><p class="text-time">9</p></div></td>
-
-                <td id="10"><div (click)="onTableSelect(10,'10')" [ngStyle]="{ 'background-color': tables.includes(10)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time2"><p class="text-time">10</p></div></td>
-            </tr>
-          </tbody>
+          </thead>
         </table>
-    </div>
+        <div class="table-data overflow-auto">
+          <div class="style-div" *ngFor="let item of pedidos">
+            <p class="heigth-bar">
+              <ngb-progressbar [type]="item.color" [value]="item.val"></ngb-progressbar>
+            </p>
+            <table (click)="item.isShow = !item.isShow" class="table table-bordered text-table2 ">
+              <thead>
+                <tr *ngIf="item.type == 'llevalo'" class="border-radius border-color table-success">
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.codPedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.cliente}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.modEntrega}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size">$ {{item.valPedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{ item.dateReserva | date:'dd/MM/yyyy' }}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.dateEntrega | date:'dd/MM/yyyy' }}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.cronometro}} Min</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.statePedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"><input (click)="openCheckbox(content3,item)" *ngIf="item.val===100"
+                        class="checkbox-style" type="checkbox" value=""><input *ngIf="item.val!=100" disabled
+                        class="checkbox-style" type="checkbox" value=""></p>
+                  </th>
+                </tr>
 
-  <div class="calendar-margin2">
-    <p class="title-hour">HORA</p>
-      <table  class="table table-borderless">
-          <tbody id="time">
-            <tr>
-              <td id="11" ><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.a)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  class="border  container-time" (click)="onClickTime('12:0','11')"><p class="text-time" >12:00 PM</p></div></td>
-              <td id="12"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.b)?  'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('12:30','12')" class="border  container-time"><p class="text-time">12:30 PM</p></div></td>
-              <td id="13"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.c)?  'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('13:0','13')" class="border  container-time"><p class="text-time">01:00 PM</p></div></td>
-              <td id="14"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.d)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('13:30','14')" class="border  container-time"><p class="text-time">01:30 PM</p></div></td>
-              <td id="15"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.e)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('14:0','15')" class="border  container-time"><p class="text-time">02:00 PM</p></div></td>
-            </tr>
-            <tr>
-                <td id="16"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.f)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('14:30','16')" class="border  container-time"><p class="text-time">02:30 PM</p></div></td>
-                <td id="17"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.g)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('15:0','17')" class="border  container-time"><p class="text-time">03:00 PM</p></div></td>
-                <td id="18"> <div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.h)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('15:30','18')" class="border  container-time"><p class="text-time">03:30 PM</p></div></td>
-                <td id="19"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.i)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('16:0','19')" class="border  container-time"><p class="text-time">04:00 PM</p></div></td>
-                <td id="20"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.j)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('16:30','20')" class="border  container-time"><p class="text-time">04:30 PM</p></div></td>
-            </tr>
-            <tr>
-                <td id="21"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.k)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  class="border  container-time" (click)="onClickTime('17:0','21')"><p class="text-time">05:00 PM</p></div></td>
-                <td id="22"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.l)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('17:30','22')" class="border  container-time"><p class="text-time">05:30 PM</p></div></td>
-                <td id="23"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.m)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('18:0','23')" class="border  container-time"><p class="text-time">06:00 PM</p></div></td>
-                <td id="24"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.n)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('18:30','24')" class="border  container-time"><p  class="text-time">06:30 PM</p></div></td>
-                <td id="25"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.o)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"  (click)="onClickTime('19:0','25')"class="border  container-time"><p class="text-time">07:00 PM</p></div></td>
-  
-            </tr>
-            <tr>
-                <td id="26"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.p)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('19:30','26')" class="border  container-time"><p class="text-time">07:30 PM</p></div></td>
-              <td id="27"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.q)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('20:0','27')" class="border  container-time"><p class="text-time">08:00 PM</p></div></td>
-              <td id="28"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.r)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('20:30','28')" class="border  container-time"><p class="text-time">08:30 PM</p></div></td>
-              <td id="29"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.s)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('21:0','29')" class="border  container-time"><p class="text-time">09:00 PM</p></div></td>
-              <td id="30"><div [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.t)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" (click)="onClickTime('21:30','30')" class="border  container-time"><p class="text-time">09:30 PM</p></div></td>
-            </tr>
-          </tbody>
-        </table>     
-        <p class="center-text2 title-people">PERSONAS</p>
-        <table class="table table-borderless">
-            <tbody>
-              <tr>
-                <td id="31"><div (click)="onPeopleSelect(1,'31')" [ngStyle]="{ 'background-color': people.includes(1)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">1</p></div></td>
-                <td id="32"><div (click)="onPeopleSelect(2,'32')" [ngStyle]="{ 'background-color': people.includes(2)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border container-time"><p class="text-time">2</p></div></td>
-                <td id="33"><div (click)="onPeopleSelect(3,'33')" [ngStyle]="{ 'background-color': people.includes(3)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border container-time"><p class="text-time">3</p></div></td>
-                <td id="34"><div (click)="onPeopleSelect(4,'34')" [ngStyle]="{ 'background-color': people.includes(4)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">4</p></div></td>
-                <td id="35"><div (click)="onPeopleSelect(5,'35')" [ngStyle]="{ 'background-color': people.includes(5)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">5</p></div></td>
-              </tr>
-              <tr>
-                  <td id="36"><div (click)="onPeopleSelect(6,'36')" [ngStyle]="{ 'background-color': people.includes(6)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">6</p></div></td>
-                  <td id="37"><div (click)="onPeopleSelect(7,'37')" [ngStyle]="{ 'background-color': people.includes(7)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">7</p></div></td>
-                  <td id="38"><div (click)="onPeopleSelect(8,'38')" [ngStyle]="{ 'background-color': people.includes(8)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">8</p></div></td>
-                  <td id="39"><div (click)="onPeopleSelect(9,'39')" [ngStyle]="{ 'background-color': people.includes(9)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">9</p></div></td>
-                  <td id="40"><div (click)="onPeopleSelect(10,'40')" [ngStyle]="{ 'background-color': people.includes(10)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}" class="border  container-time"><p class="text-time">10</p></div></td>
-              </tr>
-            </tbody>
-          </table>
-         
+                <tr *ngIf="item.type == 'reservalo'" class="border-radius border-color table-warning">
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.codPedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.cliente}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.modEntrega}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size">$ {{item.valPedido}}</p><img src="assets/icons/people-table.png" height="20px"
+                      width="20px">
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{ item.dateReserva | date:'dd/MM/yyyy' }}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.dateEntrega | date:'dd/MM/yyyy' }}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.cronometro}} Min</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.statePedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"><input (click)="openCheckbox(content3,item)" *ngIf="item.val===100"
+                        class="checkbox-style" type="checkbox" value=""><input *ngIf="item.val!=100" disabled
+                        class="checkbox-style" type="checkbox" value=""></p>
+                  </th>
+                </tr>
+
+                <tr *ngIf="item.type == 'pidelo'" class="border-radius border-color table-info">
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.codPedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.cliente}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.modEntrega}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size">$ {{item.valPedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{ item.dateReserva | date:'dd/MM/yyyy' }}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.dateEntrega | date:'dd/MM/yyyy' }}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.cronometro}} Min</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"> {{item.statePedido}}</p>
+                  </th>
+                  <th class="align-middle" scope="col">
+                    <p class="col-size"><input (click)="openCheckbox(content3,item)" *ngIf="item.val===100"
+                        class="checkbox-style" type="checkbox" value=""><input *ngIf="item.val!=100" disabled
+                        class="checkbox-style" type="checkbox" value=""></p>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+
+            <!-- empieza tabla de detalle -->
+
+            <table *ngIf="item.isShow" class="table table-striped font-size">
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <p class="table-info">Cantidad</p>
+                  </th>
+                  <th scope="col">
+                    <p class="table-info">Nombre del plato</p>
+                  </th>
+                  <th scope="col">
+                    <p class="table-info">Detalle del plato</p>
+                  </th>
+                  <th scope="col">
+                    <p class="table-info">Tiempo preparación</p>
+                  </th>
+                  <th scope="col">
+                    <p class="table-info">Valor</p>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let element of item.items">
+                  <td>{{element.amount}}</td>
+                  <td>{{element.name}}</td>
+                  <td>{{element.detail}}</td>
+                  <td>{{element.time}}</td>
+                  <td>{{element.price}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- finaliza table de detalle -->
+          </div>
+        </div>
+      </div>
+      <div class="col-5 col-md-5">
+
+        <div class="row">
+
+          <div class="calendar-margin">
+            <ng-template #t let-date let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled"
+              let-focused="focused" let-currentMonth="currentMonth" let-currentYear="currentYear">
+              <p [ngStyle]="{ 'color': reservacionesFiltered.includes(date.day+'/'+date.month+'/'+date.year)? 'rgb(63,247,4)': 'rgb(0,0,0)'}"
+                [class.bg-info]="selected" style=" text-align: center; width:2rem; height: 2rem; font-weight: 500;">
+                {{date.day}}</p>
+            </ng-template>
+            <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)"
+              (navigate)="date = $event.next"></ngb-datepicker>
+            <p class="center-text">MESA</p>
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <td id="1">
+                    <div (click)="onTableSelect(1,'1')"
+                      [ngStyle]="{ 'background-color': tables.includes(1)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">1</p>
+                    </div>
+                  </td>
+                  <td id="2">
+                    <div (click)="onTableSelect(2,'2')"
+                      [ngStyle]="{ 'background-color': tables.includes(2)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">2</p>
+                    </div>
+                  </td>
+                  <td id="3">
+                    <div (click)="onTableSelect(3,'3')"
+                      [ngStyle]="{ 'background-color': tables.includes(3)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border container-time2">
+                      <p class="text-time">3</p>
+                    </div>
+                  </td>
+                  <td id="4">
+                    <div (click)="onTableSelect(4,'4')"
+                      [ngStyle]="{ 'background-color': tables.includes(4)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border container-time2">
+                      <p class="text-time">4</p>
+                    </div>
+                  </td>
+                  <td id="5">
+                    <div (click)="onTableSelect(5,'5')"
+                      [ngStyle]="{ 'background-color': tables.includes(5)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">5</p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="6">
+                    <div (click)="onTableSelect(6,'6')"
+                      [ngStyle]="{ 'background-color': tables.includes(6)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">6</p>
+                    </div>
+                  </td>
+                  <td id="7">
+                    <div (click)="onTableSelect(7,'7')"
+                      [ngStyle]="{ 'background-color': tables.includes(7)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border container-time2">
+                      <p class="text-time">7</p>
+                    </div>
+                  </td>
+                  <td id="8">
+                    <div (click)="onTableSelect(8,'8')"
+                      [ngStyle]="{ 'background-color': tables.includes(8)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">8</p>
+                    </div>
+                  </td>
+                  <td id="9">
+                    <div (click)="onTableSelect(9,'9')"
+                      [ngStyle]="{ 'background-color': tables.includes(9)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">9</p>
+                    </div>
+                  </td>
+
+                  <td id="10">
+                    <div (click)="onTableSelect(10,'10')"
+                      [ngStyle]="{ 'background-color': tables.includes(10)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time2">
+                      <p class="text-time">10</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="calendar-margin2">
+            <p class="title-hour">HORA</p>
+            <table class="table table-borderless">
+              <tbody id="time">
+                <tr>
+                  <td id="11">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.a)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time" (click)="onClickTime('12:0','11')">
+                      <p class="text-time">12:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="12">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.b)?  'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('12:30','12')" class="border  container-time">
+                      <p class="text-time">12:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="13">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.c)?  'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('13:0','13')" class="border  container-time">
+                      <p class="text-time">01:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="14">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.d)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('13:30','14')" class="border  container-time">
+                      <p class="text-time">01:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="15">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.e)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('14:0','15')" class="border  container-time">
+                      <p class="text-time">02:00 PM</p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="16">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.f)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('14:30','16')" class="border  container-time">
+                      <p class="text-time">02:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="17">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.g)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('15:0','17')" class="border  container-time">
+                      <p class="text-time">03:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="18">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.h)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('15:30','18')" class="border  container-time">
+                      <p class="text-time">03:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="19">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.i)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('16:0','19')" class="border  container-time">
+                      <p class="text-time">04:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="20">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.j)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('16:30','20')" class="border  container-time">
+                      <p class="text-time">04:30 PM</p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="21">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.k)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time" (click)="onClickTime('17:0','21')">
+                      <p class="text-time">05:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="22">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.l)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('17:30','22')" class="border  container-time">
+                      <p class="text-time">05:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="23">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.m)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('18:0','23')" class="border  container-time">
+                      <p class="text-time">06:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="24">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.n)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('18:30','24')" class="border  container-time">
+                      <p class="text-time">06:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="25">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.o)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('19:0','25')" class="border  container-time">
+                      <p class="text-time">07:00 PM</p>
+                    </div>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td id="26">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.p)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('19:30','26')" class="border  container-time">
+                      <p class="text-time">07:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="27">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.q)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('20:0','27')" class="border  container-time">
+                      <p class="text-time">08:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="28">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.r)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('20:30','28')" class="border  container-time">
+                      <p class="text-time">08:30 PM</p>
+                    </div>
+                  </td>
+                  <td id="29">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.s)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('21:0','29')" class="border  container-time">
+                      <p class="text-time">09:00 PM</p>
+                    </div>
+                  </td>
+                  <td id="30">
+                    <div
+                      [ngStyle]="{ 'background-color': justTimes.includes(hoursObj.t)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      (click)="onClickTime('21:30','30')" class="border  container-time">
+                      <p class="text-time">09:30 PM</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="center-text2 title-people">PERSONAS</p>
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <td id="31">
+                    <div (click)="onPeopleSelect(1,'31')"
+                      [ngStyle]="{ 'background-color': people.includes(1)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">1</p>
+                    </div>
+                  </td>
+                  <td id="32">
+                    <div (click)="onPeopleSelect(2,'32')"
+                      [ngStyle]="{ 'background-color': people.includes(2)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border container-time">
+                      <p class="text-time">2</p>
+                    </div>
+                  </td>
+                  <td id="33">
+                    <div (click)="onPeopleSelect(3,'33')"
+                      [ngStyle]="{ 'background-color': people.includes(3)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border container-time">
+                      <p class="text-time">3</p>
+                    </div>
+                  </td>
+                  <td id="34">
+                    <div (click)="onPeopleSelect(4,'34')"
+                      [ngStyle]="{ 'background-color': people.includes(4)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">4</p>
+                    </div>
+                  </td>
+                  <td id="35">
+                    <div (click)="onPeopleSelect(5,'35')"
+                      [ngStyle]="{ 'background-color': people.includes(5)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">5</p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="36">
+                    <div (click)="onPeopleSelect(6,'36')"
+                      [ngStyle]="{ 'background-color': people.includes(6)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">6</p>
+                    </div>
+                  </td>
+                  <td id="37">
+                    <div (click)="onPeopleSelect(7,'37')"
+                      [ngStyle]="{ 'background-color': people.includes(7)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">7</p>
+                    </div>
+                  </td>
+                  <td id="38">
+                    <div (click)="onPeopleSelect(8,'38')"
+                      [ngStyle]="{ 'background-color': people.includes(8)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">8</p>
+                    </div>
+                  </td>
+                  <td id="39">
+                    <div (click)="onPeopleSelect(9,'39')"
+                      [ngStyle]="{ 'background-color': people.includes(9)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">9</p>
+                    </div>
+                  </td>
+                  <td id="40">
+                    <div (click)="onPeopleSelect(10,'40')"
+                      [ngStyle]="{ 'background-color': people.includes(10)? 'rgb(214, 211, 211)': 'rgb(255,255,255)'}"
+                      class="border  container-time">
+                      <p class="text-time">10</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+        <div class="row">
+          <button (click)="open(content)" type="button" class="btn  center-btn">Liberar</button>
+
+          <button (click)="open(content2)" type="button" class="btn center-btn2 ">Ocupar</button>
+        </div>
+
+      </div>
+
     </div>
   </div>
-  <div class="row">
-      <button (click)="open(content)" type="button" class="btn  center-btn">Liberar</button>
-    
-      <button (click)="open(content2)" type="button" class="btn center-btn2 ">Ocupar</button>
-  </div>
-
-</div>
-
-</div>
-</div>
 </div>
 
 <ng-template #content let-modal>
@@ -209,52 +534,56 @@ type = "ball-atom"
     </button>
   </div>
   <div class="modal-body">
-        <label class="text-center"  for="dateOfBirth">¿Esta seguro que desea <b>Liberar</b> la mesa del dia <br> {{selectedDate}} <br> a las {{formattedTime | date:'HH:mm'}} <br> con la mesa # {{selectedTable}} <br> Disponible para  {{peopleFreeSelected}} personas </label>
- 
+    <label class="text-center" for="dateOfBirth">¿Esta seguro que desea <b>Liberar</b> la mesa del dia <br>
+      {{selectedDate}} <br> a las {{formattedTime | date:'HH:mm'}} <br> con la mesa # {{selectedTable}} <br> Disponible
+      para {{peopleFreeSelected}} personas </label>
+
   </div>
   <div class="modal-footer">
-  <button type="button" class="btn btn-success acceptbtn" (click)="liberar()">Aceptar</button>
-      <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancelar</button>
-      
+    <button type="button" class="btn btn-success acceptbtn" (click)="liberar()">Aceptar</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancelar</button>
+
   </div>
 </ng-template>
 
 
 
 <ng-template #content2 let-modal>
-    <div class="modal-header">
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-          <label class="text-center"  for="dateOfBirth">¿Esta seguro que desea <b>ocupar</b> la mesa del dia <br> {{selectedDate}} <br> a las {{formattedTime | date:'HH:mm'}} <br> con la mesa # {{selectedTable}} <br> Disponible para  {{selectedPeople}} personas </label>
-   
-    </div>
-    <div class="modal-footer">
-    <button type="button" class="btn btn-success acceptbtn" (click)="ocupar()">Aceptar</button>
-        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancelar</button>
-        
-    </div>
-  </ng-template>
-  
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="text-center" for="dateOfBirth">¿Esta seguro que desea <b>ocupar</b> la mesa del dia <br>
+      {{selectedDate}} <br> a las {{formattedTime | date:'HH:mm'}} <br> con la mesa # {{selectedTable}} <br> Disponible
+      para {{selectedPeople}} personas </label>
 
-  <ng-template #content3 let-modal>
-    <div class="modal-header">
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-          <label class="text-center"  for="dateOfBirth">¿Esta seguro que deseas <b>confirmar la entrega del pedido</b> con el codigo {{pedidoSelected.codPedido}}
-             <br> del dia  {{ pedidoSelected.dateReserva | date:'dd/MM/yyyy' }}
-             <br> a las {{pedidoSelected.dateReserva | date:'HH:mm'}}</label>
-   
-    </div>
-    <div class="modal-footer">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success acceptbtn" (click)="ocupar()">Aceptar</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancelar</button>
+
+  </div>
+</ng-template>
+
+
+<ng-template #content3 let-modal>
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="text-center" for="dateOfBirth">¿Esta seguro que deseas <b>confirmar la entrega del pedido</b> con el
+      codigo {{pedidoSelected.codPedido}}
+      <br> del dia {{ pedidoSelected.dateReserva | date:'dd/MM/yyyy' }}
+      <br> a las {{pedidoSelected.dateReserva | date:'HH:mm'}}</label>
+
+  </div>
+  <div class="modal-footer">
     <button type="button" class="btn btn-success acceptbtn" (click)="liberar()">Aceptar</button>
-        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancelar</button>
-        
-    </div>
-  </ng-template>
-  
+    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Cancelar</button>
+
+  </div>
+</ng-template>
