@@ -28,8 +28,6 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import { ListSedesComponent } from './list-sedes/list-sedes.component';
 import { AddMenuComponent } from './add-menu/add-menu.component';
 import { MatRadioModule } from '@angular/material/radio';
-<<<<<<< HEAD
-=======
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { OptionsComponent } from './modules/options/components/options/options.component'
 import { LoginComponent } from './shared/login/login.component';
@@ -37,7 +35,6 @@ import { ClockComponent } from './shared/clock/clock.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
->>>>>>> origin/development
 
 
 @NgModule({
@@ -55,8 +52,6 @@ import { LoginForgetComponent } from './shared/login-forget/login-forget.compone
     MenuAliadoComponent,
     ListSedesComponent,
     AddMenuComponent,
-<<<<<<< HEAD
-=======
     AppNavbarComponent,
     OptionsComponent,
     LoginComponent,
@@ -64,7 +59,6 @@ import { LoginForgetComponent } from './shared/login-forget/login-forget.compone
     LoginFormComponent,
     SideBarComponent,
     LoginForgetComponent
->>>>>>> origin/development
   ],
   imports: [
     HttpClientModule,
