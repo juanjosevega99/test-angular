@@ -7,7 +7,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { environment } from "../environments/environment";
 import { LoginPageComponent } from "./login/login-page/login-page.component";
 import { HeaderComponent } from "./header/header.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PasswordRecoveryComponent } from "./password-recovery/password-recovery.component";
 import { NewPasswordComponent } from "./password-recovery/new-password/new-password.component";
 import { ShowHidePasswordModule } from "ngx-show-hide-password";
@@ -94,7 +94,8 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NgImageSliderModule
+    NgImageSliderModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

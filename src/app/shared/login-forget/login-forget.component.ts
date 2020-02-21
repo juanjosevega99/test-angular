@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from '@angular/forms'
+
 
 @Component({
   selector: 'app-login-forget',
@@ -8,15 +9,24 @@ import { NgForm } from "@angular/forms";
 })
 export class LoginForgetComponent implements OnInit {
 
-  constructor() { }
+  // elemento para manejar la forma del componente
+  forma:FormGroup;
+
+  constructor() { 
+
+    this.forma = new FormGroup({
+      //parametros
+      'email': new FormControl('', [Validators.required, Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$")])
+      
+    })
+  }
 
   ngOnInit() {
   }
 
-  send(forma:NgForm ){
-
-    console.log(forma);
-
+  send(){ 
+    console.log(this.forma)
+    console.log(this.forma.value)
   }
 
 }

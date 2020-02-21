@@ -1,41 +1,44 @@
 <form (ngSubmit)="send(forma)" #forma="ngForm" novalidate=''>
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <div>
-        <p class="text-with-out">Usuario</p>
-        <input type="text" class="form-control border-tifi" 
-                name="user" 
-                ngModel 
-                required
-                minlength="5"
-                pattern="([A-Za-z])([^0-9]*).{1,20}">
-    </div>
+        <div>
+            <p class="text-with-out">Usuario</p>
+            <input type="text" [ngClass]="{'is-invalid': (user.errors?.required && user.touched)}" class="form-control border-tifi" name="user" [(ngModel)]="username" required maxlength="20"
+                pattern="[A-Za-z0-9]+" #user="ngModel">
 
-    <p class="text-with-out">Contraseña</p>
-    <div class="input-group mb-3">
-
-        <input type="password" class="form-control border-tifi" 
-               name="password" 
-               ngModel
-               required
-               minlength="5"
-               pattern="([A-Za-z])([^0-9]*).{1,20}">
-
-        <div class="input-group-append">
-            <button class="btn btn-outline-primary form-control border-tifi border-left-0 d-flex" type="button"
-                id="button-addon2">
-                <img src="assets/icons/tifi-eye.svg" class="tifi-icon"></button>
+            <div class="invalid-feedback" *ngIf="user.errors?.required && user.touched">
+                Este campo es requerido
+            </div>
         </div>
 
+        <p class="text-with-out">Contraseña</p>
+        <div class="input-group mb-3">
+
+            <input type="password" [ngClass]="{'is-invalid': (password.errors?.required && password.touched)}" class="form-control border-tifi" name="password" [(ngModel)]="pass" required maxlength="20"
+                pattern="[A-Za-z0-9]+" #password="ngModel">
+
+
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary form-control  border-left-0 d-flex border-tifi" [ngClass]="{'invalid': (password.errors?.required && password.touched) || password.errors?.minlength }" type="button"
+                    id="button-addon2">
+                    <img src="assets/icons/tifi-eye.svg" class="tifi-icon"> </button>
+            </div>
+            <div class="invalid-feedback" *ngIf="password.errors?.required && password.touched">
+                este campo es requerido
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center" [ngClass]="{'class': true}" >
+            <!-- <p class="links-tifi" style="text-decoration: underline;">¿Olvidase la contraseña?</p> -->
+            <a class="links-tifi my-2" style="text-decoration: underline;" routerLink="forget"> ¿Olvidaste la
+                contraseña?</a>
+
+        </div>
+
+        <button [disabled] = "!forma.valid"
+                type="submit" class="btn container-fluid"
+            style="background-color: #572483; color: white;">Ingresar</button>
+
     </div>
-
-    <div class="d-flex justify-content-center align-items-center">
-        <!-- <p class="links-tifi" style="text-decoration: underline;">¿Olvidase la contraseña?</p> -->
-        <a class="links-tifi my-2" style="text-decoration: underline;" routerLink="forget" > ¿Olvidaste la contraseña?</a>
-
-    </div>
-
-    <button type="submit" class="btn container-fluid" style="background-color: #572483; color: white;">Ingresar</button>
-
-</div>
 </form>
