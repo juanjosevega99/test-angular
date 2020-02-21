@@ -17,12 +17,14 @@
             <input type="password" [ngClass]="{'is-invalid': (password.errors?.required && password.touched)}" class="form-control border-tifi" name="password" [(ngModel)]="pass" required maxlength="20"
                 pattern="[A-Za-z0-9]+" #password="ngModel">
 
-
             <div class="input-group-append">
-                <button class="btn btn-outline-primary form-control  border-left-0 d-flex border-tifi" [ngClass]="{'invalid': (password.errors?.required && password.touched) || password.errors?.minlength }" type="button"
-                    id="button-addon2">
-                    <img src="assets/icons/tifi-eye.svg" class="tifi-icon"> </button>
+                <button class="btn btn-outline-primary form-control  border-left-0 border-tifi" [ngClass]="{'invalid': (password.errors?.required && password.touched) || password.errors?.minlength }" type="button"
+                    id="button-addon2" aria-label="" aria-describedby="basic-addon1">
+                    <img src="assets/icons/tifi-eye.svg" class="tifi-icon d-flex"> 
+                </button>
             </div>
+           
+              
             <div class="invalid-feedback" *ngIf="password.errors?.required && password.touched">
                 este campo es requerido
             </div>
