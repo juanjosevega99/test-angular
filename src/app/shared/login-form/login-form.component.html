@@ -1,15 +1,26 @@
+<form (ngSubmit)="send(forma)" #forma="ngForm" novalidate=''>
 <div class="container-fluid">
 
     <div>
         <p class="text-with-out">Usuario</p>
-        <input type="text" class="form-control border-tifi">
+        <input type="text" class="form-control border-tifi" 
+                name="user" 
+                ngModel 
+                required
+                minlength="5"
+                pattern="([A-Za-z])([^0-9]*).{1,20}">
     </div>
 
     <p class="text-with-out">Contraseña</p>
     <div class="input-group mb-3">
 
-        <input type="text" class="form-control border-tifi" aria-label="Recipient's username"
-            aria-describedby="button-addon2">
+        <input type="password" class="form-control border-tifi" 
+               name="password" 
+               ngModel
+               required
+               minlength="5"
+               pattern="([A-Za-z])([^0-9]*).{1,20}">
+
         <div class="input-group-append">
             <button class="btn btn-outline-primary form-control border-tifi border-left-0 d-flex" type="button"
                 id="button-addon2">
@@ -20,10 +31,11 @@
 
     <div class="d-flex justify-content-center align-items-center">
         <!-- <p class="links-tifi" style="text-decoration: underline;">¿Olvidase la contraseña?</p> -->
-        <a class="links-tifi my-2" style="text-decoration: underline;" href=""> ¿Olvidaste la contraseña?</a>
+        <a class="links-tifi my-2" style="text-decoration: underline;" routerLink="forget" > ¿Olvidaste la contraseña?</a>
 
     </div>
 
-    <button type="button" class="btn container-fluid" style="background-color: #572483; color: white;">Ingresar</button>
+    <button type="submit" class="btn container-fluid" style="background-color: #572483; color: white;">Ingresar</button>
 
 </div>
+</form>

@@ -35,6 +35,7 @@ import { ClockComponent } from './shared/clock/clock.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
+import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 import { AllyManagerComponent } from './modules/AllyManag/components/ally-manager/ally-manager.component';
 import { UserManagerComponent } from './modules/UserManag/components/user-manager/user-manager.component';
 import { PromoManagerComponent } from './modules/PromManag/components/promo-manager/promo-manager.component';
@@ -67,6 +68,7 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
     LoginFormComponent,
     SideBarComponent,
     LoginForgetComponent,
+    ResestPasswordComponent,
     AllyManagerComponent,
     UserManagerComponent,
     PromoManagerComponent,
