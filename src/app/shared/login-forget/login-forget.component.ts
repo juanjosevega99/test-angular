@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from "@angular/forms";
 
 @Component({
   selector: 'app-login-forget',
@@ -10,6 +11,12 @@ export class LoginForgetComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  send(forma:NgForm ){
+
+    console.log(forma);
+
   }
 
 }

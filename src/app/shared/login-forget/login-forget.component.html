@@ -1,3 +1,5 @@
+<form (ngSubmit)="send(forma)" #forma="ngForm" novalidate >
+
 <div class="d-flex flex-column container-fluid">
 
     <p class="text-tifi-bold ">¡Hola Tifi Aliado!</p>
@@ -5,10 +7,19 @@
         el código de verificación.</p>
     
     <div class="my-3">
-        <input type="text" class="form-control border-tifi" placeholder="Ingresa tu correo electrónico">
+        <input type="text" 
+               class="form-control border-tifi" 
+               placeholder="Ingresa tu correo electrónico"
+               required
+               minlength="6"
+               name="email"
+               ngModel
+               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
 
     </div>
 
-    <button type="button" class="btn container-fluid" style="background-color: #572483; color: white;">Enviar</button>
+    <button type="submit" class="btn container-fluid" style="background-color: #572483; color: white;">Enviar</button>
 
 </div>
+
+</form>
