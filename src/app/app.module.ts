@@ -36,6 +36,14 @@ import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
 import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
+import { AllyManagerComponent } from './modules/AllyManag/components/ally-manager/ally-manager.component';
+import { UserManagerComponent } from './modules/UserManag/components/user-manager/user-manager.component';
+import { PromoManagerComponent } from './modules/PromManag/components/promo-manager/promo-manager.component';
+import { CuponManagerComponent } from './modules/CupManag/components/cupon-manager/cupon-manager.component';
+import { ReportGeneratorComponent } from './modules/ReportGen/components/report-generator/report-generator.component';
+import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/pqr-manager.component';
+import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
+import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
 
 
 @NgModule({
@@ -60,7 +68,15 @@ import { ResestPasswordComponent } from './shared/resest-password/resest-passwor
     LoginFormComponent,
     SideBarComponent,
     LoginForgetComponent,
-    ResestPasswordComponent
+    ResestPasswordComponent,
+    AllyManagerComponent,
+    UserManagerComponent,
+    PromoManagerComponent,
+    CuponManagerComponent,
+    ReportGeneratorComponent,
+    PqrManagerComponent,
+    BannerManagerComponent,
+    TycManagerComponent
   ],
   imports: [
     HttpClientModule,
