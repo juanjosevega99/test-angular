@@ -16,9 +16,6 @@ export class SideBarComponent implements OnInit {
   ngOnInit(): void {
     $(document).ready(function () {
       
-      // $("#sidebar").mCustomScrollbar({
-      //     theme: "minimal"
-      // });
 
       $('#dismiss, .overlay').on('click', function () {
           // hide sidebar
