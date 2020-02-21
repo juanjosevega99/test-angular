@@ -1,0 +1,7 @@
+.ng-invalid.ng-touched:not(form){
+    border: 1px solid red;
+}
+
+.btn.disabled, .btn:disabled {
+    opacity: .9;
+}
