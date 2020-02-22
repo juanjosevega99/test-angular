@@ -3,8 +3,8 @@
 
         <div>
             <p class="text-with-out">Usuario</p>
-            <input type="text" [ngClass]="{'is-invalid': (user.errors?.required && user.touched)}" class="form-control border-tifi" name="user" [(ngModel)]="username" required maxlength="20"
-                pattern="[A-Za-z0-9]+" #user="ngModel">
+            <input type="text" [ngClass]="{'is-invalid': (user.errors?.required && user.touched)}" class="form-control border-tifi" name="user" [(ngModel)]="email" required maxlength="35"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #user="ngModel">
 
             <div class="invalid-feedback" *ngIf="user.errors?.required && user.touched">
                 Este campo es requerido
@@ -14,13 +14,16 @@
         <p class="text-with-out">Contraseña</p>
         <div class="input-group mb-3">
 
-            <input type="password" [ngClass]="{'is-invalid': (password.errors?.required && password.touched)}" class="form-control border-tifi" name="password" [(ngModel)]="pass" required maxlength="20"
+            
+            <input [type]="Typetext" [ngClass]="{'is-invalid': (password.errors?.required && password.touched)}" class="form-control border-tifi" name="password" [(ngModel)]="pass" required maxlength="35"
                 pattern="[A-Za-z0-9]+" #password="ngModel">
 
             <div class="input-group-append">
-                <button class="btn btn-outline-primary form-control  border-left-0 border-tifi" [ngClass]="{'invalid': (password.errors?.required && password.touched) || password.errors?.minlength }" type="button"
+                <button (click)="seepassword()" class="btn btn-outline-primary form-control  border-left-0 border-tifi" [ngClass]="{'invalid': (password.errors?.required && password.touched) || password.errors?.minlength }" type="button"
                     id="button-addon2" aria-label="" aria-describedby="basic-addon1">
-                    <img src="assets/icons/tifi-eye.svg" class="tifi-icon d-flex"> 
+                    <img *ngIf="!seepass" src="assets/icons/tifi-eye.svg" class="tifi-icon d-flex">
+                    <i *ngIf="seepass" class="far fa-eye-slash tifi-icon" style="color: #572483;" ></i>
+                    
                 </button>
             </div>
            
