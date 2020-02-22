@@ -190,18 +190,18 @@ a.article:hover {
   background: rgba(33, 240, 6, 0.938) !important;
   color: rgb(255, 14, 14) !important;
 }
-//360 - 375
-// @media only screen and (max-width: 600px) and (min-width: 350px)
+
+// Styles of movile
 @media only screen and (max-width: 601px) and (min-width: 320px) {
   html {
     font-size: 15px;
   }
   #sidebar {
-    width: 23rem;
+    width: 21.5rem;
     position: fixed;
     top: 0;
-    left: -23rem;
-    height: 110vh;
+    left: -21.5rem;
+    height: 100vh;
     z-index: 999;
     background: rgb(255, 255, 255);
     color: #4d2980;
