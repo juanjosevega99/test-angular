@@ -32,12 +32,11 @@ export class LoginFormComponent implements OnInit {
     this.authentication.login(this.email, this.pass)
     .then(res => {
 
-      console.log("successfully singIn", res);
-      this.route.navigate(['options']);
+      this.route.navigate(['log']);
 
     }).catch(err => {
       this.signError = false;
-        console.log(err)
+        
       }
     );
     this.email = ''; 

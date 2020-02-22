@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 //firebase
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -10,26 +11,37 @@ import * as firebase from 'firebase';
 })
 export class AuthFireServiceService {
 
-  user: Observable< firebase.User >;
-
-  constructor( private firebaseAuth: AngularFireAuth ) {
+  user: Observable<firebase.User>;
+  
+  constructor(private firebaseAuth: AngularFireAuth, private route: Router) {
     this.user = this.firebaseAuth.authState;
-   }
+  }
 
-   //singIn
-   login( email:string, password: string ): Promise<firebase.auth.UserCredential>{
+  //singIn
+  login(email: string, password: string): Promise<firebase.auth.UserCredential> {
 
     return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
-   
-   }
 
-   //sing Out (cerrar sesion)
+  }
 
-   signOut(): Promise<void> {
+  //sing Out (cerrar sesion)
 
-     return this.firebaseAuth.auth.signOut();
+   signOut(){
 
-   }
+    this.firebaseAuth.auth.signOut()
+    .then(res => this.route.navigate(['log']) 
+    ).catch(err => {
+        console.log(err)
+      }
+
+    );
+
+  }
+
+  // Recuperar contraseña
+  forgetPassword(email): Promise<void> {
+    return this.firebaseAuth.auth.sendPasswordResetEmail(email);
+  }
 
 
 }
