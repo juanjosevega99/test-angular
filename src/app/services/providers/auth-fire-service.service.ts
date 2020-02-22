@@ -12,5 +12,24 @@ export class AuthFireServiceService {
 
   user: Observable< firebase.User >;
 
-  constructor() { }
+  constructor( private firebaseAuth: AngularFireAuth ) {
+    this.user = this.firebaseAuth.authState;
+   }
+
+   //singIn
+   login( email:string, password: string ): Promise<firebase.auth.UserCredential>{
+
+    return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
+   
+   }
+
+   //sing Out (cerrar sesion)
+
+   signOut(): Promise<void> {
+
+     return this.firebaseAuth.auth.signOut();
+
+   }
+
+
 }
