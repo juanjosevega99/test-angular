@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
+import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-side-bar',
@@ -11,14 +13,23 @@ export class SideBarComponent implements OnInit {
   Stablishment:String="KFC"; 
   headquarters:String ="Galerías";
   
-  constructor() { }
+  constructor( public firebaseservise: AuthFireServiceService ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    firebase.auth().onAuthStateChanged( function (user){
+
+      if (user){
+        console.log("usuario logeado", user.email);
+        
+      }else{
+        console.log("usuario no logeado");
+      }
+      
+    } )
+
     $(document).ready(function () {
       
-      // $("#sidebar").mCustomScrollbar({
-      //     theme: "minimal"
-      // });
 
       $('#dismiss, .overlay').on('click', function () {
           // hide sidebar
@@ -36,6 +47,14 @@ export class SideBarComponent implements OnInit {
           $('a[aria-expanded=true]').attr('aria-expanded', 'false');
       });
   });
+
+  }
+
+   
+
+  signOut() {
+    console.log("cerrar sesion")
+    this.firebaseservise.signOut();
   }
 
 }

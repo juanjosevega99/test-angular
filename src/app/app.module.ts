@@ -7,7 +7,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { environment } from "../environments/environment";
 import { LoginPageComponent } from "./login/login-page/login-page.component";
 import { HeaderComponent } from "./header/header.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PasswordRecoveryComponent } from "./password-recovery/password-recovery.component";
 import { NewPasswordComponent } from "./password-recovery/new-password/new-password.component";
 import { ShowHidePasswordModule } from "ngx-show-hide-password";
@@ -35,6 +35,7 @@ import { ClockComponent } from './shared/clock/clock.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
+import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 import { AllyManagerComponent } from './modules/AllyManag/components/ally-manager/ally-manager.component';
 import { UserManagerComponent } from './modules/UserManag/components/user-manager/user-manager.component';
 import { PromoManagerComponent } from './modules/PromManag/components/promo-manager/promo-manager.component';
@@ -67,6 +68,7 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
     LoginFormComponent,
     SideBarComponent,
     LoginForgetComponent,
+    ResestPasswordComponent,
     AllyManagerComponent,
     UserManagerComponent,
     PromoManagerComponent,
@@ -92,7 +94,8 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    NgImageSliderModule
+    NgImageSliderModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
