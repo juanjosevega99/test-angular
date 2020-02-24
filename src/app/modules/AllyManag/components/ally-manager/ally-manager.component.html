@@ -48,29 +48,10 @@
             </a>
         </div>
     </div>
-    <div class="row styleTable " style="background-color: purple;">
-        <div class="toolbar">
-            <div class="checkbox">
-              <label>
-                <input type="radio" name="iconSize" checked value="undefined">
-                <code>undefined</code>
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="radio" name="iconSize" value="lg">
-                <code>lg</code>
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="radio" name="iconSize" value="sm">
-                <code>sm</code>
-              </label>
-            </div>
-          </div>
-          
+    <div class="row styleTable table-responsive" >          
+        <!--Table-->
           <table
+            class="table table-hover"
             id="table"
             data-toggle="table"
             data-height="460"
@@ -79,15 +60,23 @@
             data-show-fullscreen="true"
             data-search="true"
             data-pagination="true"
-            data-url="../dataAlly.json">
+            >
+         
             <thead>
               <tr>
-                <th data-field="id">code</th>
-                <th data-field="name">Item Name</th>
-                <th data-field="price">Item Price</th>
+                <th data-field="code">Code</th>
+                <th data-field="nameStablishment">Nombre del establecimiento</th> 
+                <th data-field="logo">Logo</th>
+                <th data-field="numberHeadquarters">Numero de sedes</th>
+                <th data-field="services">Servicios</th>
+                <th data-field="allyType">Tipo de aliado</th>
+                <th data-field="foodType">Tipo de comida</th>
+                <th data-field="schedule">Horario</th>
               </tr>
+              
             </thead>
           </table>
+  
     </div>
 </div>
 
