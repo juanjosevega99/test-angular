@@ -15,6 +15,7 @@ import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { OptionsComponent } from './modules/options/components/options/options.component';
 import { LoginComponent } from './shared/login/login.component';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
+import { LoginForgetComponent } from './shared/login-forget/login-forget.component';
 import { AllyManagerComponent } from './modules/AllyManag/components/ally-manager/ally-manager.component';
 import { UserManagerComponent } from './modules/UserManag/components/user-manager/user-manager.component';
 import { PromoManagerComponent } from './modules/PromManag/components/promo-manager/promo-manager.component';
@@ -38,7 +39,6 @@ const routes: Routes = [
   {path:"pqrManager", component:PqrManagerComponent},
   {path:"bannerManager", component:BannerManagerComponent},
   {path:"tycManager", component:TycManagerComponent},
-  {path:"**", redirectTo:"log", pathMatch:'full'},
   {path:"recovery_password", component: PasswordRecoveryComponent},
   {path:"reset_password", component: NewPasswordComponent},
   {path:"principal", component:PrincipalPageComponent},
@@ -49,8 +49,10 @@ const routes: Routes = [
   {path:"menu-aliado",component:MenuAliadoComponent },
   {path:"sedes",component:ListSedesComponent },
   {path:"add-menu", component:AddMenuComponent},
-  {path:"side-bar", component:SideBarComponent}
-
+  {path:"side-bar", component:SideBarComponent},
+  {path:"log/forget", component:LoginForgetComponent},
+  {path:"**", redirectTo:"log", pathMatch:'full'},
+  
 ];
 
 @NgModule({

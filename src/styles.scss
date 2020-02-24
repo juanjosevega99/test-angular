@@ -6,7 +6,11 @@ $principal-color :  #572483;
     text-align: center;
 }
 
-html, body { height: 100%; width: 100%;}
+html, body { 
+    height: 100%; 
+    width: 100%;
+    font-size: 15px;
+    }
 body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .margin-padding-tifi{
@@ -17,4 +21,10 @@ body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-se
 
 .text-with-out{
     margin-bottom: 0;
+}
+
+.text-tifi-bold{
+    text-align: center !important;
+    font-weight: bold;
+    font-size: 1.2rem;
 }

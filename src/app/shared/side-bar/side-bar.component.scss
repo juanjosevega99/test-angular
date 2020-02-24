@@ -51,17 +51,17 @@
 }
 
 #sidebar {
-  width: 250px;
-  position: fixed;
-  top: 13%;
-  left: -250px;
-  height: 87vh;
-  z-index: 999;
-  background: rgb(255, 255, 255);
-  color: #4d2980;
-  transition: all 0.3s;
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-  overflow-y: scroll;
+  width: 19rem;
+    position: fixed;
+    top: 5.2rem;
+    left: -19rem;
+    height: 87vh;
+    z-index: 999;
+    background: rgb(255, 255, 255);
+    color: #4d2980;
+    transition: all 0.3s;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
 }
 
 #sidebar.active {
@@ -92,11 +92,14 @@
   position: fixed;
   width: 100vw;
   height: 100vh;
-  background: #666666aa;
+  background: #e0e0e0aa;
   z-index: 998;
   opacity: 0;
   transition: all 0.5s ease-in-out;
-  margin-top: 19px;
+  margin-top: 1.1rem;
+  margin-left: -15rem;
+  // overflow: hidden;
+  // background-size: contain; #e0e0e0
 }
 .overlay.active {
   display: block;
@@ -186,4 +189,67 @@ a.article,
 a.article:hover {
   background: rgba(33, 240, 6, 0.938) !important;
   color: rgb(255, 14, 14) !important;
+}
+
+// Styles of movile
+@media only screen and (max-width: 601px) and (min-width: 320px) {
+  html {
+    font-size: 15px;
+  }
+  #sidebar {
+    width: 21.5rem;
+    position: fixed;
+    top: 0;
+    left: -21.5rem;
+    height: 100vh;
+    z-index: 999;
+    background: rgb(255, 255, 255);
+    color: #4d2980;
+    transition: all 0.3s;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
+  }
+
+  .textLyrics1 {
+    visibility: hidden;
+  }
+  .overlay {
+    visibility: hidden;
+  }
+}
+
+// size for a tablet
+
+@media only screen and (max-width: 835px) and (min-width: 602px) {
+
+  #sidebar {
+    width: 19rem;
+    position: fixed;
+    top: 6.1rem;
+    left: -19rem;
+    height: 87vh;
+    z-index: 999;
+    background: rgb(255, 255, 255);
+    color: #4d2980;
+    transition: all 0.3s;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
+  }
+
+  .textLyrics1 {
+    visibility: hidden;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    width: 110vw;
+    height: 100vh;
+    background:#e0e0e0aa;
+    z-index: 998;
+    opacity: 0;
+    transition: all 0.5s ease;
+    margin-top: 1.5rem;
+    overflow: hidden;
+    background-size: cover;
+  }
 }

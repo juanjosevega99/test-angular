@@ -1,16 +1,32 @@
+<form [formGroup]='forma' (ngSubmit)="forgetPass()" >
+
 <div class="d-flex flex-column container-fluid">
 
-
-    <p class="text-center" style="font-weight: bold; font-size: 1.2rem; ">¡Hola Tifi Aliado!</p>
+    <p class="text-tifi-bold ">¡Hola Tifi Aliado!</p>
     <p class="text-justify">Por favor ingresa la dirección de correo electrónico registrado con nosotros, para enviarte
         el código de verificación.</p>
     
     <div class="my-3">
-        <input type="text" class="form-control border-tifi" placeholder="Ingresa tu correo electrónico">
+        <input type="text" 
+               class="form-control border-tifi" 
+               placeholder="Ingresa tu correo electrónico"
+               formControlName="email"
+               
+               >
 
     </div>
+    
+    <div *ngIf="emailinvalid" class="tifi-no-valid">
+        ¡La dirección de Correo electronico no existe!
+    </div>
+    <div *ngIf="emailsuccess" class="tifi-valid">
+        ¡Hemos enviado a tu correo un link de restablecimiento de contraseña!
+    </div>
 
-
-    <button type="button" class="btn container-fluid" style="background-color: #572483; color: white;">Enviar</button>
+    <button type="submit" class="btn container-fluid" style="background-color: #572483; color: white;" [disabled]="!forma.valid || emailinvalid">Enviar</button>
 
 </div>
+
+
+
+</form>
