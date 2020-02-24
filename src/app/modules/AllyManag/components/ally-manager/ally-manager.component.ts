@@ -6,14 +6,9 @@ import * as $ from 'jquery';
   templateUrl: './ally-manager.component.html',
   styleUrls: ['./ally-manager.component.scss']
 })
-export class AllyManagerComponent implements OnInit {
+export class AllyManagerComponent {
   
-  constructor() {
-   
-   }
-
-  ngOnInit() {
-  }
+ 
   
   //  $table = $('#table')
 
