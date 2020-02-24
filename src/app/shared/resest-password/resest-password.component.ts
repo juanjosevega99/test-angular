@@ -19,9 +19,17 @@ export class ResestPasswordComponent implements OnInit {
   constructor() {
 
     this.newpassword = new FormGroup({
+      // '', [Validators.required, Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}") ]
       'password' : new FormControl('', [Validators.required, Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}") ]),
       'verifypassword' : new FormControl()
+      // '', 
     })
+
+    this.newpassword.controls['verifypassword'].setValidators([ 
+      Validators.required, 
+      this.noEqual.bind(this.newpassword) 
+    ]
+    )
    
 
    }
@@ -32,7 +40,7 @@ export class ResestPasswordComponent implements OnInit {
 
   send(){
 
-    console.log(this.newpassword);
+    // console.log(this.newpassword);
   }
 
   seepassword(){
@@ -56,6 +64,19 @@ export class ResestPasswordComponent implements OnInit {
   }
 
   //verificar password
+
+  noEqual( control: FormControl ): { [ s:string ]: boolean } {
+    let newpass:any = this
+
+    if ( control.value !== newpass.get('password').value ){
+      return {
+        equal:true
+      }
+    }
+
+    return null;
+
+  }
 
 
 }
