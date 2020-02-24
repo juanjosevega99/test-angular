@@ -13,7 +13,7 @@ export class BannersService {
 
   postBanner(banner): Observable<Banners> {
     return this.httpclient.post<Banners>(
-      environment.UrlBase + "banner",
+      environment.UrlBase + "banners",
       banner
     );
   }
