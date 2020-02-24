@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-ally-manager',
   templateUrl: './ally-manager.component.html',
@@ -12,5 +14,15 @@ export class AllyManagerComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+  //  $table = $('#table')
+
+  // $(function() {
+  //   $('.toolbar input').change(function () {
+  //     $table.bootstrapTable('refreshOptions', {
+  //       iconSize: $(this).val()
+  //     })
+  //   })
+  // })
   
 }

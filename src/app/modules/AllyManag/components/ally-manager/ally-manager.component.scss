@@ -1,7 +1,3 @@
-html{
-    font-size: 15px;
-}
-
 // styles search 
 .btn-outline-primary {
     color: rgba(0,0,0,.87);
@@ -13,7 +9,26 @@ html{
     background-color: #552183;
 }
 
-
 .icon-size{
         font-size: 2rem;
+}
+
+.styleContainer{
+    padding: 7rem;
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-between;
+    // align-items: center;
+
+}
+.styleTable{
+    // padding: 7rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    // align-items: center;
+
+}
+.sizeInput{
+    width: 25rem;
 }
