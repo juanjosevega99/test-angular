@@ -39,7 +39,6 @@ const routes: Routes = [
   {path:"pqrManager", component:PqrManagerComponent},
   {path:"bannerManager", component:BannerManagerComponent},
   {path:"tycManager", component:TycManagerComponent},
-  {path:"**", redirectTo:"log", pathMatch:'full'},
   {path:"recovery_password", component: PasswordRecoveryComponent},
   {path:"reset_password", component: NewPasswordComponent},
   {path:"principal", component:PrincipalPageComponent},
@@ -52,7 +51,8 @@ const routes: Routes = [
   {path:"add-menu", component:AddMenuComponent},
   {path:"side-bar", component:SideBarComponent},
   {path:"log/forget", component:LoginForgetComponent},
-
+  {path:"**", redirectTo:"log", pathMatch:'full'},
+  
 ];
 
 @NgModule({

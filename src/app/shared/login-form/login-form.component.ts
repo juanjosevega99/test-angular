@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms' 
+import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -8,15 +10,48 @@ import { NgForm } from '@angular/forms'
 })
 export class LoginFormComponent implements OnInit {
 
-  constructor() { }
+  email:string;
+  pass:string;
+  signError:boolean;
+
+  seepass:boolean = false;  
+  Typetext = 'password';
+
+  constructor( public authentication: AuthFireServiceService, public route: Router ) { }
 
   ngOnInit() {
+    this.signError = true;
+    
+    if( this.authentication.user ){
+      this.route.navigate(['options']);
+    }
   }
 
-  send(forma:NgForm ){
-    console.log("formulario para postear");
-    console.log(forma);
-    console.log( "valor", forma.value );
+  login(){
+    
+    this.authentication.login(this.email, this.pass)
+    .then(res => {
+
+      this.route.navigate(['log']);
+
+    }).catch(err => {
+      this.signError = false;
+        
+      }
+    );
+    this.email = ''; 
+    this.pass = '';
+
+  }
+
+  seepassword(){
+    this.seepass = !this.seepass;
+
+    if(!this.seepass){
+      this.Typetext = 'password'
+    }else{
+      this.Typetext='text'
+    }
   }
 
 }
