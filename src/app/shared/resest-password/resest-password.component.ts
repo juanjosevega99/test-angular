@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms"
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-resest-password',
@@ -16,7 +18,7 @@ export class ResestPasswordComponent implements OnInit {
   //forms
   newpassword: FormGroup;
 
-  constructor() {
+  constructor( public firebaseservice: AngularFireAuth, public router: Router, public route: ActivatedRoute ) {
 
     this.newpassword = new FormGroup({
       // '', [Validators.required, Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}") ]
@@ -28,9 +30,7 @@ export class ResestPasswordComponent implements OnInit {
     this.newpassword.controls['verifypassword'].setValidators([ 
       Validators.required, 
       this.noEqual.bind(this.newpassword) 
-    ]
-    )
-   
+    ] )  
 
    }
 
@@ -39,7 +39,6 @@ export class ResestPasswordComponent implements OnInit {
   }
 
   send(){
-
     // console.log(this.newpassword);
   }
 
@@ -75,6 +74,18 @@ export class ResestPasswordComponent implements OnInit {
     }
 
     return null;
+
+  }
+
+
+  changeNewPass(){
+
+    const code = this.route.snapshot.queryParams['oobCode'];
+    this.firebaseservice.auth.confirmPasswordReset(code, this.newpassword.get('verifypassword').value )
+    .then(res => {
+      console.log(res);
+    }).catch(err=> console.log(err)
+    )
 
   }
 
