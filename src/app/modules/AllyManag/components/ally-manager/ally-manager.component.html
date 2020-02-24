@@ -35,7 +35,8 @@
             <form class="form-inline align-content-start">
                 <div class="input-group">
                     <div class="input-group-append">
-                        <input class="form-control sizeInput" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control sizeInput" id="myInput" type="text" placeholder="Buscar"
+                            aria-label="Search">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                     </div>
                 </div>
@@ -48,35 +49,45 @@
             </a>
         </div>
     </div>
-    <div class="row styleTable table-responsive" >          
-        <!--Table-->
-          <table
-            class="table table-hover"
-            id="table"
-            data-toggle="table"
-            data-height="460"
-            data-show-refresh="true"
-            data-show-columns="true"
-            data-show-fullscreen="true"
-            data-search="true"
-            data-pagination="true"
-            >
-         
+    <div class="row styleTable table-responsive">
+
+        <table class="table table-bordered table-striped" id="table" data-toggle="table" data-show-columns="true"
+            data-multiple-select-row="true" data-click-to-select="true" data-show-search-clear-button="true"
+            data-filter-control="true">
+            <!-- data-search="true" -->
             <thead>
-              <tr>
-                <th data-field="code">Code</th>
-                <th data-field="nameStablishment">Nombre del establecimiento</th> 
-                <th data-field="logo">Logo</th>
-                <th data-field="numberHeadquarters">Numero de sedes</th>
-                <th data-field="services">Servicios</th>
-                <th data-field="allyType">Tipo de aliado</th>
-                <th data-field="foodType">Tipo de comida</th>
-                <th data-field="schedule">Horario</th>
-              </tr>
-              
+                <tr>
+                    <!-- <th data-field="name" data-filter-control="input">Nombre</th> -->
+                    <th data-field="code" data-filter-control="input">Codigo</th>
+                    <th data-field="nameStablishment" data-filter-control="input">Nombre del establecimiento</th>
+                    <th data-field="logo">Logo</th>
+                    <th data-field="numberHeadquarters">Numero de sedes</th>
+                    <th data-field="services">Servicios</th>
+                    <th data-field="allyType">Tipo de aliado</th>
+                    <th data-field="foodType">Tipo de comida</th>
+                    <th data-field="schedule">Horario</th>
+                    <th data-field="state" data-checkbox="true"> Seleccionar</th>
+                </tr>
             </thead>
-          </table>
-  
+            <tbody id="myTable">
+                <tr>
+                    <td>1061345234</td>
+                    <td>Kfc Kentucky Fried Chicken</td>
+                    <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
+                    <td>25</td>
+                    <td>
+                    <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
+                    <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
+                    <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
+                    
+                    </td>
+                    <td>Oro</td>
+                    <td>Pollo</td>
+                    <td> 11:00 am - 9:00</td>
+                </tr>
+
+            </tbody>
+        </table>
+
     </div>
 </div>
-
