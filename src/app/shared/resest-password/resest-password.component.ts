@@ -17,6 +17,8 @@ export class ResestPasswordComponent implements OnInit {
 
   //forms
   newpassword: FormGroup;
+  restoresuccess = false;
+  restoreunsuccess = false;
 
   constructor( public firebaseservice: AngularFireAuth, public router: Router, public route: ActivatedRoute ) {
 
@@ -83,8 +85,10 @@ export class ResestPasswordComponent implements OnInit {
     const code = this.route.snapshot.queryParams['oobCode'];
     this.firebaseservice.auth.confirmPasswordReset(code, this.newpassword.get('verifypassword').value )
     .then(res => {
+      this.restoresuccess = true;
       console.log(res);
-    }).catch(err=> console.log(err)
+    }).catch(err=> {console.log(err)
+    this.restoreunsuccess=true}
     )
 
   }
