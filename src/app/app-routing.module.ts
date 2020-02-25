@@ -24,39 +24,49 @@ import { ReportGeneratorComponent } from './modules/ReportGen/components/report-
 import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/pqr-manager.component';
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
+import { LoginFormComponent } from './shared/login-form/login-form.component';
 
 
 const routes: Routes = [
-  {path:"log", component:LoginComponent},
-  {path:"login", component:LoginPageComponent},
-  {path:"navbar", component:AppNavbarComponent},
-  {path:"options", component:OptionsComponent},
-  {path:"allyManager", component:AllyManagerComponent},
-  {path:"userManager", component:UserManagerComponent},
-  {path:"promoManager", component:PromoManagerComponent},
-  {path:"cuponManager", component:CuponManagerComponent},
-  {path:"reportGenerator", component:ReportGeneratorComponent},
-  {path:"pqrManager", component:PqrManagerComponent},
-  {path:"bannerManager", component:BannerManagerComponent},
-  {path:"tycManager", component:TycManagerComponent},
-  {path:"recovery_password", component: PasswordRecoveryComponent},
-  {path:"reset_password", component: NewPasswordComponent},
-  {path:"principal", component:PrincipalPageComponent},
-  {path:"menu", component:MainMenuComponent},
-  {path:"aliados", component:ListAliadosComponent},
-  {path:"add-aliado", component:AddEstablecimientoComponent},
-  {path:"add-sede", component:AddSedeComponent},
-  {path:"menu-aliado",component:MenuAliadoComponent },
-  {path:"sedes",component:ListSedesComponent },
-  {path:"add-menu", component:AddMenuComponent},
-  {path:"side-bar", component:SideBarComponent},
-  {path:"log/forget", component:LoginForgetComponent},
-  {path:"**", redirectTo:"log", pathMatch:'full'},
-  
+  { path: "login", component: LoginPageComponent},
+  {
+    path: "log",
+    component: LoginComponent ,
+    children: [
+
+      { path: "recovery_password", component: PasswordRecoveryComponent },
+      { path: "reset_password", component: NewPasswordComponent },
+      { path: "forget", component: LoginForgetComponent },
+      { path: "loginForm", component: LoginFormComponent },
+      { path: "**", redirectTo: "loginForm", pathMatch: 'full' },
+
+    ]
+  },
+  { path: "navbar", component: AppNavbarComponent },
+  { path: "options", component: OptionsComponent },
+  { path: "allyManager", component: AllyManagerComponent },
+  { path: "userManager", component: UserManagerComponent },
+  { path: "promoManager", component: PromoManagerComponent },
+  { path: "cuponManager", component: CuponManagerComponent },
+  { path: "reportGenerator", component: ReportGeneratorComponent },
+  { path: "pqrManager", component: PqrManagerComponent },
+  { path: "bannerManager", component: BannerManagerComponent },
+  { path: "tycManager", component: TycManagerComponent },
+  { path: "principal", component: PrincipalPageComponent },
+  { path: "menu", component: MainMenuComponent },
+  { path: "aliados", component: ListAliadosComponent },
+  { path: "add-aliado", component: AddEstablecimientoComponent },
+  { path: "add-sede", component: AddSedeComponent },
+  { path: "menu-aliado", component: MenuAliadoComponent },
+  { path: "sedes", component: ListSedesComponent },
+  { path: "add-menu", component: AddMenuComponent },
+  { path: "side-bar", component: SideBarComponent },
+  { path: "**", redirectTo: "log", pathMatch: 'full' },
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{useHash:true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
