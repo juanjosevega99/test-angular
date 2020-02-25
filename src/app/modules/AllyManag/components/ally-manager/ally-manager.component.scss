@@ -1,42 +1,44 @@
-// styles search 
+// styles search
 .btn-outline-primary {
-    color: rgba(0,0,0,.87);
-    border-color: rgba(0,0,0,.87);
-    border-radius: .4rem;
+  color: rgba(0, 0, 0, 0.87);
+  border-color: rgba(0, 0, 0, 0.87);
+  border-radius: 0.4rem;
+  margin-bottom: 2rem;
 }
 .btn-outline-primary:hover {
-    color: #fff; 
-    background-color: #552183;
+  color: #fff;
+  background-color: #552183;
 }
 
-.icon-size{
-        font-size: 2rem;
+.icon-size {
+  font-size: 2rem;
 }
 
-.styleContainer{
-    padding: 7rem;
-    display: flex;
-    flex-direction: row;
-    // justify-content: space-between;
-    // align-items: center;
-
+.styleContainer {
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-between;
+  // align-items: center;
 }
-.styleTable{
-    // padding: 7rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
+.styleTable {
+  // padding: 7rem;
+  display: flex;
+//   flex-direction: row;
+//   justify-content: center;
+//   align-items: center;
 }
-.sizeInput{
-    width: 25rem;
+.sizeLogo {
+  width: 5rem;
+  height: 5rem;
 }
-.sizeLogo{
-    width: 5rem;
-    height: 5rem;
+.iconService {
+  width: 2rem;
+  height: 2rem;
 }
-.iconService{
-    width: 2rem;
-    height: 2rem;
+//syles of input search
+.sizeInput {
+  width: 25rem;
+}
+.backgroundIcon {
+  background-color: white;
 }

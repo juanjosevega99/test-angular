@@ -2,13 +2,14 @@
 
 $principal-color :  #572483;
 
-.text-center{
-    text-align: center;
-}
+// .text-center{
+//     text-align: center;
+//     vertical-align: middle;
+// }
 
 html, body { 
-    height: 100%; 
-    width: 100%;
+    // height: 100%; 
+    // width: 100%;
     font-size: 15px;
     }
 body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -28,7 +29,13 @@ body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-se
     font-weight: bold;
     font-size: 1.2rem;
 }
-
+//style for margin of body of adminTfi
 .compenetsstyle{
     padding: 7rem;
 }
+//Styles tables
+th, td{
+    text-align: center;
+    vertical-align: middle;
+}
+

@@ -1,53 +1,27 @@
-<!-- <app-app-navbar></app-app-navbar>
-<div class="container">
-    <div class="search ">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 ">
-                    <a href="/n" class="btn btn-outline-primary">
-                        <i class="fas fa-chevron-left  "></i>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form class="form-inline">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-                    </form>                
-                </div>
-                <div class="col-md-4">
-                    <a href="/n" class="btn btn-outline-primary">
-                        <p>Crear aliado</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 <app-app-navbar></app-app-navbar>
-<div>
-    <div class="row styleContainer" style="background-color: yellow;">
-        <div class="flex-grow-1" style="background-color: blue; ">
+<div class="compenetsstyle">
+    <div class="row styleContainer " >
+        <div class="flex-grow-1" >
             <a href="#" class="btn btn-outline-primary rounded-circle ">
                 <i class="fas fa-chevron-left "></i>
             </a>
         </div>
-        <div class="flex-grow-1" style="background-color: red;">
+        <div class="flex-grow-1" >
             <form class="form-inline align-content-start">
                 <div class="input-group">
                     <div class="input-group-append">
                         <input class="form-control sizeInput" id="myInput" type="text" placeholder="Buscar"
                             aria-label="Search">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
                     </div>
                 </div>
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
-        <div style="background-color: purple;">
-            <a href="/n" class="btn btn-outline-primary">
+        <div >
+            <a href="#" class="btn btn-outline-primary my-sm-0">
                 <p>Crear aliado</p>
             </a>
-        </div>
+        </div>  
     </div>
     <div class="row styleTable table-responsive">
 
@@ -60,30 +34,49 @@
                     <!-- <th data-field="name" data-filter-control="input">Nombre</th> -->
                     <th data-field="code" data-filter-control="input">Codigo</th>
                     <th data-field="nameStablishment" data-filter-control="input">Nombre del establecimiento</th>
-                    <th data-field="logo">Logo</th>
+                    <th data-field="foodType"  data-filter-control="input">Tipo de comida</th>
+                    <th data-field="logo"  >Logo</th>
                     <th data-field="numberHeadquarters">Numero de sedes</th>
                     <th data-field="services">Servicios</th>
                     <th data-field="allyType">Tipo de aliado</th>
-                    <th data-field="foodType">Tipo de comida</th>
-                    <th data-field="schedule">Horario</th>
-                    <th data-field="state" data-checkbox="true"> Seleccionar</th>
+                    <th data-field="schedule" class="position-relative">Horario</th>
+                    <th data-field="edit" > </th>
                 </tr>
             </thead>
             <tbody id="myTable">
                 <tr>
-                    <td>1061345234</td>
+                    <td >1061345234</td>
                     <td>Kfc Kentucky Fried Chicken</td>
+                    <td>Pollo</td>
                     <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
                     <td>25</td>
                     <td>
-                    <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
-                    <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
-                    <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
-                    
+                        <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
+                        <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
+                        <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
                     </td>
                     <td>Oro</td>
-                    <td>Pollo</td>
-                    <td> 11:00 am - 9:00</td>
+                    <td>11:00 am - 9:00 pm</td>
+                    <td>
+                        <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1081345</td>
+                    <td>Corrales</td>
+                    <td>Comidas rapidas</td>
+                    <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
+                    <td>22</td>
+                    <td>
+                        <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
+                        <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
+                        <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
+                    </td>
+                    <td>plata</td>
+                    <td>8:00 am - 11:00 pm</td>
+                    <td>
+                        <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
+                    </td>
                 </tr>
 
             </tbody>
