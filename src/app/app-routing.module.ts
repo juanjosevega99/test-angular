@@ -24,6 +24,7 @@ import { ReportGeneratorComponent } from './modules/ReportGen/components/report-
 import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/pqr-manager.component';
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
+import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component'
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   {path:"navbar", component:AppNavbarComponent},
   {path:"options", component:OptionsComponent},
   {path:"allyManager", component:AllyManagerComponent},
+  {path:"createAlly", component:CreateAllyComponent},
   {path:"userManager", component:UserManagerComponent},
   {path:"promoManager", component:PromoManagerComponent},
   {path:"cuponManager", component:CuponManagerComponent},
