@@ -25,33 +25,45 @@ import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/p
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
+import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
+import { MainComponent } from './components/main/main.component';
 
 
 const routes: Routes = [
-  { path: "login", component: LoginPageComponent},
   {
     path: "log",
-    component: LoginComponent ,
+    component: LoginComponent,
     children: [
 
       { path: "recovery_password", component: PasswordRecoveryComponent },
-      { path: "reset_password", component: NewPasswordComponent },
+      { path: "reset_password", component: ResestPasswordComponent },
       { path: "forget", component: LoginForgetComponent },
       { path: "loginForm", component: LoginFormComponent },
       { path: "**", redirectTo: "loginForm", pathMatch: 'full' },
+      
+    ]
+  },
+  
+  {
+    path: "main",
+    component: MainComponent,
+    children:[
 
+      { path: "options", component: OptionsComponent },
+      { path: "userManager", component: UserManagerComponent },
+      { path: "allyManager", component: AllyManagerComponent },
+      { path: "promoManager", component: PromoManagerComponent },
+      { path: "cuponManager", component: CuponManagerComponent },
+      { path: "reportGenerator", component: ReportGeneratorComponent },
+      { path: "pqrManager", component: PqrManagerComponent },
+      { path: "bannerManager", component: BannerManagerComponent },
+      { path: "tycManager", component: TycManagerComponent },
+
+      { path: "**", redirectTo: "options", pathMatch: 'full' },
+      
     ]
   },
   { path: "navbar", component: AppNavbarComponent },
-  { path: "options", component: OptionsComponent },
-  { path: "allyManager", component: AllyManagerComponent },
-  { path: "userManager", component: UserManagerComponent },
-  { path: "promoManager", component: PromoManagerComponent },
-  { path: "cuponManager", component: CuponManagerComponent },
-  { path: "reportGenerator", component: ReportGeneratorComponent },
-  { path: "pqrManager", component: PqrManagerComponent },
-  { path: "bannerManager", component: BannerManagerComponent },
-  { path: "tycManager", component: TycManagerComponent },
   { path: "principal", component: PrincipalPageComponent },
   { path: "menu", component: MainMenuComponent },
   { path: "aliados", component: ListAliadosComponent },
