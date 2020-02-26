@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Allies } from '../models/Allies';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
+import { Allies } from '../models/Allies';
 
 @Injectable({
   providedIn: 'root'

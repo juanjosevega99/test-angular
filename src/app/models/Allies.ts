@@ -1,4 +1,5 @@
 export class Allies{
+    id?:string;
     name?:string;
     nit?:string;
     documentNumber?:string;

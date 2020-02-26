@@ -22,9 +22,9 @@ export class LoginFormComponent implements OnInit {
   ngOnInit() {
     this.signError = true;
     
-    if( this.authentication.user ){
-      this.route.navigate(['options']);
-    }
+    // if( this.authentication.user ){
+    //   this.route.navigate(['options']);
+    // }
   }
 
   login(){
@@ -32,7 +32,7 @@ export class LoginFormComponent implements OnInit {
     this.authentication.login(this.email, this.pass)
     .then(res => {
 
-      this.route.navigate(['log']);
+      this.route.navigate(['options']);
 
     }).catch(err => {
       this.signError = false;
