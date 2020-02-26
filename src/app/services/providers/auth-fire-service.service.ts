@@ -43,5 +43,23 @@ export class AuthFireServiceService {
     return this.firebaseAuth.auth.sendPasswordResetEmail(email);
   }
 
+  //user is loged
+
+  isLoged():boolean{
+    firebase.auth().onAuthStateChanged( function (user){
+
+      if (user){
+        console.log("usuario logeado", user.email);
+        return true;
+        
+      }else{
+        console.log("usuario no logeado");
+        return false;
+      }
+      
+    } )
+    return false;
+  }
+
 
 }

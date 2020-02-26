@@ -44,6 +44,7 @@ import { ReportGeneratorComponent } from './modules/ReportGen/components/report-
 import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/pqr-manager.component';
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
+import { MainComponent } from './components/main/main.component';
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
     ReportGeneratorComponent,
     PqrManagerComponent,
     BannerManagerComponent,
-    TycManagerComponent
+    TycManagerComponent,
+    MainComponent
   ],
   imports: [
     HttpClientModule,
