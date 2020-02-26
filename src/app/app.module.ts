@@ -45,6 +45,7 @@ import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/p
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
 import { MainComponent } from './components/main/main.component';
+import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { MainComponent } from './components/main/main.component';
     PqrManagerComponent,
     BannerManagerComponent,
     TycManagerComponent,
-    MainComponent
+    MainComponent,
+    HeadquartersOptionsComponent
   ],
   imports: [
     HttpClientModule,

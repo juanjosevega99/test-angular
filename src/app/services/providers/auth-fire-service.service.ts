@@ -46,7 +46,8 @@ export class AuthFireServiceService {
   //user is loged
 
   isLoged():boolean{
-    firebase.auth().onAuthStateChanged( function (user){
+
+    firebase.auth().onAuthStateChanged( user => {
 
       if (user){
         console.log("usuario logeado", user.email);
