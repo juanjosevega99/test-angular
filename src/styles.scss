@@ -32,10 +32,15 @@ body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-se
 //style for margin of body of adminTfi
 .compenetsstyle{
     padding: 7rem;
+    
 }
 //Styles tables
 th, td{
     text-align: center;
-    vertical-align: middle;
+
 }
+
+.bootstrap-table .fixed-table-container .table thead th {
+    vertical-align: inherit;
+  }
 

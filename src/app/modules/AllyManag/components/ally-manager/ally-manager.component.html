@@ -18,12 +18,12 @@
             </form>
         </div>
         <div >
-            <a [routerLink]="['/createAlly']" class="btn btn-outline-primary my-sm-0">
+            <a [routerLink]="['/createAlly']" class="btn btn-outline-primary">
                 <p>Crear aliado</p>
             </a>
         </div>  
     </div>
-    <div class="row styleTable table-responsive">
+    <div class="row styleTable table-responsive mt-4">
 
         <table class="table table-bordered table-striped" id="table" data-toggle="table" data-show-columns="true"
             data-multiple-select-row="true" data-click-to-select="true" data-show-search-clear-button="true"
@@ -35,14 +35,17 @@
                     <th data-field="code" data-filter-control="input">Codigo</th>
                     <th data-field="nameStablishment" data-filter-control="input">Nombre del establecimiento</th>
                     <th data-field="foodType"  data-filter-control="input">Tipo de comida</th>
-                    <th data-field="logo"  >Logo</th>
-                    <th data-field="numberHeadquarters">Numero de sedes</th>
+                    <th data-field="logo"> logo </th>
+                    <th data-field="numberHeadquarters">Número de sedes</th>
                     <th data-field="services">Servicios</th>
                     <th data-field="allyType">Tipo de aliado</th>
                     <th data-field="schedule" class="position-relative">Horario</th>
                     <th data-field="edit" > </th>
+                    
                 </tr>
+                             
             </thead>
+
             <tbody id="myTable">
                 <tr>
                     <td >1061345234</td>

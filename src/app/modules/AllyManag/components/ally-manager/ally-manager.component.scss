@@ -1,31 +1,40 @@
-// styles search
+//syles of input search
+.sizeInput {
+  width: 25rem;
+}
+.backgroundIcon {
+  background-color: white;
+}
+// styles buttons primary
 .btn-outline-primary {
   color: rgba(0, 0, 0, 0.87);
   border-color: rgba(0, 0, 0, 0.87);
   border-radius: 0.4rem;
-  margin-bottom: 2rem;
 }
 .btn-outline-primary:hover {
   color: #fff;
   background-color: #552183;
 }
-
-.icon-size {
-  font-size: 2rem;
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #5a4183;
+  border-color: #5a4183;
 }
 
+//Style of section searach
 .styleContainer {
   display: flex;
   flex-direction: row;
-  // justify-content: space-between;
-  // align-items: center;
 }
+//Styles of table
 .styleTable {
-  // padding: 7rem;
   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: center;
+}
+//Styles of size icons
+.icon-size {
+  font-size: 2rem;
 }
 .sizeLogo {
   width: 5rem;
@@ -34,11 +43,4 @@
 .iconService {
   width: 2rem;
   height: 2rem;
-}
-//syles of input search
-.sizeInput {
-  width: 25rem;
-}
-.backgroundIcon {
-  background-color: white;
 }

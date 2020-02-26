@@ -1,0 +1,105 @@
+//Styles button primary
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #552183;
+}
+.btn-outline-primary {
+  color: rgba(0, 0, 0, 0.9);
+  border-color: rgba(0, 0, 0, 0.9);
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #5a4183;
+  border-color: #5a4183;
+}
+//paddin of container father
+.margin-container {
+  padding-top: 7rem;
+  padding-left: 1rem;
+  padding-bottom: 4rem;
+}
+//others
+.photo {
+  margin-left: 15px;
+  margin-right: 10px;
+  width: 80px;
+  height: 80px;
+  border: solid 0.5px gray;
+}
+
+.photo2 {
+  margin-left: 15px;
+  margin-right: 10px;
+  border-radius: 20px;
+}
+
+.btn-changePhoto {
+  height: 30px;
+}
+
+.margin-left2 {
+  margin-left: 1px;
+}
+
+.colors {
+  width: 80px;
+  margin-right: 3px;
+}
+
+.margin-left {
+  margin-left: 0px;
+}
+
+.width-defined {
+  width: 250px;
+  margin-top: 9px;
+}
+
+.horario {
+  border: solid 1px rgb(170, 170, 170);
+  padding: 4px;
+  margin-right: 4px;
+  width: 110px;
+  height: 40px;
+  margin-top: 7px;
+}
+
+.corousel-info {
+  margin-top: 8px;
+}
+
+.center {
+  text-align: center;
+}
+
+.width-horario {
+  width: 112px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn1 {
+  margin-left: 5px;
+  background-color: white;
+  padding: 5px;
+}
+
+.upload-btn-wrapper input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.main {
+  height: 120px;
+}
