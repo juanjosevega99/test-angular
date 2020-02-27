@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms' 
+import { NgForm } from '@angular/forms';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login-form',
@@ -16,6 +17,8 @@ export class LoginFormComponent implements OnInit {
 
   seepass:boolean = false;  
   Typetext = 'password';
+
+  loading:boolean = false;
 
   constructor( public authentication: AuthFireServiceService, public route: Router ) { }
 
@@ -32,7 +35,7 @@ export class LoginFormComponent implements OnInit {
     this.authentication.login(this.email, this.pass)
     .then(res => {
 
-      this.route.navigate(['options']);
+      this.route.navigate(['main']);
 
     }).catch(err => {
       this.signError = false;

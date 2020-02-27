@@ -1,8 +1,16 @@
 <app-app-navbar></app-app-navbar>
-<div class="row  margin-container">
-        <div class="col-1">
-                <div class="row justify-content-center"> <img src="assets/icons/back-button.png" height="30px"
-                                width="30px" alt=""> </div>
+<div class="row margin-container compenetsstyle ">
+    <div class="col-1">
+        <div class="row justify-content-center">  <img src="assets/icons/back-button.png" height="30px" width="30px" alt=""> </div>
+       
+    </div>
+
+    <div class="col-5 align-items-center">
+        <div class="filter-container  margin">
+            <div class="row">
+                <div class="col-5 align-items-center"> <label>Nombre del establecimiento</label></div>
+                <div class="col align-items-center"><input class="width-defined" type="text" name="Name" [(ngModel)]="aliado.name"  ></div>     
+              </div>
         </div>
 
         <div class="col-5 align-items-center">
