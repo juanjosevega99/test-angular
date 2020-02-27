@@ -17,7 +17,7 @@ export class LoginPageComponent implements OnInit {
   constructor( private fauth: AngularFireAuth, private spinner :NgxSpinnerService,private rputer: Router) { }
 
   login(){
-    this.spinner.show()
+    /* this.spinner.show() */
    this.fauth.auth.signInWithEmailAndPassword(this.email,this.password).then(
      (response)=> {
       this.spinner.hide(); 
