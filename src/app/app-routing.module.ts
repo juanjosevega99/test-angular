@@ -59,6 +59,7 @@ const routes: Routes = [
       { path: "pqrManager", component: PqrManagerComponent },
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
+      { path: "add-sede", component: AddSedeComponent },
 
       { path: "**", redirectTo: "options", pathMatch: 'full' },
       
@@ -69,7 +70,6 @@ const routes: Routes = [
   { path: "menu", component: MainMenuComponent },
   { path: "aliados", component: ListAliadosComponent },
   { path: "add-aliado", component: AddEstablecimientoComponent },
-  { path: "add-sede", component: AddSedeComponent },
   { path: "menu-aliado", component: MenuAliadoComponent },
   { path: "sedes", component: ListSedesComponent },
   { path: "add-menu", component: AddMenuComponent },

@@ -6,7 +6,7 @@ $principal-color :  #572483;
     text-align: center;
 }
 
-html, body { 
+html, body {
     height: 100%; 
     width: 100%;
     font-size: 15px;
@@ -36,6 +36,37 @@ body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-se
 .buttonstyle{
     background-color: #572483; 
     color: thistle; 
-    font-size: medium;
+    font-size: 1rem;
     padding: .5rem .5rem;
 }
+
+.btn:hover {
+    color:#e3e9ee;
+
+}
+
+.tifi-icon{
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.tifi-icon-back{
+    width: 2rem;
+    height: 2rem;
+    transform: rotate(180deg);
+    
+}
+
+
+
+
+
+
+
+//medias queries
+
+@media only screen and (max-width: 770px) {
+    html, body {
+        font-size: 13px;
+        }
+  }
