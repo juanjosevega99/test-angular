@@ -94,6 +94,9 @@ export class CreateAllyComponent implements OnInit {
     this.newEstablishment = termino.toLowerCase();
     this.TypeEstablishment.push(this.newEstablishment)
   }
+  putColor(termino:any){
+    console.log(termino)
+  }
   handleBoxCategory():boolean{
     if (this.otherCatSelect) {
         return this.otherCatSelect = false,

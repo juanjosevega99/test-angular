@@ -28,7 +28,7 @@ import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
-
+import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component';
 
 const routes: Routes = [
   {
@@ -41,18 +41,19 @@ const routes: Routes = [
       { path: "forget", component: LoginForgetComponent },
       { path: "loginForm", component: LoginFormComponent },
       { path: "**", redirectTo: "loginForm", pathMatch: 'full' },
-      
+
     ]
   },
-  
+
   {
     path: "main",
     component: MainComponent,
-    children:[
+    children: [
 
       { path: "options", component: OptionsComponent },
       { path: "userManager", component: UserManagerComponent },
       { path: "allyManager", component: AllyManagerComponent },
+      { path: "createAlly", component: CreateAllyComponent },
       { path: "promoManager", component: PromoManagerComponent },
       { path: "cuponManager", component: CuponManagerComponent },
       { path: "reportGenerator", component: ReportGeneratorComponent },
@@ -62,7 +63,7 @@ const routes: Routes = [
       { path: "add-sede", component: AddSedeComponent },
 
       { path: "**", redirectTo: "options", pathMatch: 'full' },
-      
+
     ]
   },
   { path: "navbar", component: AppNavbarComponent },
