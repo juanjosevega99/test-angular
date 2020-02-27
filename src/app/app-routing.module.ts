@@ -27,6 +27,7 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 import { MainComponent } from './components/main/main.component';
+import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
 
 
 const routes: Routes = [
@@ -58,6 +59,7 @@ const routes: Routes = [
       { path: "pqrManager", component: PqrManagerComponent },
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
+      { path: "add-sede", component: AddSedeComponent },
 
       { path: "**", redirectTo: "options", pathMatch: 'full' },
       
@@ -68,11 +70,11 @@ const routes: Routes = [
   { path: "menu", component: MainMenuComponent },
   { path: "aliados", component: ListAliadosComponent },
   { path: "add-aliado", component: AddEstablecimientoComponent },
-  { path: "add-sede", component: AddSedeComponent },
   { path: "menu-aliado", component: MenuAliadoComponent },
   { path: "sedes", component: ListSedesComponent },
   { path: "add-menu", component: AddMenuComponent },
   { path: "side-bar", component: SideBarComponent },
+  { path: "headquarts", component: HeadquartersOptionsComponent },
   { path: "**", redirectTo: "log", pathMatch: 'full' },
 
 ];
