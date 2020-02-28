@@ -44,6 +44,7 @@ import { ReportGeneratorComponent } from './modules/ReportGen/components/report-
 import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/pqr-manager.component';
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
+import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component';
 import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
 import { CreateHeadquarterComponent } from './modules/AllyManag/components/create-headquarter/create-headquarter.component';
@@ -80,6 +81,7 @@ import { CreateHeadquarterComponent } from './modules/AllyManag/components/creat
     PqrManagerComponent,
     BannerManagerComponent,
     TycManagerComponent,
+    CreateAllyComponent,
     MainComponent,
     HeadquartersOptionsComponent,
     CreateHeadquarterComponent

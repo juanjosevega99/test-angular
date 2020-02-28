@@ -1,72 +1,80 @@
 /* You can add global styles to this file, and also import other style files */
 
-$principal-color :  #572483;
+$principal-color: #572483;
 
-.text-center{
-    text-align: center;
+// .text-center{
+//     text-align: center;
+//     vertical-align: middle;
+// }
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 15px;
+}
+body {
+  margin: 0;
+  color: #572483;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html, body {
-    height: 100%; 
-    width: 100%;
-    font-size: 15px;
-    }
-body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.margin-padding-tifi{
-    margin-top: 3rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
+.margin-padding-tifi {
+  margin-top: 3rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
 }
 
-.text-with-out{
-    margin-bottom: 0;
+.text-with-out {
+  margin-bottom: 0;
 }
 
-.text-tifi-bold{
-    text-align: center !important;
-    font-weight: bold;
-    font-size: 1.2rem;
+.text-tifi-bold {
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+//style for margin of body of adminTfi
+.compenetsstyle {
+  padding: 7rem;
+}
+//Styles tables
+th,
+td {
+  text-align: center;
 }
 
-.compenetsstyle{
-    padding: 7rem;
+.bootstrap-table .fixed-table-container .table thead th {
+  vertical-align: inherit;
 }
 
-.buttonstyle{
-    background-color: #572483; 
-    color: thistle; 
-    font-size: 1rem;
-    padding: .5rem .5rem;
+.buttonstyle {
+  background-color: #572483;
+  color: thistle;
+  font-size: 1rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .btn:hover {
-    color:#e3e9ee;
-
+  color: #e3e9ee;
 }
 
-.tifi-icon{
-    width: 1.2rem;
-    height: 1.2rem;
+.tifi-icon {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
-.tifi-icon-back{
-    width: 2rem;
-    height: 2rem;
-    transform: rotate(180deg);
-    
+.tifi-icon-back {
+  width: 2rem;
+  height: 2rem;
+  transform: rotate(180deg);
 }
-
-
-
-
-
-
 
 //medias queries
 
 @media only screen and (max-width: 770px) {
-    html, body {
-        font-size: 13px;
-        }
+  html,
+  body {
+    font-size: 13px;
   }
+}
