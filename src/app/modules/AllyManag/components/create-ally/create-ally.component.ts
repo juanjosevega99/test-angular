@@ -16,9 +16,11 @@ export class CreateAllyComponent implements OnInit {
   TypeEstablishment: String[] = [];
   Categoria: String[] = [];
   photo: any;
+  //variables carousel
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
+  contImage:number = 0;
   //handle button other category
   otherCatSelect: boolean = true
   otherCatInput: boolean = false
@@ -41,7 +43,6 @@ export class CreateAllyComponent implements OnInit {
 
     this.horas = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
-
   }
 
   ngOnInit() {
@@ -63,6 +64,8 @@ export class CreateAllyComponent implements OnInit {
 
   }
 
+  //function for carousel images
+
   onImagesSelected($event) {
     let input = $event.target;
     console.log($event)
@@ -73,15 +76,16 @@ export class CreateAllyComponent implements OnInit {
       reader.onload = (e: any) => {
         image = e.target.result;
         this.imagesUploaded.push({ image: image, thumbImage: image })
-
-
       }
 
       this.aliado.images.push(input.files[0])
       reader.readAsDataURL(input.files[0]);
+      this.contImage = this.aliado.images.length;
     }
 
   }
+  // functions for adding text input and select
+
   handleBoxEstablishment():boolean{
     if (this.otherEstablishmentSelect) {
         return this.otherEstablishmentSelect = false,
@@ -91,7 +95,6 @@ export class CreateAllyComponent implements OnInit {
       return this.otherEstablishmentSelect = true,
       this.otherEstablishmentInput= false       
     }
-
   }
   addEstablishment(termino:String){
     this.newEstablishment = termino.toLowerCase();

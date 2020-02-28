@@ -1,4 +1,3 @@
-
 <div class="row  margin-container">
         <div class="col-1">
                 <div class="row justify-content-center">
@@ -8,25 +7,32 @@
                 </div>
         </div>
 
-        <div class="col-5 align-items-center">
+        <div class="d-flex flex-column " style="background-color: red;">
+                <div class="d-flex flex-row ">
+                        
+                                <div class="d-flex fjustify-content-around  "> 
+                                        <label>Nombre del establecimiento</label>
+                                        <input  type="text" name="Name" [(ngModel)]="aliado.name">
+                                </div>
+                                <div class="">
+                                </div>
+                        
+                </div>
                 <div class="filter-container  margin">
                         <div class="row">
-                                <div class="col-5 align-items-center"> <label>Nombre del establecimiento</label></div>
-                                <div class="col align-items-center">
-                                        <input class="width-defined" type="text" name="Name" [(ngModel)]="aliado.name">
+                                <div class="col-sm-5 col-md-5  width-defined"><label>NIT.</label></div>
+                                <div class="col">
+                                        <input 
+                                        class="width-defined" 
+                                        type="text" 
+                                        name="nit"        
+                                        [(ngModel)]="aliado.nit">
                                 </div>
                         </div>
                 </div>
                 <div class="filter-container  margin">
                         <div class="row">
-                                <div class="col-5"><label>NIT.</label></div>
-                                <div class="col"><input class="width-defined" type="text" name="nit"
-                                                [(ngModel)]="aliado.nit"></div>
-                        </div>
-                </div>
-                <div class="filter-container  margin">
-                        <div class="row">
-                                <div class="col-5"><label>Representante legal</label></div>
+                                <div class="col-5 width-defined"><label>Representante legal</label></div>
                                 <div class="col"><input class="width-defined" type="text" name="representante"
                                                 [(ngModel)]="aliado.representante"></div>
                         </div>
@@ -67,20 +73,13 @@
                                 <div class="col">
                                         <div class=" picker row  margin-left2 width-defined">
 
-                                                <input 
-                                                [(ngModel)]="aliado.colors[0]" 
-                                                class="colors" 
-                                                type="number"
-                                                placeholder="Rojo" 
-                                                min="0" 
-                                                max="255"
-                                                id="red"
-                                                >
+                                                <input [(ngModel)]="aliado.colors[0]" class="colors" type="number"
+                                                        placeholder="Rojo" min="0" max="255" id="red">
                                                 <input [(ngModel)]="aliado.colors[1]" class="colors" type="number"
                                                         placeholder="Verde" min="0" max="255" id="green">
                                                 <input [(ngModel)]="aliado.colors[2]" class="colors" type="number"
-                                                               placeholder="Azul" min="0" max="255" id="blue">
-                                                <input  type="color" #color (click)='vercolor(color.value)' >
+                                                        placeholder="Azul" min="0" max="255" id="blue">
+                                                <input type="color" #color (click)='vercolor(color.value)'>
                                                 <!-- <div id="color-picker-1" class="colors" >  </div> -->
 
                                         </div>
@@ -102,16 +101,17 @@
                                                                 {{time}}
                                                         </option>
                                                 </select>
-                                                <input *ngIf="otherEstablishmentInput" 
-                                                        class="selectSize mr-2"
-                                                        type="text" 
-                                                        name="otherEstablishment" 
-                                                        (keyup.enter)="addEstablishment(additem.value)" 
-                                                        #additem
-                                                >
+                                                <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
+                                                        type="text" name="otherEstablishment"
+                                                        (keyup.enter)="addEstablishment(additem.value)" #additem>
+                                                <!-- <button (click)=" addEstablishment(additem.value)"
+                                                        *ngIf="otherEstablishmentInput"
+                                                        class="btn1 btn btn-outline-primary"> Añadir
+                                                </button> -->
                                                 <button (click)=" handleBoxEstablishment()"
-                                                        class="btn1 btn btn-outline-primary"> Otro 
+                                                        class="btn1 btn btn-outline-primary"> Otro
                                                 </button>
+
                                         </div>
                                 </div>
 
@@ -137,7 +137,7 @@
                         </div>
                 </div>
 
-                <div class="filter-container margin">
+                <div class="form  margin">
                         <div class="row">
                                 <div class="col-5"><label>Categoría de comida</label> </div>
                                 <div class="col">
@@ -181,171 +181,188 @@
 
         <div class="col-4">
 
-                <div class="filter-container  margin">
-                        <div class="row">
-                                <div class="col-3"> <label>Horario</label> </div>
-                                <div class="col">
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Día</p>
-                                                </div>
-                                                <div class="horario center">
-                                                        <p>Apertura</p>
-                                                </div>
-                                                <div class="horario center">
-                                                        <p>Cerrado</p>
-                                                </div>
+                <div class="row ">
+                        <div class="col-2"> <label>Horario</label> </div>
+                        <div class="col containerSchedule">
+                                <div class="row ">
+                                        <div class="horario center mx-2">
+                                                <p>Día</p>
                                         </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Lunes</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[0].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[0].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
+                                        <div class="horario center mx-2">
+                                                <p>Apertura</p>
                                         </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Martes</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[1].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[1].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
+                                        <div class="horario center mx-2">
+                                                <p>Cerrado</p>
                                         </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Miércoles</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[2].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[2].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                        </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Jueves</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[3].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[3].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                        </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Viernes</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[4].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[4].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                        </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Sábado</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[5].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[5].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                        </div>
-
-                                        <div class="row">
-                                                <div class="horario center">
-                                                        <p>Domingo</p>
-                                                </div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[6].from"
-                                                                class="width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                                <div class=" center"><select [(ngModel)]="aliado.days[6].to"
-                                                                class=" width-horario browser-default custom-select width-defined">
-                                                                <option selected>---------------------</option>
-                                                                <option *ngFor="let time of horas" [value]="time">
-                                                                        {{time}}</option>
-                                                        </select></div>
-                                        </div>
-
-
-
                                 </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Lunes</p>
+                                                <!-- <input value="Lunes" type=""> -->
+                                        </div>
+                                        <div class=" center">
+                                                <select [(ngModel)]="aliado.days[0].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select>
+                                        </div>
+                                        <div class=" center">
+                                                <select [(ngModel)]="aliado.days[0].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select>
+                                        </div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Martes</p>
+                                        </div>
+                                        <div class=" center">
+                                                <select [(ngModel)]="aliado.days[1].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select>
+                                        </div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[1].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Miércoles</p>
+                                        </div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[2].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[2].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Jueves</p>
+                                        </div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[3].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[3].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Viernes</p>
+                                        </div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[4].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[4].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Sábado</p>
+                                        </div>
+                                        <div class=" center">
+                                                <select [(ngModel)]="aliado.days[5].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select>
+                                        </div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[5].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select>
+                                        </div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="horario center">
+                                                <p>Domingo</p>
+                                        </div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[6].from"
+                                                        class="width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                        <div class=" center"><select [(ngModel)]="aliado.days[6].to"
+                                                        class=" width-horario browser-default custom-select ">
+                                                        <option selected>---------------------</option>
+                                                        <option *ngFor="let time of horas" [value]="time">
+                                                                {{time}}</option>
+                                                </select></div>
+                                </div>
+
                         </div>
                 </div>
+
                 <div class="row">
-                        <div class="col-3"><label>Fotos del establecimiento</label> </div>
+                        <div class="col-3 mt-5 "><label class="text-center">Fotos del establecimiento</label> </div>
                         <div class="col align-items-center">
-                                <div class="row align-items-center">
+                                <div class="d-flex flex-column justify-content-center align-items-center mt-3">
 
-                                        <P *ngIf="imagesUploaded.length==0"
-                                                style="margin-top: 20px; margin-right: 10px; color: crimson; ">No hay
-                                                imagenes subidas</P>
-                                        <ng-image-slider *ngIf="imagesUploaded.length>0"
-                                                style="width: 230px; height: 120px; margin-top: 10px;"
-                                                [imageSize]="imageSize" [images]="imagesUploaded" #nav>
-                                        </ng-image-slider>
+                                        <div class="d-flex flex-column justify-content-center align-items-center ">
 
+                                                <div class="d-flex flex-column ">
+                                                        <ng-image-slider *ngIf="imagesUploaded.length>0"
+                                                                style="width: 230px; height: 120px; "
+                                                                [imageSize]="imageSize" [images]="imagesUploaded" #nav>
+                                                        </ng-image-slider>
 
-                                        <div class="upload-btn-wrapper">
-                                                <button class="btn1 btn btn-outline-primary">Agregar</button>
-                                                <input type="file" name="photo" (change)="onImagesSelected($event)" />
+                                                        <P *ngIf="imagesUploaded.length==0" style="color: crimson; ">
+                                                                No hay imagenes subidas</P>
+
+                                                        <div class="upload-btn-wrapper mt-3  ">
+                                                                <button class=" container  btn btn-outline-primary ">Adjuntar
+                                                                        archivos
+                                                                        {{contImage}} </button>
+                                                                <input type="file" name="photo"
+                                                                        (change)="onImagesSelected($event)" />
+                                                        </div>
+
+                                                </div>
+
                                         </div>
+
                                 </div>
 
                         </div>
@@ -355,7 +372,7 @@
 
 
         </div>
-        <div class="col-2 d-flex flex-column justify-content-center align-items-center " >
+        <div class="col-2 d-flex flex-column justify-content-center align-items-center ">
 
                 <div class="d-flex flex-column ">
                         <button class="btn btn-outline-primary mb-5">Guardar</button>
