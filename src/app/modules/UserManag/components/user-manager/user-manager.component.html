@@ -1,18 +1,73 @@
-<app-app-navbar></app-app-navbar>
-
 
 <div class="compenetsstyle">
 <div>
+  <div>
+    <form class="form-inline">
+      <div class="form-group hidden">
+        <div class="input-group">
+          <input name="datepicker"
+                 class="form-control"
+                 ngbDatepicker
+                 #datepicker="ngbDatepicker"
+                 [autoClose]="'outside'"
+                 (dateSelect)="onDateSelection($event)"
+                 [displayMonths]="2"
+                 [dayTemplate]="t"
+                 outsideDays="hidden"
+                 [startDate]="fromDate">
+          <ng-template #t let-date let-focused="focused">
+            <span class="custom-day"
+                  [class.focused]="focused"
+                  [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)"
+                  (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <input #dpFromDate
+                 class="form-control" 
+                 placeholder="yyyy-mm-dd"
+                 name="dpFromDate"
+                 [value]="formatter.format(fromDate)"
+                 (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group ml-2">
+        <div class="input-group">
+          <input #dpToDate
+                 class="form-control" 
+                 placeholder="yyyy-mm-dd"
+                 name="dpToDate"
+                 [value]="formatter.format(toDate)"
+                 (input)="toDate = validateInput(toDate, dpToDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      <button (click)=" SeachingRange( dpFromDate.value, dpToDate.value )" type="button" class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
+      <button (click)="clear()" type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+    </form>
+  
+  </div>
+
   
   <input class="form-control" id="myInput" type="text" placeholder="Buscar.." >
- 
 
   <table class="table table-bordered table-striped" 
   id="table"
-  data-toggle="table"
   data-show-columns="true"
-  data-multiple-select-row="true"
   data-click-to-select="true"
+  data-multiple-select-row="true"
+  data-toggle="table"
   data-show-search-clear-button="true"
   data-filter-control="true"
   >
@@ -21,142 +76,50 @@
       <tr>
         <th>Fecha</th>
         <th data-field="name" data-filter-control="input">Nombre</th>
-        <th data-field="correo" data-filter-control="input">Correo</th>
-        <th data-field="celular" data-filter-control="input">Celular</th>
-        <th data-field="fechaNacimiento" data-filter-control="input">Fecha Nacimiento</th>
+        <th data-field="email" data-filter-control="input">Correo</th>
+        <th data-field="cellphone" data-filter-control="input">Celular</th>
+        <th data-field="bornDate" data-filter-control="input">Fecha Nacimiento</th>
         <th data-field="genero" data-filter-control="input">Género</th>
-        <th data-field="establecimiento" data-filter-control="input">Establecimiento</th>
-        <th data-field="sede" data-filter-control="input">Sede</th>
-        <th data-field="usabilidad" data-filter-control="input">Usabilidad</th>
-        <th data-field="monto" data-filter-control="input">Monto compras</th>
+        <th data-field="establishment" data-filter-control="input">Establecimiento</th>
+        <th data-field="headquart" data-filter-control="input">Sede</th>
+        <th data-field="usability" data-filter-control="input">Usabilidad</th>
+        <th data-field="quantity" data-filter-control="input">Monto compras</th>
         <th data-field="state" data-checkbox="true"> Seleccionar</th>
       </tr>
     </thead>
-    <tbody id="myTable">
-      <tr>
-        <td>01/02/2019</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3245672341</td>
-        <td>09/01/1997</td>
-        <td>femenino</td>
-        <td>KFC</td>
-        <td>Galerías</td>
-        <td>1</td>
-        <td>$12.000</td>
+    <tbody *ngIf="searchdate" id="myTable">
+      <tr *ngFor="let user of users" >
+        <td>{{user.date}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.cellphone}}</td>
+        <td>{{user.bornDate}}</td>
+        <td>{{user.gender}}</td>
+        <td>{{user.establishment}}</td>
+        <td>{{user.headquart}}</td> 
+        <td>{{user.usability}}</td>
+        <td>{{user.quantity}}</td>
       </tr>
-      <tr>
-        <td>04/08/2019</td>
-        <td>Kenny</td>
-        <td>mary@mail.com</td>
-        <td>3125672341</td>
-        <td>19/01/1995</td>
-        <td>masculino</td>
-        <td>KFC</td>
-        <td>Centro</td>
-        <td>1</td>
-        <td>$12.000</td>
+      
+    </tbody>
+    <tbody *ngIf="!searchdate" id="myTabledate">
+      <tr *ngFor="let user of users" >
+        <td>{{user.date}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.cellphone}}</td>
+        <td>{{user.bornDate}}</td>
+        <td>{{user.gender}}</td>
+        <td>{{user.establishment}}</td>
+        <td>{{user.headquart}}</td> 
+        <td>{{user.usability}}</td>
+        <td>{{user.quantity}}</td>
       </tr>
-      <tr>
-        <td>23/03/2020</td>
-        <td>Ana</td>
-        <td>july@greatstuff.com</td>
-        <td>3214577223</td>
-        <td>11/05/1945</td>
-        <td>femenino</td>
-        <td>Corral</td>
-        <td>Galerías</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>08/10/2019</td>
-        <td>Sofia </td>
-        <td>a_r@test.com</td>
-        <td>3105672341</td>
-        <td>09/12/1976</td>
-        <td>femenino</td>
-        <td>Corral</td>
-        <td>Centro</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/02/2019</td>
-        <td>Edwin</td>
-        <td>a_r@test.com</td>
-        <td>3145332122</td>
-        <td>12/10/1923</td>
-        <td>masculino</td>
-        <td>Corral</td>
-        <td>Norte</td>
-        <td>0</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>09/12/2018</td>
-        <td>Isabella</td>
-        <td>a_r@test.com</td>
-        <td>3245672341</td>
-        <td>10/23/1998</td>
-        <td>femenino</td>
-        <td>Qbano</td>
-        <td>Galerías</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/02/2018</td>
-        <td>Natalia</td>
-        <td>a_r@test.com</td>
-        <td>3208666765</td>
-        <td>31/10/1956</td>
-        <td>femenino</td>
-        <td>Qbano</td>
-        <td>Centro</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/05/2019</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3208666765</td>
-        <td>09/09/1965</td>
-        <td>femenino</td>
-        <td>Sr. Wook</td>
-        <td>Galerias</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/02/2020</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3208666765</td>
-        <td>02/10/1999</td>
-        <td>femenino</td>
-        <td>Sr. Wook</td>
-        <td>Centro</td>
-        <td>0</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>12/04/2029</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3208666765</td>
-        <td>15/11/2000</td>
-        <td>femenino</td>
-        <td>Sr. Wook</td>
-        <td>Sur</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
+      
     </tbody>
   </table>
   <div style="margin-top: 2rem">
-      <button type="button" class="btn " style="background-color: #92d050;">Enviar a cupones</button>
+      <button type="button" class ="btn " style="background-color: #92d050;">Enviar a cupones</button>
       <button type="button" class="btn " style="background-color: #f4b081">Enviar a promociones</button>
       <button type="button" class="btn btn-success">Generar Excel</button>
       <button type="button" class="btn btn-danger">Generar PDF</button>

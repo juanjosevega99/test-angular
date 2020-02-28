@@ -54,16 +54,22 @@
       </div>
     </div>
     <button (click)=" SeachingRange( dpFromDate.value, dpToDate.value )" type="button" class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
+    <button (click)="clear()" type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
   </form>
 
   <table class="table table-bordered table-striped" 
   id="table"
   data-show-columns="true"
+  data-click-to-select="true"
+  data-multiple-select-row="true"
+  data-toggle="table"
+  data-show-search-clear-button="true"
+  data-filter-control="true"
   >
 
   <thead>
     <tr>
-      <th>Fecha</th>
+      <th data-field="date" data-filter-control="input">Fecha</th>
     </tr>
   </thead>
   <tbody id="myTable">
@@ -72,7 +78,6 @@
     </tr>
   </tbody>
 </table>
-
 
   <!-- <hr/>
   <pre>From date model: {{ fromDate | json }}</pre>

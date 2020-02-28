@@ -15,12 +15,14 @@ export class TycManagerComponent implements OnInit {
 
   from: string;
   to: string;
-  datos: any[] = [{ date: '2020-02-01' }, { date: '2020-02-02' }, { date: '2020-02-03' }, { date: '2020-02-04' }]
+  dataorigi = [{ date: '2020-02-01' }, { date: '2020-02-02' }, { date: '2020-02-03' }, { date: '2020-02-04' }];
+
+  datos: any[] = [{ date: '2020-02-01' }, { date: '2020-02-02' }, { date: '2020-02-03' }, { date: '2020-02-04' }];
   newdateArray: { date: string }[] = [];
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) {
-    this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    // this.fromDate = calendar.getToday();
+    // this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
   onDateSelection(date: NgbDate) {
@@ -55,22 +57,22 @@ export class TycManagerComponent implements OnInit {
 
   }
 
-  SeachingRange(dateFrom: string, dateTo: string) {
+  SeachingRange(dateFrom: string, dateTo: string) { 
 
     this.from = dateFrom;
     this.to = dateTo;
 
-    console.log(this.from);
-    console.log(this.to);
+    // console.log(this.from);
+    // console.log(this.to);
 
     const mydateFrom = new Date(this.from);
     const mydateTo = new Date(this.to);
 
-    console.log(mydateFrom);
-    console.log(typeof (mydateFrom));
+    // console.log(mydateFrom);
+    // console.log(typeof (mydateFrom));
 
-    console.log(" from ", mydateFrom.toDateString());
-    console.log(" to ", mydateTo.toDateString());
+    // console.log(" from ", mydateFrom.toDateString());
+    // console.log(" to ", mydateTo.toDateString());
 
     /// comparando
 
@@ -78,15 +80,24 @@ export class TycManagerComponent implements OnInit {
       const date = new Date(this.datos[i].date);
       if (date >= mydateFrom && date <= mydateTo) {
         this.newdateArray.push(this.datos[i]);
-        console.log(date.toDateString(), " esta en el rago");
+        // console.log(date.toDateString(), " esta en el rago");
       }
       else{
 
-        console.log(date.toDateString(), "no esta en el rango");
+        // console.log(date.toDateString(), "no esta en el rango");
       }
     }
     this.datos = this.newdateArray;
-    console.log(this.datos.length);
+    this.newdateArray = [];
+
+    console.log(this.fromDate);
+    console.log(this.toDate );
+  
+  }
+
+  clear(){
+
+    this.datos = this.dataorigi;
     this.newdateArray = [];
 
   }
