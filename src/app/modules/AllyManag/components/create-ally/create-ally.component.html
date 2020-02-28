@@ -65,14 +65,23 @@
                         <div class="row">
                                 <div class="col-5"><label>Color para entidad</label> </div>
                                 <div class="col">
-                                        <div class="row  margin-left2 width-defined">
+                                        <div class=" picker row  margin-left2 width-defined">
 
-                                                <input [(ngModel)]="aliado.colors[0]" class="colors" type="number"
-                                                        placeholder="Rojo">
+                                                <input 
+                                                [(ngModel)]="aliado.colors[0]" 
+                                                class="colors" 
+                                                type="number"
+                                                placeholder="Rojo" 
+                                                min="0" 
+                                                max="255"
+                                                id="red"
+                                                >
                                                 <input [(ngModel)]="aliado.colors[1]" class="colors" type="number"
-                                                        placeholder="Verde">
+                                                        placeholder="Verde" min="0" max="255" id="green">
                                                 <input [(ngModel)]="aliado.colors[2]" class="colors" type="number"
-                                                        placeholder="Azul">
+                                                               placeholder="Azul" min="0" max="255" id="blue">
+                                                <input  type="color" >
+                                                <!-- <div id="color-picker-1" class="colors" >  </div> -->
 
                                         </div>
                                 </div>
@@ -101,8 +110,8 @@
                                                         #additem
                                                 >
                                                 <button (click)=" handleBoxEstablishment()"
-                                                        class="btn1 btn btn-outline-primary"> Otro </button>
-                                                <input type="color" (keyup.enter)="putColor(color.value)"#color>
+                                                        class="btn1 btn btn-outline-primary"> Otro 
+                                                </button>
                                         </div>
                                 </div>
 

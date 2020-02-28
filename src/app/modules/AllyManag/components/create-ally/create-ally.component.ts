@@ -44,6 +44,7 @@ export class CreateAllyComponent implements OnInit {
 
   ngOnInit() {
   }
+   
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
