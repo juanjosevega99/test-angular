@@ -1,4 +1,4 @@
-<app-app-navbar></app-app-navbar>
+
 <div class="row  margin-container">
         <div class="col-1">
                 <div class="row justify-content-center">
@@ -80,7 +80,7 @@
                                                         placeholder="Verde" min="0" max="255" id="green">
                                                 <input [(ngModel)]="aliado.colors[2]" class="colors" type="number"
                                                                placeholder="Azul" min="0" max="255" id="blue">
-                                                <input  type="color" >
+                                                <input  type="color" #color (click)='vercolor(color.value)' >
                                                 <!-- <div id="color-picker-1" class="colors" >  </div> -->
 
                                         </div>
