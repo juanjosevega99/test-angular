@@ -28,6 +28,7 @@ import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
+import { CreateHeadquarterComponent } from './modules/AllyManag/components/create-headquarter/create-headquarter.component';
 import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component';
 
 const routes: Routes = [
@@ -61,6 +62,7 @@ const routes: Routes = [
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
       { path: "add-sede", component: AddSedeComponent },
+      { path: "createHeadquarter", component: CreateHeadquarterComponent },
 
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 

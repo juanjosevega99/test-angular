@@ -47,6 +47,7 @@ import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/t
 import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component';
 import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
+import { CreateHeadquarterComponent } from './modules/AllyManag/components/create-headquarter/create-headquarter.component';
 
 
 @NgModule({
@@ -82,7 +83,8 @@ import { HeadquartersOptionsComponent } from './modules/AllyManag/components/hea
     TycManagerComponent,
     CreateAllyComponent,
     MainComponent,
-    HeadquartersOptionsComponent
+    HeadquartersOptionsComponent,
+    CreateHeadquarterComponent
   ],
   imports: [
     HttpClientModule,
