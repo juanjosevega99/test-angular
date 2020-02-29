@@ -38,22 +38,22 @@
     <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
   </form>
 
-  <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+  <input class="form-control" id="general" type="text" placeholder="Buscar.." #general (keyup)="searchbyterm(general.value)" >
 
   <table class="table table-bordered table-striped" id="table" data-show-search-clear-button="true"
     data-filter-control="true">
     <thead>
       <tr>
         <th class="text-center">Date</th>
-        <th class="text-center">name <input class="form-control" type="text" (keyup) = "search(name.value)" #name></th>
-        <th class="text-center">email <input class="form-control" type="text"></th>
-        <th class="text-center">cellphone <input class="form-control" type="text"></th>
-        <th class="text-center">bornDate <input class="form-control" type="text"></th>
-        <th class="text-center">gender <input class="form-control" type="text"></th>
-        <th class="text-center">establishment <input class="form-control" type="text"></th>
-        <th class="text-center">headquart <input class="form-control" type="text"></th>
-        <th class="text-center">usability <input class="form-control" type="text"></th>
-        <th class="text-center">quantity <input class="form-control" type="text"></th>
+        <th class="text-center">name <input class="form-control" type="text" (keyup) = "search(name.value, name.id)" #name id="name"></th>
+        <th class="text-center">email <input class="form-control" type="text" (keyup) = "search( email.value, email.id )" #email id="email"  ></th>
+        <th class="text-center">cellphone <input class="form-control" type="text" id="cellphone" (keyup) = "search(cellphone.value, cellphone.id)" #cellphone></th>
+        <th class="text-center">bornDate <input class="form-control" type="text" id="birthday" (keyup) = "search(birthday.value, birthday.id)" #birthday></th>
+        <th class="text-center">gender <input class="form-control" type="text" id="gender" (keyup) = "search(gender.value, gender.id)" #gender></th>
+        <th class="text-center">establishment <input class="form-control" type="text" id="establishment" (keyup) = "search(establishment.value, establishment.id)" #establishment></th>
+        <th class="text-center">headquart <input class="form-control" type="text" id="headquart" (keyup) = "search(headquart.value, headquart.id)" #headquart></th>
+        <th class="text-center">usability <input class="form-control" type="text" id="usability" (keyup) = "search(usability.value, usability.id)" #usability></th>
+        <th class="text-center">quantity <input class="form-control" type="text" id="quantity" (keyup) = "search(quantity.value, quantity.id)" #quantity></th>
       </tr>
 
     </thead>
@@ -63,7 +63,7 @@
         <td>{{user.name}}</td>
         <td>{{user.email}}</td>
         <td>{{user.cellphone}}</td>
-        <td>{{user.bornDate}}</td>
+        <td>{{user.birthday}}</td>
         <td>{{user.gender}}</td>
         <td>{{user.establishment}}</td>
         <td>{{user.headquart}}</td>

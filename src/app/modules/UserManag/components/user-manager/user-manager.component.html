@@ -1,130 +1,13 @@
-
 <div class="compenetsstyle">
-<div>
-  <div>
-    <form class="form-inline">
-      <div class="form-group hidden">
-        <div class="input-group">
-          <input name="datepicker"
-                 class="form-control"
-                 ngbDatepicker
-                 #datepicker="ngbDatepicker"
-                 [autoClose]="'outside'"
-                 (dateSelect)="onDateSelection($event)"
-                 [displayMonths]="2"
-                 [dayTemplate]="t"
-                 outsideDays="hidden"
-                 [startDate]="fromDate">
-          <ng-template #t let-date let-focused="focused">
-            <span class="custom-day"
-                  [class.focused]="focused"
-                  [class.range]="isRange(date)"
-                  [class.faded]="isHovered(date) || isInside(date)"
-                  (mouseenter)="hoveredDate = date"
-                  (mouseleave)="hoveredDate = null">
-              {{ date.day }}
-            </span>
-          </ng-template>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <input #dpFromDate
-                 class="form-control" 
-                 placeholder="yyyy-mm-dd"
-                 name="dpFromDate"
-                 [value]="formatter.format(fromDate)"
-                 (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group ml-2">
-        <div class="input-group">
-          <input #dpToDate
-                 class="form-control" 
-                 placeholder="yyyy-mm-dd"
-                 name="dpToDate"
-                 [value]="formatter.format(toDate)"
-                 (input)="toDate = validateInput(toDate, dpToDate.value)">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
-          </div>
-        </div>
-      </div>
-      <button (click)=" SeachingRange( dpFromDate.value, dpToDate.value )" type="button" class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
-      <button (click)="clear()" type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
-    </form>
-  
-  </div>
 
-  
-  <input class="form-control" id="myInput" type="text" placeholder="Buscar.." >
-
-  <table class="table table-bordered table-striped" 
-  id="table"
-  data-show-columns="true"
-  data-click-to-select="true"
-  data-multiple-select-row="true"
-  data-toggle="table"
-  data-show-search-clear-button="true"
-  data-filter-control="true"
-  >
-  <!-- data-search="true" -->
-  <thead>
-      <tr>
-        <th>Fecha</th>
-        <th data-field="name" data-filter-control="input">Nombre</th>
-        <th data-field="email" data-filter-control="input">Correo</th>
-        <th data-field="cellphone" data-filter-control="input">Celular</th>
-        <th data-field="bornDate" data-filter-control="input">Fecha Nacimiento</th>
-        <th data-field="genero" data-filter-control="input">Género</th>
-        <th data-field="establishment" data-filter-control="input">Establecimiento</th>
-        <th data-field="headquart" data-filter-control="input">Sede</th>
-        <th data-field="usability" data-filter-control="input">Usabilidad</th>
-        <th data-field="quantity" data-filter-control="input">Monto compras</th>
-        <th data-field="state" data-checkbox="true"> Seleccionar</th>
-      </tr>
-    </thead>
-    <tbody *ngIf="searchdate" id="myTable" >
-      <tr *ngFor="let user of users" >
-        <td>{{user.date}}</td>
-        <td>{{user.name}}</td>
-        <td>{{user.email}}</td>
-        <td>{{user.cellphone}}</td>
-        <td>{{user.bornDate}}</td>
-        <td>{{user.gender}}</td>
-        <td>{{user.establishment}}</td>
-        <td>{{user.headquart}}</td> 
-        <td>{{user.usability}}</td>
-        <td>{{user.quantity}}</td>
-      </tr>
-      
-    </tbody>
-    <tbody *ngIf="!searchdate" id="myTabledate">
-      <tr *ngFor="let user of users" >
-        <td>{{user.date}}</td>
-        <td>{{user.name}}</td>
-        <td>{{user.email}}</td>
-        <td>{{user.cellphone}}</td>
-        <td>{{user.bornDate}}</td>
-        <td>{{user.gender}}</td>
-        <td>{{user.establishment}}</td>
-        <td>{{user.headquart}}</td> 
-        <td>{{user.usability}}</td>
-        <td>{{user.quantity}}</td>
-      </tr>
-      
-    </tbody>
-  </table>
-  <div style="margin-top: 2rem">
-      <button type="button" class ="btn " style="background-color: #92d050;">Enviar a cupones</button>
+  <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
+    <div class="d-flex justify-content-center container-fluid">
+      <button type="button" class="btn mr-5 " style="background-color: #92d050;">Enviar a cupones</button>
       <button type="button" class="btn " style="background-color: #f4b081">Enviar a promociones</button>
-      <button type="button" class="btn btn-success">Generar Excel</button>
+    </div>
+    <div class="d-flex justify-content-center container-fluid">
+      <button type="button" class="btn btn-success mr-5">Generar Excel</button>
       <button type="button" class="btn btn-danger">Generar PDF</button>
+    </div>
   </div>
 </div>
-
-</div>
-
