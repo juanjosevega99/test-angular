@@ -87,7 +87,7 @@
         <th data-field="state" data-checkbox="true"> Seleccionar</th>
       </tr>
     </thead>
-    <tbody *ngIf="searchdate" id="myTable">
+    <tbody *ngIf="searchdate" id="myTable" >
       <tr *ngFor="let user of users" >
         <td>{{user.date}}</td>
         <td>{{user.name}}</td>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-manager',
@@ -13,32 +14,32 @@ export class UserManagerComponent implements OnInit {
   toDate: NgbDate;
   from: string;
   to: string;
-  searchdate : boolean=true;
+  searchdate =true;
 
-  data = [
-    { date: 'string', name: 'string', email: 'string', cellphone: 'string', bornDate:'string', gender:'string', establishment:'tring',
-    headquart:'string', usability:'string', quantity:'string' }
-  ]
+  // data = [
+  //   { date: string, name: string, email: string, cellphone: string, bornDate: string, gender: string, establishment: string,
+  //     headquart: string, usability: string, quantity: string }
+  // ]
 
   dataOrigi =[
     { date:'2020-02-01', name :'Andrea', email: 'john@example.com', cellphone:'3245672341', bornDate:'09/01/1997',
     gender:'femenino', establishment:'KFC', headquart:'Galerías', usability:'1', quantity:'$12.000' },
 
-    { date:'04/08/2019', name :'Kenny', email: 'mary@mail.com', cellphone:'3125672341', bornDate:'19/01/1995',
+    { date:'2020-02-02', name :'Kenny', email: 'mary@mail.com', cellphone:'3125672341', bornDate:'19/01/1995',
     gender:'femenino', establishment:'KFC', headquart:'Centro', usability:'1', quantity:'$12.000' },
 
-    { date:'23/03/2020', name :'Ana', email: 'july@greatstuff.com', cellphone:'3214577223', bornDate:'11/05/1945',
+    { date:'2020-02-03', name :'Ana', email: 'july@greatstuff.com', cellphone:'3214577223', bornDate:'11/05/1945',
     gender:'femenino', establishment:'Corral', headquart:'Galerías', usability:'1', quantity:'$12.000' },
 
-    { date:'08/10/2019', name :'Sofia', email: 'a_r@test.com', cellphone:'3214577223', bornDate:'3105672341',
+    { date:'2020-02-04', name :'Sofia', email: 'a_r@test.com', cellphone:'3214577223', bornDate:'3105672341',
     gender:'femenino', establishment:'Corral', headquart:'Centro', usability:'1', quantity:'$12.000' },
 
-    { date:'01/02/2019', name :'Edwin', email: 'a_r@test.com', cellphone:'3145332122', bornDate:'3105672341',
+    { date:'2020-02-05', name :'Edwin', email: 'a_r@test.com', cellphone:'3145332122', bornDate:'3105672341',
     gender:'masculino', establishment:'Corral', headquart:'Norte', usability:'0', quantity:'$12.000' },
 
-    { date:'09/12/2018', name :'Isabella', email: 'a_r@test.com', cellphone:'3245672341', bornDate:'3105672341',
+    { date:'2020-02-06', name :'Isabella', email: 'a_r@test.com', cellphone:'3245672341', bornDate:'3105672341',
     gender:'femenino', establishment:'Qbano', headquart:'Galerías', usability:'1', quantity:'$12.000' },
-    
+
     { date:'2018-02-05', name :'kenny', email: 'a_r@test.com', cellphone:'3245672341', bornDate:'3105672341',
     gender:'femenino', establishment:'Qbano', headquart:'Galerías', usability:'1', quantity:'$12.000' },
 
@@ -110,8 +111,8 @@ export class UserManagerComponent implements OnInit {
 
   }
 
-  SeachingRange(dateFrom: string, dateTo: string) { 
-    this.searchdate = false;
+  SeachingRange(dateFrom: string, dateTo: string, tablefilter:any) { 
+    // this.searchdate = false;
 
     this.from = dateFrom;
     this.to = dateTo;
@@ -125,23 +126,25 @@ export class UserManagerComponent implements OnInit {
       const date = new Date(this.users[i].date);
       if (date >= mydateFrom && date <= mydateTo) {
         this.newdateArray.push(this.users[i]);
-        console.log(date.toDateString(), " esta en el rago");
+        // console.log(date.toDateString(), " esta en el rago");
       }
       else{
 
-         console.log(date.toDateString(), "no esta en el rango");
+        //  console.log(date.toDateString(), "no esta en el rango");
       }
     }
 
     this.users = this.newdateArray;
     
-    console.log(this.fromDate);
-    console.log(this.toDate );
-    console.log(this.newdateArray.length );
-    console.log(this.users.length );
+    // console.log(this.fromDate);
+    // console.log(this.toDate );
+    // console.log(this.newdateArray.length );
+    // console.log(this.users.length );
     
     this.newdateArray = [];
-    console.log(this.newdateArray.length );
+    // console.log(this.newdateArray.length );
+    console.log(tablefilter);
+    
   
   }
 
