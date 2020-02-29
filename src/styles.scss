@@ -57,6 +57,15 @@ body { margin: 0; color: #572483; font-family: Roboto, "Helvetica Neue", sans-se
     
 }
 
+.my-custom-scrollbar {
+    position: relative;
+    height: 22rem;
+    overflow: auto;
+    }
+    .table-wrapper-scroll-y {
+    display: block;
+    }
+
 
 
 

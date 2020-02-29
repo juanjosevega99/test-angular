@@ -1,5 +1,58 @@
 <div class="compenetsstyle">
 
+  <table class="table" id="table">
+
+    <thead>
+      <tr>
+        <th class="text-center">Date<input class="form-control" type="text" (keyup)="search(date.value, date.id)" #date
+          id="date"></th>
+        <th class="text-center">name <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name
+            id="name"></th>
+        <th class="text-center">email <input class="form-control" type="text" (keyup)="search( email.value, email.id )"
+            #email id="email"></th>
+        <th class="text-center">cellphone <input class="form-control" type="text" id="cellphone"
+            (keyup)="search(cellphone.value, cellphone.id)" #cellphone></th>
+        <th class="text-center">bornDate <input class="form-control" type="text" id="birthday"
+            (keyup)="search(birthday.value, birthday.id)" #birthday></th>
+        <th class="text-center">gender <input class="form-control" type="text" id="gender"
+            (keyup)="search(gender.value, gender.id)" #gender></th>
+        <th class="text-center">establishment <input class="form-control" type="text" id="establishment"
+            (keyup)="search(establishment.value, establishment.id)" #establishment></th>
+        <th class="text-center">headquart <input class="form-control" type="text" id="headquart"
+            (keyup)="search(headquart.value, headquart.id)" #headquart></th>
+        <th class="text-center">usability <input class="form-control" type="text" id="usability"
+            (keyup)="search(usability.value, usability.id)" #usability></th>
+        <th class="text-center">quantity <input class="form-control" type="text" id="quantity"
+            (keyup)="search(quantity.value, quantity.id)" #quantity></th>
+      </tr>
+
+    </thead>
+
+  </table>
+
+  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+    <table class="table table-bordered table-striped mb-0">
+      
+      <tbody>
+        <tr *ngFor="let user of newdateArray" class="text-center" >
+          <td>{{user.date}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.cellphone}}</td>
+          <td>{{user.birthday}}</td>
+          <td>{{user.gender}}</td>
+          <td>{{user.establishment}}</td>
+          <td>{{user.headquart}}</td>
+          <td>{{user.usability}}</td>
+          <td>{{user.quantity}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+
   <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btn mr-5 " style="background-color: #92d050;">Enviar a cupones</button>
