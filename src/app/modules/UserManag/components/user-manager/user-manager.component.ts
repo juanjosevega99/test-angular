@@ -64,6 +64,11 @@ export class UserManagerComponent implements OnInit {
     headquart: string, usability: string, quantity: string
   }[] = this.users;
 
+  filteredArray: {
+    date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
+    headquart: string, usability: string, quantity: string
+  }[] = [];
+
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) { }
 
@@ -107,16 +112,31 @@ export class UserManagerComponent implements OnInit {
     const mydateFrom = new Date(this.from);
     const mydateTo = new Date(this.to);
 
+    if ( !this.filteredArray.length ){
+
       this.newdateArray = [];
-
+  
       this.users.forEach(user => {
-
+  
         const userdate = new Date(user.date)
-
+  
         if (userdate >= mydateFrom && userdate <= mydateTo) {
           this.newdateArray.push(user)
         }
       });
+
+    }else{
+      
+      this.newdateArray = [];
+
+      this.filteredArray.forEach(user => {  
+        const userdate = new Date(user.date)  
+        if (userdate >= mydateFrom && userdate <= mydateTo) {
+          this.newdateArray.push(user);
+        }
+      });
+    }
+
   }
 
 
@@ -124,6 +144,7 @@ export class UserManagerComponent implements OnInit {
     this.fromDate = null;
     this.toDate = null;
     this.newdateArray = this.users;
+    this.filteredArray = [];
   }
   
 
@@ -132,6 +153,7 @@ export class UserManagerComponent implements OnInit {
     if (this.fromDate && this.toDate) {
 
       if (termino) {
+        this.filteredArray  = [];
         termino = termino.toLowerCase();
 
         const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
@@ -163,24 +185,27 @@ export class UserManagerComponent implements OnInit {
         termino = termino.toLowerCase();
 
         this.newdateArray = [];
+        this.filteredArray = [];
 
         this.users.forEach(user => {
 
           if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user)
+            this.newdateArray.push(user);
+            this.filteredArray.push(user);
           }
 
         });
 
       } else {
         this.newdateArray = this.users;
+        this.filteredArray = [];
       }
     }
   }
 
 
   searchbyterm(termino:string){
-    console.log(termino);
+   
     termino = termino.toLowerCase();
 
     this.newdateArray = [];
