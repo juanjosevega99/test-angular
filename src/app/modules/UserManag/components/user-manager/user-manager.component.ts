@@ -99,31 +99,13 @@ export class UserManagerComponent implements OnInit {
 
   }
 
-  SeachingRange(dateFrom: string, dateTo: string, termino? :string) {
+  SeachingRange(dateFrom: string, dateTo: string) {
 
     this.from = dateFrom;
     this.to = dateTo;
 
     const mydateFrom = new Date(this.from);
     const mydateTo = new Date(this.to);
-
-    if (termino){
-      console.log(termino);
-      this.search(termino);
-
-      const aux = this.newdateArray;
-      this.newdateArray = [];
-
-      aux.forEach(user => {
-
-        const userdate = new Date(user.date)
-
-        if (userdate >= mydateFrom && userdate <= mydateTo) {
-          this.newdateArray.push(user)
-        }
-      });
-
-    }else{
 
       this.newdateArray = [];
 
@@ -135,14 +117,13 @@ export class UserManagerComponent implements OnInit {
           this.newdateArray.push(user)
         }
       });
-
-    }
   }
 
 
   clear() {
     this.fromDate = null;
     this.toDate = null;
+    this.newdateArray = this.users;
   }
   
 

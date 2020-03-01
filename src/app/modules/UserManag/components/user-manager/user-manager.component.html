@@ -1,11 +1,65 @@
 <div class="compenetsstyle">
 
-  <table class="table" id="table">
+  <div class="m-3 d-flex flex-row ">
 
-    <thead>
+    <div class="container-fluid" style="width: 25%;" >
+      <a href="" class="d-flex mr-2">
+        <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+      </a>
+
+    </div>
+
+    <form class="form-inline container-fluid justify-content-end"  style="width: 75%;" #formadate>
+      <div class="form-group hidden">
+        <div class="input-group">
+          <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+            [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+            outsideDays="hidden" [startDate]="fromDate">
+          <ng-template #t let-date let-focused="focused">
+            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+              [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+              (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control 
+            [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group ml-2">
+        <div class="input-group">
+          <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate"
+            [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      <button (click)=" SeachingRange( dpFromDate.value, dpToDate.value )" type="button"
+        class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
+      <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+    </form>
+  </div>
+
+  <div class="container-fluid d-flex justify-content-center m-3">
+    <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
+      #general (keyup)="searchbyterm(general.value)">
+  </div>
+
+  <div class="tableFixHead">
+  <table >
+
+    <thead >
       <tr>
         <th class="text-center">Date<input class="form-control" type="text" (keyup)="search(date.value, date.id)" #date
-          id="date"></th>
+            id="date"></th>
         <th class="text-center">name <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name
             id="name"></th>
         <th class="text-center">email <input class="form-control" type="text" (keyup)="search( email.value, email.id )"
@@ -24,18 +78,35 @@
             (keyup)="search(usability.value, usability.id)" #usability></th>
         <th class="text-center">quantity <input class="form-control" type="text" id="quantity"
             (keyup)="search(quantity.value, quantity.id)" #quantity></th>
+        <th class="text-center">seleccionar <input type="checkbox" class="m-2"> </th>
       </tr>
 
     </thead>
+    <tbody class="mt-5" >
+      <tr *ngFor="let user of newdateArray" class="text-center">
+        <td>{{user.date}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.cellphone}}</td>
+        <td>{{user.birthday}}</td>
+        <td>{{user.gender}}</td>
+        <td>{{user.establishment}}</td>
+        <td>{{user.headquart}}</td>
+        <td>{{user.usability}}</td>
+        <td>{{user.quantity}}</td>
+        <td><input type="checkbox" class="m-1" #{{user.name}}></td>
+      </tr>
+    </tbody>
 
   </table>
+</div>
 
-  <div class="table-wrapper-scroll-y my-custom-scrollbar">
+  <!-- <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
     <table class="table table-bordered table-striped mb-0">
-      
+
       <tbody>
-        <tr *ngFor="let user of newdateArray" class="text-center" >
+        <tr *ngFor="let user of newdateArray" class="text-center">
           <td>{{user.date}}</td>
           <td>{{user.name}}</td>
           <td>{{user.email}}</td>
@@ -46,11 +117,12 @@
           <td>{{user.headquart}}</td>
           <td>{{user.usability}}</td>
           <td>{{user.quantity}}</td>
+          <td><input type="checkbox" class="m-1" #{{user.name}}></td>
         </tr>
       </tbody>
     </table>
 
-  </div>
+  </div> -->
 
 
   <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
