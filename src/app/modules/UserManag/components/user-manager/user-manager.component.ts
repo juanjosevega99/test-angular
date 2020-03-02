@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+//export table excel
+import * as XLSX from 'xlsx'; 
 
 
 @Component({

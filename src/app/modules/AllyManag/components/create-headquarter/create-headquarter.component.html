@@ -1,16 +1,21 @@
 <div class="compenetsstyle ">
-    
-    <form class="row">
-        <a href="" class="d-flex mr-2">
+
+    <form ngNativeValidate class="row" (ngSubmit)="saveHq(shape)" #shape="ngForm">
+
+        <a routerLink="/headquarts" class="d-flex mr-2">
             <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
         </a>
 
         <section class="col-5">
 
-            <div class="form-group row">
+            <div class="form-group row"
+                [ngClass]="{'has-danger': nameHq.errors?.minlength || nameHq.errors?.required }">
                 <label class="col-md-5 col-form-label">Nombre de la sede</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Nombre de la sede">
+                    <input class="form-control" type="text" placeholder="Nombre de la sede" name="nameHq"
+                        [(ngModel)]="preHeadquarters.nameHq" minlength="2" required #nameHq="ngModel">
+                    <!-- <div *ngIf="nameHq.errors?.required" class="form-control-feedback" > <small> Este campo es requerido </small>  </div> -->
+                    <!-- <div *ngIf="nameHq.errors?.minlength" class="form-control-feedback" > <small> *Mínimo {{ nameHq.errors.minlength.requiredLength }} carácteres </small> </div> -->
                 </div>
             </div>
 
@@ -19,12 +24,29 @@
                 <label class="col-md-5 col-form-label">Ubicación</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <select class="custom-select" id="inputGroupSelect01">
-                            <option selected>Seleccionar...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select *ngIf="otherLocationSelect" class="form-control" name="locationHq"
+                            [(ngModel)]="preHeadquarters.location" required>
+                            <option selected> Seleccionar... </option>
+                            <option *ngFor="let x of Location">
+                                {{x}}
+                            </option>
                         </select>
+
+                        <input *ngIf="otherLocationInput" class="col-md-9 col-form-label mr-2 form-control "
+                            [(ngModel)]="preHeadquarters.location" required type="text" name="otherLocation">
+                        <!-- (keyup)="addLocation(additem.value)" #additem> -->
+                        <!-- <button *ngIf= "buttonadd" class="btn btn-success" > Añadir ubicación </button> -->
+                        <div *ngIf="buttonadd" class="input-group-append">
+                            <span class="input-group-text" (click)="handleBoxLocation()">
+                                seleccionar
+                            </span>
+                        </div>
+
+                        <div *ngIf="otherbuttonadd" class="input-group-append">
+                            <span class="input-group-text" (click)="handleBoxLocation()">
+                                otro
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,70 +54,82 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Dirección</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Dirección">
+                    <input class="form-control" type="text" placeholder="Dirección" name="addressHq"
+                        [(ngModel)]="preHeadquarters.address" required>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Piso</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Piso">
+                    <input class="form-control" type="number" min="0" placeholder="Piso" name="floorHq"
+                        [(ngModel)]="preHeadquarters.floor">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Local</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Local">
+                    <input class="form-control" type="text" placeholder="Local" name="stallHq"
+                        [(ngModel)]="preHeadquarters.stall">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Contacto general</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Contacto general">
+                    <input class="form-control" type="text" placeholder="Contacto general" name="generalHq"
+                        [(ngModel)]="preHeadquarters.general" required>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Cargo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Cargo">
+                    <input class="form-control" type="text" placeholder="Cargo" name="chargeGeneralHq"
+                        [(ngModel)]="preHeadquarters.charge" required>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Celular</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Celular">
+                    <input class="form-control" type="text" placeholder="Celular" name="cellGeneralHq"
+                        pattern="^[3]\d{9}$" [(ngModel)]="preHeadquarters.cell" required>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Fijo">
+                    <input class="form-control" type="email" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}"
+                        placeholder="(ddd) ddd-dddd" name="telGeneralHq" [(ngModel)]="preHeadquarters.tel">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Correo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Correo">
+                    <input class="form-control" type="email" placeholder="Correo" name="emailGeneralHq"
+                        [(ngModel)]="preHeadquarters.emailGeneral" required #emailGeneralHq="ngModel">
+                    <!--  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"  -->
+                    <!-- <div *ngIf=" emailGeneralHq.errors?.required" >Este campo es requerido</div>
+                    <div *ngIf=" emailGeneralHq.errors?.pattern" >El campo no tiene formato de correo</div> -->
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Código sede</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Código sede">
+                    <input class="form-control" type="text" placeholder="dddddd-d" pattern="[0-9]{6}[ -][0-9]{1}"
+                        name="codeHq" [(ngModel)]="preHeadquarters.code" required>
                 </div>
-            </div>            
+            </div>
         </section>
 
-        <!-- <section class="col-1"></section> -->
 
-        <section class="col-6" >
+
+        <section class="col-5">
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios prestados</label>
@@ -154,107 +188,13 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios adicionales</label>
                 <div class="col-md-7">
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline" *ngFor="let x of services">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
                         <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <i class="fas fa-parking iconsstyles"></i>
-                            Parqueadero
+                            <img src={{x.img}} height="25px" width="25px">
+                            {{x.name}}
                         </label>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <img src="assets/icons/cocktail.png" height="25px" width="25px">
-                            Barra de tragos
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <i class="fas fa-wifi iconsstyles"></i>
-                            Wifi
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <img src="assets/icons/people-table.png" height="25px" width="25px">
-                            Mesa exterior
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <i class="fas fa-wheelchair iconsstyles"></i>
-                            Acceso a discapacitados
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <img src="assets/icons/dance.png" height="25px" width="25px">
-                            Show en vivo
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <i class="fas fa-smoking iconsstyles"></i>
-                            Zona de fumadores
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
-                            <i class="fas fa-braille iconsstyles"></i>
-                            Carta braile
-                        </label>
-                    </div>
-                    <div class="form-group form-check-inline">
-                        <label class="col-2 col-form-label">&nbsp;</label>
-                        <div class="">
-                            <button type="submit" class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModal">
-                                Añadir otro servicio
-                            </button>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo servicio</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Nombre del
-                                                servicio:</label>
-                                            <input type="text" class="form-control" id="recipient-name"
-                                                placeholder="Nombre del servicio">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Subir ícono</label>
-                                            <div class="upload-options">
-                                                <label>
-                                                    <input type="file" class="image-upload" accept="image/*">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-primary">Añadir</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
@@ -262,7 +202,7 @@
                 <label class="col-md-5 col-form-label">Tiempo promedio de entrega</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <input type="number" min="0" max="120" placeholder="Tiempo promedio de entrega"
+                        <input type="number" min="0" max="120" placeholder="Tiempo promedio de entrega" value="0"
                             class="form-control">
                         <div class="input-group-append">
                             <span class="input-group-text">min</span>
@@ -300,28 +240,38 @@
                 <div class="col-md-7">
                     <input class="form-control" type="email" placeholder="Correo">
                 </div>
-            </div>     
+            </div>
+        </section>
+
+        <section class="col-1 d-flex justify-content-center align-items-center ">
+
+            <div class="d-flex flex-column ">
+                <div class="form-group row" style="margin-bottom: 5rem;">
+                    <label class="">&nbsp;</label>
+                    <div class="input-group  ">
+                        <!-- [disabled]="!shape.valid" -->
+                        <button type="submit" class="btn btn-outline-primary">
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="">&nbsp;</label>
+                    <div class="input-group ">
+                        <!-- [disabled]="!shape.valid" -->
+                        <button type="submit" class="btn btn-outline-primary">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
         </section>
 
     </form>
 
-<div class="row" style="justify-content: center; margin-top: 2rem;">
-    <div class="form-group row" >
-        <label class=" ">&nbsp;</label>
-        <div class="input-group col-md-8 " style="margin-right: 2rem;">
-            <button type="submit" class="btn btn-outline-primary">
-                Cancelar
-            </button>
-        </div>
-    </div>
+    <pre>
+        {{ preHeadquarters | json }}
+    </pre>
 
-    <div class="form-group row" >
-        <label class="">&nbsp;</label>
-        <div class="input-group col-md-8 " >
-            <button type="submit" class="btn btn-outline-primary">
-                Guardar
-            </button>
-        </div>
-    </div>
-</div>
 </div>
