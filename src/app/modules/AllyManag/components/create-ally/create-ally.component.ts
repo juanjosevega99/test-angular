@@ -9,6 +9,8 @@ import { Aliado } from 'src/app/models/aliado';
 })
 export class CreateAllyComponent implements OnInit {
 
+  color:string;
+
   aliado: Aliado;
   horas: String[] = [];
   TypeEstablishment: String[] = [];
@@ -44,6 +46,7 @@ export class CreateAllyComponent implements OnInit {
 
   ngOnInit() {
   }
+   
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
@@ -107,6 +110,11 @@ export class CreateAllyComponent implements OnInit {
       this.otherCatInput= false       
     }
 
+  }
+
+  vercolor(color){
+    console.log(color);
+    
   }
 
 }
