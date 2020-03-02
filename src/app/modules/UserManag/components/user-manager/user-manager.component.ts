@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
-import * as XLSX from 'xlsx'; 
+import * as XLSX from 'xlsx';
+
+//service modal
+import { SwallServicesService } from 'src/app/services/swall-services.service';
 
 
 @Component({
@@ -11,6 +14,10 @@ import * as XLSX from 'xlsx';
 })
 export class UserManagerComponent implements OnInit {
 
+  /*name of the excel-file which will be downloaded. */
+  fileName = 'ExcelSheet.xlsx';
+
+  //vars to date filter
   hoveredDate: NgbDate;
   fromDate: NgbDate;
   toDate: NgbDate;
@@ -74,7 +81,7 @@ export class UserManagerComponent implements OnInit {
   userSelected: {}[] = [];
 
 
-  constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) { }
+  constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService) { }
 
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
@@ -125,16 +132,37 @@ export class UserManagerComponent implements OnInit {
 
   }
 
-  sendCupons() {
+  selectforsend() {
     this.userSelected = []
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
+  }
+
+  sendCupons() {
+    this.selectforsend();
   }
 
   sendPromos() {
-    this.userSelected = []
-    this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
+    this.selectforsend();
   }
 
+  dataforExcel(){
+    this.selectforsend();
+  }
+
+  generateExcel() {
+    
+    /* table id is passed over here */   
+    let element = document.getElementById('excel-table'); 
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+
+  }
 
   SeachingRange(dateFrom: string, dateTo: string) {
 

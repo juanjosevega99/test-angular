@@ -2,14 +2,14 @@
 
   <div class="m-3 d-flex flex-row ">
 
-    <div class="container-fluid" style="width: 25%;" >
+    <div class="container-fluid" style="width: 25%;">
       <a [routerLink]='["/main"]' class="d-flex mr-2">
         <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
       </a>
 
     </div>
 
-    <form class="form-inline container-fluid justify-content-end"  style="width: 75%;" #formadate>
+    <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
       <div class="form-group hidden">
         <div class="input-group">
           <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
@@ -26,7 +26,7 @@
       </div>
       <div class="form-group">
         <div class="input-group">
-          <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control 
+          <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control
             [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
@@ -42,8 +42,7 @@
           </div>
         </div>
       </div>
-      <button (click)=" search()" type="button"
-        class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
+      <button (click)=" search()" type="button" class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
       <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
     </form>
   </div>
@@ -54,61 +53,121 @@
   </div>
 
   <div class="tableFixHead">
-  <table >
+    <table>
 
-    <thead >
-      <tr>
-        <th class="text-center">Date<input class="form-control" type="text" (keyup)="search(date.value, date.id)" #date
-            id="date"></th>
-        <th class="text-center">name <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name
-            id="name"></th>
-        <th class="text-center">email <input class="form-control" type="text" (keyup)="search( email.value, email.id )"
-            #email id="email"></th>
-        <th class="text-center">cellphone <input class="form-control" type="text" id="cellphone"
-            (keyup)="search(cellphone.value, cellphone.id)" #cellphone></th>
-        <th class="text-center">bornDate <input class="form-control" type="text" id="birthday"
-            (keyup)="search(birthday.value, birthday.id)" #birthday></th>
-        <th class="text-center">gender <input class="form-control" type="text" id="gender"
-            (keyup)="search(gender.value, gender.id)" #gender></th>
-        <th class="text-center">establishment <input class="form-control" type="text" id="establishment"
-            (keyup)="search(establishment.value, establishment.id)" #establishment></th>
-        <th class="text-center">headquart <input class="form-control" type="text" id="headquart"
-            (keyup)="search(headquart.value, headquart.id)" #headquart></th>
-        <th class="text-center">usability <input class="form-control" type="text" id="usability"
-            (keyup)="search(usability.value, usability.id)" #usability></th>
-        <th class="text-center">quantity <input class="form-control" type="text" id="quantity"
-            (keyup)="search(quantity.value, quantity.id)" #quantity></th>
-        <th class="text-center">seleccionar <input type="checkbox" class="m-2" [value]="newdateArray" name="selectall" (change) = "selectedAll($event)" > </th>
-      </tr>
+      <thead>
+        <tr>
+          <th class="text-center">Date<input class="form-control" type="text" (keyup)="search(date.value, date.id)"
+              #date id="date"></th>
+          <th class="text-center">name <input class="form-control" type="text" (keyup)="search(name.value, name.id)"
+              #name id="name"></th>
+          <th class="text-center">email <input class="form-control" type="text"
+              (keyup)="search( email.value, email.id )" #email id="email"></th>
+          <th class="text-center">cellphone <input class="form-control" type="text" id="cellphone"
+              (keyup)="search(cellphone.value, cellphone.id)" #cellphone></th>
+          <th class="text-center">bornDate <input class="form-control" type="text" id="birthday"
+              (keyup)="search(birthday.value, birthday.id)" #birthday></th>
+          <th class="text-center">gender <input class="form-control" type="text" id="gender"
+              (keyup)="search(gender.value, gender.id)" #gender></th>
+          <th class="text-center">establishment <input class="form-control" type="text" id="establishment"
+              (keyup)="search(establishment.value, establishment.id)" #establishment></th>
+          <th class="text-center">headquart <input class="form-control" type="text" id="headquart"
+              (keyup)="search(headquart.value, headquart.id)" #headquart></th>
+          <th class="text-center">usability <input class="form-control" type="text" id="usability"
+              (keyup)="search(usability.value, usability.id)" #usability></th>
+          <th class="text-center">quantity <input class="form-control" type="text" id="quantity"
+              (keyup)="search(quantity.value, quantity.id)" #quantity></th>
+          <th class="text-center">seleccionar <input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
+              (change)="selectedAll($event)"> </th>
+        </tr>
 
-    </thead>
-    <tbody class="mt-5" >
-      <tr *ngFor="let user of newdateArray; let i = index " class="text-center" >
-        <td>{{user.date}}</td>
-        <td>{{user.name}}</td>
-        <td>{{user.email}}</td>
-        <td>{{user.cellphone}}</td>
-        <td>{{user.birthday}}</td>
-        <td>{{user.gender}}</td>
-        <td>{{user.establishment}}</td>
-        <td>{{user.headquart}}</td>
-        <td>{{user.usability}}</td>
-        <td>{{user.quantity}}</td>
-        <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)" ></td>
-      </tr>
-    </tbody>
+      </thead>
+      <tbody class="mt-5">
+        <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
+          <td>{{user.date}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.cellphone}}</td>
+          <td>{{user.birthday}}</td>
+          <td>{{user.gender}}</td>
+          <td>{{user.establishment}}</td>
+          <td>{{user.headquart}}</td>
+          <td>{{user.usability}}</td>
+          <td>{{user.quantity}}</td>
+          <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
+        </tr>
+      </tbody>
 
-  </table>
-</div>
+    </table>
+  </div>
 
   <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()" >Enviar cupones</button>
+      <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
+        cupones</button>
       <button type="button" class="btn " style="background-color: #f4b081">Enviar promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn btn-success mr-5">Generar Excel</button>
+      <button type="button" class="btn btn-success mr-5" (click)="dataforExcel()" data-toggle="modal"
+        data-target="#exampleModalCenter">
+        Generar Excel</button>
+
       <button type="button" class="btn btn-danger">Generar PDF</button>
+    </div>
+  </div>
+
+
+  <!-- Modal Excel-->
+  <div class="modal fade bd-example-modal-xl" id="exampleModalCenter" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #1f6f43;">
+          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar Excel</h5>
+          <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()"> Descargar</button>
+          <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print" ngxPrint>print</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tableFixHead" id="table-print">
+
+            <table class="table table-responsive" id="excel-table">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">name</th>
+                <th class="text-center">email</th>
+                <th class="text-center">cellphone</th>
+                <th class="text-center">birthDate</th>
+                <th class="text-center">gender</th>
+                <th class="text-center">establishment</th>
+                <th class="text-center">headquart</th>
+                <th class="text-center">usability</th>
+                <th class="text-center">quantity</th>
+              </tr>
+              <tr *ngFor="let user of userSelected; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{user.date}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.cellphone}}</td>
+                <td>{{user.birthday}}</td>
+                <td>{{user.gender}}</td>
+                <td>{{user.establishment}}</td>
+                <td>{{user.headquart}}</td>
+                <td>{{user.usability}}</td>
+                <td>{{user.quantity}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
     </div>
   </div>
 
