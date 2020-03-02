@@ -1,12 +1,12 @@
 <app-app-navbar></app-app-navbar>
 <div class="continer compenetsstyle d-flex justify-content-center flex-column align-items-center ">
 
-    <div class="container-fluid d-flex flex-row align-items-center " style="margin-bottom: 5rem;" >
-
+    <div class="container-fluid d-flex flex-row align-items-center " style="margin-bottom: 5rem;">
 
         <a href="" class="d-flex mr-2">
             <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
         </a>
+
         <p class="" style="margin: 1rem;">Escoge la sede</p>
 
         <div class="input-group" style=" width: 13rem;">
@@ -22,19 +22,14 @@
     </div>
 
     <div class="row container-fluid d-flex justify-content-center col-xl-6">
-
-
         <div class="col-sm-6 col-md-4 ">
-            <div class="card border-primary mb-3">
-                <!-- <img class="card-img-top" src="assets/img/ManagerAllys.jpg" alt="Card image cap"> -->
-                <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-                    <!-- <img src="assets/icons/info.png" width="80px" > -->
 
+            <div class="card border-primary mb-3">
+                <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
                     <i class="fas fa-info" style="color: black; font-size: 4rem;"></i>
                 </div>
                 <div class="card-body">
-                    <a [routerLink]="['/main','allyManager']" class="btn btn-lg btn-block buttonstyle">Información del
-                        establecimiento</a>
+                    <a [routerLink]="['/main','allyManager']" class="btn btn-lg btn-block buttonstyle">Info del establecimiento</a>
                 </div>
             </div>
         </div>
@@ -43,12 +38,9 @@
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
                     <i class="fas fa-map-marker-alt " style="color: black; font-size: 4rem;"></i>
-
-                    <!-- <img class="card-img-top" src="assets/img/ManagerUsers.jpg" alt="Card image cap"> -->
                 </div>
                 <div class="card-body">
-                    <a [routerLink]="['/main','userManager']" class="btn btn-lg btn-block buttonstyle">Información de la
-                        sede</a>
+                    <a [routerLink]="['/main','userManager']" class="btn btn-lg btn-block buttonstyle">Info de la sede</a>
                 </div>
             </div>
         </div>
@@ -57,35 +49,29 @@
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
                     <i class="far fa-folder-open" style="color: black; font-size: 4rem;"></i>
-
-
-                    <!-- <img class="card-img-top" src="assets/img/ManagerPromo.png" alt="Card image cap"> -->
                 </div>
                 <div class="card-body">
                     <a routerLink="/promoManager" class="btn btn-lg btn-block buttonstyle">Editar menu</a>
                 </div>
             </div>
         </div>
+
         <div class="col-sm-6 col-md-4 ">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-
                     <i class="fas fa-warehouse" style="color: black; font-size: 4rem;"></i>
                 </div>
-                <!-- <img class="card-img-top" src="assets/img/Managercupons.jpg" alt="Card image cap"> -->
                 <div class="card-body">
-                    <a [routerLink]="['/main','add-sede']" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
+                    <a [routerLink]="['/main','createHeadquarter']" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
                 </div>
             </div>
         </div>
+
         <div class="col-sm-6 col-md-4">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-
                     <i class="fas fa-user-tie" style="color: black; font-size: 4rem;"></i>
                 </div>
-                <!-- <img class="card-img-top" src="assets/img/ReportGenerator.jpg" alt="Card image cap"> -->
-
                 <div class="card-body">
                     <a routerLink="/reportGenerator" class="btn btn-lg btn-block buttonstyle">Perfiles</a>
                 </div>

@@ -11,5 +11,4 @@ export class Aliado{
     days?:any[];
     images: String[];
 
-
 }

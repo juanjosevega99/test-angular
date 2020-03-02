@@ -1,19 +1,46 @@
-html{
-    font-size: 15px;
+//syles of input search
+.sizeInput {
+  width: 25rem;
 }
-
-// styles search 
+.backgroundIcon {
+  background-color: white;
+}
+// styles buttons primary
 .btn-outline-primary {
-    color: rgba(0,0,0,.87);
-    border-color: rgba(0,0,0,.87);
-    border-radius: .4rem;
+  color: rgba(0, 0, 0, 0.87);
+  border-color: rgba(0, 0, 0, 0.87);
+  border-radius: 0.4rem;
 }
 .btn-outline-primary:hover {
-    color: #fff; 
-    background-color: #552183;
+  color: #fff;
+  background-color: #552183;
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #5a4183;
+  border-color: #5a4183;
 }
 
-
-.icon-size{
-        font-size: 2rem;
+//Style of section searach
+.styleContainer {
+  display: flex;
+  flex-direction: row;
+}
+//Styles of table
+.styleTable {
+  display: flex;
+}
+//Styles of size icons
+.icon-size {
+  font-size: 2rem;
+}
+.sizeLogo {
+  width: 5rem;
+  height: 5rem;
+}
+.iconService {
+  width: 2rem;
+  height: 2rem;
 }
