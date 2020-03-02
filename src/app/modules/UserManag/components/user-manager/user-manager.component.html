@@ -3,7 +3,7 @@
   <div class="m-3 d-flex flex-row ">
 
     <div class="container-fluid" style="width: 25%;" >
-      <a href="" class="d-flex mr-2">
+      <a [routerLink]='["/main"]' class="d-flex mr-2">
         <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
       </a>
 
@@ -78,12 +78,12 @@
             (keyup)="search(usability.value, usability.id)" #usability></th>
         <th class="text-center">quantity <input class="form-control" type="text" id="quantity"
             (keyup)="search(quantity.value, quantity.id)" #quantity></th>
-        <th class="text-center">seleccionar <input type="checkbox" class="m-2"> </th>
+        <th class="text-center">seleccionar <input type="checkbox" class="m-2" [value]="newdateArray" name="selectall" (change) = "selectedAll($event)" > </th>
       </tr>
 
     </thead>
     <tbody class="mt-5" >
-      <tr *ngFor="let user of newdateArray" class="text-center">
+      <tr *ngFor="let user of newdateArray; let i = index " class="text-center" >
         <td>{{user.date}}</td>
         <td>{{user.name}}</td>
         <td>{{user.email}}</td>
@@ -94,45 +94,24 @@
         <td>{{user.headquart}}</td>
         <td>{{user.usability}}</td>
         <td>{{user.quantity}}</td>
-        <td><input type="checkbox" class="m-1" #{{user.name}}></td>
+        <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)" ></td>
       </tr>
     </tbody>
 
   </table>
 </div>
 
-  <!-- <div class="table-wrapper-scroll-y my-custom-scrollbar">
-
-    <table class="table table-bordered table-striped mb-0">
-
-      <tbody>
-        <tr *ngFor="let user of newdateArray" class="text-center">
-          <td>{{user.date}}</td>
-          <td>{{user.name}}</td>
-          <td>{{user.email}}</td>
-          <td>{{user.cellphone}}</td>
-          <td>{{user.birthday}}</td>
-          <td>{{user.gender}}</td>
-          <td>{{user.establishment}}</td>
-          <td>{{user.headquart}}</td>
-          <td>{{user.usability}}</td>
-          <td>{{user.quantity}}</td>
-          <td><input type="checkbox" class="m-1" #{{user.name}}></td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div> -->
-
-
   <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn mr-5 " style="background-color: #92d050;">Enviar a cupones</button>
-      <button type="button" class="btn " style="background-color: #f4b081">Enviar a promociones</button>
+      <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()" >Enviar cupones</button>
+      <button type="button" class="btn " style="background-color: #f4b081">Enviar promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btn btn-success mr-5">Generar Excel</button>
       <button type="button" class="btn btn-danger">Generar PDF</button>
     </div>
   </div>
+
+  {{ userSelected | json }}
+
 </div>
