@@ -4,7 +4,7 @@ import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-b
 import * as XLSX from 'xlsx';
 
 //export pdf
-// import * as html2pdf from 'html2pdf.js';
+import 'jspdf-autotable';
 
 
 //service modal
@@ -182,21 +182,30 @@ export class UserManagerComponent implements OnInit {
 
   //generate pdf file
 
-  generatePdf(content:any) {
+  generatePdf(content: any) {
     console.log(content);
-    
+    //'p', 'mm', 'a4'
 
-    // let doc = new jsPDF();
-    // const content = document.getElementById('excel-table');
+    let doc = new jsPDF('landscape');
+    let col = ["#", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
+      "Sede", "Usabilidad", "Monto"];
+    let rows = [];
+    let auxrow = [];
+    this.userSelected.map((user, i) => {
+      auxrow= [];
+      auxrow[0] = i+1;
+      for (const key in user) {
+        if (user.hasOwnProperty(key)) {
+          // Mostrando en pantalla la clave junto a su valor
+          auxrow.push(user[key]);
+        }
+      }
+      rows.push(auxrow);
+    });
 
-    // doc.fromHTML(content, 15, 15, {
-    //   'width': 170,
-    // });
-
-    // doc.save('document.pdf');
-
-
-
+    //build the pdf file
+    doc.autoTable(col, rows);
+    doc.save('Test.pdf');
   }
 
   SeachingRange(dateFrom: string, dateTo: string) {
