@@ -10,6 +10,6 @@ export class Allies{
     NumberOfLocations?: number;
     idMealsCategories?:string;
     description?:string;
-    idAttentionSchedule?:string;
+    idAttentionSchedule?:string[]; //change arry
     imagesAllies?:string[];
 }

@@ -26,7 +26,16 @@ export class CreateAllyComponent  {
     idTypeOfEstablishment: "ID_objCATEGORIA_DE_COMIDAS",
     NumberOfLocations:2,
     idMealsCategories: "ID_objCATEGORIA_DE_COMIDAS",
-    description:"Description"
+    description:"Description",
+    idAttentionSchedule: [
+      {
+        day: "Lunes",
+        from: "8:00 am",
+        to: "10:00 pm"
+      }
+    ],// array of obj 
+    imagesAllies : [],
+
   }
   alliesCaregories:any= {
     // id:"ID_objCATEGORIA_DE_COMIDAS",
@@ -38,11 +47,12 @@ export class CreateAllyComponent  {
   }
 
 
+  days: string[]= []
+  hours: String[] = [];
 
   // old params
   color:string;
   aliado: Aliado;
-  horas: String[] = [];
   TypeEstablishment: String[] = [];
   Categoria: String[] = [];
   photo: any;
@@ -85,8 +95,8 @@ export class CreateAllyComponent  {
       ,"Sándwich","Arepas y empanadas","Alitas","Crepes","Restaurante bar"]
     this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
       "Saludable", "Heladería"]
-
-    this.horas = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
+    this.days = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sábado', 'Domingo']
+    this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
   }
 

@@ -25,6 +25,10 @@
 //   border-radius: 5px;
 // }
 
+//style reponsive 
+
+
+
 //Styles button primary
 .btn-outline-primary:hover {
   color: #fff;
@@ -84,10 +88,8 @@
 
 .horario {
   border: solid 1px rgb(170, 170, 170);
-  padding: 4px;
-  width: 110px;
-  height: 40px;
-  margin-top: 7px;
+  border-radius: .3rem;
+  // padding: 1px;
 }
 
 .corousel-info {
@@ -96,13 +98,6 @@
 
 .center {
   text-align: center;
-}
-
-.width-horario {
-  width: 112px;
-  margin-top: 9px;
-  margin-right: .1rem;
-  margin-left: .7rem;
 }
 
 .margin-left {

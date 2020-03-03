@@ -31,6 +31,7 @@ export class AlliesService {
       let obj = {
         name: allies.name,
         nit:allies.nit,
+        legalRepresentative:allies.legalRepresentative,
         documentNumber:allies.documentNumber,
         logo:allies.logo,
         color:allies.color,
@@ -50,6 +51,7 @@ export class AlliesService {
       let obj = {
         name: allies.name,
         nit:allies.nit,
+        legalRepresentative:allies.legalRepresentative,
         documentNumber:allies.documentNumber,
         logo:allies.logo,
         color:allies.color,
