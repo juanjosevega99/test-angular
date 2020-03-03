@@ -1,10 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
 import * as XLSX from 'xlsx';
 
+//export pdf
+// import * as html2pdf from 'html2pdf.js';
+
+
 //service modal
 import { SwallServicesService } from 'src/app/services/swall-services.service';
+import * as jsPDF from 'jspdf';
+
 
 
 @Component({
@@ -16,6 +22,9 @@ export class UserManagerComponent implements OnInit {
 
   /*name of the excel-file which will be downloaded. */
   fileName = 'ExcelSheet.xlsx';
+
+  //var to know if pdf or excel
+  typepdf = true;
 
   //vars to date filter
   hoveredDate: NgbDate;
@@ -145,15 +154,22 @@ export class UserManagerComponent implements OnInit {
     this.selectforsend();
   }
 
-  dataforExcel(){
+  //get data to export
+  datafor_Excel() {
+    this.typepdf = false;
+    this.selectforsend();
+  }
+  datafor_pdf() {
+    this.typepdf = true;
     this.selectforsend();
   }
 
+  //generate excel file
   generateExcel() {
-    
-    /* table id is passed over here */   
-    let element = document.getElementById('excel-table'); 
-    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+    /* table id is passed over here */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -161,6 +177,20 @@ export class UserManagerComponent implements OnInit {
 
     /* save to file */
     XLSX.writeFile(wb, this.fileName);
+
+  }
+
+  //generate pdf file
+
+  generatePdf() {
+
+    let doc = new jsPDF();
+    const content = document.getElementById('excel-table');
+    doc.text(10,10, content);
+
+    doc.save('document.pdf');
+    
+
 
   }
 

@@ -108,11 +108,12 @@
       <button type="button" class="btn " style="background-color: #f4b081">Enviar promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn btn-success mr-5" (click)="dataforExcel()" data-toggle="modal"
+      <button type="button" class="btn btn-success mr-5" (click)="datafor_Excel()" data-toggle="modal"
         data-target="#exampleModalCenter">
         Generar Excel</button>
 
-      <button type="button" class="btn btn-danger">Generar PDF</button>
+      <button type="button" (click)="datafor_pdf()" class="btn btn-danger" data-toggle="modal"
+        data-target="#exampleModalCenter">Generar PDF</button>
     </div>
   </div>
 
@@ -122,16 +123,24 @@
     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #1f6f43;">
+        <div *ngIf="!typepdf" class="modal-header" style="background-color: #1f6f43;">
           <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar Excel</h5>
           <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()"> Descargar</button>
-          <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print" ngxPrint>print</button>
+          <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print"
+            ngxPrint>print</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngIf="typepdf" class="modal-header" style="background-color: #9b1604;">
+          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar PDF</h5>
+          <button type="button" class="btn btn-outline-success ml-3" (click)="generatePdf()"> Descargar</button>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <div class="tableFixHead" id="table-print">
+          <div class="tableFixHead" id="content" #content>
 
             <table class="table table-responsive" id="excel-table">
               <tr>
@@ -170,7 +179,5 @@
       </div>
     </div>
   </div>
-
-  {{ userSelected | json }}
 
 </div>
