@@ -182,14 +182,19 @@ export class UserManagerComponent implements OnInit {
 
   //generate pdf file
 
-  generatePdf() {
-
-    let doc = new jsPDF();
-    const content = document.getElementById('excel-table');
-    doc.text(10,10, content);
-
-    doc.save('document.pdf');
+  generatePdf(content:any) {
+    console.log(content);
     
+
+    // let doc = new jsPDF();
+    // const content = document.getElementById('excel-table');
+
+    // doc.fromHTML(content, 15, 15, {
+    //   'width': 170,
+    // });
+
+    // doc.save('document.pdf');
+
 
 
   }
