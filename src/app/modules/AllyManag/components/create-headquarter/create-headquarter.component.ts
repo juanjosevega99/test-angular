@@ -28,7 +28,16 @@ export class CreateHeadquarterComponent implements OnInit {
     cell: null,
     tel: null,
     emailGeneral: null,
-    code: null
+    code: null,
+    services:[],
+    cost:[],
+    aditionalServices:[],
+    deliveryTime: null,
+    headquarterContact: null,
+    chargeHq: null,
+    cellHq: null,
+    telHq: null,
+    emailHq: null
   }
 
   /* preHeadquarters:Object={
@@ -47,25 +56,62 @@ export class CreateHeadquarterComponent implements OnInit {
   [(ngModel)]="preHeadquarters.nameHq"  con[] cambiar el valor inicial de preHeadquarters por el valor que se ingrese nuevo de los inputs
   [ngModel]="preHeadquarters.nameHq" html  sin [] permanece preHeadquarters en el valor fijado inicialmente así se modifiquen los inputs */
 
-  services: any[] = [{ name: 'Parqueadero', img: 'assets/icons/parking.png' }, { name: 'Barra de tragos', img: 'assets/icons/cocktail.png' }, { name: 'Wifi', img: 'assets/icons/wi-fi-zone.png' },
-  { name: 'Mesa exterior', img: 'assets/icons/people-table.png' }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png' }, { name: 'Show en vivo', img: 'assets/icons/dance.png' },
-  { name: 'Zona de fumadores', img: 'assets/icons/no-smoking.png' }, { name: 'Carta braile', img: 'assets/icons/braille.png' }]
+  
+  
+  
 
+  
   Location: String[] = [];
   newLocation: String;
+  otherLocationSelect: boolean = true;
+  otherLocationInput: boolean = false;
+  otherbuttonadd: boolean = true;
+  buttonadd: boolean = false;
+  services: any[] =[];
+  cost: any[] = [];
+  aditionalServices: any[] = [];
 
-  otherLocationSelect: boolean = true
-  otherLocationInput: boolean = false
-  otherbuttonadd: boolean = true
-  buttonadd: boolean = false
+  constructor( private swal: SwallServicesService ) {
+    this.Location = ["Almeidas", "Alto Magdalena", "Bajo Magdalena", "Gualivá", "Guavio", "Magdalena Centro", "Medina", "Oriente", "Rionegro", "Sabana Centro"],
 
+    this.services = [{name: 'Pídelo', img: 'assets/icons/shop.png', select:false},{name : 'Resérvalo', img:'assets/icons/calendar.png',select:false},{name:'Llévalo',img:'assets/icons/delivery-bike.png', select:false}]
+   
+    this.aditionalServices = [{ name: 'Parqueadero', img: 'assets/icons/parking.png',select:false }, { name: 'Barra de tragos', img: 'assets/icons/cocktail.png',select:false }, { name: 'Wifi', img: 'assets/icons/wi-fi-zone.png',select:false },
+    { name: 'Mesa exterior', img: 'assets/icons/people-table.png',select:false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png',select:false }, { name: 'Show en vivo', img: 'assets/icons/dance.png',select:false },
+    { name: 'Zona de fumadores', img: 'assets/icons/no-smoking.png',select:false }, { name: 'Carta braile', img: 'assets/icons/braille.png',select:false }]
 
-  constructor(  private swal: SwallServicesService ) {
-    this.Location = ["Almeidas", "Alto Magdalena", "Bajo Magdalena", "Gualivá", "Guavio", "Magdalena Centro", "Medina", "Oriente", "Rionegro", "Sabana Centro"]
+    this.cost = [{name: 'Pídelo',img:'assets/icons/shop.png',cost:null},{name : 'Resérvalo',img:'assets/icons/calendar.png',cost:null},{name:'Llévalo',img:'assets/icons/delivery-bike.png',cost:null}]
   }
 
   ngOnInit() {
 
+  }
+
+
+  selectedService(event, pos: number){
+   /*  console.log(event); */
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    const value = event.target.value;
+    event.target.value = value;
+    this.preHeadquarters['services'][pos]={value, checked}
+  }
+
+  writeCost(event, i:number ){
+    const id = event.target.id;
+    event.target.id = id;
+    const value = event.target.value;
+    event.target.value = value;
+    this.preHeadquarters['cost'][i]={id, value}
+  }
+
+  selectedAditionalService(event, pos: number){
+    /* console.log(event); */
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    const value = event.target.value;
+    event.target.value = value;
+    this.preHeadquarters['aditionalServices'][pos]={value, checked}
   }
 
   saveHq(shape: NgForm) {
@@ -75,7 +121,10 @@ export class CreateHeadquarterComponent implements OnInit {
     /*  console.log(this.preHeadquarters); */
     /*    swal("Hello world!"); */
     this.swal.saveChanges()
-    
+    }
+
+  cancel(){
+    this.swal.cancel()
   }
 
   handleBoxLocation(): boolean {

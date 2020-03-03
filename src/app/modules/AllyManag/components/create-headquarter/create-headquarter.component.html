@@ -102,7 +102,7 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}"
+                    <input class="form-control" type="text" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}"
                         placeholder="(ddd) ddd-dddd" name="telGeneralHq" [(ngModel)]="preHeadquarters.tel">
                 </div>
             </div>
@@ -134,26 +134,14 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios prestados</label>
                 <div class="col-md-7">
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label " for="inlineCheckbox1">
-                            <img src="assets/icons/shop.png" height="30px" width="30px">
-                            Pídelo
+                    <div class="form-check form-check-inline" *ngFor="let service of services; let i=index">
+                        <label class="form-check-label">
+                            <img src={{service.img}} height="30px" width="30px">
+                            {{service.name}}
                         </label>
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label " for="inlineCheckbox1">
-                            <img src="assets/icons/calendar.png" height="30px" width="30px">
-                            Resérvalo
-                        </label>
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label " for="inlineCheckbox1">
-                            <img src="assets/icons/delivery-bike.png" height="30px" width="30px">
-                            Llévalo
-                        </label>
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <!-- [(ngModel)]="preHeadquarters.services[i]  name="services" [value]="service"" -->
+                        <input class="form-check-input" type="checkbox" [checked]="service.select"
+                            (change)="selectedService($event,i)" [value]="service.name">
                     </div>
                 </div>
             </div>
@@ -161,36 +149,23 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Costo por reserva/pedido</label>
                 <div class="col-md-7 ">
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline" *ngFor="let x of cost, let i = index" >
                         <label>
-                            <img src="assets/icons/shop.png" height="30px" width="30px">
+                            <img src={{x.img}} height="30px" width="30px">
                         </label>
-                        <input class="reserva" type="text" placeholder="$2500">
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label>
-                            <img src="assets/icons/calendar.png" height="30px" width="30px">
-                        </label>
-                        <input class="reserva" type="text" placeholder="$2500">
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label>
-                            <img src="assets/icons/delivery-bike.png" height="30px" width="30px">
-                        </label>
-                        <input class="reserva" type="text" placeholder="$2500">
+                        <!--  [disabled]="preHeadquarters.services[0].checked" -->
+                        <input  class="reserva" type="text" placeholder="$2500" (change)="writeCost($event,i)" id={{x.name}} >
                     </div>
                 </div>
-
             </div>
-
-
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios adicionales</label>
                 <div class="col-md-7">
-                    <div class="form-check form-check-inline" *ngFor="let x of services">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label servicio" for="inlineCheckbox1">
+                    <div class="form-check form-check-inline" *ngFor="let x of aditionalServices;let i=index">
+                        <input class="form-check-input" type="checkbox" [checked]="x.select"
+                            (change)="selectedAditionalService($event,i)" [value]="x.name">
+                        <label class="form-check-label servicio">
                             <img src={{x.img}} height="25px" width="25px">
                             {{x.name}}
                         </label>
@@ -203,7 +178,7 @@
                 <div class="col-md-7">
                     <div class="input-group">
                         <input type="number" min="0" max="120" placeholder="Tiempo promedio de entrega" value="0"
-                            class="form-control">
+                            class="form-control" [(ngModel)]="preHeadquarters.deliveyTime" name="deliveryTime">
                         <div class="input-group-append">
                             <span class="input-group-text">min</span>
                         </div>
@@ -211,36 +186,47 @@
                 </div>
             </div>
 
+
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Contacto sede</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Contacto sede">
+                    <input class="form-control" type="text" name="contactHq"
+                        [(ngModel)]="preHeadquarters.headquarterContact" required placeholder="Contacto sede">
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Cargo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Cargo">
+                    <input class="form-control" placeholder="Cargo" type="text" name="chargelHq"
+                        [(ngModel)]="preHeadquarters.chargeHq" required>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Celular</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Celular">
+                    <input class="form-control" type="text" placeholder="Celular" name="cellHq" pattern="^[3]\d{9}$"
+                        [(ngModel)]="preHeadquarters.cellHq" required>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Fijo">
+                    <input class="form-control" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}" placeholder="(ddd) ddd-dddd"
+                        name="telHq" [(ngModel)]="preHeadquarters.telHq">
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Correo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Correo">
+                    <input class="form-control" type="email" placeholder="Correo" name="emailHq"
+                        [(ngModel)]="preHeadquarters.emailHq" required>
                 </div>
             </div>
+
         </section>
 
         <section class="col-1 d-flex justify-content-center align-items-center ">
@@ -259,12 +245,12 @@
                     <label class="">&nbsp;</label>
                     <div class="input-group ">
                         <!-- [disabled]="!shape.valid" -->
-                        <button type="submit" class="btn btn-outline-primary">
+                        <button type="button" (click)="cancel()" class="btn btn-outline-primary">
                             Cancelar
                         </button>
                     </div>
                 </div>
-                
+
             </div>
         </section>
 
