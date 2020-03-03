@@ -1,46 +1,44 @@
-import { Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import {FormGroup, FormControl, Validators, FormArray} from '@angular/forms'
 import { Observable } from 'rxjs';
-
 //Models of backend
 import { Aliado } from 'src/app/models/aliado';
+import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 
 @Component({
   selector: 'app-create-ally',
   templateUrl: './create-ally.component.html',
   styleUrls: ['./create-ally.component.scss']
 })
-export class CreateAllyComponent  {
+export class CreateAllyComponent implements OnInit  {
   //news params
   forma:FormGroup;
 
-  allies:any = {
+  allies:object = {
     // id: "ojsf3323",
-    name: 'Kfc',
-    nit: 1111,
-    legalRepresentative: "MIchael",
-    documentNumber:10616543,
-    logo: "url of image",
-    color: "#fffff",
-    idTypeOfEstablishment: "ID_objCATEGORIA_DE_COMIDAS",
-    NumberOfLocations:2,
-    idMealsCategories: "ID_objCATEGORIA_DE_COMIDAS",
-    description:"Description",
+    name: null,
+    nit: null,
+    legalRepresentative: null,
+    documentNumber:null,
+    logo: null,
+    colour: null,
+    idTypeOfEstablishment: null,
+    NumberOfLocations:null,
+    idMealsCategories: null,
+    description:null,
     idAttentionSchedule: [
       {
-        day: "Lunes",
-        from: "8:00 am",
-        to: "10:00 pm"
+        day: null,
+        from: null,
+        to: null
       }
     ],// array of obj 
     imagesAllies : [],
 
   }
-  alliesCaregories:any= {
-    // id:"ID_objCATEGORIA_DE_COMIDAS",
-    name:"CategoriaPrueba"
-  }
+  alliesCategories:any[]= [];
+
   mealsCategories:any= {
     // id: "ID_objCATEGORIA_DE_COMIDAS",
     name: "cafe con pan"
@@ -49,9 +47,9 @@ export class CreateAllyComponent  {
 
   days: string[]= []
   hours: String[] = [];
+  color:String = "#000000";
 
   // old params
-  color:string;
   aliado: Aliado;
   TypeEstablishment: String[] = [];
   Categoria: String[] = [];
@@ -68,7 +66,7 @@ export class CreateAllyComponent  {
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
   newEstablishment:string
-  constructor() {
+  constructor( private alliesCatServices : AlliesCategoriesService ) {
     this.forma = new FormGroup({
       
       'name' : new FormControl('',Validators.required),
@@ -83,6 +81,12 @@ export class CreateAllyComponent  {
       'description' : new FormControl('',Validators.required),
     })
 
+    //this is observator
+    this.forma.controls['color'].valueChanges
+        .subscribe( data => {
+          console.log(data);
+        })
+
 
     this.imageSize = { width: 230, height: 120 };
     this.aliado = new Aliado();
@@ -93,12 +97,27 @@ export class CreateAllyComponent  {
       "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas","Pizzas","Pastas"
       ,"Perros calientes","Pollo","Árabe","Mariscos","Oriental","Italiana","Mexicana","Postres","Peruana"
       ,"Sándwich","Arepas y empanadas","Alitas","Crepes","Restaurante bar"]
-    this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
-      "Saludable", "Heladería"]
+    // this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
+    //   "Saludable", "Heladería"]
     this.days = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
+      this.alliesCatServices.getAlliesCategories().subscribe( alliesCat => {
+        this.alliesCategories = alliesCat;
+        console.log(this.alliesCategories)
+      } )
   }
+
+  ngOnInit(){
+    
+  }
+
+  getColour(event){
+    this.color =event.target.value 
+    console.log(this.color)
+  }
+
+  
 
    //function for logo
   onPhotoSelected($event) {

@@ -36,6 +36,7 @@ export class AlliesService {
         logo:allies.logo,
         color:allies.color,
         idTypeOfEstablishment:allies.idTypeOfEstablishment,
+        nameTypeOfEstablishment:allies.nameTypeOfEstablishment,
         NumberOfLocations:allies.NumberOfLocations,
         idMealsCategories:allies.idMealsCategories,
         description:allies.description,

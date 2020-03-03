@@ -7,9 +7,10 @@ export class Allies{
     logo?:string;
     color?:string;
     idTypeOfEstablishment?:string;
+    nameTypeOfEstablishment?:string;
     NumberOfLocations?: number;
     idMealsCategories?:string;
     description?:string;
-    idAttentionSchedule?:string[]; //change arry
+    idAttentionSchedule?:string[];
     imagesAllies?:string[];
 }

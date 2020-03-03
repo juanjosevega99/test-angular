@@ -54,16 +54,11 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Color para la entidad</label>
                                         <div class="col-8">
-                                                <div class="row picker margin-left2">
+                                                <div class="row margin-left2">
+                                                        <input class="form-control " type="text" [value]="color"
+                                                                formControlName="color">
 
-                                                        <input class="colors" type="number" placeholder="Rojo" min="0"
-                                                                max="255">
-                                                        <input class="colors" type="number" placeholder="Verde" min="0"
-                                                                max="255" id="green">
-                                                        <input class="colors" type="number" placeholder="Azul" min="0"
-                                                                max="255" id="blue">
-                                                        <input type="color">
-
+                                                        <input type="color" (change)="getColour($event)">
                                                 </div>
                                         </div>
                                 </div>
@@ -72,11 +67,12 @@
                                         <div class="col-8">
                                                 <div class="row  margin-left2 ">
                                                         <select *ngIf="otherEstablishmentSelect"
-                                                                class="browser-default custom-select selectSize mr-2 text-capitalize">
+                                                                class="browser-default custom-select selectSize mr-2 text-capitalize"
+                                                                formControlName="idTypeOfEstablishment">
                                                                 <option selected>---------------------</option>
-                                                                <option *ngFor="let time of TypeEstablishment"
-                                                                        [value]="time">
-                                                                        {{time}}
+                                                                <option *ngFor="let categorie of alliesCategories"
+                                                                        [value]="categorie.id">
+                                                                        {{categorie.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
@@ -87,6 +83,7 @@
                                                                 *ngIf="otherEstablishmentInput"
                                                                 class="btn1 btn btn-outline-primary"> Añadir
                                                         </button> -->
+                                                        <button class="btn1 btn btn-outline-primary"> cancelar</button>
                                                         <button (click)=" handleBoxEstablishment()"
                                                                 class="btn1 btn btn-outline-primary"> Otro
                                                         </button>
@@ -141,7 +138,7 @@
                                         <div class="col-2"> <label>Horario</label> </div>
                                         <div class="col">
                                                 <div class="row">
-                                                        <div class="col" >
+                                                        <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
                                                                                 <p>Día</p>
@@ -160,7 +157,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[0]}} </label>
+                                                                                <label> {{days[0]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -193,7 +190,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[1]}} </label>
+                                                                                <label> {{days[1]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -226,7 +223,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[2]}} </label>
+                                                                                <label> {{days[2]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -259,7 +256,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[3]}} </label>
+                                                                                <label> {{days[3]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -292,7 +289,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[4]}} </label>
+                                                                                <label> {{days[4]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -325,7 +322,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[5]}} </label>
+                                                                                <label> {{days[5]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -358,7 +355,7 @@
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label > {{days[6]}} </label>
+                                                                                <label> {{days[6]}} </label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
@@ -387,42 +384,48 @@
 
                                                         </div>
                                                 </div>
-                                        
+
 
                                         </div>
 
                                 </div>
                                 <div class="row form-group ">
-                                        <div class="col-3 mt-5 "><label class="text-center">Fotos del establecimiento</label>
+                                        <div class="col-3 mt-5 "><label class="text-center">Fotos del
+                                                        establecimiento</label>
                                         </div>
                                         <div class="col align-items-center">
-                                                <div class="d-flex flex-column justify-content-center align-items-center mt-3">
-                
-                                                        <div class="d-flex flex-column justify-content-center align-items-center ">
-                
+                                                <div
+                                                        class="d-flex flex-column justify-content-center align-items-center mt-3">
+
+                                                        <div
+                                                                class="d-flex flex-column justify-content-center align-items-center ">
+
                                                                 <div class="d-flex flex-column ">
                                                                         <ng-image-slider *ngIf="imagesUploaded.length>0"
                                                                                 style="width: 230px; height: 120px; "
-                                                                                [imageSize]="imageSize" [images]="imagesUploaded" #nav>
+                                                                                [imageSize]="imageSize"
+                                                                                [images]="imagesUploaded" #nav>
                                                                         </ng-image-slider>
-                
-                                                                        <P *ngIf="imagesUploaded.length==0" style="color: crimson; ">
+
+                                                                        <P *ngIf="imagesUploaded.length==0"
+                                                                                style="color: crimson; ">
                                                                                 No hay imagenes subidas</P>
-                
+
                                                                         <div class="upload-btn-wrapper mt-3  ">
-                                                                                <button class=" container  btn btn-outline-primary ">Adjuntar
+                                                                                <button
+                                                                                        class=" container  btn btn-outline-primary ">Adjuntar
                                                                                         archivos
                                                                                         {{contImage}} </button>
                                                                                 <input type="file" name="photo"
-                                                                                        (change)="onImagesSelected($event)"  />
+                                                                                        (change)="onImagesSelected($event)" />
                                                                         </div>
-                
+
                                                                 </div>
-                
+
                                                         </div>
-                
+
                                                 </div>
-                
+
                                         </div>
                                 </div>
 
