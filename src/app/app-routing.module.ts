@@ -67,6 +67,7 @@ const routes: Routes = [
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 
     ]
+    
   },
   { path: "navbar", component: AppNavbarComponent },
   { path: "principal", component: PrincipalPageComponent },
