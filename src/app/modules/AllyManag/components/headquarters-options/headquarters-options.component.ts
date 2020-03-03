@@ -7,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeadquartersOptionsComponent implements OnInit {
 
-  constructor() { }
+  Headquarters: String[] = [];
+
+  constructor() { 
+    this.Headquarters= ['Galerías','Centro','Sur','Plaza']
+
+  }
 
   ngOnInit() {
   }

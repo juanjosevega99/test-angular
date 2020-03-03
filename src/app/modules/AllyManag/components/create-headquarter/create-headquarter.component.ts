@@ -17,6 +17,9 @@ import { SwallServicesService } from 'src/app/services/swall-services.service';
 })
 export class CreateHeadquarterComponent implements OnInit {
 
+  other:String;
+  otherImg :String;
+
   preHeadquarters: Object = {
     nameHq: null,
     location: null,
@@ -32,12 +35,13 @@ export class CreateHeadquarterComponent implements OnInit {
     services:[],
     cost:[],
     aditionalServices:[],
+    otherServiceadd : [],
     deliveryTime: null,
     headquarterContact: null,
     chargeHq: null,
     cellHq: null,
     telHq: null,
-    emailHq: null
+    emailHq: null,
   }
 
   /* preHeadquarters:Object={
@@ -68,8 +72,13 @@ export class CreateHeadquarterComponent implements OnInit {
   otherbuttonadd: boolean = true;
   buttonadd: boolean = false;
   services: any[] =[];
+ /*  boxcheck : boolean = true;
+  inputcost : boolean = false; */
   cost: any[] = [];
   aditionalServices: any[] = [];
+  checkboxOther : boolean = true;
+  othersServiceInput:boolean = false;
+
 
   constructor( private swal: SwallServicesService ) {
     this.Location = ["Almeidas", "Alto Magdalena", "Bajo Magdalena", "Gualivá", "Guavio", "Magdalena Centro", "Medina", "Oriente", "Rionegro", "Sabana Centro"],
@@ -80,6 +89,8 @@ export class CreateHeadquarterComponent implements OnInit {
     { name: 'Mesa exterior', img: 'assets/icons/people-table.png',select:false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png',select:false }, { name: 'Show en vivo', img: 'assets/icons/dance.png',select:false },
     { name: 'Zona de fumadores', img: 'assets/icons/no-smoking.png',select:false }, { name: 'Carta braile', img: 'assets/icons/braille.png',select:false }]
 
+    
+
     this.cost = [{name: 'Pídelo',img:'assets/icons/shop.png',cost:null},{name : 'Resérvalo',img:'assets/icons/calendar.png',cost:null},{name:'Llévalo',img:'assets/icons/delivery-bike.png',cost:null}]
   }
 
@@ -89,13 +100,22 @@ export class CreateHeadquarterComponent implements OnInit {
 
 
   selectedService(event, pos: number){
-   /*  console.log(event); */
+    console.log(event);
     const checked = event.target.checked;
     event.target.checked = checked;
     const value = event.target.value;
     event.target.value = value;
     this.preHeadquarters['services'][pos]={value, checked}
   }
+
+
+  /* handleBoxService(): boolean {
+    if (this.services['select']) {
+      return this.inputcost = true;
+    } else {
+      return this.inputcost = false;
+    }
+  } */
 
   writeCost(event, i:number ){
     const id = event.target.id;
@@ -125,6 +145,38 @@ export class CreateHeadquarterComponent implements OnInit {
 
   cancel(){
     this.swal.cancel()
+  }
+
+  handleBoxOtherservice() {
+   this.othersServiceInput = !this.othersServiceInput;
+  }
+
+  selectImg(event){
+   /*  let input = event.target;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e: any) {
+        $('#photo')
+          .attr('src', e.target.result)
+      };
+
+      reader.readAsDataURL(input.files[0]);
+
+    } */
+
+    console.log(event);
+    this.otherImg = event;
+  }
+
+  addNewServiceadd(other:String){
+    const otherService = {
+      name : other,
+      /*  this.otherImg ? this.otherImg : */
+      img : 'assets/icons/plus.png',
+      select : true
+    }
+    this.aditionalServices.push(otherService);
   }
 
   handleBoxLocation(): boolean {
