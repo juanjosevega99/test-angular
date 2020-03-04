@@ -30,6 +30,8 @@ import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
 import { CreateHeadquarterComponent } from './modules/AllyManag/components/create-headquarter/create-headquarter.component';
 import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component';
+import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
+import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
 
 const routes: Routes = [
   {
@@ -41,6 +43,7 @@ const routes: Routes = [
       { path: "reset_password", component: ResestPasswordComponent },
       { path: "forget", component: LoginForgetComponent },
       { path: "loginForm", component: LoginFormComponent },
+
       { path: "**", redirectTo: "loginForm", pathMatch: 'full' },
 
     ]
@@ -63,10 +66,13 @@ const routes: Routes = [
       { path: "tycManager", component: TycManagerComponent },
       { path: "add-sede", component: AddSedeComponent },
       { path: "createHeadquarter", component: CreateHeadquarterComponent },
+      { path: "editmenu", component: EditMenuComponent },
+      { path: "createDish", component: CreateDishComponent },
 
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 
     ]
+    
   },
   { path: "navbar", component: AppNavbarComponent },
   { path: "principal", component: PrincipalPageComponent },

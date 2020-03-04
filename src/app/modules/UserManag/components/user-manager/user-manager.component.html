@@ -1,167 +1,182 @@
-<app-app-navbar></app-app-navbar>
-
-
 <div class="compenetsstyle">
-<div>
-  
-  <input class="form-control" id="myInput" type="text" placeholder="Buscar.." >
- 
 
-  <table class="table table-bordered table-striped" 
-  id="table"
-  data-toggle="table"
-  data-show-columns="true"
-  data-multiple-select-row="true"
-  data-click-to-select="true"
-  data-show-search-clear-button="true"
-  data-filter-control="true"
-  >
-  <!-- data-search="true" -->
-  <thead>
-      <tr>
-        <th>Fecha</th>
-        <th data-field="name" data-filter-control="input">Nombre</th>
-        <th data-field="correo" data-filter-control="input">Correo</th>
-        <th data-field="celular" data-filter-control="input">Celular</th>
-        <th data-field="fechaNacimiento" data-filter-control="input">Fecha Nacimiento</th>
-        <th data-field="genero" data-filter-control="input">Género</th>
-        <th data-field="establecimiento" data-filter-control="input">Establecimiento</th>
-        <th data-field="sede" data-filter-control="input">Sede</th>
-        <th data-field="usabilidad" data-filter-control="input">Usabilidad</th>
-        <th data-field="monto" data-filter-control="input">Monto compras</th>
-        <th data-field="state" data-checkbox="true"> Seleccionar</th>
-      </tr>
-    </thead>
-    <tbody id="myTable">
-      <tr>
-        <td>01/02/2019</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3245672341</td>
-        <td>09/01/1997</td>
-        <td>femenino</td>
-        <td>KFC</td>
-        <td>Galerías</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>04/08/2019</td>
-        <td>Kenny</td>
-        <td>mary@mail.com</td>
-        <td>3125672341</td>
-        <td>19/01/1995</td>
-        <td>masculino</td>
-        <td>KFC</td>
-        <td>Centro</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>23/03/2020</td>
-        <td>Ana</td>
-        <td>july@greatstuff.com</td>
-        <td>3214577223</td>
-        <td>11/05/1945</td>
-        <td>femenino</td>
-        <td>Corral</td>
-        <td>Galerías</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>08/10/2019</td>
-        <td>Sofia </td>
-        <td>a_r@test.com</td>
-        <td>3105672341</td>
-        <td>09/12/1976</td>
-        <td>femenino</td>
-        <td>Corral</td>
-        <td>Centro</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/02/2019</td>
-        <td>Edwin</td>
-        <td>a_r@test.com</td>
-        <td>3145332122</td>
-        <td>12/10/1923</td>
-        <td>masculino</td>
-        <td>Corral</td>
-        <td>Norte</td>
-        <td>0</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>09/12/2018</td>
-        <td>Isabella</td>
-        <td>a_r@test.com</td>
-        <td>3245672341</td>
-        <td>10/23/1998</td>
-        <td>femenino</td>
-        <td>Qbano</td>
-        <td>Galerías</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/02/2018</td>
-        <td>Natalia</td>
-        <td>a_r@test.com</td>
-        <td>3208666765</td>
-        <td>31/10/1956</td>
-        <td>femenino</td>
-        <td>Qbano</td>
-        <td>Centro</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/05/2019</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3208666765</td>
-        <td>09/09/1965</td>
-        <td>femenino</td>
-        <td>Sr. Wook</td>
-        <td>Galerias</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>01/02/2020</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3208666765</td>
-        <td>02/10/1999</td>
-        <td>femenino</td>
-        <td>Sr. Wook</td>
-        <td>Centro</td>
-        <td>0</td>
-        <td>$12.000</td>
-      </tr>
-      <tr>
-        <td>12/04/2029</td>
-        <td>Andrea</td>
-        <td>john@example.com</td>
-        <td>3208666765</td>
-        <td>15/11/2000</td>
-        <td>femenino</td>
-        <td>Sr. Wook</td>
-        <td>Sur</td>
-        <td>1</td>
-        <td>$12.000</td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="margin-top: 2rem">
-      <button type="button" class="btn " style="background-color: #92d050;">Enviar a cupones</button>
-      <button type="button" class="btn " style="background-color: #f4b081">Enviar a promociones</button>
-      <button type="button" class="btn btn-success">Generar Excel</button>
-      <button type="button" class="btn btn-danger">Generar PDF</button>
+  <div class="m-3 d-flex flex-row ">
+
+    <div class="container-fluid" style="width: 25%;">
+      <a [routerLink]='["/main"]' class="d-flex mr-2">
+        <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+      </a>
+
+    </div>
+
+    <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
+      <div class="form-group hidden">
+        <div class="input-group">
+          <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+            [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+            outsideDays="hidden" [startDate]="fromDate">
+          <ng-template #t let-date let-focused="focused">
+            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+              [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+              (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control
+            [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group ml-2">
+        <div class="input-group">
+          <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate"
+            [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      <button (click)=" search()" type="button" class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
+      <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+    </form>
   </div>
-</div>
+
+  <div class="container-fluid d-flex justify-content-center m-3">
+    <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
+      #general (keyup)="searchbyterm(general.value)">
+  </div>
+
+  <div class="tableFixHead">
+    <table>
+
+      <thead>
+        <tr>
+          <th class="text-center">Fecha<input class="form-control" type="text" (keyup)="search(date.value, date.id)"
+              #date id="date"></th>
+          <th class="text-center">Nombre<input class="form-control" type="text" (keyup)="search(name.value, name.id)"
+              #name id="name"></th>
+          <th class="text-center">Correo<input class="form-control" type="text"
+              (keyup)="search( email.value, email.id )" #email id="email"></th>
+          <th class="text-center">Celular<input class="form-control" type="text" id="cellphone"
+              (keyup)="search(cellphone.value, cellphone.id)" #cellphone></th>
+          <th class="text-center">Fecha de nacimiento<input class="form-control" type="text" id="birthday"
+              (keyup)="search(birthday.value, birthday.id)" #birthday></th>
+          <th class="text-center">Género<input class="form-control" type="text" id="gender"
+              (keyup)="search(gender.value, gender.id)" #gender></th>
+          <th class="text-center">Establecimiento<input class="form-control" type="text" id="establishment"
+              (keyup)="search(establishment.value, establishment.id)" #establishment></th>
+          <th class="text-center">Sede<input class="form-control" type="text" id="headquart"
+              (keyup)="search(headquart.value, headquart.id)" #headquart></th>
+          <th class="text-center">Usabilidad<input class="form-control" type="text" id="usability"
+              (keyup)="search(usability.value, usability.id)" #usability></th>
+          <th class="text-center">Monto de compras<input class="form-control" type="text" id="quantity"
+              (keyup)="search(quantity.value, quantity.id)" #quantity></th>
+          <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
+              (change)="selectedAll($event)"> </th>
+        </tr>
+
+      </thead>
+      <tbody class="mt-5">
+        <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
+          <td>{{user.date}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.cellphone}}</td>
+          <td>{{user.birthday}}</td>
+          <td>{{user.gender}}</td>
+          <td>{{user.establishment}}</td>
+          <td>{{user.headquart}}</td>
+          <td>{{user.usability}}</td>
+          <td>{{user.quantity}}</td>
+          <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+  <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
+    <div class="d-flex justify-content-center container-fluid">
+      <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
+        cupones</button>
+      <button type="button" class="btn " style="background-color: #f4b081">Enviar promociones</button>
+    </div>
+    <div class="d-flex justify-content-center container-fluid">
+      <button type="button" class="btn btn-success mr-5" (click)="datafor_Excel()" data-toggle="modal"
+        data-target="#exampleModalCenter">
+        Generar Excel</button>
+
+      <button type="button" (click)="datafor_pdf()" class="btn btn-danger" data-toggle="modal"
+        data-target="#exampleModalCenter">Generar PDF</button>
+    </div>
+  </div>
+
+
+  <!-- Modal Excel-->
+  <div class="modal fade bd-example-modal-xl" id="exampleModalCenter" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+      <div class="modal-content">
+        <div *ngIf="!typepdf" class="modal-header" style="background-color: #1f6f43;">
+          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar Excel</h5>
+          <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()"> Descargar</button>
+          <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print"
+            ngxPrint>print</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngIf="typepdf" class="modal-header" style="background-color: #f71f20;">
+          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar PDF</h5>
+          <button type="button" class="btn btn-outline-light ml-3"(click)="generatePdf()"> Descargar</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="table-content">
+          <div id="table-print" >
+
+            <table class="table table-responsive" id="excel-table">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">name</th>
+                <th class="text-center">email</th>
+                <th class="text-center">cellphone</th>
+                <th class="text-center">birthDate</th>
+                <th class="text-center">gender</th>
+                <th class="text-center">establishment</th>
+                <th class="text-center">headquart</th>
+                <th class="text-center">usability</th>
+                <th class="text-center">quantity</th>
+              </tr>
+              <tr *ngFor="let user of userSelected; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{user.date}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.cellphone}}</td>
+                <td>{{user.birthday}}</td>
+                <td>{{user.gender}}</td>
+                <td>{{user.establishment}}</td>
+                <td>{{user.headquart}}</td>
+                <td>{{user.usability}}</td>
+                <td>{{user.quantity}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
-

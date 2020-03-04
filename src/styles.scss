@@ -70,6 +70,21 @@ td {
   transform: rotate(180deg);
 }
 
+.my-custom-scrollbar {
+    position: relative;
+    height: 23.8rem;
+    overflow: auto;
+    }
+    .table-wrapper-scroll-y {
+    display: block;
+    }
+
+
+
+
+
+
+
 //medias queries
 
 @media only screen and (max-width: 770px) {

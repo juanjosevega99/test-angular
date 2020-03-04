@@ -48,6 +48,9 @@ import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/
 import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
 import { CreateHeadquarterComponent } from './modules/AllyManag/components/create-headquarter/create-headquarter.component';
+import {NgxPrintModule} from 'ngx-print';
+import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
+import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
 
 
 @NgModule({
@@ -84,7 +87,9 @@ import { CreateHeadquarterComponent } from './modules/AllyManag/components/creat
     CreateAllyComponent,
     MainComponent,
     HeadquartersOptionsComponent,
-    CreateHeadquarterComponent
+    CreateHeadquarterComponent,
+    EditMenuComponent,
+    CreateDishComponent
   ],
   imports: [
     HttpClientModule,
@@ -104,6 +109,7 @@ import { CreateHeadquarterComponent } from './modules/AllyManag/components/creat
     BrowserAnimationsModule,
     NgImageSliderModule,
     ReactiveFormsModule,
+    NgxPrintModule
   ],
   providers: [],
   bootstrap: [AppComponent]

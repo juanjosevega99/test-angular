@@ -2,9 +2,11 @@
 
     <form ngNativeValidate class="row" (ngSubmit)="saveHq(shape)" #shape="ngForm">
 
-        <a routerLink="/headquarts" class="d-flex mr-2">
-            <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
-        </a>
+        
+            <a [routerLink]='["/headquarts"]' class="d-flex mr-2">
+                <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+            </a>
+       
 
         <section class="col-5">
 
@@ -178,7 +180,7 @@
                         <img  src='assets/icons/info.png' height="25px" width="25px">
                         otro
                     </label>
-                    <input *ngIf="othersServiceInput" class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other">
+                    <input *ngIf="othersServiceInput" class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other" required>
                     <!-- <input *ngIf="othersServiceInput" type="file" (change)="selectImg($event.target.value)" > -->
                     <!-- <button class="btn btn-outline-primary" >imgen</button>  -->
                     <button  *ngIf="othersServiceInput" class="btn btn-success" (click)="addNewServiceadd(other)" > Añadir</button>

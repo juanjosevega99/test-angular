@@ -1,0 +1,56 @@
+<div class="compenetsstyle">
+
+    <form ngNativeValidate  class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm">
+
+        
+            <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
+                <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+            </a>
+        
+
+        <section class="col-6" style="background-color:coral;" >
+
+            <div class="form-group row" style="align-items: center;">
+                <label class="col-md-5 col-form-label">Estado</label>
+                <div class="col-md-7 row" style="justify-content: center;" >
+
+                    <div class="radio radio-success">
+                        <input type="radio" name="radio2" id="radio3" value="option1"  checked>
+                        <label for="radio3">
+                            Activo
+                        </label>
+                    </div>
+
+                    <div class="radio radio-danger">
+                        <input type="radio" name="radio2" id="radio4" value="option2">
+                        <label for="radio4">
+                            Inactivo
+                        </label>
+                    </div>
+
+                    <div class="radio ">
+                        <input type="radio" name="radio2" id="radio5" value="option3">
+                        <label for="radio5">
+                            Eliminar
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Fecha de ingreso</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" placeholder="Dirección" name="addressHq">
+                </div>
+            </div>
+
+        </section>
+
+        <section class="col-5" style="background-color: chartreuse;" >
+            <p>hola</p>
+
+        </section>
+
+
+    </form>
+</div>
