@@ -16,7 +16,6 @@ export class CreateAllyComponent implements OnInit  {
   forma:FormGroup;
 
   allies:object = {
-    // id: "ojsf3323",
     name: null,
     nit: null,
     legalRepresentative: null,
@@ -37,6 +36,7 @@ export class CreateAllyComponent implements OnInit  {
     imagesAllies : [],
 
   }
+
   alliesCategories:any[]= [];
 
   mealsCategories:any= {
@@ -76,6 +76,7 @@ export class CreateAllyComponent implements OnInit  {
       'logo' : new FormControl('',Validators.required),
       'color' : new FormControl('',Validators.required),
       'idTypeOfEstablishment' : new FormControl('',Validators.required),
+      'nameTypeOfEstablishment' : new FormControl('',Validators.required),
       'NumberOfLocations' : new FormControl('',Validators.required),
       'idMealsCategories' : new FormControl('',Validators.required),
       'description' : new FormControl('',Validators.required),
@@ -87,12 +88,11 @@ export class CreateAllyComponent implements OnInit  {
           console.log(data);
         })
 
-
     this.imageSize = { width: 230, height: 120 };
     this.aliado = new Aliado();
-    this.aliado.colors = ["", "", ""];
-    this.aliado.days = [{}, {}, {}, {}, {}, {}, {}]
-    this.aliado.images = [];
+    //this.aliado.colors = ["", "", ""];
+    //this.aliado.days = [{}, {}, {}, {}, {}, {}, {}]
+    //this.aliado.images = [];
     this.Categoria = ["Alta cocina", "Comida rápida", "Comida típica", "Ensaladas y vegatariana", "Ejecutiva",
       "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas","Pizzas","Pastas"
       ,"Perros calientes","Pollo","Árabe","Mariscos","Oriental","Italiana","Mexicana","Postres","Peruana"
@@ -109,15 +109,44 @@ export class CreateAllyComponent implements OnInit  {
   }
 
   ngOnInit(){
-    
+    // console.log(this.alliesCategories)
   }
-
   getColour(event){
     this.color =event.target.value 
     console.log(this.color)
   }
+  addEstablishment(){
+    let newitem= this.forma.controls['nameTypeOfEstablishment'].value;
+    let newEstabishment:object={
+      name : newitem
+    }
+    this.alliesCatServices.postAllieCategorie(newEstabishment).subscribe(message => {
+      alert('allies categorie added')
+      this.alliesCatServices.getAlliesCategories().subscribe( alliesCat => {
+        this.alliesCategories = alliesCat;
+        console.log(this.alliesCategories)
+      } )
+    })
+    //change stade of button Otro
+    this.changeStateToSelect();
+  }
+  deleteCategory(){
+    let idCategory:any = this.forma.controls['idTypeOfEstablishment'].value
+    console.log(idCategory)
+    this.alliesCatServices.deleteAllieCategorie(idCategory).subscribe(message => {
+      alert('allies categories delete')
+      this.alliesCatServices.getAlliesCategories().subscribe( alliesCat => {
+        this.alliesCategories = alliesCat;
+        console.log(this.alliesCategories)
+      } )
+    })
+    
+  }
 
-  
+  changeStateToSelect(){
+    this.otherEstablishmentSelect = true;
+    this.otherEstablishmentInput = false;
+  }
 
    //function for logo
   onPhotoSelected($event) {
@@ -135,9 +164,8 @@ export class CreateAllyComponent implements OnInit  {
     }
 
   }
-
+  
   //function for carousel images
-
   onImagesSelected($event) {
     let input = $event.target;
     console.log($event)
@@ -167,10 +195,6 @@ export class CreateAllyComponent implements OnInit  {
       return this.otherEstablishmentSelect = true,
       this.otherEstablishmentInput= false       
     }
-  }
-  addEstablishment(termino:String){
-    this.newEstablishment = termino.toLowerCase();
-    this.TypeEstablishment.push(this.newEstablishment)
   }
   handleBoxCategory():boolean{
     if (this.otherCatSelect) {

@@ -70,37 +70,54 @@
                                                                 class="browser-default custom-select selectSize mr-2 text-capitalize"
                                                                 formControlName="idTypeOfEstablishment">
                                                                 <option selected>---------------------</option>
-                                                                <option *ngFor="let categorie of alliesCategories"
-                                                                        [value]="categorie.id">
-                                                                        {{categorie.name}}
+                                                                <option *ngFor="let category of alliesCategories"
+                                                                        [value]="category.id"
+                                                                        data-icon="">
+                                                                        {{category.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
                                                                 type="text"
-                                                                (keyup.enter)="addEstablishment(additem.value)"
-                                                                #additem>
-                                                        <!-- <button (click)=" addEstablishment(additem.value)"
-                                                                *ngIf="otherEstablishmentInput"
-                                                                class="btn1 btn btn-outline-primary"> Añadir
-                                                        </button> -->
-                                                        <button class="btn1 btn btn-outline-primary"> cancelar</button>
-                                                        <button (click)=" handleBoxEstablishment()"
-                                                                class="btn1 btn btn-outline-primary"> Otro
+                                                                (keyup.enter)="addEstablishment(additem.value)" #additem
+                                                                formControlName="nameTypeOfEstablishment">
+
+                                                        <button *ngIf="otherEstablishmentInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="changeStateToSelect()"> Cancelar</button>
+                                                        <button *ngIf="otherEstablishmentInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="addEstablishment()"> Guardar</button>
+
+                                                        <button *ngIf="!otherEstablishmentInput"
+                                                                (click)=" handleBoxEstablishment()"
+                                                                class="btn1 btn btn-outline-primary">
+                                                                Otro
                                                         </button>
+                                                        <button *ngIf="!otherEstablishmentInput"
+                                                        (click)=" deleteCategory()"
+                                                        class="btn1 btn btn-outline-primary">
+                                                        Borrar
+                                                </button>
                                                 </div>
                                         </div>
                                 </div>
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Numero de puntos</label>
                                         <div class="col-8">
-                                                <select class="browser-default custom-select ">
+                                                <!-- <select class="browser-default custom-select ">
                                                         <option selected>---------------------</option>
                                                         <option value="1">1</option>
                                                         <option value="2">2</option>
                                                         <option value="3">3</option>
                                                         <option value="4">4</option>
                                                         <option value="5">5</option>
-                                                </select>
+                                                </select> -->
+                                                <input class="form-control" type="number"
+                                                        placeholder="---------------------" 
+                                                        min="0" 
+                                                        max="30"
+                                                        formControlName="NumberOfLocations"
+                                                        >
                                         </div>
                                 </div>
                                 <div class="form-group row">
