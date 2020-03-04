@@ -1,24 +1,64 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
+import {FormGroup, FormControl, Validators, FormArray} from '@angular/forms'
+import { Observable } from 'rxjs';
+//Models of backend
 import { Aliado } from 'src/app/models/aliado';
+import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 
 @Component({
   selector: 'app-create-ally',
   templateUrl: './create-ally.component.html',
   styleUrls: ['./create-ally.component.scss']
 })
-export class CreateAllyComponent implements OnInit {
+export class CreateAllyComponent implements OnInit  {
+  //news params
+  forma:FormGroup;
 
-  color:string;
+  allies:object = {
+    // id: "ojsf3323",
+    name: null,
+    nit: null,
+    legalRepresentative: null,
+    documentNumber:null,
+    logo: null,
+    colour: null,
+    idTypeOfEstablishment: null,
+    NumberOfLocations:null,
+    idMealsCategories: null,
+    description:null,
+    idAttentionSchedule: [
+      {
+        day: null,
+        from: null,
+        to: null
+      }
+    ],// array of obj 
+    imagesAllies : [],
 
+  }
+  alliesCategories:any[]= [];
+
+  mealsCategories:any= {
+    // id: "ID_objCATEGORIA_DE_COMIDAS",
+    name: "cafe con pan"
+  }
+
+
+  days: string[]= []
+  hours: String[] = [];
+  color:String = "#000000";
+
+  // old params
   aliado: Aliado;
-  horas: String[] = [];
   TypeEstablishment: String[] = [];
   Categoria: String[] = [];
   photo: any;
+  //variables carousel
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
+  contImage:number = 0;
   //handle button other category
   otherCatSelect: boolean = true
   otherCatInput: boolean = false
@@ -26,7 +66,28 @@ export class CreateAllyComponent implements OnInit {
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
   newEstablishment:string
-  constructor() {
+  constructor( private alliesCatServices : AlliesCategoriesService ) {
+    this.forma = new FormGroup({
+      
+      'name' : new FormControl('',Validators.required),
+      'nit' : new FormControl('',Validators.required),
+      'legalRepresentative' : new FormControl('',Validators.required),
+      'documentNumber' : new FormControl('',Validators.required),
+      'logo' : new FormControl('',Validators.required),
+      'color' : new FormControl('',Validators.required),
+      'idTypeOfEstablishment' : new FormControl('',Validators.required),
+      'NumberOfLocations' : new FormControl('',Validators.required),
+      'idMealsCategories' : new FormControl('',Validators.required),
+      'description' : new FormControl('',Validators.required),
+    })
+
+    //this is observator
+    this.forma.controls['color'].valueChanges
+        .subscribe( data => {
+          console.log(data);
+        })
+
+
     this.imageSize = { width: 230, height: 120 };
     this.aliado = new Aliado();
     this.aliado.colors = ["", "", ""];
@@ -36,17 +97,29 @@ export class CreateAllyComponent implements OnInit {
       "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas","Pizzas","Pastas"
       ,"Perros calientes","Pollo","Árabe","Mariscos","Oriental","Italiana","Mexicana","Postres","Peruana"
       ,"Sándwich","Arepas y empanadas","Alitas","Crepes","Restaurante bar"]
-    this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
-      "Saludable", "Heladería"]
-
-    this.horas = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
+    // this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
+    //   "Saludable", "Heladería"]
+    this.days = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sábado', 'Domingo']
+    this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
-
+      this.alliesCatServices.getAlliesCategories().subscribe( alliesCat => {
+        this.alliesCategories = alliesCat;
+        console.log(this.alliesCategories)
+      } )
   }
 
-  ngOnInit() {
+  ngOnInit(){
+    
   }
-   
+
+  getColour(event){
+    this.color =event.target.value 
+    console.log(this.color)
+  }
+
+  
+
+   //function for logo
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
@@ -63,6 +136,8 @@ export class CreateAllyComponent implements OnInit {
 
   }
 
+  //function for carousel images
+
   onImagesSelected($event) {
     let input = $event.target;
     console.log($event)
@@ -73,15 +148,16 @@ export class CreateAllyComponent implements OnInit {
       reader.onload = (e: any) => {
         image = e.target.result;
         this.imagesUploaded.push({ image: image, thumbImage: image })
-
-
       }
 
       this.aliado.images.push(input.files[0])
       reader.readAsDataURL(input.files[0]);
+      this.contImage = this.aliado.images.length;
     }
 
   }
+  // functions for adding text input and select
+
   handleBoxEstablishment():boolean{
     if (this.otherEstablishmentSelect) {
         return this.otherEstablishmentSelect = false,
@@ -91,14 +167,10 @@ export class CreateAllyComponent implements OnInit {
       return this.otherEstablishmentSelect = true,
       this.otherEstablishmentInput= false       
     }
-
   }
   addEstablishment(termino:String){
     this.newEstablishment = termino.toLowerCase();
     this.TypeEstablishment.push(this.newEstablishment)
-  }
-  putColor(termino:any){
-    console.log(termino)
   }
   handleBoxCategory():boolean{
     if (this.otherCatSelect) {
@@ -111,10 +183,8 @@ export class CreateAllyComponent implements OnInit {
     }
 
   }
-
-  vercolor(color){
-    console.log(color);
-    
+  saveChanges(){
+    console.log( this.forma.value );
   }
 
 }

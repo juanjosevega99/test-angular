@@ -13,32 +13,32 @@ export class AlliesCategoriesService {
 
   postAllieCategorie(alliecategorie): Observable<AlliesCategories> {
     return this.httpclient.post<AlliesCategories>(
-      environment.UrlBase + "alliescategories",
+      environment.UrlBase + "allies-categories",
       alliecategorie
     );
   }
 
   putAllieCategorie(alliecategorie): Observable<AlliesCategories> {
     return this.httpclient.put<AlliesCategories>(
-      environment.UrlBase + "alliescategories" + alliecategorie.id,
+      environment.UrlBase + "allies-categories" + alliecategorie.id,
       alliecategorie
     );
   }
 
   deleteAllieCategorie(id): Observable<{}> {
     return this.httpclient.delete(
-      environment.UrlBase + "alliescategories/" + id
+      environment.UrlBase + "allies-categories/" + id
     );
   }
 
   getAlliesCategories(): Observable<any[]> {
     return this.httpclient
-      .get<AlliesCategories[]>(environment.UrlBase + "alliescategories")
+      .get<AlliesCategories[]>(environment.UrlBase + "allies-categories")
       .pipe(
         map((alliescategories: any[]) =>
           alliescategories.map(alliescategories => {
             let obj = {
-              id: alliescategories.id,
+              id: alliescategories._id,
               name: alliescategories.name
             };
             return obj;
@@ -49,7 +49,7 @@ export class AlliesCategoriesService {
 
   getAllieCategorieById(id): Observable<any[]> {
     return this.httpclient
-      .get<AlliesCategories[]>(environment.UrlBase + "alliescategories/" + id)
+      .get<AlliesCategories[]>(environment.UrlBase + "allies-categories/" + id)
       .pipe(
         map((alliescategories: any[]) =>
           alliescategories.map(alliescategories => {
