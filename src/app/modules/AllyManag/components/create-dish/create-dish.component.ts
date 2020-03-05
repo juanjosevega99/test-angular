@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateDishComponent implements OnInit {
 
+  //Object to save the dates of the form
   preDish: Object = {
     state: [],
     admissionDate: null,
@@ -17,10 +18,11 @@ export class CreateDishComponent implements OnInit {
     dishName: null,
     price: null,
     dishPhoto: null,
-    stablishmentDescription: null,
+    dishDescription: null,
     preparationTime: null
   }
 
+  //variables for categories
   Categories: String[] = [];
   arrayCategorySelect: boolean = true;
   otherCategoryInput: boolean = false;
@@ -30,14 +32,18 @@ export class CreateDishComponent implements OnInit {
 
   State: boolean[] = [];
 
+  time: string[] = [];
+
   constructor() {
     this.Categories = ["Boxes", "Combos", "Postes"]
     this.State = [true, false, false]
+    this.time = ['minutos','horas','días']
   }
 
   ngOnInit() {
   }
 
+  //Method for showing new view in the categories field
   handleBoxCategories(): boolean {
     if (this.addcategoryButton) {
       return this.addcategoryButton = false,
@@ -52,23 +58,27 @@ export class CreateDishComponent implements OnInit {
     }
   }
 
+  //Method for add new category
   addCategory(name: String) {
     this.newCategory = name.toLowerCase();
     this.Categories.push(name.toLocaleLowerCase())
   }
 
-  onPhotoSelected($event) {
-    let input = $event.target;
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
+ //Method for photo of the dish
+ onPhotoSelected($event) {
+  let input = $event.target;
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
 
-      reader.onload = function (e: any) {
-        $('photo')
-          .attr('src', e.target.result)
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
+    reader.onload = function (e: any) {
+      $('#photo')
+        .attr('src', e.target.result)
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
 
   }
 
-}
+
