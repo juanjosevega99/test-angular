@@ -86,3 +86,11 @@
   .radio-success input[type="radio"]:checked + label::after {
     background-color: #5cb85c;
   }
+
+  .photo {
+    margin-left: 15px;
+    margin-right: 10px;
+    width: 80px;
+    height: 80px;
+    border: solid 0.5px gray;
+  }

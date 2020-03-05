@@ -1,34 +1,34 @@
 <div class="compenetsstyle">
 
-    <form ngNativeValidate  class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm">
+    <form ngNativeValidate class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm" novalidate>
 
-        
-            <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
-                <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
-            </a>
-        
 
-        <section class="col-6" style="background-color:coral;" >
+        <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
+            <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+        </a>
+
+
+        <section class="col-6" style="background-color:coral;">
 
             <div class="form-group row" style="align-items: center;">
                 <label class="col-md-5 col-form-label">Estado</label>
-                <div class="col-md-7 row" style="justify-content: center;" >
+                <div class="col-md-7 row" style="justify-content: center;">
 
-                    <div class="radio radio-success">
-                        <input type="radio" name="radio2" id="radio3" value="option1"  checked>
+                    <div class="radio radio-success m-2">
+                        <input type="radio" name="radio2" id="radio3" value="option1" checked>
                         <label for="radio3">
                             Activo
                         </label>
                     </div>
 
-                    <div class="radio radio-danger">
+                    <div class="radio radio-danger m-2">
                         <input type="radio" name="radio2" id="radio4" value="option2">
                         <label for="radio4">
                             Inactivo
                         </label>
                     </div>
 
-                    <div class="radio ">
+                    <div class="radio m-2">
                         <input type="radio" name="radio2" id="radio5" value="option3">
                         <label for="radio5">
                             Eliminar
@@ -39,18 +39,118 @@
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de ingreso</label>
+
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Fecha de modificación</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Dirección" name="addressHq">
+                    <input  [disabled] class="form-control" type="text" placeholder="Fecha de modificación" name="modificationDAte"
+                        [(ngModel)]="preDish.modificationDAte">
                 </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Número de modificaciones</label>
+
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Categoría</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+
+                        <select *ngIf="arrayCategorySelect" class="form-control" name="dishCategory"
+                            [(ngModel)]="preDish.categories" >
+                            <option selected> Seleccionar... </option>
+                            <option *ngFor="let name of Categories">
+                                {{name}}
+                            </option>
+                        </select>
+
+                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="preDish.categories"
+                            type="text" name="otherCategory" (keyup.enter)="addCategory(additem.value)" #additem>
+
+                        <div *ngIf="selectAgainarray" class="input-group-append">
+                            <span class="input-group-text" (click)="handleBoxCategories()">
+                                Regresar
+                            </span>
+                        </div>
+
+                        <div *ngIf="otherCategoryInput" class="col-md-9">
+                            <div class="form-control-feedback"> <small> *Presione enter para
+                                    guardar </small> </div>
+                        </div>
+
+                        <div *ngIf="addcategoryButton" class="input-group-append">
+                            <span class="input-group-text" (click)="handleBoxCategories()">
+                                Otro
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Referencia</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" placeholder="Referencia" name="reference"
+                        [(ngModel)]="preDish.reference" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Nombre del plato</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" placeholder="Nombre del plato" name="reference"
+                        [(ngModel)]="preDish.reference" required>
+                </div>
+            </div>
+
+            <div class="text-center" style="margin-top: 4rem;">
+                <button type="button" class="btn btn-outline-primary btn-lg">Acompañamiento SIN costo adicional</button>
             </div>
 
         </section>
 
-        <section class="col-5" style="background-color: chartreuse;" >
-            <p>hola</p>
+        <section class="col-5" style="background-color: chartreuse;">
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Precio</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" placeholder="Precio" name="price"
+                        [(ngModel)]="preDish.price">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Foto del plato</label>
+                <div class="col-md-7">
+                    
+                    <div class="photo"> 
+                        <img id="photo" width="80px" height="80px">
+                    </div>
+                    <div class="upload-btn-wrapper">
+                        <button class="btn1 btn btn-outline-primary">Cargar imagen</button>
+                        <input type="file" name="photo" (change)="onPhotoSelected($event)"/>
+                    </div>
+
+                </div>
+            </div>
 
         </section>
 
 
     </form>
 </div>
+
+<!-- <script type="text/javascript">
+    $(function() {
+      $('#datetimepicker2').datetimepicker({
+        language: 'en',
+        pick12HourFormat: true
+      });
+    });
+  </script> -->
