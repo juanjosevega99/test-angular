@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { AlliesCategoriesService } from "./allies-categories.service";
+import { Allies } from '../models/Allies';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +10,9 @@ import Swal from 'sweetalert2';
 
 export class SwallServicesService {
 
-  constructor() { }
+  constructor(private alliesCatServices : AlliesCategoriesService) {
+
+   }
 
   saveChanges(){
     Swal.fire({
@@ -47,4 +52,9 @@ export class SwallServicesService {
       }
     })
   }
+  
+
+  
 }
+
+  

@@ -45,8 +45,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de modificación</label>
                 <div class="col-md-7">
-                    <input  [disabled] class="form-control" type="text" placeholder="Fecha de modificación" name="modificationDAte"
-                        [(ngModel)]="preDish.modificationDAte">
+                    <input [disabled] class="form-control" type="text" placeholder="Fecha de modificación"
+                        name="modificationDAte" [(ngModel)]="preDish.modificationDAte">
                 </div>
             </div>
 
@@ -61,7 +61,7 @@
                     <div class="input-group">
 
                         <select *ngIf="arrayCategorySelect" class="form-control" name="dishCategory"
-                            [(ngModel)]="preDish.categories" >
+                            [(ngModel)]="preDish.categories">
                             <option selected> Seleccionar... </option>
                             <option *ngFor="let name of Categories">
                                 {{name}}
@@ -78,9 +78,10 @@
                             </span>
                         </div>
 
-                        <div *ngIf="otherCategoryInput" class="col-md-9">
-                            <div class="form-control-feedback"> <small> *Presione enter para
-                                    guardar </small> </div>
+                        <div *ngIf="otherCategoryInput" class="col-md-10">
+                            <div class="form-control-feedback">
+                                <small> *Presione enter para guardar </small>
+                            </div>
                         </div>
 
                         <div *ngIf="addcategoryButton" class="input-group-append">
@@ -128,16 +129,47 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Foto del plato</label>
                 <div class="col-md-7">
-                    
-                    <div class="photo"> 
-                        <img id="photo" width="80px" height="80px">
-                    </div>
-                    <div class="upload-btn-wrapper">
-                        <button class="btn1 btn btn-outline-primary">Cargar imagen</button>
-                        <input type="file" name="photo" (change)="onPhotoSelected($event)"/>
+
+                    <div class="row align-items-center ">
+                        <div class="photo"> <img id="photo" width="80px" height="80px">
+                        </div>
+                        <div class="upload-btn-wrapper">
+                            <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
+                            <input type="file" name="photo" (change)="onPhotoSelected($event)"/>
+                        </div>
                     </div>
 
                 </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Descripción del plato</label>
+                <div class="col-md-7">
+                    <textarea class="form-control " name="dishDescription" [(ngModel)]="preDish.dishDescription"
+                        id="exampleFormControlTextarea2" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Tiempo de preparación</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <input type="number" min="0" placeholder="Tiempo de preparación" value="0"
+                            class="form-control" [(ngModel)]="preDish.preparationTime" name="preparationTime">
+                        <div class="input-group-append">
+                            <select class="input-group-text">
+                                <option *ngFor="let time of time" >
+                                   {{time}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-primary btn-lg">Acompañamiento CON costo adicional</button>
             </div>
 
         </section>
