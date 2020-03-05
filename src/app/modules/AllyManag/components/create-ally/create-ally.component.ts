@@ -1,32 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
-import {FormGroup, FormControl, Validators, FormArray} from '@angular/forms'
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import { Observable } from 'rxjs';
 //Models of backend
 import { Aliado } from 'src/app/models/aliado';
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
+//services
+import { SwallServicesService } from "../../../../services/swall-services.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-ally',
   templateUrl: './create-ally.component.html',
   styleUrls: ['./create-ally.component.scss']
 })
-export class CreateAllyComponent implements OnInit  {
+export class CreateAllyComponent implements OnInit {
   //news params
-  forma:FormGroup;
+  forma: FormGroup;
 
-  allies:object = {
-    // id: "ojsf3323",
+  allies: object = {
     name: null,
     nit: null,
     legalRepresentative: null,
-    documentNumber:null,
+    documentNumber: null,
     logo: null,
     colour: null,
     idTypeOfEstablishment: null,
-    NumberOfLocations:null,
+    NumberOfLocations: null,
     idMealsCategories: null,
-    description:null,
+    description: null,
     idAttentionSchedule: [
       {
         day: null,
@@ -34,23 +36,24 @@ export class CreateAllyComponent implements OnInit  {
         to: null
       }
     ],// array of obj 
-    imagesAllies : [],
+    imagesAllies: [],
 
   }
-  alliesCategories:any[]= [];
 
-  mealsCategories:any= {
+  alliesCategories: any[] = [];
+
+  mealsCategories: any = {
     // id: "ID_objCATEGORIA_DE_COMIDAS",
     name: "cafe con pan"
   }
 
 
-  days: string[]= []
+  days: string[] = []
   hours: String[] = [];
-  color:String = "#000000";
+  color: String = "#000000";
 
   // old params
-  aliado: Aliado;
+  aliado: Aliado; // instance necesary to working method onImagesSelected
   TypeEstablishment: String[] = [];
   Categoria: String[] = [];
   photo: any;
@@ -58,68 +61,88 @@ export class CreateAllyComponent implements OnInit  {
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
-  contImage:number = 0;
+  contImage: number = 0;
   //handle button other category
   otherCatSelect: boolean = true
   otherCatInput: boolean = false
   //handle button other type Establishment
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
-  newEstablishment:string
-  constructor( private alliesCatServices : AlliesCategoriesService ) {
+  newEstablishment: string
+  constructor(private alliesCatServices: AlliesCategoriesService,
+    private swalService: SwallServicesService) {
     this.forma = new FormGroup({
-      
-      'name' : new FormControl('',Validators.required),
-      'nit' : new FormControl('',Validators.required),
-      'legalRepresentative' : new FormControl('',Validators.required),
-      'documentNumber' : new FormControl('',Validators.required),
-      'logo' : new FormControl('',Validators.required),
-      'color' : new FormControl('',Validators.required),
-      'idTypeOfEstablishment' : new FormControl('',Validators.required),
-      'NumberOfLocations' : new FormControl('',Validators.required),
-      'idMealsCategories' : new FormControl('',Validators.required),
-      'description' : new FormControl('',Validators.required),
+
+      'name': new FormControl('', Validators.required),
+      'nit': new FormControl('', Validators.required),
+      'legalRepresentative': new FormControl('', Validators.required),
+      'documentNumber': new FormControl('', Validators.required),
+      'logo': new FormControl('', Validators.required),
+      'color': new FormControl('', Validators.required),
+      'idTypeOfEstablishment': new FormControl('', Validators.required),
+      'nameTypeOfEstablishment': new FormControl('', Validators.required),
+      'NumberOfLocations': new FormControl('', Validators.required),
+      'idMealsCategories': new FormControl('', Validators.required),
+      'description': new FormControl('', Validators.required),
     })
 
     //this is observator
     this.forma.controls['color'].valueChanges
-        .subscribe( data => {
-          console.log(data);
-        })
-
+      .subscribe(data => {
+        console.log(data);
+      })
 
     this.imageSize = { width: 230, height: 120 };
     this.aliado = new Aliado();
-    this.aliado.colors = ["", "", ""];
-    this.aliado.days = [{}, {}, {}, {}, {}, {}, {}]
+    //this.aliado.colors = ["", "", ""];
+    //this.aliado.days = [{}, {}, {}, {}, {}, {}, {}]
     this.aliado.images = [];
     this.Categoria = ["Alta cocina", "Comida rápida", "Comida típica", "Ensaladas y vegatariana", "Ejecutiva",
-      "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas","Pizzas","Pastas"
-      ,"Perros calientes","Pollo","Árabe","Mariscos","Oriental","Italiana","Mexicana","Postres","Peruana"
-      ,"Sándwich","Arepas y empanadas","Alitas","Crepes","Restaurante bar"]
+      "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas", "Pizzas", "Pastas"
+      , "Perros calientes", "Pollo", "Árabe", "Mariscos", "Oriental", "Italiana", "Mexicana", "Postres", "Peruana"
+      , "Sándwich", "Arepas y empanadas", "Alitas", "Crepes", "Restaurante bar"]
     // this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
     //   "Saludable", "Heladería"]
-    this.days = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sábado', 'Domingo']
+    this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
-      this.alliesCatServices.getAlliesCategories().subscribe( alliesCat => {
-        this.alliesCategories = alliesCat;
-        console.log(this.alliesCategories)
-      } )
-  }
-
-  ngOnInit(){
     
+    //inicialization service with collections allies-categories
+    this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
+      this.alliesCategories = alliesCat;
+      console.log(this.alliesCategories)
+    })
   }
 
-  getColour(event){
-    this.color =event.target.value 
-    console.log(this.color)
+  ngOnInit() {
+
   }
-
-  
-
-   //function for logo
+  getColour(event) {
+    this.color = event.target.value
+    console.log(this.color) // delete console log
+  }
+  //CRD -- METHODS OF TypeEstablishment: CREATE ,READ AND DELETE 
+  addEstablishment() {
+    let newitem = this.forma.controls['nameTypeOfEstablishment'].value;
+    let newEstablishment: object = {
+      name: newitem
+    }
+    this.saveOtherEstablishment(newEstablishment)
+    console.log(this.alliesCategories) // delete console log
+    this.forma.controls['nameTypeOfEstablishment'].reset() // reset input add new category establishment
+    this.changeStateToSelect();
+  }
+  deleteCategory() {
+    let idCategory: any = this.forma.controls['idTypeOfEstablishment'].value
+    console.log(idCategory) // delete console log
+    this.deleteAllyCategory(idCategory)
+  }
+  //Method for chang of oring buttons
+  changeStateToSelect() {
+    this.otherEstablishmentSelect = true;
+    this.otherEstablishmentInput = false;
+  }
+  //Method for logo
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
@@ -131,13 +154,9 @@ export class CreateAllyComponent implements OnInit  {
       };
 
       reader.readAsDataURL(input.files[0]);
-
     }
-
   }
-
-  //function for carousel images
-
+  //Method for carousel images
   onImagesSelected($event) {
     let input = $event.target;
     console.log($event)
@@ -156,35 +175,87 @@ export class CreateAllyComponent implements OnInit  {
     }
 
   }
-  // functions for adding text input and select
-
-  handleBoxEstablishment():boolean{
+  // Method for adding text input and select
+  handleBoxEstablishment(): boolean {
     if (this.otherEstablishmentSelect) {
-        return this.otherEstablishmentSelect = false,
-        this.otherEstablishmentInput= true  
-            
-    }else{
-      return this.otherEstablishmentSelect = true,
-      this.otherEstablishmentInput= false       
-    }
-  }
-  addEstablishment(termino:String){
-    this.newEstablishment = termino.toLowerCase();
-    this.TypeEstablishment.push(this.newEstablishment)
-  }
-  handleBoxCategory():boolean{
-    if (this.otherCatSelect) {
-        return this.otherCatSelect = false,
-        this.otherCatInput= true  
-            
-    }else{
-      return this.otherCatSelect = true,
-      this.otherCatInput= false       
-    }
+      return this.otherEstablishmentSelect = false,
+        this.otherEstablishmentInput = true
 
+    } else {
+      return this.otherEstablishmentSelect = true,
+        this.otherEstablishmentInput = false
+    }
   }
-  saveChanges(){
-    console.log( this.forma.value );
+  handleBoxCategory(): boolean {
+    if (this.otherCatSelect) {
+      return this.otherCatSelect = false,
+        this.otherCatInput = true
+
+    } else {
+      return this.otherCatSelect = true,
+        this.otherCatInput = false
+    }
   }
+  // method save  and cancel all collection allies
+  saveChanges() {
+    console.log(this.forma.value);
+    this.swalService.saveChanges()
+  }
+  cancelChanges() {
+    this.swalService.cancel();
+  }
+
+  // method by sweetalert2 
+  //saveTypeEstablishment 
+  saveOtherEstablishment(newEstablishment: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.alliesCatServices.postAllieCategorie(newEstablishment).subscribe(() => {
+          this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
+            this.alliesCategories = alliesCat;
+            console.log(this.alliesCategories)
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo tipo de establecimiento ha sido creado',
+          'success',
+        )
+      }
+    })
+  }
+  deleteAllyCategory(id: string) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.alliesCatServices.deleteAllieCategorie(id).subscribe(() => {
+          this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
+            this.alliesCategories = alliesCat;
+            console.log(this.alliesCategories)
+          })
+        })
+        Swal.fire(
+          'Cancelado!',
+          'success',
+        )
+      }
+    })
+  }
+
 
 }

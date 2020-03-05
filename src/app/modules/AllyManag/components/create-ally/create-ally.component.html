@@ -1,14 +1,14 @@
 <div class="margin-container">
         <form [formGroup]="forma" (ngSubmit)="saveChanges()">
                 <div class="row">
-                        <div class="col-md-1" style="background-color: purple;">
+                        <div class="col-md-1">
                                 <div class="row justify-content-center">
                                         <a href="#" class="btn btn-outline-primary rounded-circle ">
                                                 <i class="fas fa-chevron-left "></i>
                                         </a>
                                 </div>
                         </div>
-                        <div class="col-md-5" style="background-color: blue;">
+                        <div class="col-md-5">
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Nombre del establecimiento</label>
                                         <div class="col-8">
@@ -70,22 +70,33 @@
                                                                 class="browser-default custom-select selectSize mr-2 text-capitalize"
                                                                 formControlName="idTypeOfEstablishment">
                                                                 <option selected>---------------------</option>
-                                                                <option *ngFor="let categorie of alliesCategories"
-                                                                        [value]="categorie.id">
-                                                                        {{categorie.name}}
+                                                                <option *ngFor="let category of alliesCategories"
+                                                                        [value]="category.id" id="category.id"
+                                                                        data-icon="">
+                                                                        {{category.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
                                                                 type="text"
-                                                                (keyup.enter)="addEstablishment(additem.value)"
-                                                                #additem>
-                                                        <!-- <button (click)=" addEstablishment(additem.value)"
-                                                                *ngIf="otherEstablishmentInput"
-                                                                class="btn1 btn btn-outline-primary"> Añadir
-                                                        </button> -->
-                                                        <button class="btn1 btn btn-outline-primary"> cancelar</button>
-                                                        <button (click)=" handleBoxEstablishment()"
-                                                                class="btn1 btn btn-outline-primary"> Otro
+                                                                (keyup.enter)="addEstablishment(additem.value)" #additem
+                                                                formControlName="nameTypeOfEstablishment">
+
+                                                        <button *ngIf="otherEstablishmentInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="changeStateToSelect()"> Cancelar</button>
+                                                        <button *ngIf="otherEstablishmentInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="addEstablishment()"> Guardar</button>
+
+                                                        <button *ngIf="!otherEstablishmentInput"
+                                                                (click)=" handleBoxEstablishment()"
+                                                                class="btn1 btn btn-outline-primary">
+                                                                Otro
+                                                        </button>
+                                                        <button *ngIf="!otherEstablishmentInput"
+                                                                (click)=" deleteCategory()" type="button"
+                                                                class="btn1 btn btn-outline-primary">
+                                                                Borrar
                                                         </button>
                                                 </div>
                                         </div>
@@ -93,21 +104,16 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Numero de puntos</label>
                                         <div class="col-8">
-                                                <select class="browser-default custom-select ">
-                                                        <option selected>---------------------</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                </select>
+                                                <input class="form-control" type="number"
+                                                        placeholder="---------------------" min="0" max="30"
+                                                        formControlName="NumberOfLocations">
                                         </div>
                                 </div>
                                 <div class="form-group row">
-                                        <label class="col-3 col-form-label">Categoría de comida</label>
+                                        <label class="col-3 col-form-label">Categoría de comida</label> 
                                         <div class="col-8">
-                                                <div class="row  margin-left2 ">
-                                                        <select *ngIf="otherCatSelect"
+                                                <div class="row  margin-left2 "> <!--To do-->
+                                                        <select *ngIf="otherCatSelect" 
                                                                 class="browser-default custom-select selectSize mr-2">
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let time of Categoria" [value]="time">
@@ -132,7 +138,7 @@
                                 </div>
 
                         </div>
-                        <div class="col-md-5" style="background-color: green;">
+                        <div class="col-md-5">
 
                                 <div class="row ">
                                         <div class="col-2"> <label>Horario</label> </div>
@@ -432,14 +438,15 @@
 
 
                         </div>
-                        <div class="col-1 d-flex flex-column justify-content-center align-items-center "
-                                style="background-color: red;">
+                        <div class="col-1 d-flex flex-column justify-content-center align-items-center ">
                                 <div class="form-group row d-flex flex-column ">
 
                                         <button type="submit" class="btn btn-outline-primary mb-5">
                                                 Guardar
                                         </button>
-                                        <button class="btn btn-outline-primary">Cancelar</button>
+                                        <button class="btn btn-outline-primary" type="button"
+                                                (click)="cancelChanges()">Cancelar
+                                        </button>
 
                                 </div>
                         </div>

@@ -10,6 +10,7 @@ export class Allies{
     nameTypeOfEstablishment?:string;
     NumberOfLocations?: number;
     idMealsCategories?:string;
+    nameMealsCategories?:String;
     description?:string;
     idAttentionSchedule?:string[];
     imagesAllies?:string[];
