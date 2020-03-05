@@ -95,6 +95,7 @@
                                                         </button>
                                                         <button *ngIf="!otherEstablishmentInput"
                                                         (click)=" deleteCategory()"
+                                                        type="button"
                                                         class="btn1 btn btn-outline-primary">
                                                         Borrar
                                                 </button>
@@ -456,7 +457,10 @@
                                         <button type="submit" class="btn btn-outline-primary mb-5">
                                                 Guardar
                                         </button>
-                                        <button class="btn btn-outline-primary">Cancelar</button>
+                                        <button class="btn btn-outline-primary"
+                                                type="button"
+                                                (click)="cancelChanges()">Cancelar
+                                        </button>
 
                                 </div>
                         </div>

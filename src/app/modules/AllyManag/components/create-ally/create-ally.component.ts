@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 //Models of backend
 import { Aliado } from 'src/app/models/aliado';
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
+//services
+import { SwallServicesService } from "../../../../services/swall-services.service";
 
 @Component({
   selector: 'app-create-ally',
@@ -66,7 +68,8 @@ export class CreateAllyComponent implements OnInit  {
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
   newEstablishment:string
-  constructor( private alliesCatServices : AlliesCategoriesService ) {
+  constructor( private alliesCatServices : AlliesCategoriesService,
+                private swalService: SwallServicesService) {
     this.forma = new FormGroup({
       
       'name' : new FormControl('',Validators.required),
@@ -131,15 +134,17 @@ export class CreateAllyComponent implements OnInit  {
     this.changeStateToSelect();
   }
   deleteCategory(){
+
+
     let idCategory:any = this.forma.controls['idTypeOfEstablishment'].value
     console.log(idCategory)
-    this.alliesCatServices.deleteAllieCategorie(idCategory).subscribe(message => {
-      alert('allies categories delete')
+    this.swalService.deleteAllyCategory(idCategory)
+    
       this.alliesCatServices.getAlliesCategories().subscribe( alliesCat => {
         this.alliesCategories = alliesCat;
         console.log(this.alliesCategories)
       } )
-    })
+    
     
   }
 
@@ -209,6 +214,10 @@ export class CreateAllyComponent implements OnInit  {
   }
   saveChanges(){
     console.log( this.forma.value );
+    this.swalService.saveChanges()
+  }
+  cancelChanges(){
+    this.swalService.cancel();
   }
 
 }

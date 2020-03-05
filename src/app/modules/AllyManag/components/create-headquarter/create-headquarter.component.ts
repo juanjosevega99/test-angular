@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SwallServicesService } from 'src/app/services/swall-services.service'; 
-/* import swal, { SweetAlert } from "./core"; */
-
-
-
+// import swal, { SweetAlert } from "./core"; */
 
 @Component({
   selector: 'app-create-headquarter',
