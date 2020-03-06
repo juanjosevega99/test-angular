@@ -82,7 +82,7 @@ export class CreateAllyComponent implements OnInit {
       'NumberOfLocations': new FormControl('', Validators.required),
       'idMealsCategories': new FormControl('', Validators.required),
       'nameMealsCategories': new FormControl('', ),
-      'description': new FormControl('', [Validators.required, Validators.maxLength(15)]),
+      'description': new FormControl('', [Validators.required, Validators.maxLength(15)], ),
       'idAttentionSchedule': new FormArray([
               new FormControl('',)
               
