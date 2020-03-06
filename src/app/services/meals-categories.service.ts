@@ -14,28 +14,28 @@ export class MealsCategoriesService {
 
   postMealCategorie(mealcategorie): Observable<MealsCategories> {
     return this.httpclient.post<MealsCategories>(
-      environment.UrlBase + "mealscategories",
+      environment.UrlBase + "meals-categories",
       mealcategorie
     );
   }
 
   putMealCategorie(mealcategorie): Observable<MealsCategories> {
     return this.httpclient.put<MealsCategories>(
-      environment.UrlBase + "mealscategories" + mealcategorie.id,
+      environment.UrlBase + "meals-categories" + mealcategorie.id,
       mealcategorie
     );
   }
 
   deleteMealCategorie(id): Observable<{}> {
-    return this.httpclient.delete(environment.UrlBase + "mealscategories/" + id);
+    return this.httpclient.delete(environment.UrlBase + "meals-categories/" + id);
   }
 
   getMealsCategories(): Observable<any[]> {
-    return this.httpclient.get<MealsCategories[]>(environment.UrlBase + "mealscategories").pipe(
+    return this.httpclient.get<MealsCategories[]>(environment.UrlBase + "meals-categories").pipe(
       map((mealscategories: any[]) =>
         mealscategories.map(mealscategories => {
           let obj = {
-            id: mealscategories.id,
+            id: mealscategories._id,
             name: mealscategories.name
           };
           return obj;
@@ -46,7 +46,7 @@ export class MealsCategoriesService {
 
   getMealCategorieById(id): Observable<any[]> {
     return this.httpclient
-      .get<MealsCategories[]>(environment.UrlBase + "mealscategories/" + id)
+      .get<MealsCategories[]>(environment.UrlBase + "meals-categories/" + id)
       .pipe(
         map((mealscategories: any[]) =>
           mealscategories.map(mealscategories => {
