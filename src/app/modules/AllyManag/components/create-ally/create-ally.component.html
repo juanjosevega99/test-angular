@@ -71,15 +71,12 @@
                                                                 formControlName="idTypeOfEstablishment">
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let category of alliesCategories"
-                                                                        [value]="category.id" id="category.id"
-                                                                        data-icon="">
+                                                                        [value]="category.id" id="category.id" >
                                                                         {{category.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
-                                                                type="text"
-                                                                (keyup.enter)="addEstablishment(additem.value)" #additem
-                                                                formControlName="nameTypeOfEstablishment">
+                                                                type="text" formControlName="nameTypeOfEstablishment">
 
                                                         <button *ngIf="otherEstablishmentInput"
                                                                 class="btn1 btn btn-outline-primary" type="button"
@@ -110,20 +107,40 @@
                                         </div>
                                 </div>
                                 <div class="form-group row">
-                                        <label class="col-3 col-form-label">Categoría de comida</label> 
+                                        <label class="col-3 col-form-label">Categoría de comida</label>
                                         <div class="col-8">
-                                                <div class="row  margin-left2 "> <!--To do-->
-                                                        <select *ngIf="otherCatSelect" 
-                                                                class="browser-default custom-select selectSize mr-2">
+                                                <div class="row  margin-left2 ">
+                                                        <select *ngIf="otherMealSelect"
+                                                                class="browser-default custom-select selectSize mr-2"
+                                                                formControlName="idMealsCategories">
                                                                 <option selected>---------------------</option>
-                                                                <option *ngFor="let time of Categoria" [value]="time">
-                                                                        {{time}}
+                                                                <option *ngFor="let mealCategory of mealsCategories" 
+                                                                        [value]="mealCategory.id">
+                                                                        {{mealCategory.name}}
                                                                 </option>
                                                         </select>
-                                                        <input *ngIf="otherCatInput" class="selectSize mr-2" type="text"
-                                                                name="otherCat">
-                                                        <button (click)=" handleBoxCategory()"
-                                                                class="btn1 btn btn-outline-primary"> Otro </button>
+                                                        <input *ngIf="otherMealInput" class="selectSize mr-2"
+                                                                type="text"
+                                                                formControlName="nameMealsCategories">
+                                                        <button *ngIf="otherMealInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="changeStateToSelectMeal()"> Cancelar
+                                                        </button>
+                                                        <button *ngIf="otherMealInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="addMeal()"> Guardar
+                                                        </button>
+                                                        <button *ngIf="!otherMealInput"
+                                                                (click)=" handleBoxMeal()" type="button"
+                                                                class="btn1 btn btn-outline-primary"> 
+                                                                Otro 
+                                                        </button>
+                                                        <button *ngIf="!otherMealInput"
+                                                                (click)=" deleteMealCategory()" 
+                                                                type="button"
+                                                                class="btn1 btn btn-outline-primary">
+                                                                Borrar
+                                                        </button>
 
                                                 </div>
                                         </div>
@@ -131,8 +148,8 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " id="exampleFormControlTextarea2"
-                                                        rows="2">
+                                                <textarea class="form-control " 
+                                                        formControlName="description">
                                                 </textarea>
                                         </div>
                                 </div>
@@ -167,7 +184,8 @@
                                                                         </div>
                                                                         <div class=" mx-2 ">
                                                                                 <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
+                                                                                        class=" col-sm-11 browser-default custom-select form-control "
+                                                                                        formArrayName="idAttentionSchedule">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>

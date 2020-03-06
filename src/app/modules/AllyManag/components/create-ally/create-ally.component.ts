@@ -4,8 +4,9 @@ import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import { Observable } from 'rxjs';
 //Models of backend
 import { Aliado } from 'src/app/models/aliado';
-import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 //services
+import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
+import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { SwallServicesService } from "../../../../services/swall-services.service";
 import Swal from 'sweetalert2';
 
@@ -41,11 +42,7 @@ export class CreateAllyComponent implements OnInit {
   }
 
   alliesCategories: any[] = [];
-
-  mealsCategories: any = {
-    // id: "ID_objCATEGORIA_DE_COMIDAS",
-    name: "cafe con pan"
-  }
+  mealsCategories: any[] = [];
 
 
   days: string[] = []
@@ -63,14 +60,15 @@ export class CreateAllyComponent implements OnInit {
   imageSize: any
   contImage: number = 0;
   //handle button other category
-  otherCatSelect: boolean = true
-  otherCatInput: boolean = false
+  otherMealSelect: boolean = true
+  otherMealInput: boolean = false
   //handle button other type Establishment
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
   newEstablishment: string
   constructor(private alliesCatServices: AlliesCategoriesService,
-    private swalService: SwallServicesService) {
+              private swalService: SwallServicesService,
+              private mealsCatServices: MealsCategoriesService) {
     this.forma = new FormGroup({
 
       'name': new FormControl('', Validators.required),
@@ -80,13 +78,18 @@ export class CreateAllyComponent implements OnInit {
       'logo': new FormControl('', Validators.required),
       'color': new FormControl('', Validators.required),
       'idTypeOfEstablishment': new FormControl('', Validators.required),
-      'nameTypeOfEstablishment': new FormControl('', Validators.required),
+      'nameTypeOfEstablishment': new FormControl('', ),
       'NumberOfLocations': new FormControl('', Validators.required),
       'idMealsCategories': new FormControl('', Validators.required),
-      'description': new FormControl('', Validators.required),
+      'nameMealsCategories': new FormControl('', ),
+      'description': new FormControl('', [Validators.required, Validators.maxLength(15)], ),
+      'idAttentionSchedule': new FormArray([
+              new FormControl('',)
+              
+      ])
     })
 
-    //this is observator
+    //this is observator for the colorPicker optional 
     this.forma.controls['color'].valueChanges
       .subscribe(data => {
         console.log(data);
@@ -97,11 +100,11 @@ export class CreateAllyComponent implements OnInit {
     //this.aliado.colors = ["", "", ""];
     //this.aliado.days = [{}, {}, {}, {}, {}, {}, {}]
     this.aliado.images = [];
-    this.Categoria = ["Alta cocina", "Comida rápida", "Comida típica", "Ensaladas y vegatariana", "Ejecutiva",
-      "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas", "Pizzas", "Pastas"
-      , "Perros calientes", "Pollo", "Árabe", "Mariscos", "Oriental", "Italiana", "Mexicana", "Postres", "Peruana"
-      , "Sándwich", "Arepas y empanadas", "Alitas", "Crepes", "Restaurante bar"]
-    // this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
+    // this.Categoria = ["Alta cocina", "Comida rápida", "Comida típica", "Ensaladas y vegatariana", "Ejecutiva",
+    //   "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas", "Pizzas", "Pastas"
+    //   , "Perros calientes", "Pollo", "Árabe", "Mariscos", "Oriental", "Italiana", "Mexicana", "Postres", "Peruana"
+    //   , "Sándwich", "Arepas y empanadas", "Alitas", "Crepes", "Restaurante bar"]
+    // // this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
     //   "Saludable", "Heladería"]
     this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
@@ -110,8 +113,14 @@ export class CreateAllyComponent implements OnInit {
     //inicialization service with collections allies-categories
     this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
       this.alliesCategories = alliesCat;
-      console.log(this.alliesCategories)
+      console.log(this.alliesCategories) //delete console log
     })
+    //inicialization service with collections meals-categorie
+    this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
+      this.mealsCategories = mealCat;
+      console.log(this.mealsCategories);      
+    })
+
   }
 
   ngOnInit() {
@@ -127,20 +136,41 @@ export class CreateAllyComponent implements OnInit {
     let newEstablishment: object = {
       name: newitem
     }
-    this.saveOtherEstablishment(newEstablishment)
+    this.swallSaveOtherEstablishment(newEstablishment)
     console.log(this.alliesCategories) // delete console log
     this.forma.controls['nameTypeOfEstablishment'].reset() // reset input add new category establishment
     this.changeStateToSelect();
   }
+  //method delete Type Establishment
   deleteCategory() {
     let idCategory: any = this.forma.controls['idTypeOfEstablishment'].value
     console.log(idCategory) // delete console log
-    this.deleteAllyCategory(idCategory)
+    this.swallDeleteCatEstablishment(idCategory)
   }
   //Method for chang of oring buttons
   changeStateToSelect() {
     this.otherEstablishmentSelect = true;
     this.otherEstablishmentInput = false;
+  }
+   //CRD -- METHODS OF MealCategory: CREATE ,READ AND DELETE 
+   addMeal(){
+    let newitem = this.forma.controls['nameMealsCategories'].value;
+    let newMeal: object = {
+      name: newitem
+    }
+    this.swallSaveMealCategory(newMeal)
+    this.forma.controls['nameMealsCategories'].reset();
+    this.changeStateToSelectMeal();
+
+   }
+   deleteMealCategory(){
+    let idMealCat: any = this.forma.controls['idMealsCategories'].value
+    console.log(idMealCat) // delete console log
+    this.swallDeleteMealCategory(idMealCat)
+   }
+   changeStateToSelectMeal() {
+    this.otherMealSelect = true;
+    this.otherMealInput = false;
   }
   //Method for logo
   onPhotoSelected($event) {
@@ -186,14 +216,14 @@ export class CreateAllyComponent implements OnInit {
         this.otherEstablishmentInput = false
     }
   }
-  handleBoxCategory(): boolean {
-    if (this.otherCatSelect) {
-      return this.otherCatSelect = false,
-        this.otherCatInput = true
+  handleBoxMeal(): boolean {
+    if (this.otherMealSelect) {
+      return this.otherMealSelect = false,
+        this.otherMealInput = true
 
     } else {
-      return this.otherCatSelect = true,
-        this.otherCatInput = false
+      return this.otherMealSelect = true,
+        this.otherMealInput = false
     }
   }
   // method save  and cancel all collection allies
@@ -207,7 +237,7 @@ export class CreateAllyComponent implements OnInit {
 
   // method by sweetalert2 
   //saveTypeEstablishment 
-  saveOtherEstablishment(newEstablishment: any) {
+  swallSaveOtherEstablishment(newEstablishment: any) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -232,7 +262,7 @@ export class CreateAllyComponent implements OnInit {
       }
     })
   }
-  deleteAllyCategory(id: string) {
+  swallDeleteCatEstablishment(id: string) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar!",
@@ -250,7 +280,57 @@ export class CreateAllyComponent implements OnInit {
           })
         })
         Swal.fire(
-          'Cancelado!',
+          'Eliminado!',
+          'success',
+        )
+      }
+    })
+  }
+  //save and Delete Meals categories 
+  swallSaveMealCategory(newMeal: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.mealsCatServices.postMealCategorie(newMeal).subscribe(() => {
+          this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
+            this.mealsCategories = mealCat;
+            console.log(this.mealsCategories)
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nueva categoría de comida ha sido creado',
+          'success',
+        )
+      }
+    })
+  }
+  swallDeleteMealCategory(id: string) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.mealsCatServices.deleteMealCategorie(id).subscribe(() => {
+          this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
+            this.mealsCategories = mealCat;
+            console.log(this.mealsCategories)
+          })
+        })
+        Swal.fire(
+          'Eliminado!',
           'success',
         )
       }
