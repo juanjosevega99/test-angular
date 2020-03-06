@@ -9,6 +9,7 @@ import { AlliesCategoriesService } from '../../../../services/allies-categories.
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { SwallServicesService } from "../../../../services/swall-services.service";
 import Swal from 'sweetalert2';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-create-ally',
@@ -18,6 +19,7 @@ import Swal from 'sweetalert2';
 export class CreateAllyComponent implements OnInit {
   //news params
   forma: FormGroup;
+  schedules: FormGroup;
 
   allies: object = {
     name: null,
@@ -48,6 +50,8 @@ export class CreateAllyComponent implements OnInit {
   days: string[] = []
   hours: String[] = [];
   color: String = "#000000";
+  attentionSchedule:any []= [];
+
 
   // old params
   aliado: Aliado; // instance necesary to working method onImagesSelected
@@ -86,7 +90,14 @@ export class CreateAllyComponent implements OnInit {
       'idAttentionSchedule': new FormArray([
               new FormControl('',)
               
-      ])
+      ]),
+    
+    })
+
+    this.schedules = new FormGroup({
+      "day": new FormControl('',),
+      "from": new FormControl('',),
+      "to": new FormControl('',)
     })
 
     //this is observator for the colorPicker optional 
@@ -233,6 +244,21 @@ export class CreateAllyComponent implements OnInit {
   }
   cancelChanges() {
     this.swalService.cancel();
+  }
+  getAttentionScheduleLunes(day, fromLunes: String,toLunes:String){
+   // console.log(dayLunes);
+    console.log(fromLunes);
+    console.log(toLunes);
+
+    let schedule:object = {
+      day: day,
+      from: fromLunes,
+      to : toLunes
+    }
+    // To do one function for tracking array with filter and look what is the same and renplace
+    this.attentionSchedule.push(schedule)
+    console.log(this.attentionSchedule);
+    
   }
 
   // method by sweetalert2 
