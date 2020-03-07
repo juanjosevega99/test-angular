@@ -102,10 +102,13 @@ export class CreateHeadquarterComponent implements OnInit {
   selectedService(event, pos: number){
     console.log(event);
     const checked = event.target.checked;
-    event.target.checked = checked;
+    // event.target.checked = checked;
     const value = event.target.value;
+    
     event.target.value = value;
     this.preHeadquarters['services'][pos]={value, checked}
+    console.log(this.preHeadquarters['services'][0].checked);
+    
   }
 
 
