@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
-import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 //Models of backend
 import { Aliado } from 'src/app/models/aliado';
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { SwallServicesService } from "../../../../services/swall-services.service";
-import Swal from 'sweetalert2';
 import { element } from 'protractor';
 
 @Component({
@@ -45,7 +44,6 @@ export class CreateAllyComponent implements OnInit {
 
   alliesCategories: any[] = [];
   mealsCategories: any[] = [];
-
 
   days: string[] = []
   hours: String[] = [];
@@ -245,20 +243,26 @@ export class CreateAllyComponent implements OnInit {
   cancelChanges() {
     this.swalService.cancel();
   }
-  getAttentionScheduleLunes(day, fromLunes: String,toLunes:String){
+  getAttentionScheduleLunes(day:String, fromLunes: String,toLunes:String){
    // console.log(dayLunes);
     console.log(fromLunes);
     console.log(toLunes);
-
     let schedule:object = {
       day: day,
       from: fromLunes,
       to : toLunes
     }
-    // To do one function for tracking array with filter and look what is the same and renplace
+    // To do one function for tracking array with filter and look what is the same and renplace-- 
     this.attentionSchedule.push(schedule)
-    console.log(this.attentionSchedule);
-    
+    let sinRepetidos = this.attentionSchedule.filter((valorActual, indiceActual, arreglo) => {
+      // maybe working with lastIndexOf
+      return arreglo.findIndex(
+        valorDelArreglo =>valorDelArreglo.day === valorActual.day
+        ) === indiceActual
+    });
+
+    console.log("Con repetidos",this.attentionSchedule);
+    console.log("SIN repetidos",sinRepetidos);
   }
 
   // method by sweetalert2 
