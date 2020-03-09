@@ -3,11 +3,13 @@ import * as $ from 'jquery';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import Swal from 'sweetalert2';
 //Models of backend
-import { Aliado } from 'src/app/models/aliado';
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { SwallServicesService } from "../../../../services/swall-services.service";
+import { AttentionScheduleService} from "../../../../services/attention-schedule.service"
+import { AlliesService } from "../../../../services/allies.service";
+
 import { element } from 'protractor';
 
 @Component({
@@ -41,26 +43,28 @@ export class CreateAllyComponent implements OnInit {
     imagesAllies: [],
 
   }
-
+// varibles for list data from backend collection parameterized
   alliesCategories: any[] = [];
   mealsCategories: any[] = [];
+  attentionSchedule: any[] = [];
 
   days: string[] = []
   hours: String[] = [];
   color: String = "#000000";
-  attentionSchedule:any []= [];
-
-
-  // old params
-  aliado: Aliado; // instance necesary to working method onImagesSelected
-  TypeEstablishment: String[] = [];
-  Categoria: String[] = [];
-  photo: any;
+  Schedules :any []= [];
+  
   //variables carousel
+  imagesAllies: any[]= []
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
   contImage: number = 0;
+
+  // old params
+  // aliado: Aliado; // instance necesary to working method onImagesSelected
+  TypeEstablishment: String[] = [];
+  Categoria: String[] = [];
+  photo: any;
   //handle button other category
   otherMealSelect: boolean = true
   otherMealInput: boolean = false
@@ -70,7 +74,9 @@ export class CreateAllyComponent implements OnInit {
   newEstablishment: string
   constructor(private alliesCatServices: AlliesCategoriesService,
               private swalService: SwallServicesService,
-              private mealsCatServices: MealsCategoriesService) {
+              private mealsCatServices: MealsCategoriesService,
+              private scheduleServices: AttentionScheduleService,
+              private allieService: AlliesService) {
     this.forma = new FormGroup({
 
       'name': new FormControl('', Validators.required),
@@ -85,36 +91,21 @@ export class CreateAllyComponent implements OnInit {
       'idMealsCategories': new FormControl('', Validators.required),
       'nameMealsCategories': new FormControl('', ),
       'description': new FormControl('', [Validators.required, Validators.maxLength(15)], ),
-      'idAttentionSchedule': new FormArray([
-              new FormControl('',)
-              
-      ]),
+      'idAttentionSchedule': new FormControl('',Validators.required),
+      'imagesAllies': new FormControl('')
     
     })
 
-    this.schedules = new FormGroup({
-      "day": new FormControl('',),
-      "from": new FormControl('',),
-      "to": new FormControl('',)
-    })
+    // this.schedules = new FormGroup({
+    //   "dayLunes": new FormControl('',),
+    //   "fromLunes": new FormControl('',Validators.required),
+    //   "to": new FormControl('',Validators.required),
 
-    //this is observator for the colorPicker optional 
-    this.forma.controls['color'].valueChanges
-      .subscribe(data => {
-        console.log(data);
-      })
+    // })
 
     this.imageSize = { width: 230, height: 120 };
-    this.aliado = new Aliado();
-    //this.aliado.colors = ["", "", ""];
-    //this.aliado.days = [{}, {}, {}, {}, {}, {}, {}]
-    this.aliado.images = [];
-    // this.Categoria = ["Alta cocina", "Comida rápida", "Comida típica", "Ensaladas y vegatariana", "Ejecutiva",
-    //   "Comida internacional", "Heladería", "Cafetería", "Desayuno", "Hamburguesas", "Pizzas", "Pastas"
-    //   , "Perros calientes", "Pollo", "Árabe", "Mariscos", "Oriental", "Italiana", "Mexicana", "Postres", "Peruana"
-    //   , "Sándwich", "Arepas y empanadas", "Alitas", "Crepes", "Restaurante bar"]
-    // // this.TypeEstablishment = ["Alta cocina", "Restaurante tradicional", "Cafetería", "Restaurante de cadena",
-    //   "Saludable", "Heladería"]
+    // this.aliado = new Aliado();
+    this.imagesAllies = [];
     this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
@@ -129,6 +120,12 @@ export class CreateAllyComponent implements OnInit {
       this.mealsCategories = mealCat;
       console.log(this.mealsCategories);      
     })
+    //inicialization service with collections attention-schedule
+    this.scheduleServices.getAttentionSchedules().subscribe(schedule =>{
+      this.attentionSchedule = schedule;
+      console.log(this.attentionSchedule); 
+
+    })
 
   }
 
@@ -137,6 +134,7 @@ export class CreateAllyComponent implements OnInit {
   }
   getColour(event) {
     this.color = event.target.value
+    this.forma.controls['color'].setValue(this.color)
     console.log(this.color) // delete console log
   }
   //CRD -- METHODS OF TypeEstablishment: CREATE ,READ AND DELETE 
@@ -198,21 +196,21 @@ export class CreateAllyComponent implements OnInit {
   //Method for carousel images
   onImagesSelected($event) {
     let input = $event.target;
-    console.log($event)
+    console.log($event) //delete console.log
     let image = "";
     if (input.files && input.files[0]) {
       var reader = new FileReader();
-
       reader.onload = (e: any) => {
         image = e.target.result;
         this.imagesUploaded.push({ image: image, thumbImage: image })
       }
-
-      this.aliado.images.push(input.files[0])
+      console.log('imagnes loading',this.imagesUploaded) // images upLoad in an Array with objects
+      this.imagesAllies.push(input.files[0].name)
+      console.log('Array of images',this.imagesAllies) // array 
       reader.readAsDataURL(input.files[0]);
-      this.contImage = this.aliado.images.length;
+      this.contImage = this.imagesAllies.length;
+      this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
     }
-
   }
   // Method for adding text input and select
   handleBoxEstablishment(): boolean {
@@ -237,34 +235,45 @@ export class CreateAllyComponent implements OnInit {
   }
   // method save  and cancel all collection allies
   saveChanges() {
-    console.log(this.forma.value);
     this.swalService.saveChanges()
+    let addSchedule : object ={
+      attentionSchedule : this.Schedules
+    }
+    this.scheduleServices.postAttentionSchedule(addSchedule).subscribe(message => {
+      alert('attention added')
+      this.scheduleServices.getAttentionSchedules().subscribe(schedule =>{
+        this.attentionSchedule = schedule;
+        console.log(this.attentionSchedule); 
+      })
+    })
+    this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)
+    console.log(this.forma.value);
+    this.allieService.postAllie(this.forma.value).subscribe(message =>{
+      alert('allie added')
+      // this.allieService.getAllies()
+    })
   }
   cancelChanges() {
     this.swalService.cancel();
   }
-  getAttentionScheduleLunes(day:String, fromLunes: String,toLunes:String){
+  getAttentionSchedule(day:String, from:String, to:String, i:number){
    // console.log(dayLunes);
-    console.log(fromLunes);
-    console.log(toLunes);
+    console.log(from); //delete console log
+    console.log(to, i); //delete console log
     let schedule:object = {
       day: day,
-      from: fromLunes,
-      to : toLunes
+      from: from,
+      to : to
     }
     // To do one function for tracking array with filter and look what is the same and renplace-- 
-    this.attentionSchedule.push(schedule)
-    let sinRepetidos = this.attentionSchedule.filter((valorActual, indiceActual, arreglo) => {
-      // maybe working with lastIndexOf
-      return arreglo.findIndex(
-        valorDelArreglo =>valorDelArreglo.day === valorActual.day
-        ) === indiceActual
-    });
-
-    console.log("Con repetidos",this.attentionSchedule);
-    console.log("SIN repetidos",sinRepetidos);
+    if (this.Schedules[i]){
+      this.Schedules[i] = schedule;
+    }
+    else{
+      this.Schedules.push(schedule);
+    }
+      console.log(this.Schedules); //delete console log 
   }
-
   // method by sweetalert2 
   //saveTypeEstablishment 
   swallSaveOtherEstablishment(newEstablishment: any) {

@@ -56,7 +56,7 @@
                                         <div class="col-8">
                                                 <div class="row margin-left2">
                                                         <input class="form-control " type="text" [value]="color"
-                                                                formControlName="color">
+                                                                >
 
                                                         <input type="color" (change)="getColour($event)">
                                                 </div>
@@ -71,7 +71,7 @@
                                                                 formControlName="idTypeOfEstablishment">
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let category of alliesCategories"
-                                                                        [value]="category.id" id="category.id" >
+                                                                        [value]="category.id" id="category.id">
                                                                         {{category.name}}
                                                                 </option>
                                                         </select>
@@ -114,14 +114,13 @@
                                                                 class="browser-default custom-select selectSize mr-2"
                                                                 formControlName="idMealsCategories">
                                                                 <option selected>---------------------</option>
-                                                                <option *ngFor="let mealCategory of mealsCategories" 
+                                                                <option *ngFor="let mealCategory of mealsCategories"
                                                                         [value]="mealCategory.id">
                                                                         {{mealCategory.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherMealInput" class="selectSize mr-2"
-                                                                type="text"
-                                                                formControlName="nameMealsCategories">
+                                                                type="text" formControlName="nameMealsCategories">
                                                         <button *ngIf="otherMealInput"
                                                                 class="btn1 btn btn-outline-primary" type="button"
                                                                 (click)="changeStateToSelectMeal()"> Cancelar
@@ -130,15 +129,12 @@
                                                                 class="btn1 btn btn-outline-primary" type="button"
                                                                 (click)="addMeal()"> Guardar
                                                         </button>
-                                                        <button *ngIf="!otherMealInput"
-                                                                (click)=" handleBoxMeal()" type="button"
-                                                                class="btn1 btn btn-outline-primary"> 
-                                                                Otro 
+                                                        <button *ngIf="!otherMealInput" (click)=" handleBoxMeal()"
+                                                                type="button" class="btn1 btn btn-outline-primary">
+                                                                Otro
                                                         </button>
-                                                        <button *ngIf="!otherMealInput"
-                                                                (click)=" deleteMealCategory()" 
-                                                                type="button"
-                                                                class="btn1 btn btn-outline-primary">
+                                                        <button *ngIf="!otherMealInput" (click)=" deleteMealCategory()"
+                                                                type="button" class="btn1 btn btn-outline-primary">
                                                                 Borrar
                                                         </button>
 
@@ -148,14 +144,13 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " 
-                                                        formControlName="description">
+                                                <textarea class="form-control " formControlName="description">
                                                 </textarea>
                                         </div>
                                 </div>
 
                         </div>
-                        <div class="col-md-5" >
+                        <div class="col-md-5">
 
                                 <div class="row ">
                                         <div class="col-2"> <label>Horario</label> </div>
@@ -176,18 +171,16 @@
                                                         </div>
 
                                                 </div>
-                                                <div *ngFor="let day of days" class="row my-3 form-group ">
+                                                <div *ngFor="let day of days; let i = index" class="row my-3 form-group ">
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label #dayLunes>{{day}}</label>
+                                                                                <label #dayl>{{day}}</label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control "
-                                                                                        
-                                                                                        #fromLunes
-                                                                                        >
+                                                                                <select class=" col-sm-11 browser-default custom-select form-control "
+                                                                                        #from
+                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
@@ -198,17 +191,17 @@
                                                                                 </select>
                                                                         </div>
                                                                         <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control"
-                                                                                        #toLunes
-                                                                                        (click)="getAttentionScheduleLunes(dayLunes.textContent, fromLunes.value  , toLunes.value)">
+                                                                                 <!-- paramater use by function gerAttentionScheduleLunes -->
+                                                                                <select class=" col-sm-11 browser-default custom-select form-control"
+                                                                                        #to
+                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
                                                                                         <option *ngFor="let time of hours"
                                                                                                 [value]="time">
                                                                                                 {{time}}
-                                                                                                
+
                                                                                         </option>
                                                                                 </select>
                                                                         </div>
@@ -430,12 +423,7 @@
                                                 </label>
                                         </div>
                                         <div class="col align-items-center">
-                                                <div
-                                                        class="d-flex flex-column justify-content-center align-items-center mt-3">
-
-                                                        <div
-                                                                class="d-flex flex-column justify-content-center align-items-center ">
-
+                                                        <div class="d-flex flex-column justify-content-center align-items-center ">
                                                                 <div class="d-flex flex-column ">
                                                                         <ng-image-slider *ngIf="imagesUploaded.length>0"
                                                                                 style="width: 230px; height: 120px; "
@@ -445,23 +433,21 @@
 
                                                                         <P *ngIf="imagesUploaded.length==0"
                                                                                 style="color: crimson; ">
-                                                                                No hay imagenes subidas</P>
+                                                                                No hay imagenes subidas
+                                                                        </P>
 
                                                                         <div class="upload-btn-wrapper mt-3  ">
-                                                                                <button
-                                                                                        class=" container  btn btn-outline-primary ">Adjuntar
-                                                                                        archivos
-                                                                                        {{contImage}} </button>
+                                                                                <button class=" container  btn btn-outline-primary ">
+                                                                                        Adjuntar archivos {{contImage}} 
+                                                                                </button>
                                                                                 <input type="file" name="photo"
-                                                                                        (change)="onImagesSelected($event)" />
+                                                                                        (change)="onImagesSelected($event)"
+                                                                                />
                                                                         </div>
 
                                                                 </div>
 
                                                         </div>
-
-                                                </div>
-
                                         </div>
                                 </div>
 

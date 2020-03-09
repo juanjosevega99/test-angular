@@ -12,6 +12,6 @@ export class Allies{
     idMealsCategories?:string;
     nameMealsCategories?:String;
     description?:string;
-    idAttentionSchedule?:string[];
+    idAttentionSchedule?:string;
     imagesAllies?:string[];
 }
