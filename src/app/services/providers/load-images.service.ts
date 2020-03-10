@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-// import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 import * as firebase from 'firebase';
 // import { AngularFirestore } from '@angular/fire/storage';}
-import { AngularFirestore } from '@angular/fire/firestore';
+// import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class LoadImagesService {
   private FOLDER_IMAGES = 'assets' 
   private allies = 'allies'
 
-  constructor(private db : AngularFirestore) { 
+  constructor(private db : AngularFireStorage) { 
   }
 
   loadImagesFirebase(images: any[]){
