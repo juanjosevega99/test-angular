@@ -9,6 +9,7 @@ import { MealsCategoriesService } from "../../../../services/meals-categories.se
 import { SwallServicesService } from "../../../../services/swall-services.service";
 import { AttentionScheduleService} from "../../../../services/attention-schedule.service"
 import { AlliesService } from "../../../../services/allies.service";
+import { LoadImagesService } from "../../../../services/providers/load-images.service"
 
 import { element } from 'protractor';
 
@@ -76,7 +77,8 @@ export class CreateAllyComponent implements OnInit {
               private swalService: SwallServicesService,
               private mealsCatServices: MealsCategoriesService,
               private scheduleServices: AttentionScheduleService,
-              private allieService: AlliesService) {
+              private allieService: AlliesService,
+              private loadImagesService : LoadImagesService) {
     this.forma = new FormGroup({
 
       'name': new FormControl('', Validators.required),
@@ -104,7 +106,6 @@ export class CreateAllyComponent implements OnInit {
     // })
 
     this.imageSize = { width: 230, height: 120 };
-    // this.aliado = new Aliado();
     this.imagesAllies = [];
     this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
@@ -180,16 +181,17 @@ export class CreateAllyComponent implements OnInit {
     this.otherMealInput = false;
   }
   //Method for logo
+  // print bs64 of image =>  e.target.result)
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
       var reader = new FileReader();
-
       reader.onload = function (e: any) {
         $('#photo')
-          .attr('src', e.target.result)
+        .attr('src', e.target.result)
       };
-
+      console.log('data enter if ', input.files) //delete console.log
+      console.log('data enter if ', input.files[0]) //delete console.log
       reader.readAsDataURL(input.files[0]);
     }
   }
@@ -205,10 +207,12 @@ export class CreateAllyComponent implements OnInit {
         this.imagesUploaded.push({ image: image, thumbImage: image })
       }
       console.log('imagnes loading',this.imagesUploaded) // images upLoad in an Array with objects
-      this.imagesAllies.push(input.files[0].name)
-      console.log('Array of images',this.imagesAllies) // array 
+      this.imagesAllies.push(input.files[0])
+      console.log('Array of images',input.files[0]) // array 
       reader.readAsDataURL(input.files[0]);
       this.contImage = this.imagesAllies.length;
+      this.loadImagesService.loadImagesFirebase(this.imagesAllies)
+      console.log('Vector de images',this.imagesAllies)
       this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
     }
   }
@@ -243,7 +247,7 @@ export class CreateAllyComponent implements OnInit {
       alert('attention added')
       this.scheduleServices.getAttentionSchedules().subscribe(schedule =>{
         this.attentionSchedule = schedule;
-        console.log(this.attentionSchedule); 
+        console.log(this.attentionSchedule); // delete console log
       })
     })
     this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)

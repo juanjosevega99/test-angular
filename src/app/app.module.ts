@@ -4,6 +4,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireStorageModule } from "@angular/fire/storage";
 import { environment } from "../environments/environment";
 import { LoginPageComponent } from "./login/login-page/login-page.component";
 import { HeaderComponent } from "./header/header.component";
@@ -51,7 +52,7 @@ import { CreateHeadquarterComponent } from './modules/AllyManag/components/creat
 import {NgxPrintModule} from 'ngx-print';
 import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
 import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
-
+import { LoadImagesService } from "./services/providers/load-images.service";
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { CreateDishComponent } from './modules/AllyManag/components/create-dish/
     NgxSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
+    AngularFireStorageModule,
     NgbModule,
     DpDatePickerModule,
     BrowserModule,
@@ -111,7 +113,9 @@ import { CreateDishComponent } from './modules/AllyManag/components/create-dish/
     ReactiveFormsModule,
     NgxPrintModule
   ],
-  providers: [],
+  providers: [
+    LoadImagesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
