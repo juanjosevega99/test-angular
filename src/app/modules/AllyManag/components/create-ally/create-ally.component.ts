@@ -10,8 +10,8 @@ import { SwallServicesService } from "../../../../services/swall-services.servic
 import { AttentionScheduleService} from "../../../../services/attention-schedule.service"
 import { AlliesService } from "../../../../services/allies.service";
 import { LoadImagesService } from "../../../../services/providers/load-images.service"
-
-import { element } from 'protractor';
+//models
+import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
 
 @Component({
   selector: 'app-create-ally',
@@ -55,7 +55,7 @@ export class CreateAllyComponent implements OnInit {
   Schedules :any []= [];
   
   //variables carousel
-  imagesAllies: any[]= []
+  imagesAllies: FileItem[]= []
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
@@ -198,7 +198,7 @@ export class CreateAllyComponent implements OnInit {
   //Method for carousel images
   onImagesSelected($event) {
     let input = $event.target;
-    console.log($event) //delete console.log
+    console.log($event.target.files) //delete console.log
     let image = "";
     if (input.files && input.files[0]) {
       var reader = new FileReader();
@@ -206,16 +206,34 @@ export class CreateAllyComponent implements OnInit {
         image = e.target.result;
         this.imagesUploaded.push({ image: image, thumbImage: image })
       }
-      console.log('imagnes loading',this.imagesUploaded) // images upLoad in an Array with objects
-      this.imagesAllies.push(input.files[0])
-      console.log('Array of images',input.files[0]) // array 
+      let fileList = input.files;
+      console.log('object of each image',fileList) // array 
+      // this.imagesAllies.push(input.files[0]) 
+      console.log('imagnes loading',this.imagesAllies) // images upLoad in an Array with object
       reader.readAsDataURL(input.files[0]);
-      this.contImage = this.imagesAllies.length;
-      this.loadImagesService.loadImagesFirebase(this.imagesAllies)
-      console.log('Vector de images',this.imagesAllies)
-      this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
+      for ( const propiedad in Object.getOwnPropertyNames( fileList) ){
+        const temporalFile = fileList[propiedad];
+        console.log(temporalFile)
+        if (this.isImage(temporalFile)){
+          const newField = new FileItem( temporalFile )
+          this.imagesAllies.push( newField )
+        }
+      }
+      console.log( this.imagesAllies); // to do
+      
+    //   this.contImage = this.imagesAllies.length;
+
+    //   this.loadImagesService.loadImagesFirebase(this.imagesAllies)
+
+    //   console.log('Vector de images',this.imagesAllies)
+    //   this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
     }
   }
+  //DIRECTICVES OF VALIDATION LOADIMAGES
+  isImage( typeFile:string):boolean{
+    return ( typeFile === '' || typeFile == undefined ) ? false : typeFile.startsWith('image')
+  }
+
   // Method for adding text input and select
   handleBoxEstablishment(): boolean {
     if (this.otherEstablishmentSelect) {

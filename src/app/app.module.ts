@@ -53,6 +53,7 @@ import {NgxPrintModule} from 'ngx-print';
 import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
 import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
 import { LoadImagesService } from "./services/providers/load-images.service";
+import { ValidationsLoadImagesDirective } from './directives/validations-load-images.directive';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { LoadImagesService } from "./services/providers/load-images.service";
     HeadquartersOptionsComponent,
     CreateHeadquarterComponent,
     EditMenuComponent,
-    CreateDishComponent
+    CreateDishComponent,
+    ValidationsLoadImagesDirective
   ],
   imports: [
     HttpClientModule,

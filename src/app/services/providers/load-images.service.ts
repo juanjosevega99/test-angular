@@ -20,7 +20,7 @@ export class LoadImagesService {
     console.log('images by UPLOAD',images[0].name)
     for ( const item of images ){
       
-      console.log('ciclo',item.name)
+      console.log('ciclo',item)
       // const uploadTask: firebase.storage.UploadTask = 
       //                   storageRef.child(`${this.FOLDER_IMAGES}/ ${this.allies}`)
       //                   .put( item.images[0] )
