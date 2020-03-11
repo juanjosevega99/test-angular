@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { SwallServicesService } from "../../../../services/swall-services.service";
-import { AttentionScheduleService} from "../../../../services/attention-schedule.service"
+import { AttentionScheduleService } from "../../../../services/attention-schedule.service"
 import { AlliesService } from "../../../../services/allies.service";
 import { LoadImagesService } from "../../../../services/providers/load-images.service"
 //models
@@ -21,30 +21,29 @@ import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
 export class CreateAllyComponent implements OnInit {
   //news params
   forma: FormGroup;
-  schedules: FormGroup;
 
-  allies: object = {
-    name: null,
-    nit: null,
-    legalRepresentative: null,
-    documentNumber: null,
-    logo: null,
-    colour: null,
-    idTypeOfEstablishment: null,
-    NumberOfLocations: null,
-    idMealsCategories: null,
-    description: null,
-    idAttentionSchedule: [
-      {
-        day: null,
-        from: null,
-        to: null
-      }
-    ],// array of obj 
-    imagesAllies: [],
+  // allies: object = {
+  //   name: null,
+  //   nit: null,
+  //   legalRepresentative: null,
+  //   documentNumber: null,
+  //   logo: null,
+  //   colour: null,
+  //   idTypeOfEstablishment: null,
+  //   NumberOfLocations: null,
+  //   idMealsCategories: null,
+  //   description: null,
+  //   idAttentionSchedule: [
+  //     {
+  //       day: null,
+  //       from: null,
+  //       to: null
+  //     }
+  //   ],// array of obj 
+  //   imagesAllies: [],
 
-  }
-// varibles for list data from backend collection parameterized
+  // }
+  // varibles for list data from backend collection parameterized
   alliesCategories: any[] = [];
   mealsCategories: any[] = [];
   attentionSchedule: any[] = [];
@@ -52,10 +51,10 @@ export class CreateAllyComponent implements OnInit {
   days: string[] = []
   hours: String[] = [];
   color: String = "#000000";
-  Schedules :any []= [];
-  
+  Schedules: any[] = [];
+
   //variables carousel
-  imagesAllies: FileItem[]= []
+  imagesAllies: FileItem[] = []
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
@@ -74,11 +73,11 @@ export class CreateAllyComponent implements OnInit {
   otherEstablishmentInput: boolean = false
   newEstablishment: string
   constructor(private alliesCatServices: AlliesCategoriesService,
-              private swalService: SwallServicesService,
-              private mealsCatServices: MealsCategoriesService,
-              private scheduleServices: AttentionScheduleService,
-              private allieService: AlliesService,
-              private loadImagesService : LoadImagesService) {
+    private swalService: SwallServicesService,
+    private mealsCatServices: MealsCategoriesService,
+    private scheduleServices: AttentionScheduleService,
+    private allieService: AlliesService,
+    private loadImagesService: LoadImagesService) {
     this.forma = new FormGroup({
 
       'name': new FormControl('', Validators.required),
@@ -88,14 +87,14 @@ export class CreateAllyComponent implements OnInit {
       'logo': new FormControl('', Validators.required),
       'color': new FormControl('', Validators.required),
       'idTypeOfEstablishment': new FormControl('', Validators.required),
-      'nameTypeOfEstablishment': new FormControl('', ),
+      'nameTypeOfEstablishment': new FormControl(''),
       'NumberOfLocations': new FormControl('', Validators.required),
       'idMealsCategories': new FormControl('', Validators.required),
-      'nameMealsCategories': new FormControl('', ),
-      'description': new FormControl('', [Validators.required, Validators.maxLength(15)], ),
-      'idAttentionSchedule': new FormControl('',Validators.required),
+      'nameMealsCategories': new FormControl(''),
+      'description': new FormControl('', [Validators.required, Validators.maxLength(15)]),
+      'idAttentionSchedule': new FormControl('', Validators.required),
       'imagesAllies': new FormControl('')
-    
+
     })
 
     // this.schedules = new FormGroup({
@@ -106,11 +105,11 @@ export class CreateAllyComponent implements OnInit {
     // })
 
     this.imageSize = { width: 230, height: 120 };
-    this.imagesAllies = [];
+    // this.imagesAllies = [];
     this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
-    
+
     //inicialization service with collections allies-categories
     this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
       this.alliesCategories = alliesCat;
@@ -119,12 +118,12 @@ export class CreateAllyComponent implements OnInit {
     //inicialization service with collections meals-categorie
     this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
       this.mealsCategories = mealCat;
-      console.log(this.mealsCategories);      
+      console.log(this.mealsCategories);
     })
     //inicialization service with collections attention-schedule
-    this.scheduleServices.getAttentionSchedules().subscribe(schedule =>{
+    this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
       this.attentionSchedule = schedule;
-      console.log(this.attentionSchedule); 
+      console.log(this.attentionSchedule);
 
     })
 
@@ -160,8 +159,8 @@ export class CreateAllyComponent implements OnInit {
     this.otherEstablishmentSelect = true;
     this.otherEstablishmentInput = false;
   }
-   //CRD -- METHODS OF MealCategory: CREATE ,READ AND DELETE 
-   addMeal(){
+  //CRD -- METHODS OF MealCategory: CREATE ,READ AND DELETE 
+  addMeal() {
     let newitem = this.forma.controls['nameMealsCategories'].value;
     let newMeal: object = {
       name: newitem
@@ -170,13 +169,13 @@ export class CreateAllyComponent implements OnInit {
     this.forma.controls['nameMealsCategories'].reset();
     this.changeStateToSelectMeal();
 
-   }
-   deleteMealCategory(){
+  }
+  deleteMealCategory() {
     let idMealCat: any = this.forma.controls['idMealsCategories'].value
     console.log(idMealCat) // delete console log
     this.swallDeleteMealCategory(idMealCat)
-   }
-   changeStateToSelectMeal() {
+  }
+  changeStateToSelectMeal() {
     this.otherMealSelect = true;
     this.otherMealInput = false;
   }
@@ -188,7 +187,7 @@ export class CreateAllyComponent implements OnInit {
       var reader = new FileReader();
       reader.onload = function (e: any) {
         $('#photo')
-        .attr('src', e.target.result)
+          .attr('src', e.target.result)
       };
       console.log('data enter if ', input.files) //delete console.log
       console.log('data enter if ', input.files[0]) //delete console.log
@@ -203,35 +202,52 @@ export class CreateAllyComponent implements OnInit {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = (e: any) => {
-        image = e.target.result;
-        this.imagesUploaded.push({ image: image, thumbImage: image })
-      }
-      let fileList = input.files;
-      console.log('object of each image',fileList) // array 
+      image = e.target.result;
+      this.imagesUploaded.push({ image: image, thumbImage: image })
+    }
+      let fileList = input.files; //pas object
+      console.log('object of each image', fileList) // array delete console
       // this.imagesAllies.push(input.files[0]) 
-      console.log('imagnes loading',this.imagesAllies) // images upLoad in an Array with object
+      console.log('imagnes loading', this.imagesAllies) // images upLoad in an Array with object delete console
       reader.readAsDataURL(input.files[0]);
-      for ( const propiedad in Object.getOwnPropertyNames( fileList) ){
+      for (const propiedad in Object.getOwnPropertyNames(fileList)) {
         const temporalFile = fileList[propiedad];
         console.log(temporalFile)
-        if (this.isImage(temporalFile)){
-          const newField = new FileItem( temporalFile )
-          this.imagesAllies.push( newField )
-        }
+        // if ( this.fileCanUpload(temporalFile) ){
+          const newField = new FileItem(temporalFile)
+          this.imagesAllies.push(newField)
+        // }
       }
-      console.log( this.imagesAllies); // to do
-      
-    //   this.contImage = this.imagesAllies.length;
+      console.log('antes',this.imagesAllies); //
 
-    //   this.loadImagesService.loadImagesFirebase(this.imagesAllies)
+      //   this.contImage = this.imagesAllies.length;
 
-    //   console.log('Vector de images',this.imagesAllies)
-    //   this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
+      //   console.log('Vector de images',this.imagesAllies)
+      //   this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
     }
   }
   //DIRECTICVES OF VALIDATION LOADIMAGES
-  isImage( typeFile:string):boolean{
-    return ( typeFile === '' || typeFile == undefined ) ? false : typeFile.startsWith('image')
+  fileCanUpload( file: File): boolean{
+    if (this._fileAlreadyUpload(file.name) && this.isImage( file.type ) ) {
+      return true;
+    }else {
+      return false;
+    }
+
+  }
+  
+  isImage(typeFile: string): boolean {
+    return (typeFile === '' || typeFile == undefined) ? false : typeFile.startsWith('image')
+  }
+
+  _fileAlreadyUpload(nameFile:string): boolean{
+    for ( const file of this.imagesAllies ){
+      if (file.nameFile === nameFile) {
+        console.log( 'El archivo '+ nameFile + ' ya esta agregado' );
+        return true;        
+      }
+    }
+    return false
   }
 
   // Method for adding text input and select
@@ -258,43 +274,46 @@ export class CreateAllyComponent implements OnInit {
   // method save  and cancel all collection allies
   saveChanges() {
     this.swalService.saveChanges()
-    let addSchedule : object ={
-      attentionSchedule : this.Schedules
+    let addSchedule: object = {
+      attentionSchedule: this.Schedules
     }
     this.scheduleServices.postAttentionSchedule(addSchedule).subscribe(message => {
       alert('attention added')
-      this.scheduleServices.getAttentionSchedules().subscribe(schedule =>{
+      this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
         this.attentionSchedule = schedule;
         console.log(this.attentionSchedule); // delete console log
       })
     })
     this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)
     console.log(this.forma.value);
-    this.allieService.postAllie(this.forma.value).subscribe(message =>{
+    this.allieService.postAllie(this.forma.value).subscribe(message => {
       alert('allie added')
       // this.allieService.getAllies()
     })
+    console.log('despues',this.imagesAllies); //
+
+    this.loadImagesService.loadImagesFirebase(this.imagesAllies)
   }
   cancelChanges() {
     this.swalService.cancel();
   }
-  getAttentionSchedule(day:String, from:String, to:String, i:number){
-   // console.log(dayLunes);
+  getAttentionSchedule(day: String, from: String, to: String, i: number) {
+    // console.log(dayLunes);
     console.log(from); //delete console log
     console.log(to, i); //delete console log
-    let schedule:object = {
+    let schedule: object = {
       day: day,
       from: from,
-      to : to
+      to: to
     }
     // To do one function for tracking array with filter and look what is the same and renplace-- 
-    if (this.Schedules[i]){
+    if (this.Schedules[i]) {
       this.Schedules[i] = schedule;
     }
-    else{
+    else {
       this.Schedules.push(schedule);
     }
-      console.log(this.Schedules); //delete console log 
+    console.log(this.Schedules); //delete console log 
   }
   // method by sweetalert2 
   //saveTypeEstablishment 
