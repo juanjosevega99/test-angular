@@ -170,7 +170,7 @@ export class CreateHeadquarterComponent implements OnInit {
     const otherService = {
       name: other,
       img: this.otherImg ? this.otherImg : 'assets/icons/plus.png',
-      select: true
+      select: false
     }
     this.aditionalServices.push(otherService);
   }

@@ -40,3 +40,17 @@
     background-color: #5a4183;
     border-color: #5a4183;
   }
+
+  //Styles for the button: upload image
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.upload-btn-wrapper input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}

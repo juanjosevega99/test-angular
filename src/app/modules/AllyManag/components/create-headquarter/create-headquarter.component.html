@@ -34,7 +34,7 @@
                                 {{x}}
                             </option>
                         </select>
-                        <input *ngIf="otherLocationInput" class="col-md-9 col-form-label mr-2 form-control "
+                        <input *ngIf="otherLocationInput" class="col-md-9 col-form-label mr-2 form-control"
                             #otherLocation="ngModel" (keyup.enter)="addLocation(additem.value)" #additem
                             [(ngModel)]="preHeadquarters.location"
                             [ngClass]="{'is-invalid': (!otherLocation.valid && otherLocation.touched ),'is-valid':(otherLocation.valid) }"
@@ -54,7 +54,7 @@
 
                         <div *ngIf="otherbuttonadd" class="input-group-append">
                             <span class="input-group-text" (click)="handleBoxLocation()">
-                                otro
+                                Otro
                             </span>
                         </div>
 
@@ -197,7 +197,6 @@
                             <img src={{service.img}} height="30px" width="30px">
                             {{service.name}}
                         </label>
-                        <!-- [(ngModel)]="preHeadquarters.services[i]  name="services" [value]="service"" -->
                         <input class="form-check-input" type="checkbox" [checked]="service.select"
                             (change)="selectedService($event,i)" [value]="service.name">
                     </div>
@@ -213,26 +212,17 @@
                             <label>
                                 <img src={{x.img}} height="30px" width="30px">
                             </label>
-                            <!-- [disabled]="[disabled]="!preHeadquarters['services'][position].checked"" -->
-                            <input class="reserva form-control" type="text" min="0" placeholder="$2500" (change)="writeCost($event,position)"
-                            name="cost" #cost="ngModel" pattern="[0-9]{1,5}" required [(ngModel)]="preHeadquarters.cost"
-                            [ngClass]="{'is-invalid': (!cost.valid && cost.touched || cost.errors?.pattern ),'is-valid':(cost.valid) }"
-                            required>
+                            <input class="reserva form-control" type="text" min="0" placeholder="$2500"
+                                (change)="writeCost($event,position)" name="cost" #cost="ngModel" pattern="[0-9]{1,5}"
+                                required [(ngModel)]="preHeadquarters.cost"
+                                [ngClass]="{'is-invalid': (!cost.valid && cost.touched || cost.errors?.pattern ),'is-valid':(cost.valid) }"
+                                required>
                         </div>
 
                         <div *ngIf="cost.errors?.required" class="invalid-feedback">*Este campo es requerido
                         </div>
                         <div *ngIf="cost.errors?.pattern" class="invalid-feedback">*Sólo carácteres numéricos</div>
                         <div class="valid-feedback">Ok!</div>
-
-                        <!-- <input class="form-control" type="text" min="0" placeholder="Piso" name="floorHq" #floorHq="ngModel"
-                        pattern="[0-9]{1,3}" required [(ngModel)]="preHeadquarters.floor"
-                        [ngClass]="{'is-invalid': (!floorHq.valid && floorHq.touched || floorHq.errors?.pattern ),'is-valid':(floorHq.valid) }">
-                    <div *ngIf="floorHq.errors?.required" class="invalid-feedback">*Este campo es requerido
-                    </div>
-                    <div *ngIf="floorHq.errors?.pattern" class="invalid-feedback">*Sólo carácteres numéricos, máximo 3
-                        carácteres</div>
-                    <div class="valid-feedback">Ok!</div> -->
                     </div>
                 </div>
             </div>
@@ -254,26 +244,20 @@
                             <img src='assets/icons/info.png' height="25px" width="25px">
                             otro
                         </label>
-                        <input *ngIf="othersServiceInput" class="col-md-9 col-form-label mr-2 form-control"
-                            [(ngModel)]="other" name="other" required>
-                        <input *ngIf="othersServiceInput" type="file" (change)="selectImg($event)" >
-                        <!-- <button class="btn btn-outline-primary" >imgen</button>  -->
-                        <button *ngIf="othersServiceInput" class="btn btn-outline-primary"
-                            (click)="addNewServiceadd(other)">
-                            Añadir</button>
+                        <div *ngIf="othersServiceInput">
+                            <input class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other"
+                                required>
+                            <div class="row">
+                                <div class="upload-btn-wrapper">
+                                    <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
+                                    <input type="file" (change)="selectImg($event)">
+                                </div>
+                                <button class="btn btn-outline-primary"
+                                    (click)="addNewServiceadd(other)">Añadir</button>
+                            </div>
+                        </div>
                     </a>
                 </div>
-
-
-                <!--,{name:'otro',  img: 'assets/icons/other.svg' ,select:false }   
-                   <input *ngIf="otherLocationInput" class="col-md-9 col-form-label mr-2 form-control "
-                [(ngModel)]="preHeadquarters.location" required type="text" name="otherLocation">
-
-                <div *ngIf="otherbuttonadd" class="input-group-append">
-                    <span class="input-group-text" (click)="handleBoxLocation()">
-                        otro
-                    </span>
-                </div> -->
 
             </div>
 

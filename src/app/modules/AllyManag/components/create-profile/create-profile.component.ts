@@ -3,57 +3,55 @@ import { NgForm } from '@angular/forms';
 import { SwallServicesService } from 'src/app/services/swall-services.service';
 
 @Component({
-  selector: 'app-create-dish',
-  templateUrl: './create-dish.component.html',
-  styleUrls: ['./create-dish.component.scss']
+  selector: 'app-create-profile',
+  templateUrl: './create-profile.component.html',
+  styleUrls: ['./create-profile.component.scss']
 })
-export class CreateDishComponent implements OnInit {
+export class CreateProfileComponent implements OnInit {
 
-  //Object to save the dates of the form
-  preDish: Object = {
-    state: [],
-   /*  creationDate: null, */
-   /*  modificationDate: null, */
-    numberOfModifications: null,
-    nameMealsCategories: null,
-    reference: null,
-    name: null,
-    price: null,
-    imageDishe: null,
-    description: null,
-    preparationTime: null
+  preProfile: Object = {
+    state:[],
+    entryDate:null,
+    modificationDate:null,
+    numberOfModifications:0,
+    nameAllie:null,
+    nameHeadquarter:null,
+    nameCharge:null,
+    userCode:null,
+    permis:null,
+    identification:null,
+    name:null,
+    email:null,
+    photo:null
   }
+
+  //variables for categories
+  arrayCategorySelect: boolean = true;
+  otherCategoryInput: boolean = false;
+  addcategoryButton: boolean = true;
+  selectAgainarray: boolean = false;
+  newCategory: String;
+  Categories: String[] = [];
+
+  //variable for the state
+  State: any[] = [];
 
   //variables for tick
   date:String;
   times:String;
   today:Date;
 
-  //variables for categories
-  Categories: String[] = [];
-  arrayCategorySelect: boolean = true;
-  otherCategoryInput: boolean = false;
-  addcategoryButton: boolean = true;
-  selectAgainarray: boolean = false;
-  newCategory: String;
 
-  State: any[] = [];
-
-  time: string[] = [];
-
-  constructor(private swal: SwallServicesService) {
-    this.Categories = ["Boxes", "Combos", "Postes"]
+  constructor(private swal: SwallServicesService) { 
+    this.Categories=["cajero","","","",""]
     this.State = [{name:'Activo',selected: true}, {name:'Inactivo',selected:false}, {name:'Eliminar',selected:false}]
-    this.time = ['segundos','minutos','horas']
   }
 
   ngOnInit() {
     setInterval( ()=>this.tick(), 1000 );
   }
-
-
-  //Method for showing new view in the categories field
-  handleBoxCategories(): boolean {
+   //Method for showing new view in the categories field
+   handleBoxCategories(): boolean {
     if (this.addcategoryButton) {
       return this.addcategoryButton = false,
         this.otherCategoryInput = true,
@@ -67,38 +65,21 @@ export class CreateDishComponent implements OnInit {
     }
   }
 
-  //Method for add new category
-  addCategory(name: String) {
-    this.newCategory = name.toLowerCase();
-    this.Categories.push(name.toLocaleLowerCase())
-  }
-
- //Method for photo of the dish
- onPhotoSelected($event) {
-  let input = $event.target;
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function (e: any) {
-      $('#photo')
-        .attr('src', e.target.result)
-    };
-
-   reader.readAsDataURL(input.files[0]);
-/*    this.preDish['imageDishe'] 
-    console.log(input.files[0].name); */
-    
-  }
-}
-
-//Metod for selecting the state
+  //Metod for selecting the state
 selectedState(event){
   const checked = event.target.checked;
   const value = event.target.value;
 
   event.target.value = value;
-  this.preDish['state'] = { value, checked }
+  this.preProfile['state'] = { value, checked }
 }
+
+  //Method for add new profile
+  addCategory(name: String) {
+    this.newCategory = name.toLowerCase();
+    this.Categories.push(name.toLocaleLowerCase())
+  }
+
 
 //Metod for the admission date
 tick(): void{
@@ -108,8 +89,8 @@ tick(): void{
   /* this.preDish['creationDate'] = this.today */
 }
 
-//save new dish
-saveDish(shape: NgForm) {
+//save new profile
+saveProfile(shape: NgForm) {
   console.log("enviando algo");
   console.log(shape);
   console.log(shape.value);
@@ -119,6 +100,5 @@ saveDish(shape: NgForm) {
   
 }
 
-  }
 
-
+}

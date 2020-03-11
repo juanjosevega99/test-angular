@@ -51,6 +51,9 @@ import { CreateHeadquarterComponent } from './modules/AllyManag/components/creat
 import {NgxPrintModule} from 'ngx-print';
 import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
 import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
+import { AccompanimentsComponent } from './modules/AllyManag/components/accompaniments/accompaniments.component';
+import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
+import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
 
 
 @NgModule({
@@ -89,7 +92,10 @@ import { CreateDishComponent } from './modules/AllyManag/components/create-dish/
     HeadquartersOptionsComponent,
     CreateHeadquarterComponent,
     EditMenuComponent,
-    CreateDishComponent
+    CreateDishComponent,
+    AccompanimentsComponent,
+    ProfileComponent,
+    CreateProfileComponent
   ],
   imports: [
     HttpClientModule,
