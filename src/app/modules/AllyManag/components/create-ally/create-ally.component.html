@@ -56,7 +56,7 @@
                                         <div class="col-8">
                                                 <div class="row margin-left2">
                                                         <input class="form-control " type="text" [value]="color"
-                                                                formControlName="color">
+                                                                >
 
                                                         <input type="color" (change)="getColour($event)">
                                                 </div>
@@ -71,15 +71,12 @@
                                                                 formControlName="idTypeOfEstablishment">
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let category of alliesCategories"
-                                                                        [value]="category.id" id="category.id"
-                                                                        data-icon="">
+                                                                        [value]="category.id" id="category.id">
                                                                         {{category.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
-                                                                type="text"
-                                                                (keyup.enter)="addEstablishment(additem.value)" #additem
-                                                                formControlName="nameTypeOfEstablishment">
+                                                                type="text" formControlName="nameTypeOfEstablishment">
 
                                                         <button *ngIf="otherEstablishmentInput"
                                                                 class="btn1 btn btn-outline-primary" type="button"
@@ -110,20 +107,36 @@
                                         </div>
                                 </div>
                                 <div class="form-group row">
-                                        <label class="col-3 col-form-label">Categoría de comida</label> 
+                                        <label class="col-3 col-form-label">Categoría de comida</label>
                                         <div class="col-8">
-                                                <div class="row  margin-left2 "> <!--To do-->
-                                                        <select *ngIf="otherCatSelect" 
-                                                                class="browser-default custom-select selectSize mr-2">
+                                                <div class="row  margin-left2 ">
+                                                        <select *ngIf="otherMealSelect"
+                                                                class="browser-default custom-select selectSize mr-2"
+                                                                formControlName="idMealsCategories">
                                                                 <option selected>---------------------</option>
-                                                                <option *ngFor="let time of Categoria" [value]="time">
-                                                                        {{time}}
+                                                                <option *ngFor="let mealCategory of mealsCategories"
+                                                                        [value]="mealCategory.id">
+                                                                        {{mealCategory.name}}
                                                                 </option>
                                                         </select>
-                                                        <input *ngIf="otherCatInput" class="selectSize mr-2" type="text"
-                                                                name="otherCat">
-                                                        <button (click)=" handleBoxCategory()"
-                                                                class="btn1 btn btn-outline-primary"> Otro </button>
+                                                        <input *ngIf="otherMealInput" class="selectSize mr-2"
+                                                                type="text" formControlName="nameMealsCategories">
+                                                        <button *ngIf="otherMealInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="changeStateToSelectMeal()"> Cancelar
+                                                        </button>
+                                                        <button *ngIf="otherMealInput"
+                                                                class="btn1 btn btn-outline-primary" type="button"
+                                                                (click)="addMeal()"> Guardar
+                                                        </button>
+                                                        <button *ngIf="!otherMealInput" (click)=" handleBoxMeal()"
+                                                                type="button" class="btn1 btn btn-outline-primary">
+                                                                Otro
+                                                        </button>
+                                                        <button *ngIf="!otherMealInput" (click)=" deleteMealCategory()"
+                                                                type="button" class="btn1 btn btn-outline-primary">
+                                                                Borrar
+                                                        </button>
 
                                                 </div>
                                         </div>
@@ -131,8 +144,7 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " id="exampleFormControlTextarea2"
-                                                        rows="2">
+                                                <textarea class="form-control " formControlName="description">
                                                 </textarea>
                                         </div>
                                 </div>
@@ -159,32 +171,38 @@
                                                         </div>
 
                                                 </div>
-                                                <div class="row my-3 form-group ">
+                                                <div *ngFor="let day of days; let i = index" class="row my-3 form-group ">
                                                         <div class="col">
                                                                 <div class="row ">
                                                                         <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[0]}} </label>
+                                                                                <label #dayl>{{day}}</label>
                                                                         </div>
                                                                         <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
+                                                                                <select class=" col-sm-11 browser-default custom-select form-control "
+                                                                                        #from
+                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
                                                                                         <option *ngFor="let time of hours"
                                                                                                 [value]="time">
-                                                                                                {{time}}</option>
+                                                                                                {{time}}
+                                                                                        </option>
                                                                                 </select>
                                                                         </div>
                                                                         <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
+                                                                                 <!-- paramater use by function gerAttentionScheduleLunes -->
+                                                                                <select class=" col-sm-11 browser-default custom-select form-control"
+                                                                                        #to
+                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
                                                                                         <option *ngFor="let time of hours"
                                                                                                 [value]="time">
-                                                                                                {{time}}</option>
+                                                                                                {{time}}
+
+                                                                                        </option>
                                                                                 </select>
                                                                         </div>
 
@@ -192,222 +210,19 @@
 
                                                         </div>
                                                 </div>
-                                                <div class="row my-3 form-group ">
-                                                        <div class="col">
-                                                                <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[1]}} </label>
-                                                                        </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-                                                                        <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-
-                                                                </div>
-
-                                                        </div>
-                                                </div>
-                                                <div class="row my-3 form-group ">
-                                                        <div class="col">
-                                                                <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[2]}} </label>
-                                                                        </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-                                                                        <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-
-                                                                </div>
-
-                                                        </div>
-                                                </div>
-                                                <div class="row my-3 form-group ">
-                                                        <div class="col">
-                                                                <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[3]}} </label>
-                                                                        </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-                                                                        <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-
-                                                                </div>
-
-                                                        </div>
-                                                </div>
-                                                <div class="row my-3 form-group ">
-                                                        <div class="col">
-                                                                <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[4]}} </label>
-                                                                        </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-                                                                        <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-
-                                                                </div>
-
-                                                        </div>
-                                                </div>
-                                                <div class="row my-3 form-group ">
-                                                        <div class="col">
-                                                                <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[5]}} </label>
-                                                                        </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-                                                                        <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-
-                                                                </div>
-
-                                                        </div>
-                                                </div>
-                                                <div class="row my-3 form-group ">
-                                                        <div class="col">
-                                                                <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
-                                                                                <label> {{days[6]}} </label>
-                                                                        </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control ">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-                                                                        <div>
-                                                                                <select
-                                                                                        class=" col-sm-11 browser-default custom-select form-control">
-                                                                                        <option selected>
-                                                                                                ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}</option>
-                                                                                </select>
-                                                                        </div>
-
-                                                                </div>
-
-                                                        </div>
-                                                </div>
-
-
                                         </div>
 
                                 </div>
                                 <div class="row form-group ">
-                                        <div class="col-3 mt-5 "><label class="text-center">Fotos del
-                                                        establecimiento</label>
+                                        <div class="col-3 mt-5 ">
+                                                <label class="text-center">
+                                                        Fotos del establecimiento
+                                                </label>
                                         </div>
-                                        <div class="col align-items-center">
-                                                <div
-                                                        class="d-flex flex-column justify-content-center align-items-center mt-3">
-
-                                                        <div
-                                                                class="d-flex flex-column justify-content-center align-items-center ">
-
+                                        <div class="  col align-items-center">
+                                                        <div class="d-flex flex-column justify-content-center align-items-center ">
                                                                 <div class="d-flex flex-column ">
-                                                                        <ng-image-slider *ngIf="imagesUploaded.length>0"
+                                                                        <ng-image-slider *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
                                                                                 style="width: 230px; height: 120px; "
                                                                                 [imageSize]="imageSize"
                                                                                 [images]="imagesUploaded" #nav>
@@ -415,23 +230,21 @@
 
                                                                         <P *ngIf="imagesUploaded.length==0"
                                                                                 style="color: crimson; ">
-                                                                                No hay imagenes subidas</P>
+                                                                                No hay imagenes subidas
+                                                                        </P>
 
                                                                         <div class="upload-btn-wrapper mt-3  ">
-                                                                                <button
-                                                                                        class=" container  btn btn-outline-primary ">Adjuntar
-                                                                                        archivos
-                                                                                        {{contImage}} </button>
+                                                                                <button class=" container  btn btn-outline-primary ">
+                                                                                        Adjuntar archivos {{contImage}} 
+                                                                                </button>
                                                                                 <input type="file" name="photo"
-                                                                                        (change)="onImagesSelected($event)" />
+                                                                                        (change)="onImagesSelected($event)"
+                                                                                />
                                                                         </div>
 
                                                                 </div>
 
                                                         </div>
-
-                                                </div>
-
                                         </div>
                                 </div>
 
@@ -445,7 +258,8 @@
                                                 Guardar
                                         </button>
                                         <button class="btn btn-outline-primary" type="button"
-                                                (click)="cancelChanges()">Cancelar
+                                                (click)="cancelChanges()">
+                                                Cancelar
                                         </button>
 
                                 </div>

@@ -4,6 +4,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireStorageModule } from "@angular/fire/storage";
 import { environment } from "../environments/environment";
 import { LoginPageComponent } from "./login/login-page/login-page.component";
 import { HeaderComponent } from "./header/header.component";
@@ -55,6 +56,8 @@ import { AccompanimentsComponent } from './modules/AllyManag/components/accompan
 import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
 import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
 
+import { LoadImagesService } from "./services/providers/load-images.service";
+import { ValidationsLoadImagesDirective } from './directives/validations-load-images.directive';
 
 @NgModule({
   declarations: [
@@ -95,7 +98,8 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
     CreateDishComponent,
     AccompanimentsComponent,
     ProfileComponent,
-    CreateProfileComponent
+    CreateProfileComponent,
+    ValidationsLoadImagesDirective
   ],
   imports: [
     HttpClientModule,
@@ -108,6 +112,7 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
     NgxSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
+    AngularFireStorageModule,
     NgbModule,
     DpDatePickerModule,
     BrowserModule,
@@ -117,7 +122,9 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
     ReactiveFormsModule,
     NgxPrintModule
   ],
-  providers: [],
+  providers: [
+    LoadImagesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

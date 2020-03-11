@@ -13,7 +13,7 @@ export class AttentionScheduleService {
 
   postAttentionSchedule(attentionschedule): Observable<AttentionSchedule> {
     return this.httpclient.post<AttentionSchedule>(
-      environment.UrlBase + "attentionschedules",
+      environment.UrlBase + "attention-schedule",
       attentionschedule
     );
   }
@@ -33,12 +33,12 @@ export class AttentionScheduleService {
 
   getAttentionSchedules(): Observable<any[]> {
     return this.httpclient
-      .get<AttentionSchedule[]>(environment.UrlBase + "attentionschedules")
+      .get<AttentionSchedule[]>(environment.UrlBase + "attention-schedule")
       .pipe(
         map((attentionschedules: any[]) =>
           attentionschedules.map(attentionschedules => {
             let obj = {
-              id: attentionschedules.id,
+              id: attentionschedules._id,
               attentionSchedule: attentionschedules.attentionSchedule
             };
             return obj;
