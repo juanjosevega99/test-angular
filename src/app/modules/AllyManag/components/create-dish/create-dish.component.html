@@ -1,6 +1,6 @@
 <div class="compenetsstyle">
 
-    <form ngNativeValidate class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm" novalidate>
+    <form novalidate="" class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm">
 
 
         <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
@@ -8,28 +8,31 @@
         </a>
 
 
-        <section class="col-6" style="background-color:coral;">
+        <section class="col-6">
 
             <div class="form-group row" style="align-items: center;">
                 <label class="col-md-5 col-form-label">Estado</label>
-                <div class="col-md-7 row" style="justify-content: center;">
+                <div class="col-md-7">
 
-                    <div class="radio radio-success m-2">
-                        <input type="radio" name="radio2" id="radio3" value="option1" checked>
+                    <div class="radio radio-success m-2 form-check form-check-inline">
+                        <input class="form-check-input " type="radio" name="radio2" id="radio3" [checked]="State.select"
+                            (change)="selectedState($event)" [value]="State[0].name">
                         <label for="radio3">
                             Activo
                         </label>
                     </div>
 
-                    <div class="radio radio-danger m-2">
-                        <input type="radio" name="radio2" id="radio4" value="option2">
+                    <div class="radio radio-danger m-2 form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="radio2" id="radio4" [checked]="State.select"
+                            (change)="selectedState($event)" [value]="State[1].name">
                         <label for="radio4">
                             Inactivo
                         </label>
                     </div>
 
-                    <div class="radio m-2">
-                        <input type="radio" name="radio2" id="radio5" value="option3">
+                    <div class="radio m-2 form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="radio2" id="radio5" [checked]="State.select"
+                            (change)="selectedState($event)" [value]="State[2].name" disabled>
                         <label for="radio5">
                             Eliminar
                         </label>
@@ -39,19 +42,35 @@
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de ingreso</label>
+                <div class="col-md-7">
+                    <label class="dt">
+                        <p class="text-center">
+                            {{date}}
+                        </p>
+                    </label>
+
+                    <label class="dt" style="margin-right: 10px;">
+                        <p class="text-center">
+                            {{times}}
+                        </p>
+                    </label>
+
+                </div>
 
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de modificación</label>
                 <div class="col-md-7">
-                    <input [disabled] class="form-control" type="text" placeholder="Fecha de modificación"
-                        name="modificationDAte" [(ngModel)]="preDish.modificationDAte">
+                    <label>---</label>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Número de modificaciones</label>
+                <div class="col-md-7">
+                    <label>0</label>
+                </div>
 
             </div>
 
@@ -61,15 +80,18 @@
                     <div class="input-group">
 
                         <select *ngIf="arrayCategorySelect" class="form-control" name="dishCategory"
-                            [(ngModel)]="preDish.categories">
-                            <option selected> Seleccionar... </option>
+                            #nameMealsCategories="ngModel" required
+                            [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid) }"
+                            [(ngModel)]="preDish.nameMealsCategories">
+                            <!-- <option selected> Seleccionar... </option> -->
                             <option *ngFor="let name of Categories">
                                 {{name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría"
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="preDish.categories"
+                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #otherCat="ngModel"
+                            [ngClass]="{'is-invalid': (!otherCat.valid && otherCat.touched ),'is-valid':(otherCat.valid)}"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="preDish.nameMealsCategories"
                             type="text" name="otherCategory" (keyup.enter)="addCategory(additem.value)" #additem>
 
                         <div *ngIf="selectAgainarray" class="input-group-append">
@@ -90,6 +112,9 @@
                             </span>
                         </div>
 
+                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <div class="valid-feedback">Ok!</div>
+
                     </div>
                 </div>
             </div>
@@ -97,32 +122,41 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Referencia</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Referencia" name="reference"
-                        [(ngModel)]="preDish.reference" required>
+                    <input class="form-control" type="text" placeholder="Referencia" name="reference" #ref="ngModel"
+                        [(ngModel)]="preDish.reference" required pattern="[0-9a-zA-Z]{8}"
+                        [ngClass]="{'is-invalid': (!ref.valid && ref.touched) || ref.errors?.pattern ,'is-valid':(ref.valid) }">
+                    <div *ngIf="ref.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="ref.errors?.pattern" class="invalid-feedback">*La referencia debe ser de 8 carácteres
+                    </div>
+                    <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Nombre del plato</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Nombre del plato" name="reference"
-                        [(ngModel)]="preDish.reference" required>
+                    <input class="form-control" type="text" placeholder="Nombre del plato" name="nameDish"
+                        #name="ngModel"
+                        [ngClass]="{'is-invalid': (!name.valid && name.touched ),'is-valid':(name.valid) }"
+                        [(ngModel)]="preDish.name" required minlength="2">
+
+                    <div class="invalid-feedback">*Este campo es requerido </div>
+                    <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
-
-            <div class="text-center" style="margin-top: 4rem;">
-                <button type="button" class="btn btn-outline-primary btn-lg">Acompañamiento SIN costo adicional</button>
-            </div>
-
         </section>
 
-        <section class="col-5" style="background-color: chartreuse;">
+        <section class="col-5">
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Precio</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Precio" name="price"
+                    <input class="form-control" type="text" placeholder="Precio" name="price" pattern="[0-9]{0,20}"
+                        #price="ngModel" required
+                        [ngClass]="{'is-invalid': (!price.valid && price.touched) || price.errors?.pattern ,'is-valid':(price.valid)}"
                         [(ngModel)]="preDish.price">
+                    <div *ngIf=" price.errors?.required" class="invalid-feedback">*Este campo es requerido</div>
+                    <div *ngIf=" price.errors?.pattern" class="invalid-feedback">*Sólo ingresar carácteres numéricos</div>
                 </div>
             </div>
 
@@ -131,11 +165,11 @@
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
-                        <div class="photo"> <img id="photo" width="80px" height="80px">
+                        <div class="photo"> <img id="photo" width="100px" height="100px">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
-                            <input type="file" name="photo" (change)="onPhotoSelected($event)"/>
+                            <input type="file" name="photo" (change)="onPhotoSelected($event)" />
                         </div>
                     </div>
 
@@ -146,7 +180,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Descripción del plato</label>
                 <div class="col-md-7">
-                    <textarea class="form-control " name="dishDescription" [(ngModel)]="preDish.dishDescription"
+                    <textarea class="form-control " name="dishDescription" [(ngModel)]="preDish.description" #description="ngModel"
+                    
                         id="exampleFormControlTextarea2" rows="2"></textarea>
                 </div>
             </div>
@@ -155,27 +190,43 @@
                 <label class="col-md-5 col-form-label">Tiempo de preparación</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <input type="number" min="0" placeholder="Tiempo de preparación" value="0"
-                            class="form-control" [(ngModel)]="preDish.preparationTime" name="preparationTime">
+                        <input type="number" min="0" placeholder="Tiempo de preparación" value="0" class="form-control"
+                            [(ngModel)]="preDish.preparationTime" name="preparationTime">
                         <div class="input-group-append">
                             <select class="input-group-text">
-                                <option *ngFor="let time of time" >
-                                   {{time}}
+                                <option *ngFor="let time of time">
+                                    {{time}}
                                 </option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="text-center">
-                <button type="button" class="btn btn-outline-primary btn-lg">Acompañamiento CON costo adicional</button>
-            </div>
-
         </section>
 
+        <section class="col-12 d-flex" style="justify-content: center;">
+            
+            
+            <div style="padding: 1rem;">
+                <a [routerLink]="['/main','accompaniments']" class="btn btn-outline-primary btn-lg" >Acompañamiento adicional</a>
+            </div>
+        
+        </section>
 
+        <section class="col-12 d-flex" style="justify-content: center;">
+           
+            <button [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
+
+        </section>
     </form>
+
+    <pre>
+        {{ preDish | json }}
+    </pre>
+
+
+
+
 </div>
 
 <!-- <script type="text/javascript">

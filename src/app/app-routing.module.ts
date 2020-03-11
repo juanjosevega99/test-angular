@@ -32,6 +32,10 @@ import { CreateHeadquarterComponent } from './modules/AllyManag/components/creat
 import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/create-ally.component';
 import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
 import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
+import { AccompanimentsComponent } from './modules/AllyManag/components/accompaniments/accompaniments.component';
+import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
+import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
+
 
 const routes: Routes = [
   {
@@ -68,6 +72,10 @@ const routes: Routes = [
       { path: "createHeadquarter", component: CreateHeadquarterComponent },
       { path: "editmenu", component: EditMenuComponent },
       { path: "createDish", component: CreateDishComponent },
+      { path : "accompaniments", component: AccompanimentsComponent},
+      { path : "profiles", component: ProfileComponent},
+      { path : "createProfile", component: CreateProfileComponent},
+      
 
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 
