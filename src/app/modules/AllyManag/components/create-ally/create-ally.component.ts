@@ -218,7 +218,7 @@ export class CreateAllyComponent implements OnInit {
           this.imagesAllies.push(newField)
         // }
       }
-      console.log('antes',this.imagesAllies); //
+      console.log(this.imagesAllies); //
 
       //   this.contImage = this.imagesAllies.length;
 
@@ -290,8 +290,6 @@ export class CreateAllyComponent implements OnInit {
       alert('allie added')
       // this.allieService.getAllies()
     })
-    console.log('despues',this.imagesAllies); //
-
     this.loadImagesService.loadImagesFirebase(this.imagesAllies)
   }
   cancelChanges() {

@@ -20,14 +20,14 @@ export class AttentionScheduleService {
 
   putAttentionSchedule(attentionschedule): Observable<AttentionSchedule> {
     return this.httpclient.put<AttentionSchedule>(
-      environment.UrlBase + "attentionschedules" + attentionschedule.id,
+      environment.UrlBase + "attention-schedules" + attentionschedule.id,
       attentionschedule
     );
   }
 
   deleteAttentionSchedule(id): Observable<{}> {
     return this.httpclient.delete(
-      environment.UrlBase + "attentionschedules/" + id
+      environment.UrlBase + "attention-schedules/" + id
     );
   }
 
