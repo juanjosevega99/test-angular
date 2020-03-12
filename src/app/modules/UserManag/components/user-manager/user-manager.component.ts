@@ -82,20 +82,22 @@ export class UserManagerComponent implements OnInit {
 
   ]
 
-  newdateArray: OrderByUser[] = this.users;
+  usergetting: OrderByUser[] = [];
+  //newdateArray: OrderByUser[] = this.users;
+  newdateArray = this.usergetting;
   // {
-    // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
-    // headquart: string, usability: string, quantity: string, selected: boolean
+  // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
+  // headquart: string, usability: string, quantity: string, selected: boolean
   // }[] = this.users;
-// 
+  // 
   filteredArray: OrderByUser[] = [];
   //  {
-    // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
-    // headquart: string, usability: string, quantity: string, selected: boolean
+  // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
+  // headquart: string, usability: string, quantity: string, selected: boolean
   // }[] = [];
 
   userSelected: {}[] = [];
-  usergetting: OrderByUser[] = [];
+
 
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
@@ -267,7 +269,7 @@ export class UserManagerComponent implements OnInit {
 
       this.newdateArray = [];
 
-      this.users.forEach(user => {
+      this.usergetting.forEach(user => {
 
         const userdate = new Date(user.registerDate)
 
@@ -294,7 +296,7 @@ export class UserManagerComponent implements OnInit {
   clear() {
     this.fromDate = null;
     this.toDate = null;
-    this.newdateArray = this.users;
+    this.newdateArray = this.usergetting;
     this.filteredArray = [];
   }
 
@@ -334,12 +336,15 @@ export class UserManagerComponent implements OnInit {
     } else {
 
       if (termino) {
+
         termino = termino.toLowerCase();
 
         this.newdateArray = [];
         this.filteredArray = [];
 
-        this.users.forEach(user => {
+        this.usergetting.forEach(user => {
+
+          user[id] = user[id].toString();
 
           if (user[id].toLowerCase().indexOf(termino) >= 0) {
             this.newdateArray.push(user);
@@ -348,8 +353,9 @@ export class UserManagerComponent implements OnInit {
 
         });
 
+
       } else {
-        this.newdateArray = this.users;
+        this.newdateArray = this.usergetting;
         this.filteredArray = [];
       }
     }
@@ -358,22 +364,40 @@ export class UserManagerComponent implements OnInit {
 
   searchbyterm(termino: string) {
 
-    termino = termino.toLowerCase();
+    if (termino) {
+      termino = termino.toLowerCase();
+      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
-    const aux = this.newdateArray
+      if (this.filteredArray.length){
 
-    var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+        this.newdateArray = this.filteredArray.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+  
+        });
+      }else{
 
-    this.newdateArray = aux.filter(function (item) {
-      //We test each element of the object to see if one string matches the regexp.
-      return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-        myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+        this.newdateArray = this.usergetting.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+  
+        });
 
-    });
+      }
+
+    } else {
+      if (this.filteredArray.length){
+        this.newdateArray = this.filteredArray;
+      }else{
+        this.newdateArray = this.usergetting;
+      }
+    }
 
   }
 
-  convertDate(date: Date) : string {
+  convertDate(date: Date): string {
     const d = new Date(date);
     const n = d.toISOString().split("T")[0];
     return n;
