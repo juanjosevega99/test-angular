@@ -1,12 +1,12 @@
 export class OrderByUser{
     id?:string;
     idUser?:String;
-    registerDate?:Date;
+    registerDate?:string;
     name?:string;
     lastname?:string;
     email?:string;
     phone?:string;
-    birthday?:Date;
+    birthday?:string;
     gender?:string;
     password?:string;
     idAllie?:string;
@@ -15,4 +15,5 @@ export class OrderByUser{
     nameHeadquarter?:string;
     usability?:number;
     purchaseAmount?:number;
+    selected?:boolean = false;
 }

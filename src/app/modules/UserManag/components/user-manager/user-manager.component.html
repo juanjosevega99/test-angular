@@ -84,16 +84,16 @@
       </thead>
       <tbody class="mt-5">
         <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
-          <td>{{user.date}}</td>
+          <td>{{user.registerDate}}</td>
           <td>{{user.name}}</td>
           <td>{{user.email}}</td>
-          <td>{{user.cellphone}}</td>
+          <td>{{user.phone}}</td>
           <td>{{user.birthday}}</td>
           <td>{{user.gender}}</td>
-          <td>{{user.establishment}}</td>
-          <td>{{user.headquart}}</td>
+          <td>{{user.nameAllie}}</td>
+          <td>{{user.nameHeadquarter}}</td>
           <td>{{user.usability}}</td>
-          <td>{{user.quantity}}</td>
+          <td>{{user.purchaseAmount}}</td>
           <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
         </tr>
       </tbody>
@@ -105,7 +105,8 @@
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
         cupones</button>
-      <button type="button" class="btn " style="background-color: #f4b081">Enviar promociones</button>
+      <button type="button" class="btn " style="background-color: #f4b081" (click)="sendPromos()">Enviar
+        promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btn btn-success mr-5" (click)="datafor_Excel()" data-toggle="modal"
@@ -134,40 +135,40 @@
         </div>
         <div *ngIf="typepdf" class="modal-header" style="background-color: #f71f20;">
           <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar PDF</h5>
-          <button type="button" class="btn btn-outline-light ml-3"(click)="generatePdf()"> Descargar</button>
+          <button type="button" class="btn btn-outline-light ml-3" (click)="generatePdf()"> Descargar</button>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body" id="table-content">
-          <div id="table-print" >
+          <div id="table-print">
 
             <table class="table table-responsive" id="excel-table">
               <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Date</th>
-                <th class="text-center">name</th>
-                <th class="text-center">email</th>
-                <th class="text-center">cellphone</th>
-                <th class="text-center">birthDate</th>
-                <th class="text-center">gender</th>
-                <th class="text-center">establishment</th>
-                <th class="text-center">headquart</th>
-                <th class="text-center">usability</th>
-                <th class="text-center">quantity</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Coreo</th>
+                <th class="text-center">Celular</th>
+                <th class="text-center">F.Nacimiento</th>
+                <th class="text-center">Genero</th>
+                <th class="text-center">Establecimiento</th>
+                <th class="text-center">Sede</th>
+                <th class="text-center">Usabilidad</th>
+                <th class="text-center">Monto Compra</th>
               </tr>
               <tr *ngFor="let user of userSelected; let i = index">
                 <td>{{i+1}}</td>
-                <td>{{user.date}}</td>
+                <td>{{user.registerDate}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.email}}</td>
-                <td>{{user.cellphone}}</td>
+                <td>{{user.phone}}</td>
                 <td>{{user.birthday}}</td>
                 <td>{{user.gender}}</td>
-                <td>{{user.establishment}}</td>
-                <td>{{user.headquart}}</td>
+                <td>{{user.nameAllie}}</td>
+                <td>{{user.nameHeadquarter}}</td>
                 <td>{{user.usability}}</td>
-                <td>{{user.quantity}}</td>
+                <td>{{user.purchaseAmount}}</td>
               </tr>
             </table>
           </div>

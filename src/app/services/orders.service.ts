@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { Orders } from "../models/Orders";
+import { Orders } from '../models/Orders';
 
 @Injectable({
   providedIn: "root"
@@ -31,7 +31,7 @@ export class OrdersService {
       map((orders: any[]) =>
         orders.map(orders => {
           let obj = {
-            id: orders.id,
+            id: orders._id,
             code: orders.code,
             idUser: orders.idUser,
             idAllies: orders.idAllies,
@@ -54,14 +54,12 @@ export class OrdersService {
     );
   }
 
-  getChargeById(id): Observable<any[]> {
-    return this.httpclient
-      .get<Orders[]>(environment.UrlBase + "orders/" + id)
-      .pipe(
+  getChargeById(id:string): Observable<Orders[]> {
+    return this.httpclient.get<Orders[]>(environment.UrlBase + "orders/" + id).pipe(
         map((orders: any[]) =>
           orders.map(orders => {
             let obj = {
-              id: orders.id,
+              id: orders._id,
               code: orders.code,
               idUser: orders.idUser,
               idAllies: orders.idAllies,
