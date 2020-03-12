@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SwallServicesService } from 'src/app/services/swall-services.service';
+
 /* import swal, { SweetAlert } from "./core"; */
 
 
@@ -10,10 +11,7 @@ import { SwallServicesService } from 'src/app/services/swall-services.service';
   selector: 'app-create-headquarter',
   templateUrl: './create-headquarter.component.html',
   styleUrls: ['./create-headquarter.component.scss'],
-  /* styles:[`
-    .ng-invalid.ng-touched:not(form) :{ border: 1px solid red}
-
-  `] */
+  
 })
 export class CreateHeadquarterComponent implements OnInit {
 

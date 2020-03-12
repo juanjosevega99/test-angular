@@ -130,7 +130,7 @@ export class CreateAllyComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    
   }
   getColour(event) {
     this.color = event.target.value
@@ -286,6 +286,7 @@ export class CreateAllyComponent implements OnInit {
     })
     this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)
     console.log(this.forma.value);
+    console.log('valor of nameEStblishment ',this.forma.controls['nameTypeOfEstablishment'].value)
     this.allieService.postAllie(this.forma.value).subscribe(message => {
       alert('allie added')
       // this.allieService.getAllies()

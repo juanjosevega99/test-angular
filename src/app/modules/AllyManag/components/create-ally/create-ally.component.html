@@ -68,14 +68,16 @@
                                                 <div class="row  margin-left2 ">
                                                         <select *ngIf="otherEstablishmentSelect"
                                                                 class="browser-default custom-select selectSize mr-2 text-capitalize"
-                                                                formControlName="idTypeOfEstablishment">
+                                                                formControlName="idTypeOfEstablishment"
+                                                                >
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let category of alliesCategories"
-                                                                        [value]="category.id" id="category.id">
+                                                                        [value]="category.id" >
                                                                         {{category.name}}
                                                                 </option>
                                                         </select>
                                                         <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
+                                                                id="nameTypeOfEstablishment"
                                                                 type="text" formControlName="nameTypeOfEstablishment">
 
                                                         <button *ngIf="otherEstablishmentInput"
