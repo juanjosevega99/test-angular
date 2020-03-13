@@ -55,21 +55,45 @@ export class CreateAllyComponent implements OnInit {
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
     private loadImagesService: LoadImagesService) {
-    this.forma = new FormGroup({
+    
+      this.forma = new FormGroup({
 
-      'name': new FormControl('', Validators.required),
-      'nit': new FormControl('', Validators.required),
-      'legalRepresentative': new FormControl('', Validators.required),
-      'documentNumber': new FormControl('', Validators.required),
-      'logo': new FormControl('', Validators.required),
-      'color': new FormControl('', Validators.required),
-      'idTypeOfEstablishment': new FormControl('', Validators.required),
+      'name': new FormControl('', [Validators.required,Validators.minLength(2),
+        // Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.0123456789'--()]{2,48}")
+      ], ),
+      'nit': new FormControl('', [Validators.required,
+        Validators.pattern("[0123456789,.'--]{8,20}")
+      
+      ]),
+      'legalRepresentative': new FormControl('', [Validators.required,
+        Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,64}")
+      
+      ]),
+      'documentNumber': new FormControl('', [Validators.required,
+        Validators.pattern("[0123456789,.'--]{8,20}")             
+      
+      ]),
+      'logo': new FormControl('', [Validators.required,
+      Validators.pattern("")
+      
+      ]),
+      'color': new FormControl('', [Validators.pattern("")
+      
+      ]),
+      'idTypeOfEstablishment': new FormControl('', [Validators.required,
+
+      ]),
       'nameTypeOfEstablishment': new FormControl(''),
-      'NumberOfLocations': new FormControl('', Validators.required),
-      'idMealsCategories': new FormControl('', [Validators.required, ]),
+      'NumberOfLocations': new FormControl('', [Validators.required]),
+      'idMealsCategories': new FormControl('', [Validators.required, 
+      ]),
       'nameMealsCategories': new FormControl(''),
-      'description': new FormControl('', [Validators.required, Validators.maxLength(15)]),
-      'idAttentionSchedule': new FormControl('', Validators.required),
+      'description': new FormControl('', [
+        Validators.maxLength(20)
+
+      ]),
+      'idAttentionSchedule': new FormControl('', [Validators.required, 
+      ]),
       'imagesAllies': new FormControl('')
 
     })

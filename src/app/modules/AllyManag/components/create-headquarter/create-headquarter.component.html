@@ -17,7 +17,8 @@
                         [ngClass]="{'is-invalid': (!nameHq.valid && nameHq.touched ),'is-valid':(nameHq.valid) }"
                         type="text" placeholder="Nombre de la sede" name="nameHq" [(ngModel)]="preHeadquarters.nameHq"
                         minlength="2" required #nameHq="ngModel">
-                    <div class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="nameHq.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="nameHq.errors?.minlength" class="invalid-feedback">* por lo menos 2 caracteres</div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
@@ -84,7 +85,7 @@
                         [ngClass]="{'is-invalid': (!floorHq.valid && floorHq.touched || floorHq.errors?.pattern ),'is-valid':(floorHq.valid) }">
                     <div *ngIf="floorHq.errors?.required" class="invalid-feedback">*Este campo es requerido
                     </div>
-                    <div *ngIf="floorHq.errors?.pattern" class="invalid-feedback">*Sólo carácteres numéricos, máximo 3
+                    <div *ngIf="floorHq.errors?.pattern" class="invalid-feedback">*Sólo caracteres numéricos, máximo 3
                         carácteres</div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
