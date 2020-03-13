@@ -15,6 +15,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
+import { FormGroup, FormControl } from '@angular/forms';
 
 
 
@@ -98,10 +99,25 @@ export class UserManagerComponent implements OnInit {
 
   userSelected: {}[] = [];
 
-
+  //variable para formatear los campos de la tabla
+  table: FormGroup;
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
     private userservice: UsersService, private orderservice: OrdersService) {
+
+  this.table = new FormGroup({
+    "date" : new FormControl(),
+    "name" : new FormControl(),
+    "email" : new FormControl(),
+    "phone" : new FormControl(),
+    "birthday" : new FormControl(),
+    "gender" : new FormControl(),
+    "nameAllie" : new FormControl(),
+    "nameHeadquarter" : new FormControl(),
+    "usability" : new FormControl(),
+    "purchaseAmount" : new FormControl(),
+    
+  })
 
     this.userservice.getUsers().subscribe(res => {
 
@@ -172,10 +188,7 @@ export class UserManagerComponent implements OnInit {
   //selected All items
   selectedAll(event) {
     const checked = event.target.checked;
-    this.newdateArray.forEach(item => item.selected = checked
-
-    )
-
+    this.newdateArray.forEach(item => item.selected = checked)
   }
 
   selectedOne(event, pos: number) {
@@ -200,6 +213,8 @@ export class UserManagerComponent implements OnInit {
   sendPromos() {
     this.selectforsend();
     console.log("users", this.usergetting);
+    console.log(this.table);
+    
 
   }
 
@@ -294,10 +309,18 @@ export class UserManagerComponent implements OnInit {
 
 
   clear() {
+
+    this.table.reset({
+      date:"",
+      name:""
+    });
+
     this.fromDate = null;
     this.toDate = null;
-    this.newdateArray = this.usergetting;
     this.filteredArray = [];
+    this.newdateArray = [];
+    this.newdateArray = this.usergetting;
+    this.newdateArray.forEach(item => item.selected = false)
   }
 
 
@@ -337,26 +360,48 @@ export class UserManagerComponent implements OnInit {
 
       if (termino) {
 
-        termino = termino.toLowerCase();
+        if (!this.filteredArray.length) {
 
-        this.newdateArray = [];
-        this.filteredArray = [];
+          termino = termino.toLowerCase();
 
-        this.usergetting.forEach(user => {
+          this.newdateArray = [];
+          this.filteredArray = [];
 
-          user[id] = user[id].toString();
+          this.usergetting.forEach(user => {
 
-          if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user);
-            this.filteredArray.push(user);
-          }
+            user[id] = user[id].toString();
 
-        });
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
+            }
+
+          });
+        }
+        else {
+
+          this.newdateArray = [];
+
+          this.filteredArray.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+
+            }
+
+          });
+
+        }
 
 
       } else {
-        this.newdateArray = this.usergetting;
-        this.filteredArray = [];
+        if (this.filteredArray.length) {
+          this.newdateArray = this.filteredArray;
+        } else {
+          this.newdateArray = this.usergetting;
+        }
       }
     }
   }
@@ -368,29 +413,35 @@ export class UserManagerComponent implements OnInit {
       termino = termino.toLowerCase();
       var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
-      if (this.filteredArray.length){
+      if (this.filteredArray.length) {
 
         this.newdateArray = this.filteredArray.filter(function (item) {
           //We test each element of the object to see if one string matches the regexp.
           return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
             myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-  
+
         });
-      }else{
+      } else {
 
         this.newdateArray = this.usergetting.filter(function (item) {
           //We test each element of the object to see if one string matches the regexp.
           return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
             myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-  
+
+        });
+        this.filteredArray = this.usergetting.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
         });
 
       }
 
     } else {
-      if (this.filteredArray.length){
+      if (this.filteredArray.length) {
         this.newdateArray = this.filteredArray;
-      }else{
+      } else {
         this.newdateArray = this.usergetting;
       }
     }

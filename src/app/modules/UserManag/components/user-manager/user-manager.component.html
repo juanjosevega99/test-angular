@@ -52,15 +52,15 @@
       #general (keyup)="searchbyterm(general.value)">
   </div>
 
-  <div class="tableFixHead">
+  <div class="tableFixHead" [formGroup] = "table">
     <table>
-
+    
       <thead>
         <tr>
           <th class="text-center">Fecha<input class="form-control" type="text" (keyup)="search(date.value, date.id)"
-              #date id="registerDate"></th>
+              #date id="registerDate" formControlName ="date"></th>
           <th class="text-center">Nombre<input class="form-control" type="text" (keyup)="search(name.value, name.id)"
-              #name id="name"></th>
+              #name id="name"  ></th>
           <th class="text-center">Correo<input class="form-control" type="text"
               (keyup)="search( email.value, email.id )" #email id="email"></th>
           <th class="text-center">Celular<input class="form-control" type="text" id="phone"
