@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
-import { SwallServicesService } from "../../../../services/swall-services.service";
 import { AttentionScheduleService } from "../../../../services/attention-schedule.service"
 import { AlliesService } from "../../../../services/allies.service";
 import { LoadImagesService } from "../../../../services/providers/load-images.service"
@@ -21,32 +20,10 @@ import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
 export class CreateAllyComponent implements OnInit {
   //news params
   forma: FormGroup;
-
-  // allies: object = {
-  //   name: null,
-  //   nit: null,
-  //   legalRepresentative: null,
-  //   documentNumber: null,
-  //   logo: null,
-  //   colour: null,
-  //   idTypeOfEstablishment: null,
-  //   NumberOfLocations: null,
-  //   idMealsCategories: null,
-  //   description: null,
-  //   idAttentionSchedule: [
-  //     {
-  //       day: null,
-  //       from: null,
-  //       to: null
-  //     }
-  //   ],// array of obj 
-  //   imagesAllies: [],
-
-  // }
   // varibles for list data from backend collection parameterized
   alliesCategories: any[] = [];
   mealsCategories: any[] = [];
-  attentionSchedule: any[] = [];
+  attentionSchedule: any[] = []; 
 
   days: string[] = []
   hours: String[] = [];
@@ -62,18 +39,18 @@ export class CreateAllyComponent implements OnInit {
 
   // old params
   // aliado: Aliado; // instance necesary to working method onImagesSelected
-  TypeEstablishment: String[] = [];
-  Categoria: String[] = [];
-  photo: any;
+  // TypeEstablishment: String[] = [];
+  // Categoria: String[] = [];
+  // photo: any;
+
   //handle button other category
   otherMealSelect: boolean = true
   otherMealInput: boolean = false
   //handle button other type Establishment
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
-  newEstablishment: string
+  // newEstablishment: string
   constructor(private alliesCatServices: AlliesCategoriesService,
-    private swalService: SwallServicesService,
     private mealsCatServices: MealsCategoriesService,
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
@@ -97,15 +74,7 @@ export class CreateAllyComponent implements OnInit {
 
     })
 
-    // this.schedules = new FormGroup({
-    //   "dayLunes": new FormControl('',),
-    //   "fromLunes": new FormControl('',Validators.required),
-    //   "to": new FormControl('',Validators.required),
-
-    // })
-
     this.imageSize = { width: 230, height: 120 };
-    // this.imagesAllies = [];
     this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
@@ -154,7 +123,7 @@ export class CreateAllyComponent implements OnInit {
     console.log(idCategory) // delete console log
     this.swallDeleteCatEstablishment(idCategory)
   }
-  //Method for chang of oring buttons
+  //Method for change of oring buttons
   changeStateToSelect() {
     this.otherEstablishmentSelect = true;
     this.otherEstablishmentInput = false;
@@ -170,11 +139,13 @@ export class CreateAllyComponent implements OnInit {
     this.changeStateToSelectMeal();
 
   }
+  //method delete Type MealCategory
   deleteMealCategory() {
     let idMealCat: any = this.forma.controls['idMealsCategories'].value
     console.log(idMealCat) // delete console log
     this.swallDeleteMealCategory(idMealCat)
   }
+   //Method for change of oring buttons
   changeStateToSelectMeal() {
     this.otherMealSelect = true;
     this.otherMealInput = false;
@@ -250,7 +221,7 @@ export class CreateAllyComponent implements OnInit {
     return false
   }
 
-  // Method for adding text input and select
+  // Method for change botton of de CRD in typeEstablihment and MelaCategoryes
   handleBoxEstablishment(): boolean {
     if (this.otherEstablishmentSelect) {
       return this.otherEstablishmentSelect = false,
@@ -273,31 +244,24 @@ export class CreateAllyComponent implements OnInit {
   }
   // method save  and cancel all collection allies
   saveChanges() {
-    this.swalService.saveChanges()
     let addSchedule: object = {
       attentionSchedule: this.Schedules
     }
-    this.scheduleServices.postAttentionSchedule(addSchedule).subscribe(message => {
-      alert('attention added')
-      this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
-        this.attentionSchedule = schedule;
-        console.log(this.attentionSchedule); // delete console log
-      })
-    })
+    
     this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)
     console.log(this.forma.value);
+    let objAllie = this.forma.value
     console.log('valor of nameEStblishment ',this.forma.controls['nameTypeOfEstablishment'].value)
-    this.allieService.postAllie(this.forma.value).subscribe(message => {
-      alert('allie added')
-      // this.allieService.getAllies()
-    })
-    this.loadImagesService.loadImagesFirebase(this.imagesAllies)
+    this.swallSaveAllie(objAllie,addSchedule)
+    
+    // this.loadImagesService.loadImagesFirebase(this.imagesAllies) 
   }
+
   cancelChanges() {
-    this.swalService.cancel();
+    this.swallCancelAlly()
   }
+
   getAttentionSchedule(day: String, from: String, to: String, i: number) {
-    // console.log(dayLunes);
     console.log(from); //delete console log
     console.log(to, i); //delete console log
     let schedule: object = {
@@ -305,7 +269,7 @@ export class CreateAllyComponent implements OnInit {
       from: from,
       to: to
     }
-    // To do one function for tracking array with filter and look what is the same and renplace-- 
+    // function to replace the values of array 
     if (this.Schedules[i]) {
       this.Schedules[i] = schedule;
     }
@@ -322,8 +286,8 @@ export class CreateAllyComponent implements OnInit {
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
@@ -341,14 +305,15 @@ export class CreateAllyComponent implements OnInit {
       }
     })
   }
+  // Modal for delete Establishmet
   swallDeleteCatEstablishment(id: string) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
@@ -372,8 +337,8 @@ export class CreateAllyComponent implements OnInit {
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
@@ -397,8 +362,8 @@ export class CreateAllyComponent implements OnInit {
       text: "de que deseas eliminar!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
@@ -415,6 +380,53 @@ export class CreateAllyComponent implements OnInit {
       }
     })
   }
+  //save AND cancel allie 
+  swallSaveAllie(newAlly: any, newSchedule:any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.scheduleServices.postAttentionSchedule(newSchedule).subscribe(() => {
+          this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
+            this.attentionSchedule = schedule;
+            console.log(this.attentionSchedule); // delete console log
+          })
+        })
+        this.allieService.postAllie(newAlly).subscribe()
+        
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo aliado ha sido creado',
+          'success',
+        )
+      }
+    })
+  }
+  swallCancelAlly(){
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas cancelar!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, cancelar!'
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Cancelado!',
+          'success',
+        )
+      }
+    })
+  }
+ 
 
 
 }

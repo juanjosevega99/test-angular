@@ -139,4 +139,19 @@
    flex-direction: column;
    align-items: center;
  }
- 
+
+ .swal2-styled.swal2-confirm {
+  border: 0;
+  border-radius: .25em;
+  background: initial;
+  background-color: #3085d6;
+  color: rgb(7, 7, 7);
+  font-size: 1.0625em;
+}
+
+.swal2-actions:not(.swal2-loading) .swal2-styled:hover {
+  // background-image: linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1));
+  color: rgb(247, 15, 15);
+  background-color: #552183;
+
+}
