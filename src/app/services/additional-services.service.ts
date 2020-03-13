@@ -13,11 +13,11 @@ export class AdditionalServicesService {
   constructor(private httpclient: HttpClient) { }
 
   postAdditionalService(additionalservice):Observable<AdditionalServices>{
-    return this.httpclient.post<AdditionalServices>(environment.UrlBase+"additionalservices", additionalservice);
+    return this.httpclient.post<AdditionalServices>(environment.UrlBase+"additional-services", additionalservice);
   }
 
   putAdditionalService(additionalservice):Observable<AdditionalServices>{
-    return this.httpclient.put<AdditionalServices>(environment.UrlBase+"additionalservices"+ additionalservice.id, additionalservice);
+    return this.httpclient.put<AdditionalServices>(environment.UrlBase+"additional-services"+ additionalservice.id, additionalservice);
   }
 
   deleteAdditionalService(id):Observable<{}>{
@@ -25,19 +25,20 @@ export class AdditionalServicesService {
   }
 
   getAdditionalServices(): Observable<any[]>{
-    return this.httpclient.get<AdditionalServices[]>(environment.UrlBase+"additionalservices").pipe(map((additionalservices:any[])=>additionalservices.map((additionalservices)=>{
+    return this.httpclient.get<AdditionalServices[]>(environment.UrlBase+"additional-services").pipe(map( (additionalservices:any[]) => additionalservices.map(
+      (additionalservices)=>{
       let obj = {
-        id:additionalservices.id,
-        additionalServices: additionalservices.additionalservices,
+        id:additionalservices._id,
+        additionalServices: additionalservices.additionalServices,
       } 
       return obj;
     })));
   }
 
   getAdditionalServicesById(id): Observable<any[]>{
-    return this.httpclient.get<AdditionalServices[]>(environment.UrlBase+"additionalservices/"+id).pipe(map((additionalservices:any[])=>additionalservices.map((additionalservices)=>{
+    return this.httpclient.get<AdditionalServices[]>(environment.UrlBase+"additional-services/"+id).pipe(map((additionalservices:any[])=>additionalservices.map((additionalservices)=>{
       let obj = {
-        id:additionalservices.id,
+        id:additionalservices._id,
         additionalServices: additionalservices.additionalservices,
       } 
       return obj;

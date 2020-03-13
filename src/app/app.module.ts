@@ -58,6 +58,7 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
 
 import { LoadImagesService } from "./services/providers/load-images.service";
 import { ValidationsLoadImagesDirective } from './directives/validations-load-images.directive';
+import { LocationServiceService } from './services/location-service.service';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { ValidationsLoadImagesDirective } from './directives/validations-load-im
     NgxPrintModule
   ],
   providers: [
-    LoadImagesService
+    LoadImagesService,
+    LocationServiceService
   ],
   bootstrap: [AppComponent]
 })

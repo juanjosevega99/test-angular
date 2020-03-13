@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SwallServicesService } from 'src/app/services/swall-services.service';
+import {AdditionalServicesService} from '../../../../services/additional-services.service'
+import { LocationServiceService } from 'src/app/services/location-service.service';
 /* import swal, { SweetAlert } from "./core"; */
 
 
@@ -20,7 +22,7 @@ export class CreateHeadquarterComponent implements OnInit {
   other: String;
   otherImg: String;
 
-  readerImg = new  FileReader();
+  readerImg = new FileReader();
 
   preHeadquarters: Object = {
     nameHq: null,
@@ -81,11 +83,27 @@ export class CreateHeadquarterComponent implements OnInit {
   checkboxOther: boolean = true;
   othersServiceInput: boolean = false;
 
+  ArrayseviceChecked: any[] = [];
+  collectionAddService: any[] = [];
+  
 
-  constructor(private swal: SwallServicesService) {
-    this.Location = ["Almeidas", "Alto Magdalena", "Bajo Magdalena", "Gualivá", "Guavio", "Magdalena Centro", "Medina", "Oriente", "Rionegro", "Sabana Centro"],
 
-      this.services = [{ name: 'Pídelo', img: 'assets/icons/shop.png', select: false }, { name: 'Resérvalo', img: 'assets/icons/calendar.png', select: false }, { name: 'Llévalo', img: 'assets/icons/delivery-bike.png', select: false }]
+  constructor(private swal: SwallServicesService, private additionalServices: AdditionalServicesService, private locationService: LocationServiceService) {
+    this.locationService.getLocations()
+      .subscribe((data:any)=>{
+        this.Location = data.facet_groups[0].facets 
+    
+         data.records.forEach((element:any) => {
+           let loc : any = {
+             name: element.fields.empty1
+           }
+           this.Location.push(loc)
+         });
+      })     
+
+    /* this.Location = ["Almeidas", "Alto Magdalena", "Bajo Magdalena", "Gualivá", "Guavio", "Magdalena Centro", "Medina", "Oriente", "Rionegro", "Sabana Centro"], */
+
+    this.services = [{ name: 'Pídelo', img: 'assets/icons/shop.png', select: false }, { name: 'Resérvalo', img: 'assets/icons/calendar.png', select: false }, { name: 'Llévalo', img: 'assets/icons/delivery-bike.png', select: false }]
 
     this.aditionalServices = [{ name: 'Parqueadero', img: 'assets/icons/parking.png', select: false }, { name: 'Barra de tragos', img: 'assets/icons/cocktail.png', select: false }, { name: 'Wifi', img: 'assets/icons/wi-fi-zone.png', select: false },
     { name: 'Mesa exterior', img: 'assets/icons/people-table.png', select: false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png', select: false }, { name: 'Show en vivo', img: 'assets/icons/dance.png', select: false },
@@ -98,6 +116,28 @@ export class CreateHeadquarterComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  getAdditionalService(nameService: String, imageService: String, position: number, event) {
+    /* console.log(nameService,imageService); */
+
+    let seviceChecked: Object = {
+      name: nameService,
+      image: imageService
+    }
+    const checked = event.target.checked;
+
+    if (checked === true) {
+      if (this.ArrayseviceChecked[position]) {
+        this.ArrayseviceChecked[position] = seviceChecked;
+      } else {
+        this.ArrayseviceChecked.push(seviceChecked)
+      }
+    } else if (checked === false) {
+      this.ArrayseviceChecked.splice(position,1)
+    }
+    console.log(this.ArrayseviceChecked);
+    console.log(checked);
   }
 
 
@@ -140,11 +180,24 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 
   saveHq(shape: NgForm) {
+   let agregateAdditionalServices : object={
+      additionalServices: this.ArrayseviceChecked
+    }
+    this.additionalServices.postAdditionalService(agregateAdditionalServices).subscribe(message=>{
+      alert('agreggaa')
+      this.additionalServices.getAdditionalServices().subscribe(service=>{
+        this.collectionAddService = service;
+        
+        console.log(this.collectionAddService);
+        
+      })
+    })
     console.log("enviando algo");
     console.log(shape);
     console.log(shape.value);
-    /*  console.log(this.preHeadquarters); */
-    /*    swal("Hello world!"); */
+  
+
+
     this.swal.saveChanges()
   }
 
@@ -156,7 +209,7 @@ export class CreateHeadquarterComponent implements OnInit {
     this.othersServiceInput = !this.othersServiceInput;
   }
 
-  selectImg(event : any) {
+  selectImg(event: any) {
 
     const file = event.target.files[0];
 
@@ -190,10 +243,10 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 
 
-  addLocation(termino: String) {
+ /*  addLocation(termino: String) {
     this.newLocation = termino.toLowerCase();
     this.Location.push(termino.toLocaleLowerCase())
     console.log(termino);
-  }
+  } */
 
 }

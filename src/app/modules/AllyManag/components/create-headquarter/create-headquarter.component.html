@@ -28,10 +28,11 @@
                     <div class="input-group">
                         <select *ngIf="otherLocationSelect" class="form-control" name="locationHq" #locationHq="ngModel"
                             [(ngModel)]="preHeadquarters.location" required
-                            [ngClass]="{'is-invalid': (!locationHq.valid ),'is-valid':(locationHq.valid) }">
-                            <!-- <option selected> Seleccionar... </option> -->
-                            <option *ngFor="let x of Location">
-                                {{x}}
+                            [ngClass]="{'is-invalid': (!locationHq.valid),'is-valid':(locationHq.valid) }">
+                            <!-- <option selected> Seleccionar... </option> --> 
+                            <option *ngFor="let list of Location"  >
+                                {{list.name}}
+                                
                             </option>
                         </select>
                         <input *ngIf="otherLocationInput" class="col-md-9 col-form-label mr-2 form-control"
@@ -231,10 +232,10 @@
                 <label class="col-md-5 col-form-label">Servicios adicionales</label>
                 <div class="col-md-7">
                     <div class="form-check form-check-inline" *ngFor="let x of aditionalServices;let i=index">
-                        <input class="form-check-input" type="checkbox" [checked]="x.select"
+                        <input class="form-check-input" type="checkbox" [checked]="x.select" (click)="getAdditionalService(nameService.textContent,imageService.src,i,$event)"
                             (change)="selectedAditionalService($event,i)" [value]="x.name">
-                        <label class="form-check-label servicio">
-                            <img id={{i}} src={{x.img}} height="25px" width="25px">
+                        <label class="form-check-label servicio" #nameService>
+                            <img id={{i}} src={{x.img}} height="25px" width="25px" #imageService >
                             {{x.name}}
                         </label>
                     </div>
@@ -252,7 +253,7 @@
                                     <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
                                     <input type="file" (change)="selectImg($event)">
                                 </div>
-                                <button class="btn btn-outline-primary"
+                                <button type="button" class="btn btn-outline-primary"
                                     (click)="addNewServiceadd(other)">Añadir</button>
                             </div>
                         </div>
@@ -353,7 +354,8 @@
                 <div class="form-group row" style="margin-bottom: 5rem;">
                     <label class="">&nbsp;</label>
                     <div class="input-group  ">
-                        <button [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary" id="btnguardar">
+                        <!-- [disabled]="!shape.valid" -->
+                        <button  type="submit" class="btn btn-outline-primary" id="btnguardar">
                             Guardar
                         </button>
                     </div>
