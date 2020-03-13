@@ -60,23 +60,23 @@
           <th class="text-center">Fecha<input class="form-control" type="text" (keyup)="search(date.value, date.id)"
               #date id="registerDate" formControlName ="date"></th>
           <th class="text-center">Nombre<input class="form-control" type="text" (keyup)="search(name.value, name.id)"
-              #name id="name"  ></th>
+              #name id="name" formControlName ="name" ></th>
           <th class="text-center">Correo<input class="form-control" type="text"
-              (keyup)="search( email.value, email.id )" #email id="email"></th>
+              (keyup)="search( email.value, email.id )" #email id="email" formControlName ="email"></th>
           <th class="text-center">Celular<input class="form-control" type="text" id="phone"
-              (keyup)="search(cellphone.value, cellphone.id)" #cellphone></th>
+              (keyup)="search(cellphone.value, cellphone.id)" #cellphone formControlName ="phone"></th>
           <th class="text-center">Fecha de nacimiento<input class="form-control" type="text" id="birthday"
-              (keyup)="search(birthday.value, birthday.id)" #birthday></th>
+              (keyup)="search(birthday.value, birthday.id)" #birthday formControlName ="birthday"></th>
           <th class="text-center">Género<input class="form-control" type="text" id="gender"
-              (keyup)="search(gender.value, gender.id)" #gender></th>
+              (keyup)="search(gender.value, gender.id)" #gender formControlName ="gender"></th>
           <th class="text-center">Establecimiento<input class="form-control" type="text" id="nameAllie"
-              (keyup)="search(establishment.value, establishment.id)" #establishment></th>
+              (keyup)="search(establishment.value, establishment.id)" #establishment formControlName ="nameAllie"></th>
           <th class="text-center">Sede<input class="form-control" type="text" id="nameHeadquarter"
-              (keyup)="search(headquart.value, headquart.id)" #headquart></th>
+              (keyup)="search(headquart.value, headquart.id)" #headquart formControlName ="nameHeadquarter"></th>
           <th class="text-center">Usabilidad<input class="form-control" type="text" id="usability"
-              (keyup)="search(usability.value, usability.id)" #usability></th>
+              (keyup)="search(usability.value, usability.id)" #usability formControlName ="usability"></th>
           <th class="text-center">Monto compras<input class="form-control" type="text" id="purchaseAmount"
-              (keyup)="search(quantity.value, quantity.id)" #quantity></th>
+              (keyup)="search(quantity.value, quantity.id)" #quantity formControlName ="purchaseAmount"></th>
           <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
               (change)="selectedAll($event)"> </th>
         </tr>

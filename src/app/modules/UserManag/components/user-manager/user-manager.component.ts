@@ -105,19 +105,19 @@ export class UserManagerComponent implements OnInit {
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
     private userservice: UsersService, private orderservice: OrdersService) {
 
-  this.table = new FormGroup({
-    "date" : new FormControl(),
-    "name" : new FormControl(),
-    "email" : new FormControl(),
-    "phone" : new FormControl(),
-    "birthday" : new FormControl(),
-    "gender" : new FormControl(),
-    "nameAllie" : new FormControl(),
-    "nameHeadquarter" : new FormControl(),
-    "usability" : new FormControl(),
-    "purchaseAmount" : new FormControl(),
-    
-  })
+    this.table = new FormGroup({
+      "date": new FormControl(),
+      "name": new FormControl(),
+      "email": new FormControl(),
+      "phone": new FormControl(),
+      "birthday": new FormControl(),
+      "gender": new FormControl(),
+      "nameAllie": new FormControl(),
+      "nameHeadquarter": new FormControl(),
+      "usability": new FormControl(),
+      "purchaseAmount": new FormControl(),
+
+    })
 
     this.userservice.getUsers().subscribe(res => {
 
@@ -214,7 +214,7 @@ export class UserManagerComponent implements OnInit {
     this.selectforsend();
     console.log("users", this.usergetting);
     console.log(this.table);
-    
+
 
   }
 
@@ -311,8 +311,16 @@ export class UserManagerComponent implements OnInit {
   clear() {
 
     this.table.reset({
-      date:"",
-      name:""
+      date: "",
+      name: "",
+      email: "",
+      phone: "",
+      birthday: "",
+      gender: "",
+      nameAllie: "",
+      nameHeadquarter: "",
+      usability: "",
+      purchaseAmount: ""
     });
 
     this.fromDate = null;
