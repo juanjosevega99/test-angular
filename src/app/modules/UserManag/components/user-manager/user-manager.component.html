@@ -1,4 +1,4 @@
-<div class="compenetsstyle">
+<div class="compenetsstyle" style="background-color: #e9e7e7;" >
 
   <div class="m-3 d-flex flex-row ">
 
@@ -52,31 +52,31 @@
       #general (keyup)="searchbyterm(general.value)">
   </div>
 
-  <div class="tableFixHead" [formGroup] = "table">
+  <div class="tableFixHead" [formGroup]="table">
     <table>
-    
+
       <thead>
         <tr>
           <th class="text-center">Fecha<input class="form-control" type="text" (keyup)="search(date.value, date.id)"
-              #date id="registerDate" formControlName ="date"></th>
+              #date id="registerDate" formControlName="date" style="visibility: hidden;" ></th>
           <th class="text-center">Nombre<input class="form-control" type="text" (keyup)="search(name.value, name.id)"
-              #name id="name" formControlName ="name" ></th>
+              #name id="name" formControlName="name"></th>
           <th class="text-center">Correo<input class="form-control" type="text"
-              (keyup)="search( email.value, email.id )" #email id="email" formControlName ="email"></th>
+              (keyup)="search( email.value, email.id )" #email id="email" formControlName="email"></th>
           <th class="text-center">Celular<input class="form-control" type="text" id="phone"
-              (keyup)="search(cellphone.value, cellphone.id)" #cellphone formControlName ="phone"></th>
-          <th class="text-center">Fecha de nacimiento<input class="form-control" type="text" id="birthday"
-              (keyup)="search(birthday.value, birthday.id)" #birthday formControlName ="birthday"></th>
+              (keyup)="search(cellphone.value, cellphone.id)" #cellphone formControlName="phone"></th>
+          <th class="text-center">Fecha nacimiento<input class="form-control" type="text" id="birthday"
+              (keyup)="search(birthday.value, birthday.id)" #birthday formControlName="birthday"></th>
           <th class="text-center">Género<input class="form-control" type="text" id="gender"
-              (keyup)="search(gender.value, gender.id)" #gender formControlName ="gender"></th>
+              (keyup)="search(gender.value, gender.id)" #gender formControlName="gender"></th>
           <th class="text-center">Establecimiento<input class="form-control" type="text" id="nameAllie"
-              (keyup)="search(establishment.value, establishment.id)" #establishment formControlName ="nameAllie"></th>
+              (keyup)="search(establishment.value, establishment.id)" #establishment formControlName="nameAllie"></th>
           <th class="text-center">Sede<input class="form-control" type="text" id="nameHeadquarter"
-              (keyup)="search(headquart.value, headquart.id)" #headquart formControlName ="nameHeadquarter"></th>
+              (keyup)="search(headquart.value, headquart.id)" #headquart formControlName="nameHeadquarter"></th>
           <th class="text-center">Usabilidad<input class="form-control" type="text" id="usability"
-              (keyup)="search(usability.value, usability.id)" #usability formControlName ="usability"></th>
+              (keyup)="search(usability.value, usability.id)" #usability formControlName="usability"></th>
           <th class="text-center">Monto compras<input class="form-control" type="text" id="purchaseAmount"
-              (keyup)="search(quantity.value, quantity.id)" #quantity formControlName ="purchaseAmount"></th>
+              (keyup)="search(quantity.value, quantity.id)" #quantity formControlName="purchaseAmount"></th>
           <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
               (change)="selectedAll($event)"> </th>
         </tr>
@@ -103,17 +103,17 @@
 
   <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
+      <button type="button" class="btnForInforms mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
         cupones</button>
-      <button type="button" class="btn " style="background-color: #f4b081" (click)="sendPromos()">Enviar
+      <button type="button" class="btnForInforms" style="background-color: #f4b081" (click)="sendPromos()">Enviar
         promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn btn-success mr-5" (click)="datafor_Excel()" data-toggle="modal"
+      <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
         data-target="#exampleModalCenter">
         Generar Excel</button>
 
-      <button type="button" (click)="datafor_pdf()" class="btn btn-danger" data-toggle="modal"
+      <button type="button" (click)="datafor_pdf()" class="btnForInforms" data-toggle="modal"
         data-target="#exampleModalCenter">Generar PDF</button>
     </div>
   </div>
