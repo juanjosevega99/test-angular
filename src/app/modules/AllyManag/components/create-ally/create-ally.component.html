@@ -20,11 +20,10 @@
                                                         class="invalid-feedback">
                                                         Este campo es requerido
                                                 </div>
-                                                <!-- <div *ngIf="forma.get('name').errors?.pattern "
+                                                <div *ngIf="forma.get('name').errors?.minlength "
                                                         class="invalid-feedback">
-                                                        Como mínimo 2 caracteres y no se puede utilizar caracteres
-                                                        especiales.
-                                                </div> -->
+                                                        Como mínimo 2 caracteres
+                                                </div>
                                                 <div class="valid-feedback">Ok!</div>
                                         </div>
                                 </div>
@@ -127,9 +126,10 @@
                                                                 [ngClass]="{ 'is-invalid': (!forma.get('idTypeOfEstablishment').valid && 
                                                                         forma.get('idTypeOfEstablishment').touched ), 
                                                                         'is-valid':( forma.get('idTypeOfEstablishment').valid )}">
+
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let category of alliesCategories"
-                                                                        [value]="category.id">
+                                                                        [ngValue]="category">
                                                                         {{category.name}}
                                                                 </option>
                                                         </select>
@@ -183,13 +183,12 @@
                                                 <div class="row  margin-left2 ">
                                                         <select *ngIf="otherMealSelect"
                                                                 class="browser-default custom-select selectSize mr-2"
-                                                                formControlName="idMealsCategories" 
-                                                                [ngClass]="{ 'is-invalid': (!forma.get('idMealsCategories').valid && 
+                                                                formControlName="idMealsCategories" [ngClass]="{ 'is-invalid': (!forma.get('idMealsCategories').valid && 
                                                                 forma.get('idMealsCategories').touched ), 
                                                                 'is-valid':( forma.get('idMealsCategories').valid )}">
                                                                 <option selected>---------------------</option>
                                                                 <option *ngFor="let mealCategory of mealsCategories"
-                                                                        [value]="mealCategory.id">
+                                                                        [ngValue]="mealCategory">
                                                                         {{mealCategory.name}}
                                                                 </option>
                                                         </select>
@@ -222,13 +221,12 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " formControlName="description"
-                                                [ngClass]="{ 'is-invalid': (!forma.get('description').valid ), 
+                                                <textarea class="form-control " formControlName="description" [ngClass]="{ 'is-invalid': (!forma.get('description').valid ), 
                                                                 'is-valid':( forma.get('description').valid )}">
                                                 </textarea>
                                                 <div *ngIf="forma.get('description').errors?.maxlength "
-                                                                class="invalid-feedback">
-                                                                Como máximo 8 caracteres
+                                                        class="invalid-feedback">
+                                                        Como máximo 20 caracteres
                                                 </div>
                                         </div>
                                 </div>

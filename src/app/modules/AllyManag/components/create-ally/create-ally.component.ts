@@ -29,6 +29,7 @@ export class CreateAllyComponent implements OnInit {
   hours: String[] = [];
   color: String = "#000000";
   Schedules: any[] = [];
+  objectEstablishment:any;
 
   //variables carousel
   imagesAllies: FileItem[] = []
@@ -77,7 +78,7 @@ export class CreateAllyComponent implements OnInit {
       Validators.pattern("")
       
       ]),
-      'color': new FormControl('', [Validators.pattern("")
+      'color': new FormControl(this.color, [Validators.pattern("")
       
       ]),
       'idTypeOfEstablishment': new FormControl('', [Validators.required,
@@ -111,19 +112,17 @@ export class CreateAllyComponent implements OnInit {
     //inicialization service with collections meals-categorie
     this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
       this.mealsCategories = mealCat;
-      console.log(this.mealsCategories);
+      console.log(this.mealsCategories);// delete console log
     })
     //inicialization service with collections attention-schedule
     this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
       this.attentionSchedule = schedule;
-      console.log(this.attentionSchedule);
-
+      console.log(this.attentionSchedule);// delete console log
     })
 
   }
-
   ngOnInit() {
-    
+     
   }
   getColour(event) {
     this.color = event.target.value
@@ -140,10 +139,11 @@ export class CreateAllyComponent implements OnInit {
     console.log(this.alliesCategories) // delete console log
     this.forma.controls['nameTypeOfEstablishment'].reset() // reset input add new category establishment
     this.changeStateToSelect();
+
   }
   //method delete Type Establishment
   deleteCategory() {
-    let idCategory: any = this.forma.controls['idTypeOfEstablishment'].value
+    let idCategory: any = this.forma.controls['idTypeOfEstablishment'].value.id
     console.log(idCategory) // delete console log
     this.swallDeleteCatEstablishment(idCategory)
   }
@@ -154,6 +154,7 @@ export class CreateAllyComponent implements OnInit {
   }
   //CRD -- METHODS OF MealCategory: CREATE ,READ AND DELETE 
   addMeal() {
+  
     let newitem = this.forma.controls['nameMealsCategories'].value;
     let newMeal: object = {
       name: newitem
@@ -161,11 +162,11 @@ export class CreateAllyComponent implements OnInit {
     this.swallSaveMealCategory(newMeal)
     this.forma.controls['nameMealsCategories'].reset();
     this.changeStateToSelectMeal();
-
+  
   }
   //method delete Type MealCategory
   deleteMealCategory() {
-    let idMealCat: any = this.forma.controls['idMealsCategories'].value
+    let idMealCat: any = this.forma.controls['idMealsCategories'].value.id
     console.log(idMealCat) // delete console log
     this.swallDeleteMealCategory(idMealCat)
   }
@@ -267,7 +268,20 @@ export class CreateAllyComponent implements OnInit {
     }
   }
   // method save  and cancel all collection allies
-  saveChanges() {
+  saveChanges() { 
+    // put the values of properties establishment
+    let idEstablishment:any = this.forma.controls['idTypeOfEstablishment'].value.id
+    let nameEstablishment:any = this.forma.controls['idTypeOfEstablishment'].value.name
+
+    this.forma.controls['idTypeOfEstablishment'].setValue(idEstablishment)
+    this.forma.controls['nameTypeOfEstablishment'].setValue(nameEstablishment)
+    // put the values of properties Meals categories
+    let idMeal:any = this.forma.controls['idMealsCategories'].value.id
+    let nameMeal:any = this.forma.controls['idMealsCategories'].value.name
+
+    this.forma.controls['idMealsCategories'].setValue(idMeal)
+    this.forma.controls['nameMealsCategories'].setValue(nameMeal)
+    
     let addSchedule: object = {
       attentionSchedule: this.Schedules
     }
