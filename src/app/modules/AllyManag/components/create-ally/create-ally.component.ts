@@ -282,6 +282,7 @@ export class CreateAllyComponent implements OnInit {
     this.forma.controls['idMealsCategories'].setValue(idMeal)
     this.forma.controls['nameMealsCategories'].setValue(nameMeal)
     
+    //
     let addSchedule: object = {
       attentionSchedule: this.Schedules
     }
