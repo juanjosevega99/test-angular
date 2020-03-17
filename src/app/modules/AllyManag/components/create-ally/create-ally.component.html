@@ -86,16 +86,20 @@
                                         <label class="col-3 col-form-label">Logo del establecimiento</label>
                                         <div class="col-8">
                                                 <div class="row align-items-center ">
-                                                        <div class="photo"> <img id="photo" width="80px" height="80px">
+                                                        <div class="photo"> 
+                                                                <img id="photo" width="80px" height="80px">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
-                                                                <button class="btn1 btn btn-outline-primary">Cargar
-                                                                        Imagen</button>
-                                                                <input type="file" name="photo"
+                                                                <button class="btn1 btn btn-outline-primary">
+                                                                        Cargar archivo
+                                                                </button>
+                                                                <input type="file" 
                                                                         (change)="onPhotoSelected($event)"
-                                                                        formControlName="logo" [ngClass]="{ 'is-invalid': (!forma.get('logo').valid && 
+                                                                        formControlName="logo" 
+                                                                        [ngClass]="{ 'is-invalid': (!forma.get('logo').valid && 
                                                                         forma.get('logo').touched ), 
-                                                                        'is-valid':( forma.get('logo').valid )}" />
+                                                                        'is-valid':( forma.get('logo').valid )}" 
+                                                                >
                                                                 <div *ngIf="forma.get('logo').errors?.required "
                                                                         class="invalid-feedback">
                                                                         Este campo es requerido

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
+import { FormGroup, FormControl, Validators } from '@angular/forms'
 import Swal from 'sweetalert2';
+import { AngularFireStorage } from '@angular/fire/storage'
 //Models of backend
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { AttentionScheduleService } from "../../../../services/attention-schedule.service"
 import { AlliesService } from "../../../../services/allies.service";
-import { LoadImagesService } from "../../../../services/providers/load-images.service"
+// import { LoadImagesService } from "../../../../services/providers/load-images.service"
 //models
 import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
 
@@ -55,7 +56,7 @@ export class CreateAllyComponent implements OnInit {
     private mealsCatServices: MealsCategoriesService,
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
-    private loadImagesService: LoadImagesService) {
+    private storage: AngularFireStorage) {
     
       this.forma = new FormGroup({
 
@@ -179,15 +180,25 @@ export class CreateAllyComponent implements OnInit {
   // print bs64 of image =>  e.target.result)
   onPhotoSelected($event) {
     let input = $event.target;
+    // console.log(input.files);
+    
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function (e: any) {
         $('#photo')
-          .attr('src', e.target.result)
+          .attr('src', e.target.result) 
       };
-      console.log('data enter if ', input.files) //delete console.log
-      console.log('data enter if ', input.files[0]) //delete console.log
-      reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(input.files[0]);
+    
+    const id = Math.random().toString(36).substring(2);
+    const file = input.files[0];
+    const filePath = 'upload/imagen.png'
+    const ref = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file)
+      
+    
+    //   console.log('data enter if ', input.files) //delete console.log
+    //   console.log('data enter if ', input.files[0]) //delete console.log
     }
   }
   //Method for carousel images
