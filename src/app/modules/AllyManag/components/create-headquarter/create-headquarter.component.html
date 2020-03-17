@@ -15,7 +15,7 @@
                 <div class="col-md-7 form-group">
                     <input class="form-control"
                         [ngClass]="{'is-invalid': (!nameHq.valid && nameHq.touched ),'is-valid':(nameHq.valid) }"
-                        type="text" placeholder="Nombre de la sede" name="nameHq" [(ngModel)]="preHeadquarters.nameHq"
+                        type="text" placeholder="Nombre de la sede" name="name" [(ngModel)]="preHeadquarters.name"
                         minlength="2" required #nameHq="ngModel">
                     <div *ngIf="nameHq.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
                     <div *ngIf="nameHq.errors?.minlength" class="invalid-feedback">* por lo menos 2 caracteres</div>
@@ -27,37 +27,13 @@
                 <label class="col-md-5 col-form-label">Ubicación</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <select *ngIf="otherLocationSelect" class="form-control" name="locationHq" #locationHq="ngModel"
-                            [(ngModel)]="preHeadquarters.location" required
-                            [ngClass]="{'is-invalid': (!locationHq.valid ),'is-valid':(locationHq.valid) }">
-                            <!-- <option selected> Seleccionar... </option> -->
-                            <option *ngFor="let x of Location">
-                                {{x}}
+                        <select *ngIf="otherLocationSelect" class="form-control" name="ubication" #locationHq="ngModel"
+                            [(ngModel)]="preHeadquarters.ubication" required
+                            [ngClass]="{'is-invalid': (!locationHq.valid),'is-valid':(locationHq.valid) }">
+                            <option *ngFor="let list of Location">
+                                {{list.name}}
                             </option>
                         </select>
-                        <input *ngIf="otherLocationInput" class="col-md-9 col-form-label mr-2 form-control"
-                            #otherLocation="ngModel" (keyup.enter)="addLocation(additem.value)" #additem
-                            [(ngModel)]="preHeadquarters.location"
-                            [ngClass]="{'is-invalid': (!otherLocation.valid && otherLocation.touched ),'is-valid':(otherLocation.valid) }"
-                            required type="text" name="otherLocation">
-                        <!-- <button *ngIf= "buttonadd" class="btn btn-success" > Añadir ubicación </button> -->
-                        <div *ngIf="buttonadd" class="input-group-append">
-                            <span class="input-group-text" (click)="handleBoxLocation()">
-                                Regresar
-                            </span>
-                        </div>
-
-                        <div *ngIf="otherLocationInput" class="col-md-10">
-                            <div class="form-control-feedback">
-                                <small> *Presione enter para guardar </small>
-                            </div>
-                        </div>
-
-                        <div *ngIf="otherbuttonadd" class="input-group-append">
-                            <span class="input-group-text" (click)="handleBoxLocation()">
-                                Otro
-                            </span>
-                        </div>
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
                         <div class="valid-feedback">Ok!</div>
@@ -69,7 +45,7 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Dirección</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Dirección" name="addressHq"
+                    <input class="form-control" type="text" placeholder="Dirección" name="address"
                         [ngClass]="{'is-invalid': (!addressHq.valid && addressHq.touched ),'is-valid':(addressHq.valid) }"
                         [(ngModel)]="preHeadquarters.address" required #addressHq="ngModel">
                     <div class="invalid-feedback">*Este campo es requerido </div>
@@ -80,8 +56,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Piso</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" min="0" placeholder="Piso" name="floorHq" #floorHq="ngModel"
-                        pattern="[0-9]{1,3}" required [(ngModel)]="preHeadquarters.floor"
+                    <input class="form-control" type="text" min="0" placeholder="Piso" name="numberFloor" #floorHq="ngModel"
+                        pattern="[0-9]{1,3}" required [(ngModel)]="preHeadquarters.numberFloor"
                         [ngClass]="{'is-invalid': (!floorHq.valid && floorHq.touched || floorHq.errors?.pattern ),'is-valid':(floorHq.valid) }">
                     <div *ngIf="floorHq.errors?.required" class="invalid-feedback">*Este campo es requerido
                     </div>
@@ -94,8 +70,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Local</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Local" name="stallHq" #stallHq="ngModel"
-                        required min="0" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="preHeadquarters.stall"
+                    <input class="form-control" type="text" placeholder="Local" name="local" #stallHq="ngModel"
+                        required min="0" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="preHeadquarters.local"
                         [ngClass]="{'is-invalid': (!stallHq.valid && stallHq.touched || stallHq.errors?.pattern ),'is-valid':(stallHq.valid) }">
                     <div *ngIf="stallHq.errors?.required" class="invalid-feedback">*Este campo es requerido
                     </div>
@@ -107,8 +83,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Contacto general</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Contacto general" name="generalHq" required
-                        #generalHq="ngModel" [(ngModel)]="preHeadquarters.general" minlength="3"
+                    <input class="form-control" type="text" placeholder="Contacto general" name="generalContact" required
+                        #generalHq="ngModel" [(ngModel)]="preHeadquarters.generalContact" minlength="3"
                         [ngClass]="{'is-invalid': (!generalHq.valid && generalHq.touched ),'is-valid':(generalHq.valid) }">
                     <div class="invalid-feedback">*Este campo es requerido </div>
                     <div class="valid-feedback">Ok!</div>
@@ -118,8 +94,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Cargo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Cargo" name="chargeGeneralHq"
-                        #chargeGeneralHq="ngModel" minlength="3" required [(ngModel)]="preHeadquarters.charge"
+                    <input class="form-control" type="text" placeholder="Cargo" name="chargeGC"
+                        #chargeGeneralHq="ngModel" minlength="3" required [(ngModel)]="preHeadquarters.chargeGC"
                         [ngClass]="{'is-invalid': (!chargeGeneralHq.valid && chargeGeneralHq.touched ),'is-valid':(chargeGeneralHq.valid) }">
                     <div class="invalid-feedback">*Este campo es requerido </div>
                     <div class="valid-feedback">Ok!</div>
@@ -129,9 +105,9 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Celular</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Celular" name="cellGeneralHq" required
+                    <input class="form-control" type="text" placeholder="Celular" name="mobileGC" required
                         [ngClass]="{'is-invalid': (!cellGeneralHq.valid && cellGeneralHq.touched) || cellGeneralHq.errors?.pattern ,'is-valid':(cellGeneralHq.valid) }"
-                        #cellGeneralHq="ngModel" pattern="^[3]\d{9}$" [(ngModel)]="preHeadquarters.cell">
+                        #cellGeneralHq="ngModel" pattern="^[3]\d{9}$" [(ngModel)]="preHeadquarters.mobileGC">
                     <div *ngIf="cellGeneralHq.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
                     <div *ngIf="cellGeneralHq.errors?.pattern" class="invalid-feedback">*Ingrese un número de celular
                         válido </div>
@@ -143,7 +119,7 @@
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" pattern="\([0-9]{3}\)[0-9]{3}[ -][0-9]{4}"
-                        placeholder="(xxx)xxx-xxxx" name="telGeneralHq" [(ngModel)]="preHeadquarters.tel">
+                        placeholder="(xxx)xxx-xxxx" name="telephoneGC" [(ngModel)]="preHeadquarters.telephoneGC">
                     <div class="col-md-9">
                         <div class="form-control-feedback">
                             <small> *Indicador seguido del número:(xxx)xxx-xxxx </small>
@@ -155,7 +131,7 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Correo</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Correo" name="emailGeneralHq"
+                    <input class="form-control" type="email" placeholder="Correo" name="emailGeneral"
                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                         [ngClass]="{'is-invalid': (!emailGeneralHq.valid && emailGeneralHq.touched) || emailGeneralHq.errors?.pattern ,'is-valid':(emailGeneralHq.valid) }"
                         [(ngModel)]="preHeadquarters.emailGeneral" required #emailGeneralHq="ngModel">
@@ -173,7 +149,7 @@
                     <input class="form-control" type="text" placeholder="dddddd-d"
                         pattern="[0-9a-zA-Z]{6}[ -][0-9a-zA-Z]{1}" #codeHq="ngModel"
                         [ngClass]="{'is-invalid': (!codeHq.valid && codeHq.touched) || codeHq.errors?.pattern ,'is-valid':(codeHq.valid) }"
-                        name="codeHq" [(ngModel)]="preHeadquarters.code" required>
+                        name="code" [(ngModel)]="preHeadquarters.code" required>
                     <div class="col-md-9">
                         <div class="form-control-feedback">
                             <small> *Formato(7 carácteres): xxxxxx-x </small>
@@ -206,18 +182,16 @@
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Costo por reserva/pedido</label>
-                <div class="col-md-7 ">
+                <div class="col-md-7">
                     <div class="form-check form-check-inline" *ngFor="let x of cost; let position = index">
-                        <div *ngIf="preHeadquarters['services'][position]?.checked">
-
+                        <div *ngIf="preHeadquarters['principarlServices'][position]?.checked">
                             <label>
                                 <img src={{x.img}} height="30px" width="30px">
                             </label>
-                            <input class="reserva form-control" type="text" min="0" placeholder="$2500"
-                                (change)="writeCost($event,position)" name="cost" #cost="ngModel" pattern="[0-9]{1,5}"
-                                required [(ngModel)]="preHeadquarters.cost"
-                                [ngClass]="{'is-invalid': (!cost.valid && cost.touched || cost.errors?.pattern ),'is-valid':(cost.valid) }"
-                                required>
+                            <input class="reserva form-control" type="text" (change)="writeCost($event,position)"
+                                [id]=x.name name="{{x.name}}" ngModel required #cost="ngModel" min="0"
+                                placeholder="$2500" pattern="[0-9]{3,6}"
+                                [ngClass]="{'is-invalid': (!cost.valid && cost.touched || cost.errors?.pattern ),'is-valid':(cost.valid) }">
                         </div>
 
                         <div *ngIf="cost.errors?.required" class="invalid-feedback">*Este campo es requerido
@@ -233,9 +207,10 @@
                 <div class="col-md-7">
                     <div class="form-check form-check-inline" *ngFor="let x of aditionalServices;let i=index">
                         <input class="form-check-input" type="checkbox" [checked]="x.select"
+                            (click)="getAdditionalService(nameService.textContent,imageService.src,i,$event)"
                             (change)="selectedAditionalService($event,i)" [value]="x.name">
-                        <label class="form-check-label servicio">
-                            <img id={{i}} src={{x.img}} height="25px" width="25px">
+                        <label class="form-check-label servicio" #nameService>
+                            <img id={{i}} src={{x.img}} height="25px" width="25px" #imageService>
                             {{x.name}}
                         </label>
                     </div>
@@ -246,14 +221,14 @@
                             otro
                         </label>
                         <div *ngIf="othersServiceInput">
-                            <input class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other"
+                            <input class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other" id="other"
                                 required>
                             <div class="row">
                                 <div class="upload-btn-wrapper">
                                     <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
                                     <input type="file" (change)="selectImg($event)">
                                 </div>
-                                <button class="btn btn-outline-primary"
+                                <button  type="button" class="btn btn-outline-primary"
                                     (click)="addNewServiceadd(other)">Añadir</button>
                             </div>
                         </div>
@@ -269,7 +244,7 @@
                         <input type="text" min="0" placeholder="Tiempo promedio de entrega" #deliveryTime="ngModel"
                             pattern="[0-9]{1,3}" required
                             [ngClass]="{'is-invalid': (!deliveryTime.valid && deliveryTime.touched ),'is-valid':(deliveryTime.valid) }"
-                            class="form-control" [(ngModel)]="preHeadquarters.deliveyTime" name="deliveryTime">
+                            class="form-control" [(ngModel)]="preHeadquarters.averageDeliveryTime" name="deliveryTime">
                         <div class="input-group-append">
                             <span class="input-group-text">min</span>
                         </div>
@@ -288,7 +263,7 @@
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="contactHq" #contactHq="ngModel" minlength="3"
                         [ngClass]="{'is-invalid': (!contactHq.valid && contactHq.touched ),'is-valid':(contactHq.valid) }"
-                        [(ngModel)]="preHeadquarters.headquarterContact" required placeholder="Contacto sede">
+                        [(ngModel)]="preHeadquarters.headquartersContact" required placeholder="Contacto sede">
                     <div class="invalid-feedback">*Este campo es requerido </div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
@@ -299,7 +274,7 @@
                 <div class="col-md-7">
                     <input class="form-control" placeholder="Cargo" type="text" name="chargeHq" #chargeHq="ngModel"
                         [ngClass]="{'is-invalid': (!chargeHq.valid && chargeHq.touched ),'is-valid':(chargeHq.valid) }"
-                        [(ngModel)]="preHeadquarters.chargeHq" minlength="3" required>
+                        [(ngModel)]="preHeadquarters.chargeHC" minlength="3" required>
                     <div class="invalid-feedback">*Este campo es requerido </div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
@@ -310,7 +285,7 @@
                 <div class="col-md-7">
                     <input class="form-control" type="text" placeholder="Celular" name="cellHq" pattern="^[3]\d{9}$"
                         [ngClass]="{'is-invalid': (!cellHq.valid && cellHq.touched) || cellHq.errors?.pattern ,'is-valid':(cellHq.valid) }"
-                        [(ngModel)]="preHeadquarters.cellHq" #cellHq="ngModel" required>
+                        [(ngModel)]="preHeadquarters.mobileHC" #cellHq="ngModel" required>
                     <div *ngIf="cellHq.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
                     <div *ngIf="cellHq.errors?.pattern" class="invalid-feedback">*Ingrese un número de celular
                         válido </div>
@@ -322,7 +297,7 @@
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" pattern="\([0-9]{3}\)[0-9]{3}[ -][0-9]{4}"
-                        placeholder="(xxx)xxx-xxxx" name="telHq" [(ngModel)]="preHeadquarters.telHq">
+                        placeholder="(xxx)xxx-xxxx" name="telHq" [(ngModel)]="preHeadquarters.telephoneHC">
                     <div class="col-md-9">
                         <div class="form-control-feedback">
                             <small> *Indicador seguido del número:(xxx)xxx-xxxx </small>
@@ -337,7 +312,7 @@
                     <input class="form-control" type="email" placeholder="Correo" name="emailHq"
                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #emailHq="ngModel"
                         [ngClass]="{'is-invalid': (!emailHq.valid && emailHq.touched) || emailGeneralHq.errors?.pattern ,'is-valid':(emailHq.valid) }"
-                        [(ngModel)]="preHeadquarters.emailHq" required>
+                        [(ngModel)]="preHeadquarters.emailHC" required>
                     <div *ngIf="emailHq.errors?.required" class="invalid-feedback">*Este campo es requerido
                     </div>
                     <div *ngIf="emailHq.errors?.pattern" class="invalid-feedback">*El campo no tiene formato de
@@ -373,8 +348,8 @@
 
     </form>
 
-    <pre>
+   <!--  <pre>
         {{ preHeadquarters | json }}
-    </pre>
+    </pre> -->
 
 </div>

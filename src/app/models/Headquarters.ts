@@ -12,7 +12,7 @@ export class Headquarters {
     mobileGC?:string;
     telephoneGC?:string;
     principarlServices?:string[];
-    costPerService?:number;
+    costPerService?:string[];
     aditionalServices?:string[];
     averageDeliveryTime?:string;
     headquartersContact?:string;
