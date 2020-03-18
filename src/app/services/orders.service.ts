@@ -81,4 +81,31 @@ export class OrdersService {
         )
       );
   }
+  getChargeByUserId(id:string): Observable<Orders[]> {
+    return this.httpclient.get<Orders[]>(environment.UrlBase + "orders/user/" + id).pipe(
+        map((orders: any[]) =>
+          orders.map(orders => {
+            let obj = {
+              id: orders._id,
+              code: orders.code,
+              idUser: orders.idUser,
+              idAllies: orders.idAllies,
+              nameAllies: orders.nameAllies,
+              idHeadquartes: orders.idHeadquartes,
+              nameHeadquartes: orders.nameHeadquartes,
+              idDishe: orders.idDishe,
+              nameDishe: orders.nameDishe,
+              typeOfService: orders.typeOfService,
+              orderValue: orders.orderValue,
+              dateAndHourReservation: orders.dateAndHourReservation,
+              dateAndHourDelivey: orders.dateAndHourDelivey,
+              chronometer: orders.chronometer,
+              orderStatus: orders.orderStatus,
+              deliveryStatus: orders.deliveryStatus
+            };
+            return obj;
+          })
+        )
+      );
+  }
 }

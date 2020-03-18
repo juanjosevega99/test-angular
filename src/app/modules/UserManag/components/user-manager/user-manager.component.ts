@@ -15,7 +15,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, NgModel } from '@angular/forms';
 
 
 
@@ -39,6 +39,8 @@ export class UserManagerComponent implements OnInit {
 
   from: string;
   to: string;
+
+  generalsearch : string ;
 
   users = [
     {
@@ -123,7 +125,7 @@ export class UserManagerComponent implements OnInit {
 
       res.forEach((user: Users) => {
 
-        this.orderservice.getChargeById(user.id).subscribe(res => {
+        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
           if (res.length > 0) {
 
             const obj: OrderByUser = {};
@@ -329,6 +331,7 @@ export class UserManagerComponent implements OnInit {
     this.newdateArray = [];
     this.newdateArray = this.usergetting;
     this.newdateArray.forEach(item => item.selected = false)
+    this.generalsearch = '';
   }
 
 
@@ -368,25 +371,9 @@ export class UserManagerComponent implements OnInit {
 
       if (termino) {
 
-        if (!this.filteredArray.length) {
+        if (this.filteredArray.length) {
 
           termino = termino.toLowerCase();
-
-          this.newdateArray = [];
-          this.filteredArray = [];
-
-          this.usergetting.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-              this.filteredArray.push(user);
-            }
-
-          });
-        }
-        else {
 
           this.newdateArray = [];
 
@@ -396,6 +383,22 @@ export class UserManagerComponent implements OnInit {
 
             if (user[id].toLowerCase().indexOf(termino) >= 0) {
               this.newdateArray.push(user);
+              
+            }
+
+          });
+        }
+        else {
+
+          this.newdateArray = [];
+
+          this.usergetting.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
 
             }
 
@@ -405,9 +408,13 @@ export class UserManagerComponent implements OnInit {
 
 
       } else {
+
         if (this.filteredArray.length) {
+
           this.newdateArray = this.filteredArray;
+
         } else {
+
           this.newdateArray = this.usergetting;
         }
       }
@@ -447,9 +454,13 @@ export class UserManagerComponent implements OnInit {
       }
 
     } else {
+
       if (this.filteredArray.length) {
+
         this.newdateArray = this.filteredArray;
+
       } else {
+
         this.newdateArray = this.usergetting;
       }
     }
