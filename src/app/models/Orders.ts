@@ -14,5 +14,6 @@ export class Orders {
     dateAndHourDelivey?:Date;
     chronometer?:number;
     orderStatus?:string;
+    quantity?:number;
     deliveryStatus?:boolean;
 }
