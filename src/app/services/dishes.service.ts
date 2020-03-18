@@ -12,7 +12,7 @@ export class DishesService {
   constructor(private httpclient: HttpClient) {}
 
   postDishe(dishe): Observable<Dishes> {
-    return this.httpclient.post<Dishes>(environment.UrlBase + "dishes", dishe);
+    return this.httpclient.post<Dishes>(environment.UrlBase + "dishes/", dishe);
   }
 
   putDishe(dishe): Observable<Dishes> {
@@ -31,7 +31,7 @@ export class DishesService {
       map((dishes: any[]) =>
         dishes.map(dishes => {
           let obj = {
-            id: dishes.id,
+            id: dishes._id,
             idMealsCategories: dishes.idMealsCategories,
             nameMealsCategories: dishes.nameMealsCategories,
             reference: dishes.reference,
