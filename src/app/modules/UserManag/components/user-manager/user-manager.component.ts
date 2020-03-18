@@ -123,28 +123,30 @@ export class UserManagerComponent implements OnInit {
 
       res.forEach((user: Users) => {
 
-        this.orderservice.getChargeById(user.id).subscribe(res => {
-          if (res.length > 0) {
+        this.orderservice.getChargeByUserId(user.id).subscribe(order => {
+          console.log(order);
+          
 
-            const obj: OrderByUser = {};
+          // if (order.length > 0) {
+          //   const obj: OrderByUser = {};
 
-            res.forEach((order: Orders) => {
-              obj.name = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
-              obj.nameAllie = order.nameAllies;
-              obj.nameHeadquarter = order.nameHeadquartes;
-              obj.usability = order.orderValue ? 1 : 0;
-              obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+          //   order.forEach((order: Orders) => {
+          //     obj.name = user.name;
+          //     obj.email = user.email;
+          //     obj.phone = user.phone;
+          //     obj.birthday = this.convertDate(user.birthday);
+          //     obj.gender = user.gender;
+          //     obj.nameAllie = order.nameAllies;
+          //     obj.nameHeadquarter = order.nameHeadquartes;
+          //     obj.usability = order.orderValue ? 1 : 0;
+          //     obj.purchaseAmount = order.orderValue;
+          //     obj.registerDate = this.convertDate(order.dateAndHourReservation);
 
-              this.usergetting.push(obj);
-            }
-            )
+          //     this.usergetting.push(obj);
+          //   }
+          //   )
 
-          }
+          // }
         })
 
       })
@@ -212,9 +214,8 @@ export class UserManagerComponent implements OnInit {
   // ==========================
   sendPromos() {
     this.selectforsend();
-    console.log("users", this.usergetting);
-    console.log(this.table);
-
+    // console.log("users", this.usergetting);
+    // console.log(this.table);
 
   }
 

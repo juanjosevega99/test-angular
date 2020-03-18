@@ -7,7 +7,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item">
             <a class="nav-link">Nombre</a>
@@ -41,13 +41,13 @@
           </li>
           <li class="nav-item">
             <a class="nav-link">Sede</a>
-            <input class="form-control" type="text" id="nameHeadquarter"
-              (keyup)="search(headquart.value, headquart.id)" #headquart formControlName="nameHeadquarter">
+            <input class="form-control" type="text" id="nameHeadquarter" (keyup)="search(headquart.value, headquart.id)"
+              #headquart formControlName="nameHeadquarter">
           </li>
           <li class="nav-item">
             <a class="nav-link">Usabilidad</a>
-            <input class="form-control" type="text" id="usability"
-              (keyup)="search(usability.value, usability.id)" #usability formControlName="usability">
+            <input class="form-control" type="text" id="usability" (keyup)="search(usability.value, usability.id)"
+              #usability formControlName="usability">
           </li>
           <li class="nav-item">
             <a class="nav-link">Monto-compras</a>
@@ -111,7 +111,7 @@
       #general (keyup)="searchbyterm(general.value)">
   </div>
 
-  <div class="tableFixHead" [formGroup]="table">
+  <div class="tableFixHead" >
     <table>
 
       <thead>

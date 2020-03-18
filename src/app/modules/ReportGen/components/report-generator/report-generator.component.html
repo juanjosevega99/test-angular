@@ -1,2 +1,96 @@
+<div class="compenetsstyle px-5">
 
-<p>report-generator works!</p>
+    <div class="container-fluid">
+        <div class="m-3 d-flex flex-row ">
+
+            <div class="container-fluid" style="width: 25%;">
+                <a [routerLink]='["/main"]' class="d-flex mr-2">
+                    <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+                </a>
+
+            </div>
+
+            <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
+                <div class="form-group hidden">
+                    <div class="input-group">
+                        <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+                            [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+                            [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate">
+                        <ng-template #t let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                                [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                                (mouseleave)="hoveredDate = null">
+                                {{ date.day }}
+                            </span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control
+                            [value]="formatter.format(fromDate)"
+                            (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()"
+                                type="button">Desde</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group ml-2">
+                    <div class="input-group">
+                        <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate"
+                            [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()"
+                                type="button">Hasta</button>
+                        </div>
+                    </div>
+                </div>
+                <button (click)=" search()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
+                <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+            </form>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="tableFixHead" [formGroup]="table">
+            <table>
+
+                <thead>
+                    <tr>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Correo</th>
+                        <th class="text-center">Celular</th>
+                        <th class="text-center">F. Nacimiento</th>
+                        <th class="text-center">Género</th>
+                        <th class="text-center">Establecimiento</th>
+                        <th class="text-center">Sede</th>
+                        <th class="text-center">Usabilidad</th>
+                        <th class="text-center">Monto compras</th>
+                        <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray"
+                                name="selectall" (change)="selectedAll($event)"> </th>
+                    </tr>
+
+                </thead>
+                <tbody class="mt-5">
+                    <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
+                        <td>{{user.registerDate}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.phone}}</td>
+                        <td>{{user.birthday}}</td>
+                        <td>{{user.gender}}</td>
+                        <td>{{user.nameAllie}}</td>
+                        <td>{{user.nameHeadquarter}}</td>
+                        <td>{{user.usability}}</td>
+                        <td>{{user.purchaseAmount}}</td>
+                        <td><input type="checkbox" class="m-1" [checked]="user.selected"
+                                (change)="selectedOne($event, i)"></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()"> Descargar</button>
+</div>

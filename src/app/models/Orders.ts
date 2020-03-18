@@ -1,5 +1,5 @@
 export class Orders {
-    id?:string;
+    _id?:string;
     code?:string;
     idUser?:string;
     idAllies?:string;

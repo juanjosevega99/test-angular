@@ -76,7 +76,6 @@ const routes: Routes = [
       { path : "profiles", component: ProfileComponent},
       { path : "createProfile", component: CreateProfileComponent},
       
-
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 
     ]
