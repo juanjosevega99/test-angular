@@ -40,7 +40,7 @@ export class UserManagerComponent implements OnInit {
   from: string;
   to: string;
 
-  generalsearch : string ;
+  generalsearch: string;
 
   users = [
     {
@@ -313,16 +313,16 @@ export class UserManagerComponent implements OnInit {
   clear() {
 
     this.table.reset({
-      date: "",
-      name: "",
-      email: "",
-      phone: "",
-      birthday: "",
-      gender: "",
-      nameAllie: "",
-      nameHeadquarter: "",
-      usability: "",
-      purchaseAmount: ""
+      date: null,
+      name: null,
+      email: null,
+      phone: null,
+      birthday: null,
+      gender: null,
+      nameAllie: null,
+      nameHeadquarter: null,
+      usability: null,
+      purchaseAmount: null
     });
 
     this.fromDate = null;
@@ -383,12 +383,14 @@ export class UserManagerComponent implements OnInit {
 
             if (user[id].toLowerCase().indexOf(termino) >= 0) {
               this.newdateArray.push(user);
-              
+
             }
 
           });
         }
         else {
+          console.log("no filtered array");
+
 
           this.newdateArray = [];
 
@@ -409,13 +411,26 @@ export class UserManagerComponent implements OnInit {
 
       } else {
 
-        if (this.filteredArray.length) {
+        this.table.value[id] = null;
 
-          this.newdateArray = this.filteredArray;
+        let count = 0;
+        for (var i in this.table.value) {
+
+          if (this.table.value[i] == null || this.table.value[i] == "") {
+            count += 1;
+          }
+        }
+
+        if (count > 9 && !this.generalsearch) {
+
+          this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
 
         } else {
 
-          this.newdateArray = this.usergetting;
+          this.newdateArray = this.filteredArray;
+          count = 0;
         }
       }
     }
@@ -455,14 +470,24 @@ export class UserManagerComponent implements OnInit {
 
     } else {
 
-      if (this.filteredArray.length) {
-
-        this.newdateArray = this.filteredArray;
-
-      } else {
-
-        this.newdateArray = this.usergetting;
+      let count = 0;
+      for (var i in this.table.value) {
+        if (this.table.value[i] == null || this.table.value[i] == "") {
+          count += 1;
+        }
       }
+
+      if (count > 9 && !this.generalsearch) {
+
+          this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
+          
+        } else {
+
+          this.newdateArray = this.filteredArray;
+          count = 0;
+        }
     }
 
   }
