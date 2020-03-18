@@ -82,31 +82,31 @@ export class OrdersService {
     )
     )
   }
-
-  getChargeByUserId(id: string): Observable<Orders[]> {
-    return this.httpclient.get<Orders[]>(environment.UrlBase + "orders/user/" + id).pipe(map(
-      (orders: Orders[]) => orders.map( order => {
-        let obj = {
-          id: order._id,
-          code: order.code,
-          idUser: order.idUser,
-          idAllies: order.idAllies,
-          nameAllies: order.nameAllies,
-          idHeadquartes: order.idHeadquartes,
-          nameHeadquartes: order.nameHeadquartes,
-          idDishe: order.idDishe,
-          nameDishe: order.nameDishe,
-          typeOfService: order.typeOfService,
-          orderValue: order.orderValue,
-          dateAndHourReservation: order.dateAndHourReservation,
-          dateAndHourDelivey: order.dateAndHourDelivey,
-          chronometer: order.chronometer,
-          orderStatus: order.orderStatus,
-          deliveryStatus: order.deliveryStatus
-        };
-        return obj;
-      }))
-    )
+  getChargeByUserId(id:string): Observable<Orders[]> {
+    return this.httpclient.get<Orders[]>(environment.UrlBase + "orders/user/" + id).pipe(
+        map((orders: any[]) =>
+          orders.map(orders => {
+            let obj = {
+              id: orders._id,
+              code: orders.code,
+              idUser: orders.idUser,
+              idAllies: orders.idAllies,
+              nameAllies: orders.nameAllies,
+              idHeadquartes: orders.idHeadquartes,
+              nameHeadquartes: orders.nameHeadquartes,
+              idDishe: orders.idDishe,
+              nameDishe: orders.nameDishe,
+              typeOfService: orders.typeOfService,
+              orderValue: orders.orderValue,
+              dateAndHourReservation: orders.dateAndHourReservation,
+              dateAndHourDelivey: orders.dateAndHourDelivey,
+              chronometer: orders.chronometer,
+              orderStatus: orders.orderStatus,
+              deliveryStatus: orders.deliveryStatus
+            };
+            return obj;
+          })
+        )
+      );
   }
-
 }

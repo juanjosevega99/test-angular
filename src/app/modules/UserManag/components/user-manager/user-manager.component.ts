@@ -15,7 +15,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, NgModel } from '@angular/forms';
 
 
 
@@ -39,6 +39,8 @@ export class UserManagerComponent implements OnInit {
 
   from: string;
   to: string;
+
+  generalsearch: string;
 
   users = [
     {
@@ -123,30 +125,28 @@ export class UserManagerComponent implements OnInit {
 
       res.forEach((user: Users) => {
 
-        this.orderservice.getChargeByUserId(user.id).subscribe(order => {
-          console.log(order);
-          
+        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
+          if (res.length > 0) {
 
-          // if (order.length > 0) {
-          //   const obj: OrderByUser = {};
+            const obj: OrderByUser = {};
 
-          //   order.forEach((order: Orders) => {
-          //     obj.name = user.name;
-          //     obj.email = user.email;
-          //     obj.phone = user.phone;
-          //     obj.birthday = this.convertDate(user.birthday);
-          //     obj.gender = user.gender;
-          //     obj.nameAllie = order.nameAllies;
-          //     obj.nameHeadquarter = order.nameHeadquartes;
-          //     obj.usability = order.orderValue ? 1 : 0;
-          //     obj.purchaseAmount = order.orderValue;
-          //     obj.registerDate = this.convertDate(order.dateAndHourReservation);
+            res.forEach((order: Orders) => {
+              obj.name = user.name;
+              obj.email = user.email;
+              obj.phone = user.phone;
+              obj.birthday = this.convertDate(user.birthday);
+              obj.gender = user.gender;
+              obj.nameAllie = order.nameAllies;
+              obj.nameHeadquarter = order.nameHeadquartes;
+              obj.usability = order.orderValue ? 1 : 0;
+              obj.purchaseAmount = order.orderValue;
+              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
 
-          //     this.usergetting.push(obj);
-          //   }
-          //   )
+              this.usergetting.push(obj);
+            }
+            )
 
-          // }
+          }
         })
 
       })
@@ -312,16 +312,16 @@ export class UserManagerComponent implements OnInit {
   clear() {
 
     this.table.reset({
-      date: "",
-      name: "",
-      email: "",
-      phone: "",
-      birthday: "",
-      gender: "",
-      nameAllie: "",
-      nameHeadquarter: "",
-      usability: "",
-      purchaseAmount: ""
+      date: null,
+      name: null,
+      email: null,
+      phone: null,
+      birthday: null,
+      gender: null,
+      nameAllie: null,
+      nameHeadquarter: null,
+      usability: null,
+      purchaseAmount: null
     });
 
     this.fromDate = null;
@@ -330,6 +330,7 @@ export class UserManagerComponent implements OnInit {
     this.newdateArray = [];
     this.newdateArray = this.usergetting;
     this.newdateArray.forEach(item => item.selected = false)
+    this.generalsearch = '';
   }
 
 
@@ -369,25 +370,9 @@ export class UserManagerComponent implements OnInit {
 
       if (termino) {
 
-        if (!this.filteredArray.length) {
+        if (this.filteredArray.length) {
 
           termino = termino.toLowerCase();
-
-          this.newdateArray = [];
-          this.filteredArray = [];
-
-          this.usergetting.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-              this.filteredArray.push(user);
-            }
-
-          });
-        }
-        else {
 
           this.newdateArray = [];
 
@@ -401,15 +386,50 @@ export class UserManagerComponent implements OnInit {
             }
 
           });
+        }
+        else {
+          console.log("no filtered array");
+
+
+          this.newdateArray = [];
+
+          this.usergetting.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
+
+            }
+
+          });
 
         }
 
 
       } else {
-        if (this.filteredArray.length) {
-          this.newdateArray = this.filteredArray;
-        } else {
+
+        this.table.value[id] = null;
+
+        let count = 0;
+        for (var i in this.table.value) {
+
+          if (this.table.value[i] == null || this.table.value[i] == "") {
+            count += 1;
+          }
+        }
+
+        if (count > 9 && !this.generalsearch) {
+
           this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
+
+        } else {
+
+          this.newdateArray = this.filteredArray;
+          count = 0;
         }
       }
     }
@@ -448,11 +468,25 @@ export class UserManagerComponent implements OnInit {
       }
 
     } else {
-      if (this.filteredArray.length) {
-        this.newdateArray = this.filteredArray;
-      } else {
-        this.newdateArray = this.usergetting;
+
+      let count = 0;
+      for (var i in this.table.value) {
+        if (this.table.value[i] == null || this.table.value[i] == "") {
+          count += 1;
+        }
       }
+
+      if (count > 9 && !this.generalsearch) {
+
+          this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
+          
+        } else {
+
+          this.newdateArray = this.filteredArray;
+          count = 0;
+        }
     }
 
   }

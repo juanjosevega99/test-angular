@@ -108,7 +108,7 @@
 
   <div class="container-fluid d-flex justify-content-center m-3">
     <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-      #general (keyup)="searchbyterm(general.value)">
+      #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
   </div>
 
   <div class="tableFixHead" >
