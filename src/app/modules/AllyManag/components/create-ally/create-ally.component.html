@@ -38,8 +38,7 @@
                                                         Este campo es requerido
                                                 </div>
                                                 <div *ngIf="forma.get('nit').errors?.pattern " class="invalid-feedback">
-                                                        Como mínimo 8 caracteres y no se puede utilizar caracteres
-                                                        especiales.
+                                                        Como mínimo 8 caracteres y no se puede ingresar letras.
                                                 </div>
                                                 <div class="valid-feedback">Ok!</div>
                                         </div>
@@ -95,11 +94,11 @@
                                                                 </button>
                                                                 <input type="file" 
                                                                         (change)="onPhotoSelected($event)"
-                                                                        formControlName="logo" 
                                                                         [ngClass]="{ 'is-invalid': (!forma.get('logo').valid && 
                                                                         forma.get('logo').touched ), 
                                                                         'is-valid':( forma.get('logo').valid )}" 
                                                                 >
+                                                                <input type="text" [value]="urlLogo | async">
                                                                 <div *ngIf="forma.get('logo').errors?.required "
                                                                         class="invalid-feedback">
                                                                         Este campo es requerido
