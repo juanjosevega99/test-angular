@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms'
-import { AngularFireStorage } from '@angular/fire/storage'
 import { finalize } from "rxjs/operators";
 import { Observable } from 'rxjs/internal/Observable';
 import * as $ from 'jquery';
@@ -14,6 +13,8 @@ import { AlliesService } from "../../../../services/allies.service";
 // import { LoadImagesService } from "../../../../services/providers/load-images.service"
 //models
 import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
+// firebase 
+import { AngularFireStorage } from '@angular/fire/storage'
 
 @Component({
   selector: 'app-create-ally',
@@ -36,7 +37,7 @@ export class CreateAllyComponent implements OnInit {
   objectEstablishment: any;
 
   //varibles of upload Logo
-  urlLogo: Observable<any>;
+  urlLogo: Observable<string>;
   fileImgLogo: any;
 
   //variables carousel
@@ -417,21 +418,7 @@ export class CreateAllyComponent implements OnInit {
       if (result.value) {
         console.log('File of IMAGE NEED', this.fileImgLogo)
         // upload Image Logo
-        const id = Math.random().toString(36).substring(2);
-        const file = this.fileImgLogo;
-        const filePath = `assets/allies/logos/${id}`
-        const ref = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file)
-        task.snapshotChanges()
-          .pipe(
-            finalize(() => {
-              ref.getDownloadURL().subscribe(urlImage => {
-                this.urlLogo = urlImage;
-                console.log('URL IMAGE', this.urlLogo)
-                // 
-              })
-            })
-          ).subscribe();
+        
         // put the values of properties establishment
         console.log(this.forma.controls['idTypeOfEstablishment'].value);
         console.log(this.forma.controls['idTypeOfEstablishment'].value.id);
@@ -465,11 +452,25 @@ export class CreateAllyComponent implements OnInit {
         console.log(objAllie);
 
         //agrgate urlLogo of propertie object 
-        this.allieService.postAllie(objAllie).subscribe(()=> {
-          this.allieService.getAllies().subscribe(allie=> {
-            this.allies = allie;
-            console.log(this.allies); // to do 
-          })
+        this.allieService.postAllie(objAllie).subscribe((allie:any)=> {
+          
+          console.log('POST',allie._id);
+        const id = allie._id
+        const file = this.fileImgLogo;
+        const filePath = `assets/allies/logos/${id}`
+        const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file)
+        task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                this.urlLogo = urlImage;
+                console.log('URL IMAGE', this.urlLogo)
+                // 
+              })
+            })
+          ).subscribe();
+          
         })
 
         Swal.fire(
