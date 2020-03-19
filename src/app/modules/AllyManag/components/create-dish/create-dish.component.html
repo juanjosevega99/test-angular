@@ -91,25 +91,40 @@
                         <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #otherCat="ngModel"
                             [ngClass]="{'is-invalid': (!otherCat.valid && otherCat.touched ),'is-valid':(otherCat.valid)}"
                             class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="preDish.nameMealsCategories"
-                            type="text" name="otherCategory" (keyup.enter)="addCategory(additem.value)" #additem>
+                            type="text" name="otherCategory">
+                        <!-- (keyup.space)="addCategory(additem.value)" #additem -->
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="handleBoxCategories()"> Cancelar</button>
 
-                        <div *ngIf="selectAgainarray" class="input-group-append">
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="addCategory()"> Guardar</button>
+
+                        <button *ngIf="addcategoryButton"(click)="handleBoxCategories()"
+                            class="btn1 btn btn-outline-primary">
+                            Otro
+                        </button>
+
+                        <button *ngIf="addcategoryButton" (click)=" deleteCategory()" type="button"
+                            class="btn1 btn btn-outline-primary">
+                            Borrar
+                        </button>
+                        <!-- <div *ngIf="selectAgainarray" class="input-group-append">
                             <span class="input-group-text" (click)="handleBoxCategories()">
                                 Regresar
                             </span>
-                        </div>
+                        </div> -->
 
-                        <div *ngIf="otherCategoryInput" class="col-md-10">
+                        <!-- <div *ngIf="otherCategoryInput" class="col-md-10">
                             <div class="form-control-feedback">
                                 <small> *Presione enter para guardar </small>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div *ngIf="addcategoryButton" class="input-group-append">
+                        <!-- <div *ngIf="addcategoryButton" class="input-group-append">
                             <span class="input-group-text" (click)="handleBoxCategories()">
                                 Otro
                             </span>
-                        </div>
+                        </div> -->
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
                         <div class="valid-feedback">Ok!</div>
@@ -195,8 +210,8 @@
                             class="form-control">
                         <div class="input-group-append">
                             <select class="input-group-text" class="form-control"
-                            [ngClass]="{'is-invalid': (!timeUnity.valid),'is-valid':(timeUnity.valid) }" #timeUnity="ngModel"
-                                [(ngModel)]="preDish.preparationTime[1]" name="times" required>
+                                [ngClass]="{'is-invalid': (!timeUnity.valid),'is-valid':(timeUnity.valid) }"
+                                #timeUnity="ngModel" [(ngModel)]="preDish.preparationTime[1]" name="times" required>
                                 <option *ngFor="let time of time">
                                     {{time}}
                                 </option>
@@ -230,9 +245,8 @@
         </section>
     </form>
 
-   <!--  <pre>
+    <!--  <pre>
         {{ preDish | json }}
     </pre> -->
 
 </div>
-

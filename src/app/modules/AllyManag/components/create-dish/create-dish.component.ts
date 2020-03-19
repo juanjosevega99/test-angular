@@ -13,10 +13,10 @@ export class CreateDishComponent implements OnInit {
 
   //Object to save the dates of the form
   preDish: Object = {
-    idMealsCategories:null,
+    idMealsCategories: null,
     state: null,
-    creationDate: null,
-    modificationDate: null,
+    /* creationDate: null,
+    modificationDate: null, */
     numberOfModifications: 0,
     nameMealsCategories: null,
     reference: null,
@@ -26,13 +26,13 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: [],
     idAccompaniments: [],
-    idPromotion:null
+    idPromotion: null
   }
 
   //variables for tick
-  date:string;
-  times:string;
-  today:Date;
+  date: string;
+  times: string;
+  today: Date;
 
   //variables for categories
   Categories: String[] = [];
@@ -48,14 +48,13 @@ export class CreateDishComponent implements OnInit {
 
   constructor(private _router: Router, private dishes: DishesService) {
     this.Categories = ["Boxes", "Combos", "Postes"]
-    this.State = [{name:'Activo',selected: true}, {name:'Inactivo',selected:false}, {name:'Eliminar',selected:false}]
-    this.time = ['segundos','minutos','horas']
+    this.State = [{ name: 'Activo', selected: true }, { name: 'Inactivo', selected: false }, { name: 'Eliminar', selected: false }]
+    this.time = ['segundos', 'minutos', 'horas']
   }
 
   ngOnInit() {
-    setInterval( ()=>this.tick(), 1000 );
+    setInterval(() => this.tick(), 1000);
   }
-
 
   //Method for showing new view in the categories field
   handleBoxCategories(): boolean {
@@ -75,91 +74,77 @@ export class CreateDishComponent implements OnInit {
   //Method for add new category
   addCategory(name: String) {
     this.newCategory = name.toLowerCase();
-    this.Categories.push(name.toLocaleLowerCase())
+    this.Categories.push(this.newCategory.toLocaleLowerCase())
   }
 
- //Method for photo of the dish
- onPhotoSelected($event) {
-  let input = $event.target;
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
+  //Method for delete a category
+  deleteCategory(){}
 
-    reader.onload = function (e: any) {
-      $('#photo')
-        .attr('src', e.target.result)
-    };
+  //Method for photo of the dish
+  onPhotoSelected($event) {
+    let input = $event.target;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
 
-   reader.readAsDataURL(input.files[0]);
-/*    this.preDish['imageDishe'] */
-  this.preDish['imageDishe'] = input.files[0].name
-    
-  }
-}
-
-//Methos for preparation time
-inputTime(event1){
-  /* const valueInput = event1.target.value */
-  
-  console.log(event1);
-  
-}
-
-//Method for selecting the state
-selectedState(event){
-  const value = event.target.value;
-  event.target.value = value;
-  this.preDish['state'] = value
-}
-
-//Method for the admission date
-tick(): void{
-  this.today = new Date();
-  this.times = this.today.toLocaleString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-  this.date = this.today.toLocaleString('es-ES',{weekday:'long',day:'2-digit',month:'numeric',year:'numeric'});
-  /* this.preDish['creationDate'] = this.date.concat("-",this.times) */ 
-}
-
-//Method for the modifications number
-modificationsNumber(): void{
-  /* this.preDish['numberOfModifications'].push(0)
-  console.log(this.preDish['numberOfModifications'].push(0)); */ 
-}
-
-//save new dish
-saveDish(shape: NgForm) {
-   this.swallSaveDish(this.preDish)
-}
-
-swallSaveDish(newHeadquarter: any){
-
-  Swal.fire({
-    title: 'Estás seguro?',
-    text: "de que deseas guardar los cambios!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, guardar!'
-  }).then((result) => {
-    if (result.value) {
-      console.log("Array FINAL: ", this.preDish);
-      this.dishes.postDishe(this.preDish).subscribe()
-      Swal.fire({
-        title: 'Guardado',
-        text: "Tu nuevo plato ha sido creado!",
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Ok!'
-      }).then((result) => {
-        if (result.value) {
-          this._router.navigate(['/main','editmenu']);
-        }
-      })
+      reader.onload = function (e: any) {
+        $('#photo')
+          .attr('src', e.target.result)
+      };
+      reader.readAsDataURL(input.files[0]);
+      this.preDish['imageDishe'] = input.files[0].name
     }
-  })
+  }
 
-}
+  //Method for selecting the state
+  selectedState(event) {
+    const value = event.target.value;
+    event.target.value = value;
+    this.preDish['state'] = value
+  }
+
+  //Method for the admission date
+  tick(): void {
+    this.today = new Date();
+    this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    /* this.preDish['creationDate'] = this.date.concat("-",this.times) */
+  }
+
+  //save new dish
+  saveDish(shape: NgForm) {
+    this.swallSaveDish(this.preDish)
+  }
+
+  swallSaveDish(newHeadquarter: any) {
+
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.preDish);
+        this.dishes.postDishe(this.preDish).subscribe(message=>{})
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu nuevo plato ha sido creado!",
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'editmenu']);
+          }
+        })
+      }
+    })
 
   }
+
+}
 
 
