@@ -1,5 +1,39 @@
 @import '../../../UserManag/components/user-manager/user-manager.component.scss';
 
-.nav-item a{
-    border-right: 1px solid #d2d2d2;;
+.menu{
+    
+    background-color: #f6f6f6;
+    width: 95%;
+    border-radius: .8rem;
+}
+
+.menu ul {
+    display: flex;
+    margin: 0;
+    padding: 10px;
+    list-style: none;
+
+}
+
+.menu li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    flex-grow: 1;
+    border-right: 1px solid #4e4f4f;
+
+
+}
+
+.menu li a{
+    margin-right: 10px;
+    
+    padding: 10px;
+    color: #4e4f4f;
+
+}
+
+.menu li input {
+    background-color:#d2d2d2 ;
+    border-radius: .5rem;
 }
