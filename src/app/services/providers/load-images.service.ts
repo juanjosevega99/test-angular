@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-
 import { AngularFireStorage } from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
+import { finalize } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 // import { AngularFirestore } from '@angular/fire/storage';}
 // import { AngularFirestore } from '@angular/fire/firestore';
 
@@ -10,12 +11,11 @@ import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
   providedIn: 'root'
 })
 export class LoadImagesService {
-  private FOLDER_IMAGES = 'assets' 
-  private allies = 'allies'
-  private establishmentPhotos = 'establishmentPhotos'
+  private folderImages = 'assets' 
 
 
-  constructor(private db : AngularFireStorage) { 
+  constructor(private storage: AngularFireStorage) {
+    
   }
 
   loadImagesFirebase(images: FileItem[]){
@@ -35,6 +35,24 @@ export class LoadImagesService {
         }        
         ) 
     }
+  }
+
+  upladImage(fileImgLogo:any, routeImage:string, ){
+      const id = Math.random().toString(36).substring(2);
+      const file = fileImgLogo;
+      const filePath = `assets/${routeImage}/${id}`
+      const ref = this.storage.ref(filePath); 
+      const task = this.storage.upload(filePath, file)
+      task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                // this.urlLogo = urlImage;
+                             // 
+              })
+            })
+          ).subscribe();
+    
   }
 
 
