@@ -25,10 +25,10 @@ export class LoadImagesService {
       console.log('ciclo',item)
 
       const uploadTask: firebase.storage.UploadTask = 
-                          storageRef.child(`${this.FOLDER_IMAGES}/ ${this.allies} / ${this.establishmentPhotos}`)
+                          storageRef.child(`${this.FOLDER_IMAGES}/ ${this.allies}/ ${this.establishmentPhotos}`)
                         .put( item.file ) ;
       uploadTask.on( firebase.storage.TaskEvent.STATE_CHANGED,
-        ( error )=> console.log('Error al subir',error),
+        ( error )=> console.log('Error al subir', error ),
         ()=>{
           console.log('Imagen cargada correctamente');
           item.url =   uploadTask.snapshot.downloadURL 

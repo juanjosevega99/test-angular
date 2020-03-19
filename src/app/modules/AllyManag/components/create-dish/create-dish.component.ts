@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { SwallServicesService } from 'src/app/services/swall-services.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { DishesService } from 'src/app/services/dishes.service';
 
 @Component({
   selector: 'app-create-dish',
@@ -11,23 +13,26 @@ export class CreateDishComponent implements OnInit {
 
   //Object to save the dates of the form
   preDish: Object = {
-    state: [],
-   /*  creationDate: null, */
-   /*  modificationDate: null, */
-    numberOfModifications: null,
+    idMealsCategories: null,
+    state: null,
+    /* creationDate: null,
+    modificationDate: null, */
+    numberOfModifications: 0,
     nameMealsCategories: null,
     reference: null,
     name: null,
     price: null,
     imageDishe: null,
     description: null,
-    preparationTime: null
+    preparationTime: [],
+    idAccompaniments: [],
+    idPromotion: null
   }
 
   //variables for tick
-  date:String;
-  times:String;
-  today:Date;
+  date: string;
+  times: string;
+  today: Date;
 
   //variables for categories
   Categories: String[] = [];
@@ -39,18 +44,17 @@ export class CreateDishComponent implements OnInit {
 
   State: any[] = [];
 
-  time: string[] = [];
+  time: String[] = [];
 
-  constructor(private swal: SwallServicesService) {
+  constructor(private _router: Router, private dishes: DishesService) {
     this.Categories = ["Boxes", "Combos", "Postes"]
-    this.State = [{name:'Activo',selected: true}, {name:'Inactivo',selected:false}, {name:'Eliminar',selected:false}]
-    this.time = ['segundos','minutos','horas']
+    this.State = [{ name: 'Activo', selected: true }, { name: 'Inactivo', selected: false }, { name: 'Eliminar', selected: false }]
+    this.time = ['segundos', 'minutos', 'horas']
   }
 
   ngOnInit() {
-    setInterval( ()=>this.tick(), 1000 );
+    setInterval(() => this.tick(), 1000);
   }
-
 
   //Method for showing new view in the categories field
   handleBoxCategories(): boolean {
@@ -70,55 +74,77 @@ export class CreateDishComponent implements OnInit {
   //Method for add new category
   addCategory(name: String) {
     this.newCategory = name.toLowerCase();
-    this.Categories.push(name.toLocaleLowerCase())
+    this.Categories.push(this.newCategory.toLocaleLowerCase())
   }
 
- //Method for photo of the dish
- onPhotoSelected($event) {
-  let input = $event.target;
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
+  //Method for delete a category
+  deleteCategory(){}
 
-    reader.onload = function (e: any) {
-      $('#photo')
-        .attr('src', e.target.result)
-    };
+  //Method for photo of the dish
+  onPhotoSelected($event) {
+    let input = $event.target;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
 
-   reader.readAsDataURL(input.files[0]);
-/*    this.preDish['imageDishe'] 
-    console.log(input.files[0].name); */
-    
+      reader.onload = function (e: any) {
+        $('#photo')
+          .attr('src', e.target.result)
+      };
+      reader.readAsDataURL(input.files[0]);
+      this.preDish['imageDishe'] = input.files[0].name
+    }
   }
-}
 
-//Metod for selecting the state
-selectedState(event){
-  const checked = event.target.checked;
-  const value = event.target.value;
+  //Method for selecting the state
+  selectedState(event) {
+    const value = event.target.value;
+    event.target.value = value;
+    this.preDish['state'] = value
+  }
 
-  event.target.value = value;
-  this.preDish['state'] = { value, checked }
-}
+  //Method for the admission date
+  tick(): void {
+    this.today = new Date();
+    this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    /* this.preDish['creationDate'] = this.date.concat("-",this.times) */
+  }
 
-//Metod for the admission date
-tick(): void{
-  this.today = new Date();
-  this.times = this.today.toLocaleString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-  this.date = this.today.toLocaleString('es-ES',{weekday:'long',day:'2-digit',month:'numeric',year:'numeric'});
-  /* this.preDish['creationDate'] = this.today */
-}
+  //save new dish
+  saveDish(shape: NgForm) {
+    this.swallSaveDish(this.preDish)
+  }
 
-//save new dish
-saveDish(shape: NgForm) {
-  console.log("enviando algo");
-  console.log(shape);
-  console.log(shape.value);
-  /*  console.log(this.preHeadquarters); */
-  /*    swal("Hello world!"); */
-  this.swal.saveChanges()
-  
-}
+  swallSaveDish(newHeadquarter: any) {
+
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.preDish);
+        this.dishes.postDishe(this.preDish).subscribe(message=>{})
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu nuevo plato ha sido creado!",
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'editmenu']);
+          }
+        })
+      }
+    })
 
   }
+
+}
 
 

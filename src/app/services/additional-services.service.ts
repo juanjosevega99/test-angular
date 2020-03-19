@@ -21,7 +21,7 @@ export class AdditionalServicesService {
   }
 
   deleteAdditionalService(id):Observable<{}>{
-    return this.httpclient.delete(environment.UrlBase+"additionalservices/"+id);
+    return this.httpclient.delete(environment.UrlBase+"additional-services/"+id);
   }
 
   getAdditionalServices(): Observable<any[]>{
@@ -39,7 +39,7 @@ export class AdditionalServicesService {
     return this.httpclient.get<AdditionalServices[]>(environment.UrlBase+"additional-services/"+id).pipe(map((additionalservices:any[])=>additionalservices.map((additionalservices)=>{
       let obj = {
         id:additionalservices._id,
-        additionalServices: additionalservices.additionalservices,
+        additionalServices: additionalservices.additionalServices,
       } 
       return obj;
     })));

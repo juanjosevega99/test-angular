@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { AlliesCategoriesService } from "./allies-categories.service";
-import { Allies } from '../models/Allies';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +38,8 @@ export class SwallServicesService {
       text: "de que deseas cancelar!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
