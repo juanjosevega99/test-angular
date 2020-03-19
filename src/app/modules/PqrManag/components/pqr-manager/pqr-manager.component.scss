@@ -64,7 +64,6 @@
 .PqrGeneral div{
     width: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
     margin: 1rem;
     flex-direction: column;
@@ -114,4 +113,12 @@
 	border-radius: 10px;
 	box-shadow: inset 0 0 10px rgba(0,0,0,.3);
 	background-color: #001f7f;
+}
+
+// =================================
+// Buttons
+// =================================
+.btnForInforms{
+    width: 10rem;
+    color: #542b81;
 }
