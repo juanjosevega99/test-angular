@@ -436,7 +436,10 @@ export class CreateAllyComponent implements OnInit {
       console.log('THIS IS MAGIC ', this.urlLogo);
       // this.forma.controls['logo'].setValue(this.urlLogo)
       
-         // put the values of properties establishment
+    // put the values of properties establishment
+    console.log(this.forma.controls['idTypeOfEstablishment'].value);
+    console.log(this.forma.controls['idTypeOfEstablishment'].value.id);
+    
     let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
     let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
 
@@ -453,18 +456,18 @@ export class CreateAllyComponent implements OnInit {
     let addSchedule: object = {
       attentionSchedule: this.Schedules
     }
+    this.scheduleServices.postAttentionSchedule(addSchedule).subscribe(() => {
+      this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
+        this.attentionSchedule = schedule;
+        console.log(this.attentionSchedule); // delete console log
+      })
+    })
     this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)  //to do
     console.log(this.forma.value); // delete console.log
     let objAllie = this.forma.value
     // console.log('valor of nameEStblishment ', this.forma.controls['nameTypeOfEstablishment'].value) //delete console.log
-
-
-        this.scheduleServices.postAttentionSchedule(addSchedule).subscribe(() => {
-          this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
-            this.attentionSchedule = schedule;
-            console.log(this.attentionSchedule); // delete console log
-          })
-        })
+        console.log(objAllie);
+        
         //agrgate urlLogo of propertie object 
         this.allieService.postAllie(objAllie).subscribe()
 
