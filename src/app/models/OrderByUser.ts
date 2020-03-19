@@ -12,6 +12,7 @@ export class OrderByUser{
     quantity?:string;
     nameDishe?:string;
     controlOrder?:String;
+    unitValue?:number;
 
     lastname?:string;
     email?:string;
