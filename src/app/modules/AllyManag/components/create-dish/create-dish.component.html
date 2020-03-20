@@ -62,7 +62,17 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de modificación</label>
                 <div class="col-md-7">
-                    <label>---</label>
+                    <label class="dt">
+                        <p class="text-center">
+                            {{date}}
+                        </p>
+                    </label>
+
+                    <label class="dt" style="margin-right: 10px;">
+                        <p class="text-center">
+                            {{times}}
+                        </p>
+                    </label>
                 </div>
             </div>
 
@@ -79,25 +89,24 @@
                 <div class="col-md-7">
                     <div class="input-group">
 
-                        <select *ngIf="arrayCategorySelect" class="form-control" name="dishCategory"
+                        <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="dishCategory"
                             #nameMealsCategories="ngModel" required
                             [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid) }"
                             [(ngModel)]="preDish.nameMealsCategories">
-                            <option *ngFor="let name of Categories">
-                                {{name}}
+                            <option *ngFor="let category of dishesCategories">
+                                {{category.name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #otherCat="ngModel"
-                            [ngClass]="{'is-invalid': (!otherCat.valid && otherCat.touched ),'is-valid':(otherCat.valid)}"
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="preDish.nameMealsCategories"
-                            type="text" name="otherCategory">
-                        <!-- (keyup.space)="addCategory(additem.value)" #additem -->
+                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #category="ngModel" 
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCat" type="text" name="otherCat"
+                            [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}">
+
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
                             (click)="handleBoxCategories()"> Cancelar</button>
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                            (click)="addCategory()"> Guardar</button>
+                            (click)="addCategory(otherCat)"> Guardar</button>
 
                         <button *ngIf="addcategoryButton"(click)="handleBoxCategories()"
                             class="btn1 btn btn-outline-primary">
@@ -108,23 +117,6 @@
                             class="btn1 btn btn-outline-primary">
                             Borrar
                         </button>
-                        <!-- <div *ngIf="selectAgainarray" class="input-group-append">
-                            <span class="input-group-text" (click)="handleBoxCategories()">
-                                Regresar
-                            </span>
-                        </div> -->
-
-                        <!-- <div *ngIf="otherCategoryInput" class="col-md-10">
-                            <div class="form-control-feedback">
-                                <small> *Presione enter para guardar </small>
-                            </div>
-                        </div> -->
-
-                        <!-- <div *ngIf="addcategoryButton" class="input-group-append">
-                            <span class="input-group-text" (click)="handleBoxCategories()">
-                                Otro
-                            </span>
-                        </div> -->
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
                         <div class="valid-feedback">Ok!</div>
@@ -180,7 +172,8 @@
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
-                        <div class="photo"> <img id="photo" width="100px" height="100px">
+                        <div class="photo"> 
+                            <img id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -245,7 +238,7 @@
         </section>
     </form>
 
-    <!--  <pre>
+     <!-- <pre>
         {{ preDish | json }}
     </pre> -->
 
