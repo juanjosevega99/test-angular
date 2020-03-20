@@ -7,6 +7,7 @@ import 'jspdf-autotable';
 import * as jsPDF from 'jspdf';
 import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { PqrsService } from 'src/app/services/pqrs.service';
+import { Pqrs } from 'src/app/models/Pqrs';
 
 @Component({
   selector: 'app-pqr-list',
@@ -50,6 +51,26 @@ export class PqrListComponent implements OnInit {
 
    this.pqrlistservice.getPqrs().subscribe(res=>{
      console.log(res);
+     if (res.length > 0) {
+
+      const obj: Pqrs = {};
+
+      res.forEach((order: any) => {
+        obj.id = order.id,
+        obj.date = this.convertDate( order.date );
+        obj.nameUser = order.nameUser;
+        obj.email = order.email;
+        obj.phone = order.phone;
+        obj.birthday = this.convertDate( order.birthday);
+        obj.gender = order.gender;
+        obj.nameAllie = order.nameAllie;
+        obj.nameHeadquarter = order.nameHeadquarter;
+
+      },
+      this.usergetting.push(obj)
+      )
+
+    }
      
    })
     
@@ -109,7 +130,7 @@ selectedOne(event, pos: number) {
 
 selectforsend() {
   this.userSelected = []
-  this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
+  this.newdateArray = this.usergetting;
 }
 
 //get data to export
@@ -145,11 +166,11 @@ generatePdf(content: any) {
   //'p', 'mm', 'a4'
 
   let doc = new jsPDF('landscape');
-  let col = ["#", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
-    "Sede", "Usabilidad", "Monto"];
+  let col = ["Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
+    "Sede"];
   let rows = [];
   let auxrow = [];
-  this.userSelected.map((user, i) => {
+  this.usergetting.map((user, i) => {
     auxrow = [];
     auxrow[0] = i + 1;
     for (const key in user) {
@@ -389,11 +410,25 @@ searchbyterm(termino: string) {
 
 }
 
+
+// ===========================
+// convert date
+// ===========================
+
+
 convertDate(date: Date): string {
-  const d = new Date(date);
-  const n = d.toISOString().split("T")[0];
+  let n:string;
+  try{
+
+    const d = new Date(date);
+    n = d.toISOString().split("T")[0];
+  }catch{
+    console.log(date);
+    
+  }
   return n;
 }
+
 
 }
 
