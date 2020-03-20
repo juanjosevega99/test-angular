@@ -3,6 +3,10 @@ import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { DishesService } from 'src/app/services/dishes.service';
+import { DishesCategoriesService } from "src/app/services/dishes-categories.service";
+import { AngularFireStorage } from "@angular/fire/storage";
+import { finalize } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-create-dish',
@@ -35,21 +39,31 @@ export class CreateDishComponent implements OnInit {
   today: Date;
 
   //variables for categories
-  Categories: String[] = [];
+  /* Categories: String[] = []; */
   arrayCategorySelect: boolean = true;
   otherCategoryInput: boolean = false;
   addcategoryButton: boolean = true;
   selectAgainarray: boolean = false;
   newCategory: String;
+  dishesCategories: any[] = [];
 
   State: any[] = [];
 
   time: String[] = [];
 
-  constructor(private _router: Router, private dishes: DishesService) {
-    this.Categories = ["Boxes", "Combos", "Postes"]
+  //variable for upload images
+  fileImagedish: any;
+  urlDish: Observable<string>;
+
+  constructor(private _router: Router, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService) {
+    /*  this.Categories = ["Boxes", "Combos", "Postes"] */
     this.State = [{ name: 'Activo', selected: true }, { name: 'Inactivo', selected: false }, { name: 'Eliminar', selected: false }]
     this.time = ['segundos', 'minutos', 'horas']
+
+    //inicialization service with collections dishes-categories
+    this.dishCategory.getDishCategory().subscribe(dishesCat => {
+      this.dishesCategories = dishesCat;
+    })
   }
 
   ngOnInit() {
@@ -71,14 +85,21 @@ export class CreateDishComponent implements OnInit {
     }
   }
 
-  //Method for add new category
+  //CRD -- Methos of TypeDish: CREATE ,READ AND DELETE 
   addCategory(name: String) {
-    this.newCategory = name.toLowerCase();
-    this.Categories.push(this.newCategory.toLocaleLowerCase())
-  }
+    let newitem = name;
+    let newCategory: object = {
+      name: newitem
+    }
+    this.swallSaveOtherDish(newCategory)
 
-  //Method for delete a category
-  deleteCategory(){}
+    this.handleBoxCategories()
+  }
+  
+  deleteCategory() {
+    let categorySelected = this.preDish['nameMealsCategories']
+    this.swallDeleteDish(categorySelected)
+  }
 
   //Method for photo of the dish
   onPhotoSelected($event) {
@@ -93,6 +114,8 @@ export class CreateDishComponent implements OnInit {
       reader.readAsDataURL(input.files[0]);
       this.preDish['imageDishe'] = input.files[0].name
     }
+
+    return this.fileImagedish = input.files[0]
   }
 
   //Method for selecting the state
@@ -115,8 +138,68 @@ export class CreateDishComponent implements OnInit {
     this.swallSaveDish(this.preDish)
   }
 
-  swallSaveDish(newHeadquarter: any) {
+  //sweet alerts
+  swallSaveOtherDish(newCategory: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar esta nueva categoría!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.dishCategory.postDishCategory(newCategory).subscribe(() => {
+          this.dishCategory.getDishCategory().subscribe(dishC => {
+            this.dishesCategories = dishC;
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nueva categoría de plato ha sido creada',
+          'success',
+        )
+      }
+    })
+  }
 
+  swallDeleteDish(categorySelected: string) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar esta categoría!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.dishCategory.getDishCategory().subscribe(dishC => {
+          this.dishesCategories = dishC;
+          this.dishesCategories.forEach((element: any) => {
+            let dish: any = {
+              id: element.id,
+              name: element.name
+            }
+            if (dish.name == categorySelected) {
+              this.dishCategory.deleteDishCategory(dish.id).subscribe(() => {
+                this.dishCategory.getDishCategory().subscribe(dishes => {
+                  this.dishesCategories = dishes;
+                })
+              })
+            }
+          });
+        })
+        Swal.fire(
+          'Eliminado!',
+          'success',
+        )
+      }
+    })
+  }
+
+  swallSaveDish(newHeadquarter: any) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -128,7 +211,22 @@ export class CreateDishComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
-        this.dishes.postDishe(this.preDish).subscribe(message=>{})
+        this.dishes.postDishe(this.preDish).subscribe(message => { })
+        const id = Math.random().toString(36).substring(2);
+        const file = this.fileImagedish;
+        const filePath = `assets/allies/menu/${id}`;
+        const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file)
+        task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                this.urlDish = urlImage;
+                console.log(this.urlDish);
+              })
+            }
+            )
+          ).subscribe()
         Swal.fire({
           title: 'Guardado',
           text: "Tu nuevo plato ha sido creado!",
