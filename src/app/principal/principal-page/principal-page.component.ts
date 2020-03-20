@@ -35,7 +35,7 @@ export class PrincipalPageComponent implements OnInit {
 
   ngOnInit() {
   
-    this.spinner.show()
+    // this.spinner.show()
     this.reservaService.getReservas().subscribe((reservas)=>{
       this.reservas = reservas;
       this.hours();

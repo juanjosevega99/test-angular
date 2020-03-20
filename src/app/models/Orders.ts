@@ -1,5 +1,5 @@
 export class Orders {
-    id?:string;
+    _id?:string;
     code?:string;
     idUser?:string;
     idAllies?:string;
@@ -14,5 +14,6 @@ export class Orders {
     dateAndHourDelivey?:Date;
     chronometer?:number;
     orderStatus?:string;
+    quantity?:number;
     deliveryStatus?:boolean;
 }

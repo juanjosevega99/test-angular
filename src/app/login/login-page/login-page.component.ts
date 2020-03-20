@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner'
-import { AngularFireAuth } from "@angular/fire/auth"; 
-import * as firebase from "firebase"; 
+import { AngularFireAuth } from "@angular/fire/auth";  
 import { Router } from '@angular/router';
 
 @Component({

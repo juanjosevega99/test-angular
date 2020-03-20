@@ -1,0 +1,224 @@
+<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+
+    <div class="filerControl px-1">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link">Nombre</a>
+                        <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name id="name"
+                            formControlName="name">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Correo</a>
+                        <input class="form-control" type="text" (keyup)="search( email.value, email.id )" #email
+                            id="email" formControlName="email">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Celular</a>
+                        <input class="form-control" type="text" id="phone"
+                            (keyup)="search(cellphone.value, cellphone.id)" #cellphone formControlName="phone">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">F. Nacimiento</a>
+                        <input class="form-control" type="text" id="birthday"
+                            (keyup)="search(birthday.value, birthday.id)" #birthday formControlName="birthday">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Género</a>
+                        <input class="form-control" type="text" id="gender" (keyup)="search(gender.value, gender.id)"
+                            #gender formControlName="gender">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Establecimiento</a>
+                        <input class="form-control" type="text" id="nameAllie"
+                            (keyup)="search(establishment.value, establishment.id)" #establishment
+                            formControlName="nameAllie">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Sede</a>
+                        <input class="form-control" type="text" id="nameHeadquarter"
+                            (keyup)="search(headquart.value, headquart.id)" #headquart
+                            formControlName="nameHeadquarter">
+                    </li>
+                   
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="m-3 d-flex flex-row ">
+
+        <div class="container-fluid" style="width: 25%;">
+            <a [routerLink]='["/main"]' class="d-flex mr-2">
+                <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+            </a>
+
+        </div>
+
+        <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
+            <div class="form-group hidden">
+                <div class="input-group">
+                    <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+                        [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+                        [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate">
+                    <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null">
+                            {{ date.day }}
+                        </span>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control
+                        [value]="formatter.format(fromDate)"
+                        (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()"
+                            type="button"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ml-2">
+                <div class="input-group">
+                    <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate"
+                        [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()"
+                            type="button"></button>
+                    </div>
+                </div>
+            </div>
+            <button (click)=" search()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
+            <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+        </form>
+    </div>
+
+    <div class="container-fluid d-flex justify-content-center m-3">
+        <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
+            #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
+    </div>
+
+    <div class="tableFixHead">
+        <table>
+
+            <thead>
+                <tr>
+                    <th class="text-center">Radicado</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Correo</th>
+                    <th class="text-center">Celular</th>
+                    <th class="text-center">F. Nacimiento</th>
+                    <th class="text-center">Género</th>
+                    <th class="text-center">Establecimiento</th>
+                    <th class="text-center">Sede</th>
+                    <th class="text-center">Responder </th>
+                </tr>
+
+            </thead>
+            <tbody class="mt-5">
+                <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
+                    <td>{{user.registerDate}}</td>
+                    <td>{{user.registerDate}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>{{user.birthday}}</td>
+                    <td>{{user.gender}}</td>
+                    <td>{{user.nameAllie}}</td>
+                    <td>{{user.nameHeadquarter}}</td>
+                    <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)">
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
+        <div class="d-flex justify-content-center container-fluid">
+            
+            <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
+                data-target="#exampleModalCenter">
+                Generar Excel</button>
+        </div>
+        <div class="d-flex justify-content-center container-fluid">
+
+            <button type="button" (click)="datafor_pdf()" class="btnForInforms" data-toggle="modal"
+                data-target="#exampleModalCenter">Generar PDF</button>
+        </div>
+    </div>
+
+
+    <!-- Modal Excel-->
+    <div class="modal fade bd-example-modal-xl" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div *ngIf="!typepdf" class="modal-header" style="background-color: #1f6f43;">
+                    <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar Excel</h5>
+                    <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()">
+                        Descargar</button>
+                    <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print"
+                        ngxPrint>print</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf="typepdf" class="modal-header" style="background-color: #f71f20;">
+                    <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar PDF</h5>
+                    <button type="button" class="btn btn-outline-light ml-3" (click)="generatePdf()"> Descargar</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="table-content">
+                    <div id="table-print">
+
+                        <table class="table table-responsive" id="excel-table">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Coreo</th>
+                                <th class="text-center">Celular</th>
+                                <th class="text-center">F.Nacimiento</th>
+                                <th class="text-center">Genero</th>
+                                <th class="text-center">Establecimiento</th>
+                                <th class="text-center">Sede</th>
+                                <th class="text-center">Usabilidad</th>
+                                <th class="text-center">Monto Compra</th>
+                            </tr>
+                            <tr *ngFor="let user of userSelected; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{user.registerDate}}</td>
+                                <td>{{user.name}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.phone}}</td>
+                                <td>{{user.birthday}}</td>
+                                <td>{{user.gender}}</td>
+                                <td>{{user.nameAllie}}</td>
+                                <td>{{user.nameHeadquarter}}</td>
+                                <td>{{user.usability}}</td>
+                                <td>{{user.purchaseAmount}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

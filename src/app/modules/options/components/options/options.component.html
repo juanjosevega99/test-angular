@@ -20,7 +20,7 @@
       <div class="card border-primary mb-3">
         <img class="card-img-top" src="assets/img/ManagerPromo.png" alt="Card image cap">
         <div class="card-body">
-          <a routerLink="/promoManager" class="btn btn-lg btn-block buttonstyle">Admin de Promos</a>
+          <a routerLink="/promoManager" class="btn-lg btn-block buttonstyle btn">Admin de Promos</a>
         </div>
       </div>
       </div>
@@ -36,7 +36,7 @@
         <div class="card border-primary mb-3" >
           <img class="card-img-top" src="assets/img/ReportGenerator.jpg" alt="Card image cap">
           <div class="card-body">
-            <a routerLink="/reportGenerator" class="btn btn-lg btn-block buttonstyle">Generador de informes</a>
+            <a [routerLink]="['/main','reportGenerator']" class="btn btn-lg btn-block buttonstyle">Generador de informes</a>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
         <div class="card border-primary mb-3">
           <img class="card-img-top" src="assets/img/Manager-pqr.jpg" alt="Card image cap">
           <div class="card-body">
-            <a routerLink="/pqrManager" class="btn btn-lg btn-block buttonstyle">Admin de PQR's</a>
+            <a [routerLink]="['/main','pqrList']" class="btn btn-lg btn-block buttonstyle">Admin de PQR's</a>
           </div>
         </div>
       </div>
