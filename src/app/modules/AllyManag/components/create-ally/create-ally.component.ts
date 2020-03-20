@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { finalize } from "rxjs/operators";
 import { Observable } from 'rxjs/internal/Observable';
-import * as $ from 'jquery';
-import Swal from 'sweetalert2';
 //Models of backend
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
@@ -12,9 +10,13 @@ import { AttentionScheduleService } from "../../../../services/attention-schedul
 import { AlliesService } from "../../../../services/allies.service";
 // import { LoadImagesService } from "../../../../services/providers/load-images.service"
 //models
-import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
+// import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
 // firebase 
 import { AngularFireStorage } from '@angular/fire/storage'
+// other libraris
+import { Guid } from "guid-typescript";
+import Swal from 'sweetalert2';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-create-ally',
@@ -24,24 +26,25 @@ import { AngularFireStorage } from '@angular/fire/storage'
 export class CreateAllyComponent implements OnInit {
   //news params
   forma: FormGroup;
-  // varibles for list data from backend collection parameterized
+  // Variables for list data from backend collection parameterized
   alliesCategories: any[] = [];
   mealsCategories: any[] = [];
   attentionSchedule: any[] = [];
-  allies : any[]= [];
 
+  //variables of attentin Schedule
   days: string[] = []
   hours: String[] = [];
   Schedules: any[] = [];
+
   color: String = "#000000";
   objectEstablishment: any;
 
-  //varibles of upload Logo
+  //Variables of upload Logo
   urlLogo: Observable<string>;
   fileImgLogo: any;
 
   //variables carousel
-  imagesAllies: FileItem[] = []
+  imagesAllies: any = []
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
@@ -59,8 +62,8 @@ export class CreateAllyComponent implements OnInit {
   //handle button other type Establishment
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
-  // newEstablishment: string
-  constructor(private alliesCatServices: AlliesCategoriesService,
+  constructor(
+    private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
@@ -186,8 +189,6 @@ export class CreateAllyComponent implements OnInit {
   // print bs64 of image =>  e.target.result)
   onPhotoSelected($event): any {
     let input = $event.target;
-    // console.log(input.files);
-
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function (e: any) {
@@ -214,15 +215,14 @@ export class CreateAllyComponent implements OnInit {
       // this.imagesAllies.push(input.files[0]) 
       console.log('imagnes loading', this.imagesAllies) // images upLoad in an Array with object delete console
       reader.readAsDataURL(input.files[0]);
-      for (const propiedad in Object.getOwnPropertyNames(fileList)) {
-        const temporalFile = fileList[propiedad];
-        console.log(temporalFile)
-        // if ( this.fileCanUpload(temporalFile) ){
-        const newField = new FileItem(temporalFile)
-        this.imagesAllies.push(newField)
-        // }
-      }
-      console.log(this.imagesAllies); //
+      // for (const propiedad in Object.getOwnPropertyNames(fileList)) {
+      //   const temporalFile = fileList[propiedad];
+      //   console.log(temporalFile)
+      //   // if ( this.fileCanUpload(temporalFile) ){
+      //   const newField = new FileItem(temporalFile)
+      //   this.imagesAllies.push(newField)
+      //   // }
+      // }
 
       //   this.contImage = this.imagesAllies.length;
 
@@ -278,7 +278,6 @@ export class CreateAllyComponent implements OnInit {
   // method save  and cancel all collection allies
   saveChanges() {
     this.swallSaveAllie()
-
   }
 
   cancelChanges() {
@@ -416,12 +415,29 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log('File of IMAGE NEED', this.fileImgLogo)
-        // upload Image Logo
-        
+        console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
+        // upload Logo
+        const id: Guid = Guid.create();
+        const file = this.fileImgLogo;
+        const filePath = `assets/allies/logos/${id}`
+        const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file)
+        task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                this.urlLogo = urlImage;
+                console.log('URL IMAGE', this.urlLogo) //delete console.log
+                this.forma.controls['logo'].setValue(this.urlLogo)
+                
+                // 
+              })
+            })
+          ).subscribe();
         // put the values of properties establishment
         console.log(this.forma.controls['idTypeOfEstablishment'].value);
         console.log(this.forma.controls['idTypeOfEstablishment'].value.id);
+
 
         let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
         let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
@@ -449,29 +465,9 @@ export class CreateAllyComponent implements OnInit {
         console.log(this.forma.value); // delete console.log
         let objAllie = this.forma.value
         // console.log('valor of nameEStblishment ', this.forma.controls['nameTypeOfEstablishment'].value) //delete console.log
-        console.log(objAllie);
-
+        console.log(objAllie); //delete consle.log
         //agrgate urlLogo of propertie object 
-        this.allieService.postAllie(objAllie).subscribe((allie:any)=> {
-          
-          console.log('POST',allie._id);
-        const id = allie._id
-        const file = this.fileImgLogo;
-        const filePath = `assets/allies/logos/${id}`
-        const ref = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file)
-        task.snapshotChanges()
-          .pipe(
-            finalize(() => {
-              ref.getDownloadURL().subscribe(urlImage => {
-                this.urlLogo = urlImage;
-                console.log('URL IMAGE', this.urlLogo)
-                // 
-              })
-            })
-          ).subscribe();
-          
-        })
+        this.allieService.postAllie(objAllie).subscribe()
 
         Swal.fire(
           'Guardado!',
