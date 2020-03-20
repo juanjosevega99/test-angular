@@ -35,6 +35,7 @@ import { CreateDishComponent } from './modules/AllyManag/components/create-dish/
 import { AccompanimentsComponent } from './modules/AllyManag/components/accompaniments/accompaniments.component';
 import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
 import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
+import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 
 
 const routes: Routes = [
@@ -65,6 +66,7 @@ const routes: Routes = [
       { path: "promoManager", component: PromoManagerComponent },
       { path: "cuponManager", component: CuponManagerComponent },
       { path: "reportGenerator", component: ReportGeneratorComponent },
+      { path: "pqrList", component: PqrListComponent },
       { path: "pqrManager", component: PqrManagerComponent },
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
