@@ -45,7 +45,8 @@ export class PqrsService {
             nameHeadquarter: pqrs.nameHeadquarter,
             state: pqrs.state,
             description: pqrs.description,
-            reply: pqrs.reply
+            reply: pqrs.reply,
+            date: pqrs.date
           };
           return obj;
         })

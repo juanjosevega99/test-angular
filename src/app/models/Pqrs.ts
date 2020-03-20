@@ -1,5 +1,6 @@
 export class Pqrs {
     id?:string;
+    date?:Date;
     idUser?:string;
     nameUser?:string;
     lastNameUser?:string;
