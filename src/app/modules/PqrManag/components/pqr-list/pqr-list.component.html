@@ -136,7 +136,10 @@
                     <td>{{user.gender}}</td>
                     <td>{{user.nameAllie}}</td>
                     <td>{{user.nameHeadquarter}}</td>
-                    <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)">
+                    <td>
+                        <a [routerLink] ="['/main', 'pqrManager', user.id]">
+                            <i class="fas fa-share" style="color: #542b81; font-size: 1rem;  width:1.5rem; height:1.5rem;"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>
@@ -195,7 +198,7 @@
                                 <th class="text-center">Genero</th>
                                 <th class="text-center">Establecimiento</th>
                                 <th class="text-center">Sede</th>
-                                
+
                             </tr>
                             <tr *ngFor="let user of newdateArray; let i = index">
                                 <td>{{user.id}}</td>

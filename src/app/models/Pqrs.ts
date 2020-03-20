@@ -1,12 +1,12 @@
 export class Pqrs {
     id?:string;
-    date?:Date;
+    date?:String;
     idUser?:string;
     nameUser?:string;
     lastNameUser?:string;
     email?:string;
     gender?:string;
-    birthday?:Date;
+    birthday?:String;
     phone?:string;
     idAllies?:string;
     nameAllie?:string;

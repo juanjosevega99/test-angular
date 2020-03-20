@@ -55,13 +55,13 @@ export class PqrListComponent implements OnInit {
 
       const obj: Pqrs = {};
 
-      res.forEach((order: Pqrs) => {
+      res.forEach((order: any) => {
         obj.id = order.id,
-        obj.date = order.date;
+        obj.date = this.convertDate( order.date );
         obj.nameUser = order.nameUser;
         obj.email = order.email;
         obj.phone = order.phone;
-        obj.birthday = order.birthday;
+        obj.birthday = this.convertDate( order.birthday);
         obj.gender = order.gender;
         obj.nameAllie = order.nameAllie;
         obj.nameHeadquarter = order.nameHeadquarter;
@@ -417,8 +417,15 @@ searchbyterm(termino: string) {
 
 
 convertDate(date: Date): string {
-  const d = new Date(date);
-  const n = d.toISOString().split("T")[0];
+  let n:string;
+  try{
+
+    const d = new Date(date);
+    n = d.toISOString().split("T")[0];
+  }catch{
+    console.log(date);
+    
+  }
   return n;
 }
 
