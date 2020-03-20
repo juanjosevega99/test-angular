@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from "@angular/fire/auth"; 
-import * as firebase from "firebase"; 
 import { PasswordServiceService } from './recovery-service/password-service.service';
 
 

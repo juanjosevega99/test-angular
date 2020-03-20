@@ -1,0 +1,83 @@
+@import "../../../UserManag/components/user-manager/user-manager.component.scss";
+.buttonfirst {
+    margin-right: 5rem;
+  }
+  .buttonsecond {
+    margin-right: 12rem;
+  }
+  
+  .form-group.hidden {
+    width: 0;
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.focused {
+    background-color: #e6e6e6;
+  }
+  .custom-day.range,
+  .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+  }
+  .custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+  }
+  
+  .tableFixHead {
+    overflow-y: auto;
+    height: 22rem;
+  }
+  .tableFixHead thead th {
+    position: sticky;
+    top: 0;
+  }
+  
+  /* Just common table stuff. Really. */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th,
+  td {
+    padding: 8px 16px;
+  }
+  th {
+    background: #eee;
+  }
+  
+  .btn-success.focus,
+  .btn-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+  }
+  .btn.focus,
+  .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  [type="button"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+  button:focus {
+    outline: 1px dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+  }
+  .mr-5,
+  .mx-5 {
+    margin-right: 3rem !important;
+  }
+  .btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+  }

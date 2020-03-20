@@ -62,14 +62,24 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de modificación</label>
                 <div class="col-md-7">
-                    <label>---</label>
+                    <label class="dt">
+                        <p class="text-center">
+                            {{date}}
+                        </p>
+                    </label>
+
+                    <label class="dt" style="margin-right: 10px;">
+                        <p class="text-center">
+                            {{times}}
+                        </p>
+                    </label>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Número de modificaciones</label>
                 <div class="col-md-7">
-                    <label>0</label>
+                    <label class="form-control">{{preDish.numberOfModifications}}</label>
                 </div>
 
             </div>
@@ -79,38 +89,34 @@
                 <div class="col-md-7">
                     <div class="input-group">
 
-                        <select *ngIf="arrayCategorySelect" class="form-control" name="dishCategory"
+                        <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="dishCategory"
                             #nameMealsCategories="ngModel" required
                             [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid) }"
                             [(ngModel)]="preDish.nameMealsCategories">
-                            <!-- <option selected> Seleccionar... </option> -->
-                            <option *ngFor="let name of Categories">
-                                {{name}}
+                            <option *ngFor="let category of dishesCategories">
+                                {{category.name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #otherCat="ngModel"
-                            [ngClass]="{'is-invalid': (!otherCat.valid && otherCat.touched ),'is-valid':(otherCat.valid)}"
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="preDish.nameMealsCategories"
-                            type="text" name="otherCategory" (keyup.enter)="addCategory(additem.value)" #additem>
+                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #category="ngModel" 
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCat" type="text" name="otherCat"
+                            [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}">
 
-                        <div *ngIf="selectAgainarray" class="input-group-append">
-                            <span class="input-group-text" (click)="handleBoxCategories()">
-                                Regresar
-                            </span>
-                        </div>
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="handleBoxCategories()"> Cancelar</button>
 
-                        <div *ngIf="otherCategoryInput" class="col-md-10">
-                            <div class="form-control-feedback">
-                                <small> *Presione enter para guardar </small>
-                            </div>
-                        </div>
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="addCategory(otherCat)"> Guardar</button>
 
-                        <div *ngIf="addcategoryButton" class="input-group-append">
-                            <span class="input-group-text" (click)="handleBoxCategories()">
-                                Otro
-                            </span>
-                        </div>
+                        <button *ngIf="addcategoryButton"(click)="handleBoxCategories()"
+                            class="btn1 btn btn-outline-primary">
+                            Otro
+                        </button>
+
+                        <button *ngIf="addcategoryButton" (click)=" deleteCategory()" type="button"
+                            class="btn1 btn btn-outline-primary">
+                            Borrar
+                        </button>
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
                         <div class="valid-feedback">Ok!</div>
@@ -156,7 +162,8 @@
                         [ngClass]="{'is-invalid': (!price.valid && price.touched) || price.errors?.pattern ,'is-valid':(price.valid)}"
                         [(ngModel)]="preDish.price">
                     <div *ngIf=" price.errors?.required" class="invalid-feedback">*Este campo es requerido</div>
-                    <div *ngIf=" price.errors?.pattern" class="invalid-feedback">*Sólo ingresar carácteres numéricos</div>
+                    <div *ngIf=" price.errors?.pattern" class="invalid-feedback">*Sólo ingresar carácteres numéricos
+                    </div>
                 </div>
             </div>
 
@@ -165,7 +172,8 @@
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
-                        <div class="photo"> <img id="photo" width="100px" height="100px">
+                        <div class="photo"> 
+                            <img id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -176,13 +184,11 @@
                 </div>
             </div>
 
-
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Descripción del plato</label>
                 <div class="col-md-7">
-                    <textarea class="form-control " name="dishDescription" [(ngModel)]="preDish.description" #description="ngModel"
-                    
-                        id="exampleFormControlTextarea2" rows="2"></textarea>
+                    <textarea class="form-control " name="dishDescription" [(ngModel)]="preDish.description"
+                        #description="ngModel" id="exampleFormControlTextarea2" rows="2"></textarea>
                 </div>
             </div>
 
@@ -190,50 +196,50 @@
                 <label class="col-md-5 col-form-label">Tiempo de preparación</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <input type="number" min="0" placeholder="Tiempo de preparación" value="0" class="form-control"
-                            [(ngModel)]="preDish.preparationTime" name="preparationTime">
+                        <input type="text" min="0" placeholder="Tiempo de preparación" value="0" class="form-control"
+                            #preparationTime="ngModel" [(ngModel)]="preDish.preparationTime[0]" name="preparationTime"
+                            pattern="[0-9]{1,3}" required
+                            [ngClass]="{'is-invalid': (!preparationTime.valid && preparationTime.touched ),'is-valid':(preparationTime.valid)}"
+                            class="form-control">
                         <div class="input-group-append">
-                            <select class="input-group-text">
+                            <select class="input-group-text" class="form-control"
+                                [ngClass]="{'is-invalid': (!timeUnity.valid),'is-valid':(timeUnity.valid) }"
+                                #timeUnity="ngModel" [(ngModel)]="preDish.preparationTime[1]" name="times" required>
                                 <option *ngFor="let time of time">
                                     {{time}}
                                 </option>
                             </select>
                         </div>
+                        <div *ngIf="preparationTime.errors?.required" class="invalid-feedback">*Este campo es
+                            requerido
+                        </div>
+                        <div *ngIf="preparationTime.errors?.pattern" class="invalid-feedback">*Sólo carácteres
+                            numéricos
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="col-12 d-flex" style="justify-content: center;">
-            
-            
+
             <div style="padding: 1rem;">
-                <a [routerLink]="['/main','accompaniments']" class="btn btn-outline-primary btn-lg" >Acompañamiento adicional</a>
+                <a [routerLink]="['/main','accompaniments']" class="btn btn-outline-primary btn-lg">Acompañamiento
+                    adicional</a>
             </div>
-        
+
         </section>
 
         <section class="col-12 d-flex" style="justify-content: center;">
-           
+
             <button [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
 
         </section>
     </form>
 
-    <pre>
+     <!-- <pre>
         {{ preDish | json }}
-    </pre>
-
-
-
+    </pre> -->
 
 </div>
-
-<!-- <script type="text/javascript">
-    $(function() {
-      $('#datetimepicker2').datetimepicker({
-        language: 'en',
-        pick12HourFormat: true
-      });
-    });
-  </script> -->

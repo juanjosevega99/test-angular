@@ -1,18 +1,27 @@
 export class OrderByUser{
     id?:string;
     idUser?:String;
-    registerDate?:Date;
+    idHeadquartes?:string;
+    nameAllie?:string;
+    nameHeadquarter?:string;
     name?:string;
+    typeOfService?:string;
+    purchaseAmount?:number;
+    dateAndHourReservation?:Date;
+    registerDate?:string;
+    quantity?:string;
+    nameDishe?:string;
+    controlOrder?:String;
+    unitValue?:number;
+
     lastname?:string;
     email?:string;
     phone?:string;
-    birthday?:Date;
+    birthday?:string;
     gender?:string;
     password?:string;
     idAllie?:string;
-    nameAllie?:string;
     idHeadquarter?:string;
-    nameHeadquarter?:string;
     usability?:number;
-    purchaseAmount?:number;
+    selected?:boolean = false;
 }

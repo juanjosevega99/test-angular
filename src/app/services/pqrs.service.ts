@@ -31,7 +31,7 @@ export class PqrsService {
       map((pqrs: any[]) =>
         pqrs.map(pqrs => {
           let obj = {
-            id: pqrs.id,
+            id: pqrs._id,
             idUser: pqrs.idUser,
             nameUser: pqrs.nameUser,
             lastNameUser: pqrs.lastNameUser,

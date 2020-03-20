@@ -176,11 +176,17 @@ export class CreateHeadquarterComponent implements OnInit {
         console.log("Array FINAL: ", this.preHeadquarters);
         this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
         })
-        Swal.fire(
-          'Guardado!',
-          'Tu nueva sede ha sido creada',
-          'success',
-        )
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu nueva sede ha sido creada!",
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/headquarts']);
+          }
+        })
       }
     })
   }
@@ -197,9 +203,7 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
-
         this._router.navigate(['/headquarts']);
-
       }
     })
   }
