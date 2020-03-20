@@ -1,5 +1,14 @@
 <div class="compenetsstyle">
 
-    <p>accompaniments works!</p>
+    <form novalidate="" class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm">
 
+
+        <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
+            <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+        </a>
+
+
+        <section class="col-6"></section>
+
+    </form>
 </div>
