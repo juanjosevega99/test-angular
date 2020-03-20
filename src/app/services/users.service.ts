@@ -17,7 +17,7 @@ export class UsersService {
       map((users: any[]) =>
         users.map(users => {
           let obj = {
-            id: users.id,
+            id: users._id,
             name: users.name,
             lastname: users.lastname,
             email: users.email,

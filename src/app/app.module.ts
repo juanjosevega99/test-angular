@@ -59,6 +59,7 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
 import { LoadImagesService } from "./services/providers/load-images.service";
 import { ValidationsLoadImagesDirective } from './directives/validations-load-images.directive';
 import { LocationServiceService } from './services/location-service.service';
+import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { LocationServiceService } from './services/location-service.service';
     AccompanimentsComponent,
     ProfileComponent,
     CreateProfileComponent,
-    ValidationsLoadImagesDirective
+    ValidationsLoadImagesDirective,
+    PqrListComponent
   ],
   imports: [
     HttpClientModule,

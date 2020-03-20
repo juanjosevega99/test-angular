@@ -1,4 +1,63 @@
-<div class="compenetsstyle">
+<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+
+  <div class="filerControl px-1">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link">Nombre</a>
+            <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name id="name"
+              formControlName="name">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Correo</a>
+            <input class="form-control" type="text" (keyup)="search( email.value, email.id )" #email id="email"
+              formControlName="email">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Celular</a>
+            <input class="form-control" type="text" id="phone" (keyup)="search(cellphone.value, cellphone.id)"
+              #cellphone formControlName="phone">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">F. Nacimiento</a>
+            <input class="form-control" type="text" id="birthday" (keyup)="search(birthday.value, birthday.id)"
+              #birthday formControlName="birthday">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Género</a>
+            <input class="form-control" type="text" id="gender" (keyup)="search(gender.value, gender.id)" #gender
+              formControlName="gender">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Establecimiento</a>
+            <input class="form-control" type="text" id="nameAllie"
+              (keyup)="search(establishment.value, establishment.id)" #establishment formControlName="nameAllie">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Sede</a>
+            <input class="form-control" type="text" id="nameHeadquarter" (keyup)="search(headquart.value, headquart.id)"
+              #headquart formControlName="nameHeadquarter">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Usabilidad</a>
+            <input class="form-control" type="text" id="usability" (keyup)="search(usability.value, usability.id)"
+              #usability formControlName="usability">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Monto-compras</a>
+            <input class="form-control" type="text" id="purchaseAmount" (keyup)="search(quantity.value, quantity.id)"
+              #quantity formControlName="purchaseAmount">
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 
   <div class="m-3 d-flex flex-row ">
 
@@ -42,41 +101,31 @@
           </div>
         </div>
       </div>
-      <button (click)=" search()" type="button" class="btn btn-outline-primary my-2 my-sm-0">Buscar</button>
+      <button (click)=" search()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
       <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
     </form>
   </div>
 
   <div class="container-fluid d-flex justify-content-center m-3">
     <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-      #general (keyup)="searchbyterm(general.value)">
+      #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
   </div>
 
-  <div class="tableFixHead">
+  <div class="tableFixHead" >
     <table>
 
       <thead>
         <tr>
-          <th class="text-center">Fecha<input class="form-control" type="text" (keyup)="search(date.value, date.id)"
-              #date id="date"></th>
-          <th class="text-center">Nombre<input class="form-control" type="text" (keyup)="search(name.value, name.id)"
-              #name id="name"></th>
-          <th class="text-center">Correo<input class="form-control" type="text"
-              (keyup)="search( email.value, email.id )" #email id="email"></th>
-          <th class="text-center">Celular<input class="form-control" type="text" id="cellphone"
-              (keyup)="search(cellphone.value, cellphone.id)" #cellphone></th>
-          <th class="text-center">Fecha de nacimiento<input class="form-control" type="text" id="birthday"
-              (keyup)="search(birthday.value, birthday.id)" #birthday></th>
-          <th class="text-center">Género<input class="form-control" type="text" id="gender"
-              (keyup)="search(gender.value, gender.id)" #gender></th>
-          <th class="text-center">Establecimiento<input class="form-control" type="text" id="establishment"
-              (keyup)="search(establishment.value, establishment.id)" #establishment></th>
-          <th class="text-center">Sede<input class="form-control" type="text" id="headquart"
-              (keyup)="search(headquart.value, headquart.id)" #headquart></th>
-          <th class="text-center">Usabilidad<input class="form-control" type="text" id="usability"
-              (keyup)="search(usability.value, usability.id)" #usability></th>
-          <th class="text-center">Monto de compras<input class="form-control" type="text" id="quantity"
-              (keyup)="search(quantity.value, quantity.id)" #quantity></th>
+          <th class="text-center">Fecha</th>
+          <th class="text-center">Nombre</th>
+          <th class="text-center">Correo</th>
+          <th class="text-center">Celular</th>
+          <th class="text-center">F. Nacimiento</th>
+          <th class="text-center">Género</th>
+          <th class="text-center">Establecimiento</th>
+          <th class="text-center">Sede</th>
+          <th class="text-center">Usabilidad</th>
+          <th class="text-center">Monto compras</th>
           <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
               (change)="selectedAll($event)"> </th>
         </tr>
@@ -84,16 +133,16 @@
       </thead>
       <tbody class="mt-5">
         <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
-          <td>{{user.date}}</td>
+          <td>{{user.registerDate}}</td>
           <td>{{user.name}}</td>
           <td>{{user.email}}</td>
-          <td>{{user.cellphone}}</td>
+          <td>{{user.phone}}</td>
           <td>{{user.birthday}}</td>
           <td>{{user.gender}}</td>
-          <td>{{user.establishment}}</td>
-          <td>{{user.headquart}}</td>
+          <td>{{user.nameAllie}}</td>
+          <td>{{user.nameHeadquarter}}</td>
           <td>{{user.usability}}</td>
-          <td>{{user.quantity}}</td>
+          <td>{{user.purchaseAmount}}</td>
           <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
         </tr>
       </tbody>
@@ -103,16 +152,17 @@
 
   <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
+      <button type="button" class="btnForInforms mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
         cupones</button>
-      <button type="button" class="btn " style="background-color: #f4b081">Enviar promociones</button>
+      <button type="button" class="btnForInforms" style="background-color: #f4b081" (click)="sendPromos()">Enviar
+        promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btn btn-success mr-5" (click)="datafor_Excel()" data-toggle="modal"
+      <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
         data-target="#exampleModalCenter">
         Generar Excel</button>
 
-      <button type="button" (click)="datafor_pdf()" class="btn btn-danger" data-toggle="modal"
+      <button type="button" (click)="datafor_pdf()" class="btnForInforms" data-toggle="modal"
         data-target="#exampleModalCenter">Generar PDF</button>
     </div>
   </div>
@@ -134,40 +184,40 @@
         </div>
         <div *ngIf="typepdf" class="modal-header" style="background-color: #f71f20;">
           <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar PDF</h5>
-          <button type="button" class="btn btn-outline-light ml-3"(click)="generatePdf()"> Descargar</button>
+          <button type="button" class="btn btn-outline-light ml-3" (click)="generatePdf()"> Descargar</button>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body" id="table-content">
-          <div id="table-print" >
+          <div id="table-print">
 
             <table class="table table-responsive" id="excel-table">
               <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Date</th>
-                <th class="text-center">name</th>
-                <th class="text-center">email</th>
-                <th class="text-center">cellphone</th>
-                <th class="text-center">birthDate</th>
-                <th class="text-center">gender</th>
-                <th class="text-center">establishment</th>
-                <th class="text-center">headquart</th>
-                <th class="text-center">usability</th>
-                <th class="text-center">quantity</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Coreo</th>
+                <th class="text-center">Celular</th>
+                <th class="text-center">F.Nacimiento</th>
+                <th class="text-center">Genero</th>
+                <th class="text-center">Establecimiento</th>
+                <th class="text-center">Sede</th>
+                <th class="text-center">Usabilidad</th>
+                <th class="text-center">Monto Compra</th>
               </tr>
               <tr *ngFor="let user of userSelected; let i = index">
                 <td>{{i+1}}</td>
-                <td>{{user.date}}</td>
+                <td>{{user.registerDate}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.email}}</td>
-                <td>{{user.cellphone}}</td>
+                <td>{{user.phone}}</td>
                 <td>{{user.birthday}}</td>
                 <td>{{user.gender}}</td>
-                <td>{{user.establishment}}</td>
-                <td>{{user.headquart}}</td>
+                <td>{{user.nameAllie}}</td>
+                <td>{{user.nameHeadquarter}}</td>
                 <td>{{user.usability}}</td>
-                <td>{{user.quantity}}</td>
+                <td>{{user.purchaseAmount}}</td>
               </tr>
             </table>
           </div>
