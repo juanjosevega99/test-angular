@@ -24,7 +24,7 @@ import * as $ from 'jquery';
   styleUrls: ['./create-ally.component.scss']
 })
 export class CreateAllyComponent implements OnInit {
-  //news params
+  // object ally
   forma: FormGroup;
   // Variables for list data from backend collection parameterized
   alliesCategories: any[] = [];
@@ -35,6 +35,7 @@ export class CreateAllyComponent implements OnInit {
   days: string[] = []
   hours: String[] = [];
   Schedules: any[] = [];
+  idSchedule: string;
 
   color: String = "#000000";
   objectEstablishment: any;
@@ -186,7 +187,6 @@ export class CreateAllyComponent implements OnInit {
     this.otherMealInput = false;
   }
   //Method for logo
-  // print bs64 of image =>  e.target.result)
   onPhotoSelected($event): any {
     let input = $event.target;
     if (input.files && input.files[0]) {
@@ -427,48 +427,37 @@ export class CreateAllyComponent implements OnInit {
             finalize(() => {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlLogo = urlImage;
-                console.log('URL IMAGE', this.urlLogo) //delete console.log
                 this.forma.controls['logo'].setValue(this.urlLogo)
-                
-                // 
+                // put the values of properties establishment
+                let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
+                let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
+
+                this.forma.controls['idTypeOfEstablishment'].setValue(idEstablishment)
+                this.forma.controls['nameTypeOfEstablishment'].setValue(nameEstablishment)
+                // put the values of properties Meals categories
+                let idMeal: any = this.forma.controls['idMealsCategories'].value.id
+                let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
+
+                this.forma.controls['idMealsCategories'].setValue(idMeal)
+                this.forma.controls['nameMealsCategories'].setValue(nameMeal)
+
+                //format of properties by collection AttentatinShedule
+                let addSchedule: object = {
+                  attentionSchedule: this.Schedules
+                }
+                this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
+                  this.idSchedule = schedule._id;
+                  console.log('LAST ONE', this.idSchedule);//delete consle.log
+                  this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
+                  console.log(this.forma.value); // delete console.log
+                  //upload all fields to ally  collection 
+                  let objAllie = this.forma.value
+                  console.log(objAllie); //delete consle.log
+                  this.allieService.postAllie(objAllie).subscribe()
+                })
               })
             })
           ).subscribe();
-        // put the values of properties establishment
-        console.log(this.forma.controls['idTypeOfEstablishment'].value);
-        console.log(this.forma.controls['idTypeOfEstablishment'].value.id);
-
-
-        let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
-        let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
-
-        this.forma.controls['idTypeOfEstablishment'].setValue(idEstablishment)
-        this.forma.controls['nameTypeOfEstablishment'].setValue(nameEstablishment)
-        // put the values of properties Meals categories
-        let idMeal: any = this.forma.controls['idMealsCategories'].value.id
-        let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
-
-        this.forma.controls['idMealsCategories'].setValue(idMeal)
-        this.forma.controls['nameMealsCategories'].setValue(nameMeal)
-
-        //format of properties by collection AttentatinShedule
-        let addSchedule: object = {
-          attentionSchedule: this.Schedules
-        }
-        this.scheduleServices.postAttentionSchedule(addSchedule).subscribe(() => {
-          this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
-            this.attentionSchedule = schedule;
-            console.log(this.attentionSchedule); // delete console log
-          })
-        })
-        this.forma.controls['idAttentionSchedule'].setValue(this.attentionSchedule[0].id)  //to do
-        console.log(this.forma.value); // delete console.log
-        let objAllie = this.forma.value
-        // console.log('valor of nameEStblishment ', this.forma.controls['nameTypeOfEstablishment'].value) //delete console.log
-        console.log(objAllie); //delete consle.log
-        //agrgate urlLogo of propertie object 
-        this.allieService.postAllie(objAllie).subscribe()
-
         Swal.fire(
           'Guardado!',
           'Tu nuevo aliado ha sido creado',
