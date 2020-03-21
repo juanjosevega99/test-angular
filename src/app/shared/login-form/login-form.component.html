@@ -26,7 +26,8 @@
                 <button (click)="seepassword()" class="btn btn-outline-primary form-control  border-left-0 border-tifi" [ngClass]="{'invalid': (password.errors?.required && password.touched) || password.errors?.minlength }" type="button"
                     id="button-addon2" aria-label="" aria-describedby="basic-addon1">
                     <img *ngIf="!seepass" src="assets/icons/tifi-eye.svg" class="tifi-icon d-flex">
-                    <i *ngIf="seepass" class="far fa-eye-slash tifi-icon" style="color: #572483;" ></i>
+                    <img *ngIf="seepass" src="assets/icons/tifi-eye-close.svg" class="tifi-icon d-flex">
+                    <!-- <i *ngIf="seepass" class="far fa-eye-slash tifi-icon" style="color: #572483;" ></i> -->
                     
                 </button>
             </div>

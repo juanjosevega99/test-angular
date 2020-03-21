@@ -44,7 +44,7 @@ const routes: Routes = [
     component: LoginComponent,
     children: [
 
-      { path: "recovery_password", component: PasswordRecoveryComponent },
+      // { path: "recovery_password", component: PasswordRecoveryComponent },
       { path: "reset_password", component: ResestPasswordComponent },
       { path: "forget", component: LoginForgetComponent },
       { path: "loginForm", component: LoginFormComponent },

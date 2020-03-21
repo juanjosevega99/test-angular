@@ -1,6 +1,13 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
 
   <div class="filerControl px-1">
+
+    <div style="width: 5%;" class="d-flex align-items-center">
+      <a [routerLink]='["/main"]' class="d-flex">
+        <img src="assets/icons/Back.png" class="tifi-icon-back">
+      </a>
+    </div>
+
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
         aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +57,7 @@
               #usability formControlName="usability">
           </li>
           <li class="nav-item">
-            <a class="nav-link">Monto-compras</a>
+            <a class="nav-link">M. compra</a>
             <input class="form-control" type="text" id="purchaseAmount" (keyup)="search(quantity.value, quantity.id)"
               #quantity formControlName="purchaseAmount">
           </li>
@@ -59,18 +66,16 @@
     </nav>
   </div>
 
-  <div class="m-3 d-flex flex-row ">
+  <div class="container-fluid m-3 d-flex flex-row">
 
-    <div class="container-fluid" style="width: 25%;">
-      <a [routerLink]='["/main"]' class="d-flex mr-2">
-        <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
-      </a>
 
-    </div>
+      <input style="width: 50%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
+        #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
+   
 
-    <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
-      <div class="form-group hidden">
-        <div class="input-group">
+    <form class="form-inline d-flex justify-content-end " style="width: 45%;" #formadate>
+      <div class="form-group hidden" >
+        <div class="input-group" >
           <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
             [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
             outsideDays="hidden" [startDate]="fromDate">
@@ -88,7 +93,7 @@
           <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" form-control
             [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+            <button class="btn btn-outline-primary calendar" (click)="datepicker.toggle()" type="button">Desde</button>
           </div>
         </div>
       </div>
@@ -97,21 +102,20 @@
           <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate"
             [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+            <button class="btn btn-outline-primary calendar" (click)="datepicker.toggle()" type="button">Hasta</button>
           </div>
         </div>
       </div>
-      <button (click)=" search()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
-      <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+      <div class="d-flex flex-row">
+
+        <button (click)=" search()" type="button" class="btn btn-outline-primary m-2 my-sm-0 ml-3">Buscar</button>
+        <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
+        
+      </div>
     </form>
   </div>
 
-  <div class="container-fluid d-flex justify-content-center m-3">
-    <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-      #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
-  </div>
-
-  <div class="tableFixHead" >
+  <div class="tableFixHead mt-5">
     <table>
 
       <thead>
@@ -160,10 +164,13 @@
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
         data-target="#exampleModalCenter">
+        <img src="assets/icons/excel.png" class="tifi-icon-back">
         Generar Excel</button>
 
       <button type="button" (click)="datafor_pdf()" class="btnForInforms" data-toggle="modal"
-        data-target="#exampleModalCenter">Generar PDF</button>
+        data-target="#exampleModalCenter">
+        <img src="assets/icons/pdf.png" class="tifi-icon-back">
+        Generar PDF</button>
     </div>
   </div>
 

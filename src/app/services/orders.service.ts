@@ -106,7 +106,7 @@ export class OrdersService {
               orderStatus: orders.orderStatus,
               deliveryStatus: orders.deliveryStatus,
               costReservation: orders.costReservation,
-              costReservationIva: orders.costReservationIva
+              costReservationIva: orders.costReservation + (orders.costReservation* environment.IVA )
             };
             return obj;
           })
