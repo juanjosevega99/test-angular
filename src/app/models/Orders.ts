@@ -8,6 +8,7 @@ export class Orders {
     nameHeadquartes?:string;
     idDishe?:string;
     nameDishe?:string;
+    valueDishe?:number;
     typeOfService?:string;
     orderValue?:number;
     dateAndHourReservation?:Date;
@@ -16,4 +17,7 @@ export class Orders {
     orderStatus?:string;
     quantity?:number;
     deliveryStatus?:boolean;
+    costReservation: number;
+    costReservationIva: number;
+
 }

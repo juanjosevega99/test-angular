@@ -7,12 +7,12 @@ export class OrderByUser{
     name?:string;
     typeOfService?:string;
     purchaseAmount?:number;
-    dateAndHourReservation?:Date;
     registerDate?:string;
-    quantity?:string;
+    dateAndHourDelivery?:string;
+    quantity?:number;
     nameDishe?:string;
-    controlOrder?:String;
-    unitValue?:number;
+    controlOrder?:boolean;
+    valueDishe?:number;
 
     lastname?:string;
     email?:string;

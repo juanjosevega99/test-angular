@@ -60,16 +60,19 @@ export class ReportGeneratorComponent implements OnInit {
             const obj: OrderByUser = {};
 
             order.forEach((order: Orders) => {
-              obj.name = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
+              obj.idHeadquarter = order.idHeadquartes;
               obj.nameAllie = order.nameAllies;
               obj.nameHeadquarter = order.nameHeadquartes;
-              obj.usability = order.orderValue ? 1 : 0;
+              obj.id = order._id;
+              obj.name = user.name;
+              obj.typeOfService = order.typeOfService;
               obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+              obj.registerDate = this.convertDate(order.dateAndHourReservation);
+              obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
+              obj.quantity = order.quantity;
+              obj.nameDishe = order.nameDishe;
+              obj.controlOrder = order.deliveryStatus;
+              obj.valueDishe = order.valueDishe;
 
               this.usergetting.push(obj);
             })

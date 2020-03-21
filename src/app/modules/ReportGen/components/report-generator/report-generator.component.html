@@ -46,7 +46,8 @@
                         </div>
                     </div>
                 </div>
-                <button (click)=" SeachingRange()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
+                <button (click)=" SeachingRange()" type="button"
+                    class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
                 <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
             </form>
         </div>
@@ -85,12 +86,23 @@
                 <tbody class="mt-5">
                     <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
 
-                        <td>{{user.registerDate}}</td>
-                        <td>{{user.name}}</td>
-                        <td>{{user.nameHeadquarter}}</td>
-                        <td>{{user.nameAllie}}</td>
-                        <td>{{user.purchaseAmount}}</td>
-
+                        <td>{{ order.idHeadquarter }}</td>
+                        <td>{{ order.nameAllie }}</td>
+                        <td>{{ order.nameHeadquarter }}</td>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.name }}</td>
+                        <td>{{ order.typeOfService }}</td>
+                        <td>{{ order.purchaseAmount }}</td>
+                        <td>{{ order.registerDate }}</td>
+                        <td>{{ order.dateAndHourDelivery }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>{{ order.nameDishe }}</td>
+                        <td>{{ order.controlOrder }}</td>
+                        <td>{{ order.valueDishe }}</td>
+                        <td>{{ order.costReservationIva }}</td>
+                        <td>{{ order.costReservationIva + order.valueDishe }}</td>
+                        <td>{{ order.orderValue }}</td>
+                        <td>{{ order.costReservation }}</td>
 
                     </tr>
                 </tbody>
