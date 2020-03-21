@@ -8,7 +8,7 @@
         
 
         {
-            "type": "firefox",
+            "type": "chrome",
             "request": "launch",
             "name": "Launch tifi firefox against localhost",
             "url": "http://localhost:4200",
