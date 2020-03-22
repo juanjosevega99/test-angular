@@ -311,7 +311,8 @@
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
                                                                         style="width: 230px; height: 120px; "
                                                                         [imageSize]="imageSize"
-                                                                        [images]="imagesUploaded" #nav>
+                                                                        [images]="imagesUploaded" 
+                                                                        #nav>
                                                                 </ng-image-slider>
 
                                                                 <P *ngIf="imagesUploaded.length==0"
