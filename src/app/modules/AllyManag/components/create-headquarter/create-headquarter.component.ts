@@ -92,13 +92,13 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
-  getNameAlly(){
-    this.allies.getAllies().subscribe( ally =>{
+  getNameAlly() {
+    this.allies.getAllies().subscribe(ally => {
       this.nameAlli = ally
-      console.log("imprimiendo aliados",this.nameAlli); 
+      console.log("imprimiendo aliados", this.nameAlli);
     })
   }
 
@@ -149,7 +149,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for saving the new headquarter
   saveHq(shape: NgForm) {
-    let agregateAdditionalServices: object = {
+   /*  let agregateAdditionalServices: object = {
       additionalServices: this.ArrayseviceChecked
     }
     this.additionalServices.postAdditionalService(agregateAdditionalServices).subscribe(message => {
@@ -157,7 +157,7 @@ export class CreateHeadquarterComponent implements OnInit {
         this.collectionAddService = service;
         console.log(this.collectionAddService);
       })
-    })
+    }) */
     this.swallSaveHeadquarter(this.preHeadquarters)
   }
 
@@ -173,7 +173,17 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        let agregateAdditionalServices: object = {
+          additionalServices: this.ArrayseviceChecked
+        }
+        this.additionalServices.postAdditionalService(agregateAdditionalServices).subscribe(message => {
+          this.additionalServices.getAdditionalServices().subscribe(service => {
+            this.collectionAddService = service;
+            console.log(this.collectionAddService);
+          })
+        })
         console.log("Array FINAL: ", this.preHeadquarters);
+
         this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
         })
         Swal.fire({
@@ -233,18 +243,18 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 }
 
- /* preHeadquarters:Object={
-    nameHq:'Galerías',
-    location:'',
-    address:'',
-    floor:'',
-    stall:'',
-    general:'', o null para limpiar todo
-    charge:'',
-    cell:'',
-    tel:'',
-    emailGeneral:'',
-    code:'122212-3'
-  }
-  [(ngModel)]="preHeadquarters.nameHq"  con[] cambiar el valor inicial de preHeadquarters por el valor que se ingrese nuevo de los inputs
-  [ngModel]="preHeadquarters.nameHq" html  sin [] permanece preHeadquarters en el valor fijado inicialmente así se modifiquen los inputs */
+/* preHeadquarters:Object={
+   nameHq:'Galerías',
+   location:'',
+   address:'',
+   floor:'',
+   stall:'',
+   general:'', o null para limpiar todo
+   charge:'',
+   cell:'',
+   tel:'',
+   emailGeneral:'',
+   code:'122212-3'
+ }
+ [(ngModel)]="preHeadquarters.nameHq"  con[] cambiar el valor inicial de preHeadquarters por el valor que se ingrese nuevo de los inputs
+ [ngModel]="preHeadquarters.nameHq" html  sin [] permanece preHeadquarters en el valor fijado inicialmente así se modifiquen los inputs */

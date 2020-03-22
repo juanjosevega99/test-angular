@@ -112,7 +112,7 @@ export class CreateDishComponent implements OnInit {
           .attr('src', e.target.result)
       };
       reader.readAsDataURL(input.files[0]);
-      this.preDish['imageDishe'] = input.files[0].name
+      
     }
 
     return this.fileImagedish = input.files[0]
@@ -211,7 +211,7 @@ export class CreateDishComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
-        this.dishes.postDishe(this.preDish).subscribe(message => { })
+        
         const id = Math.random().toString(36).substring(2);
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;
@@ -223,6 +223,8 @@ export class CreateDishComponent implements OnInit {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlDish = urlImage;
                 console.log(this.urlDish);
+                this.preDish['imageDishe'] = this.urlDish
+                this.dishes.postDishe(this.preDish).subscribe(message => { })
               })
             }
             )
