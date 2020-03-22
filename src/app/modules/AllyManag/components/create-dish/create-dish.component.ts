@@ -87,6 +87,7 @@ export class CreateDishComponent implements OnInit {
 
   //CRD -- Methos of TypeDish: CREATE ,READ AND DELETE 
   addCategory(name: String) {
+    if (name != null) {
     let newitem = name;
     let newCategory: object = {
       name: newitem
@@ -94,6 +95,7 @@ export class CreateDishComponent implements OnInit {
     this.swallSaveOtherDish(newCategory)
 
     this.handleBoxCategories()
+  } else { alert("Ingrese el nombre de la nueva categoría") }
   }
   
   deleteCategory() {

@@ -1,6 +1,6 @@
 export class Profiles {
   id?:string;
-  state?:boolean;
+  state?:string[];
   entryDate?:Date;
   modificationDate?:Date;
   numberOfModifications?:number;

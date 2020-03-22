@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { SwallServicesService } from 'src/app/services/swall-services.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { ProfilesService } from 'src/app/services/profiles.service';
+import { ProfilesCategoriesService } from "src/app/services/profiles-categories.service";
+import { AngularFireStorage } from "@angular/fire/storage";
+import { finalize } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-create-profile',
@@ -10,19 +16,19 @@ import { SwallServicesService } from 'src/app/services/swall-services.service';
 export class CreateProfileComponent implements OnInit {
 
   preProfile: Object = {
-    state:[],
-    entryDate:null,
-    modificationDate:null,
-    numberOfModifications:0,
-    nameAllie:null,
-    nameHeadquarter:null,
-    nameCharge:null,
-    userCode:null,
-    permis:null,
-    identification:null,
-    name:null,
-    email:null,
-    photo:null
+    state: [],
+    /* entryDate:null,
+    modificationDate:null, */
+    numberOfModifications: 0,
+    nameAllie: null,
+    nameHeadquarter: null,
+    nameCharge: null,
+    userCode: null,
+    permis: null,
+    identification: null,
+    name: null,
+    email: null,
+    photo: null
   }
 
   //variables for categories
@@ -37,21 +43,33 @@ export class CreateProfileComponent implements OnInit {
   State: any[] = [];
 
   //variables for tick
-  date:String;
-  times:String;
-  today:Date;
+  date: String;
+  times: String;
+  today: Date;
+
+  //variable for the permission
+  permiss:string[]=[];
+
+  //variable for upload images
+  fileImagedish: any;
+  urlDish: Observable<string>;
 
 
-  constructor(private swal: SwallServicesService) { 
-    this.Categories=["cajero","","","",""]
-    this.State = [{name:'Activo',selected: true}, {name:'Inactivo',selected:false}, {name:'Eliminar',selected:false}]
+  constructor(private _router: Router, private profiles: ProfilesService, private storage: AngularFireStorage, private profileCategory: ProfilesCategoriesService) {
+
+    this.State = [{ name: 'Activo', selected: true }, { name: 'Inactivo', selected: false }, { name: 'Eliminar', selected: false }]
+    this.permiss = ["permiso1","permiso2"]
+    //inicialization service with collections dishes-categories
+    this.profileCategory.getProfileCategory().subscribe(profileCat => {
+      this.Categories = profileCat;
+    })
   }
 
   ngOnInit() {
-    setInterval( ()=>this.tick(), 1000 );
+    setInterval(() => this.tick(), 1000);
   }
-   //Method for showing new view in the categories field
-   handleBoxCategories(): boolean {
+  //Method for showing new view in the categories field
+  handleBoxCategories(): boolean {
     if (this.addcategoryButton) {
       return this.addcategoryButton = false,
         this.otherCategoryInput = true,
@@ -66,39 +84,126 @@ export class CreateProfileComponent implements OnInit {
   }
 
   //Metod for selecting the state
-selectedState(event){
-  const checked = event.target.checked;
-  const value = event.target.value;
+  selectedState(event) {
+    const checked = event.target.checked;
+    const value = event.target.value;
 
-  event.target.value = value;
-  this.preProfile['state'] = { value, checked }
-}
+    event.target.value = value;
+    this.preProfile['state'] = { value, checked }
+  }
 
-  //Method for add new profile
+  //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
   addCategory(name: String) {
-    this.newCategory = name.toLowerCase();
-    this.Categories.push(name.toLocaleLowerCase())
+    if (name != null) {
+      let newitem = name;
+      let newCategory: object = {
+        name: newitem
+      }
+      this.swallSaveOtherProfile(newCategory)
+
+      this.handleBoxCategories()
+    } else { alert("Ingrese el nuevo perfil")}
+
+  }
+
+  deleteCategory() {
+    let categorySelected = this.preProfile['nameCharge']
+    this.swallDeleteProfile(categorySelected)
   }
 
 
-//Metod for the admission date
-tick(): void{
-  this.today = new Date();
-  this.times = this.today.toLocaleString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-  this.date = this.today.toLocaleString('es-ES',{weekday:'long',day:'2-digit',month:'numeric',year:'numeric'});
-  /* this.preDish['creationDate'] = this.today */
-}
+  //Metod for the admission date
+  tick(): void {
+    this.today = new Date();
+    this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    /* this.preDish['creationDate'] = this.today */
+  }
 
-//save new profile
-saveProfile(shape: NgForm) {
-  console.log("enviando algo");
-  console.log(shape);
-  console.log(shape.value);
-  /*  console.log(this.preHeadquarters); */
-  /*    swal("Hello world!"); */
-  this.swal.saveChanges()
-  
-}
+   //Method for photo of the dish
+   onPhotoSelected($event) {
+    let input = $event.target;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e: any) {
+        $('#photo')
+          .attr('src', e.target.result)
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+
+    return this.fileImagedish = input.files[0]
+  }
+
+  //save new profile
+  saveProfile(shape: NgForm) {
+    console.log("enviando algo");
+    console.log(shape);
+    console.log(shape.value);
+
+
+  }
+
+  //sweet alerts
+  swallSaveOtherProfile(newCategory: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar este nuevo perfil!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.profileCategory.postProfileCategory(newCategory).subscribe(() => {
+          this.profileCategory.getProfileCategory().subscribe(profileC => {
+            this.Categories = profileC;
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo perfil ha sido creada',
+          'success',
+        )
+      }
+    })
+  }
+
+  swallDeleteProfile(categorySelected: string) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar este perfil!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.profileCategory.getProfileCategory().subscribe(profileC => {
+          this.Categories = profileC;
+          this.Categories.forEach((element: any) => {
+            let profile: any = {
+              id: element.id,
+              name: element.name
+            }
+            if (profile.name == categorySelected) {
+              this.profileCategory.deleteProfileCategory(profile.id).subscribe(() => {
+                this.profileCategory.getProfileCategory().subscribe(profiles => {
+                  this.Categories = profiles;
+                })
+              })
+            }
+          });
+        })
+        Swal.fire(
+          'Eliminado!',
+          'success',
+        )
+      }
+    })
+  }
 
 
 }
