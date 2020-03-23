@@ -46,7 +46,7 @@
                             (keyup)="search(headquart.value, headquart.id)" #headquart
                             formControlName="nameHeadquarter">
                     </li>
-                   
+
                 </ul>
             </div>
         </nav>
@@ -127,16 +127,19 @@
             </thead>
             <tbody class="mt-5">
                 <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
-                    <td>{{user.registerDate}}</td>
-                    <td>{{user.registerDate}}</td>
-                    <td>{{user.name}}</td>
+                    <td>{{user.id}}</td>
+                    <td>{{user.date}}</td>
+                    <td>{{user.nameUser}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.phone}}</td>
                     <td>{{user.birthday}}</td>
                     <td>{{user.gender}}</td>
                     <td>{{user.nameAllie}}</td>
                     <td>{{user.nameHeadquarter}}</td>
-                    <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)">
+                    <td>
+                        <a [routerLink] ="['/main', 'pqrManager', user.id]">
+                            <i class="fas fa-share" style="color: #542b81; font-size: 1rem;  width:1.5rem; height:1.5rem;"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>
@@ -146,7 +149,7 @@
 
     <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
         <div class="d-flex justify-content-center container-fluid">
-            
+
             <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
                 data-target="#exampleModalCenter">
                 Generar Excel</button>
@@ -186,7 +189,7 @@
 
                         <table class="table table-responsive" id="excel-table">
                             <tr>
-                                <th class="text-center">#</th>
+                                <th class="text-center">Radicado</th>
                                 <th class="text-center">Fecha</th>
                                 <th class="text-center">Nombre</th>
                                 <th class="text-center">Coreo</th>
@@ -195,21 +198,18 @@
                                 <th class="text-center">Genero</th>
                                 <th class="text-center">Establecimiento</th>
                                 <th class="text-center">Sede</th>
-                                <th class="text-center">Usabilidad</th>
-                                <th class="text-center">Monto Compra</th>
+
                             </tr>
-                            <tr *ngFor="let user of userSelected; let i = index">
-                                <td>{{i+1}}</td>
-                                <td>{{user.registerDate}}</td>
-                                <td>{{user.name}}</td>
+                            <tr *ngFor="let user of newdateArray; let i = index">
+                                <td>{{user.id}}</td>
+                                <td>{{user.date}}</td>
+                                <td>{{user.nameUser}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.phone}}</td>
                                 <td>{{user.birthday}}</td>
                                 <td>{{user.gender}}</td>
                                 <td>{{user.nameAllie}}</td>
                                 <td>{{user.nameHeadquarter}}</td>
-                                <td>{{user.usability}}</td>
-                                <td>{{user.purchaseAmount}}</td>
                             </tr>
                         </table>
                     </div>

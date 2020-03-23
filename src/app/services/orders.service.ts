@@ -74,7 +74,9 @@ export class OrdersService {
           dateAndHourDelivey: order.dateAndHourDelivey,
           chronometer: order.chronometer,
           orderStatus: order.orderStatus,
-          deliveryStatus: order.deliveryStatus
+          deliveryStatus: order.deliveryStatus,
+          costReservation: order.costReservation,
+          costReservationIva: order.costReservationIva
         };
 
         return obj
@@ -102,7 +104,9 @@ export class OrdersService {
               dateAndHourDelivey: orders.dateAndHourDelivey,
               chronometer: orders.chronometer,
               orderStatus: orders.orderStatus,
-              deliveryStatus: orders.deliveryStatus
+              deliveryStatus: orders.deliveryStatus,
+              costReservation: orders.costReservation,
+              costReservationIva: orders.costReservation + (orders.costReservation* environment.IVA )
             };
             return obj;
           })

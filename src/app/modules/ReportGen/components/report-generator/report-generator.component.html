@@ -46,7 +46,8 @@
                         </div>
                     </div>
                 </div>
-                <button (click)=" SeachingRange()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
+                <button (click)=" SeachingRange()" type="button"
+                    class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
                 <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
             </form>
         </div>
@@ -61,36 +62,47 @@
                         <th class="text-center">Establecimiento</th>
                         <th class="text-center">zona</th>
                         <th class="text-center">C. Pedido</th>
-                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Cliente</th>
                         <th class="text-center">T. servicio</th>
-                        <th class="text-center">Monto compras</th>
-                        <th class="text-center">F. Reserva</th>
-                        <th class="text-center">F. Entrega</th>
+                        <th class="text-center">Valor Pedido</th>
+                        <th class="text-center">F. H. Reserva</th>
+                        <th class="text-center">F. H Entrega</th>
                         <th class="text-center">Catidad</th>
                         <th class="text-center">Plato</th>
                         <th class="text-center">Control Pedidos</th>
                         <th class="text-center">V. unidad</th>
-                        <th class="text-center">Costo de reserva</th>
-                        <th class="text-center">valor con reserva</th>
+                        <th class="text-center">Costo reserva IVA</th>
+                        <th class="text-center">valor T. con reserva</th>
                         <th class="text-center">valor total sin reserva</th>
-
-
-                        <th class="text-center">Sede</th>
-                        <th class="text-center">Usabilidad</th>
-                        <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray"
-                                name="selectall" (change)="selectedAll($event)"> </th>
+                        <th class="text-center">Costo reserva sin IVA</th>
+                        <th class="text-center">% Intermediación</th>
+                        <th class="text-center">Valor Intermediación sin IVA</th>
+                        <th class="text-center">Valor Intermediación IVA</th>
+                        <th class="text-center">Valor T. Intermediación y Reserva</th>
+                        <th class="text-center">Valor a pagar Aliado</th>
                     </tr>
 
                 </thead>
                 <tbody class="mt-5">
                     <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
 
-                        <td>{{user.registerDate}}</td>
-                        <td>{{user.name}}</td>
-                        <td>{{user.nameHeadquarter}}</td>
-                        <td>{{user.nameAllie}}</td>
-                        <td>{{user.purchaseAmount}}</td>
-
+                        <td>{{ order.idHeadquarter }}</td>
+                        <td>{{ order.nameAllie }}</td>
+                        <td>{{ order.nameHeadquarter }}</td>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.name }}</td>
+                        <td>{{ order.typeOfService }}</td>
+                        <td>{{ order.purchaseAmount }}</td>
+                        <td>{{ order.registerDate }}</td>
+                        <td>{{ order.dateAndHourDelivery }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>{{ order.nameDishe }}</td>
+                        <td>{{ order.controlOrder }}</td>
+                        <td>{{ order.valueDishe }}</td>
+                        <td>{{ order.costReservationIva }}</td>
+                        <td>{{ order.costReservationIva + order.valueDishe }}</td>
+                        <td>{{ order.orderValue }}</td>
+                        <td>{{ order.costReservation }}</td>
 
                     </tr>
                 </tbody>

@@ -44,7 +44,7 @@ const routes: Routes = [
     component: LoginComponent,
     children: [
 
-      { path: "recovery_password", component: PasswordRecoveryComponent },
+      // { path: "recovery_password", component: PasswordRecoveryComponent },
       { path: "reset_password", component: ResestPasswordComponent },
       { path: "forget", component: LoginForgetComponent },
       { path: "loginForm", component: LoginFormComponent },
@@ -67,7 +67,7 @@ const routes: Routes = [
       { path: "cuponManager", component: CuponManagerComponent },
       { path: "reportGenerator", component: ReportGeneratorComponent },
       { path: "pqrList", component: PqrListComponent },
-      { path: "pqrManager", component: PqrManagerComponent },
+      { path: "pqrManager/:id", component: PqrManagerComponent },
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
       { path: "add-sede", component: AddSedeComponent },
@@ -77,6 +77,7 @@ const routes: Routes = [
       { path : "accompaniments", component: AccompanimentsComponent},
       { path : "profiles", component: ProfileComponent},
       { path : "createProfile", component: CreateProfileComponent},
+      { path: "headquarts", component: HeadquartersOptionsComponent },
       
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 

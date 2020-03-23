@@ -45,7 +45,8 @@ export class PqrsService {
             nameHeadquarter: pqrs.nameHeadquarter,
             state: pqrs.state,
             description: pqrs.description,
-            reply: pqrs.reply
+            reply: pqrs.reply,
+            date: pqrs.date
           };
           return obj;
         })
@@ -53,30 +54,12 @@ export class PqrsService {
     );
   }
 
-  getCPqrsById(id): Observable<any[]> {
-    return this.httpclient.get<Pqrs[]>(environment.UrlBase + "pqrs/" + id).pipe(
-      map((pqrs: any[]) =>
-        pqrs.map(pqrs => {
-          let obj = {
-            id: pqrs.id,
-            idUser: pqrs.idUser,
-            nameUser: pqrs.nameUser,
-            lastNameUser: pqrs.lastNameUser,
-            email: pqrs.email,
-            gender: pqrs.gender,
-            birthday: pqrs.birthday,
-            phone: pqrs.phone,
-            idAllies: pqrs.idAllies,
-            nameAllie: pqrs.nameAllie,
-            idHeadquarter: pqrs.idHeadquarter,
-            nameHeadquarter: pqrs.nameHeadquarter,
-            state: pqrs.state,
-            description: pqrs.description,
-            reply: pqrs.reply
-          };
-          return obj;
+  getCPqrsById(id): Observable<any> {
+    return this.httpclient.get<Pqrs>(environment.UrlBase + "pqrs/" + id).pipe(
+      map((pqrs: any) => {
+          
+          return pqrs;
         })
       )
-    );
   }
 }
