@@ -45,14 +45,14 @@ export class CreateAllyComponent implements OnInit {
 
    //Variables of upload ImagesAlly to firebase
    imagesAlly: any = []
-   urlImagesAlly: Observable<string>;
-   arrayImagesAlly: any = [];
+  //  urlImagesAlly: Observable<string>;
+  //  arrayImagesAlly: any = [];
     
   //variables carousel
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
-  contImage: number = this.imagesUploaded.lenght;
+  contImage: number = this.imagesUploaded.length;
 
   // old params
   // aliado: Aliado; // instance necesary to working method onImagesSelected
