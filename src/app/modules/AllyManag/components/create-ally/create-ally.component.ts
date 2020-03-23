@@ -8,8 +8,6 @@ import { AlliesCategoriesService } from '../../../../services/allies-categories.
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
 import { AttentionScheduleService } from "../../../../services/attention-schedule.service"
 import { AlliesService } from "../../../../services/allies.service";
-// import { LoadImagesService } from "../../../../services/providers/load-images.service"
-//models
 // import { FileItem } from 'src/app/models/loadImages_Firebase/file-item';
 // firebase 
 import { AngularFireStorage } from '@angular/fire/storage'
@@ -17,7 +15,7 @@ import { AngularFireStorage } from '@angular/fire/storage'
 import { Guid } from "guid-typescript";
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
-import { async } from '@angular/core/testing';
+
 
 @Component({
   selector: 'app-create-ally',
@@ -42,19 +40,19 @@ export class CreateAllyComponent implements OnInit {
   objectEstablishment: any;
 
   //Variables of upload Logo to firebase
-  urlLogo: Observable<string>;
+  urlLogo: any;
   fileImgLogo: any;
 
    //Variables of upload ImagesAlly to firebase
-   imagesAllies: any = []
+   imagesAlly: any = []
    urlImagesAlly: Observable<string>;
-   arrayImagesAlly: any [];
+   arrayImagesAlly: any = [];
     
   //variables carousel
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any
-  contImage: number = 0;
+  contImage: number = this.imagesUploaded.lenght;
 
   // old params
   // aliado: Aliado; // instance necesary to working method onImagesSelected
@@ -137,7 +135,6 @@ export class CreateAllyComponent implements OnInit {
     })
 
   }
-
   ngOnInit() {
 
   }
@@ -215,23 +212,9 @@ export class CreateAllyComponent implements OnInit {
         image = e.target.result;
         this.imagesUploaded.push({ image: image, thumbImage: image })
       }
-      // let fileList = input.files; //pas object
-      // console.log('object of each image', fileList) // array delete console
       reader.readAsDataURL(input.files[0]);
-      this.imagesAllies.push(input.files[0]) 
-      // console.log('imagnes loading', this.imagesAllies) // images upLoad in an Array with object delete console
-      // for (const propiedad in Object.getOwnPropertyNames(fileList)) {
-      //   const temporalFile = fileList[propiedad];
-      //   console.log('temporal file',temporalFile)
-      // //   // if ( this.fileCanUpload(temporalFile) ){
-      //   const newField = temporalFile
-      //   this.imagesAllies.push(newField)
-      //   //   // }
-      // }
-      console.log('Array images', this.imagesAllies)
-      //   this.contImage = this.imagesAllies.length;
-      //   console.log('Vector de images',this.imagesAllies)
-      //   this.forma.controls['imagesAllies'].setValue(this.imagesAllies)
+      this.imagesAlly.push(input.files[0]) 
+      console.log('Array images', this.imagesAlly)
     }
   }
   // //DIRECTICVES OF VALIDATION LOADIMAGES
@@ -304,6 +287,22 @@ export class CreateAllyComponent implements OnInit {
       this.Schedules.push(schedule);
     }
     console.log(this.Schedules); //delete console log 
+  }
+  uploadImages(file: any, path: any){
+    return new Promise(( resolve, reject ) => {
+      const idImage: Guid = Guid.create();
+      const filePath = `assets/allies/${path}/${idImage}`
+      const ref = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, file)
+      task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImageLogo => {
+                resolve(urlImageLogo)
+              })
+            })
+          ).subscribe();
+    })
   }
   // method by sweetalert2 
   //saveTypeEstablishment 
@@ -420,72 +419,48 @@ export class CreateAllyComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
-        // upload Logo
-        const idLogo: Guid = Guid.create();
-        const file = this.fileImgLogo;
-        const filePath = `assets/allies/logos/${idLogo}`
-        const ref = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file)
-        task.snapshotChanges()
-          .pipe(
-            finalize(() => {
-              ref.getDownloadURL().subscribe(urlImageLogo => {
-                this.urlLogo = urlImageLogo;
-                this.forma.controls['logo'].setValue(this.urlLogo)
-                 //uplad imagesEstablishment
-                 const fileImagesAlly = this.imagesAllies;
-                    for ( const item of fileImagesAlly ){
-                      const idImagesAlly: Guid = Guid.create();
-                      const filePathImagesAlly = `assets/allies/ImagesEstablishment/${idImagesAlly}`
-                      const refImagesAlly = this.storage.ref(filePathImagesAlly);
-                      const taskImageAlly = this.storage.upload(filePathImagesAlly, item);
-                      taskImageAlly.snapshotChanges()
-                        .pipe(
-                          finalize( ()=>{
-                            refImagesAlly.getDownloadURL().subscribe( urlImageAlly => {
-                              this.urlImagesAlly = urlImageAlly //to do
-                              console.log('images ally URL ', this.urlImagesAlly)
-                              // this.arrayImagesAlly.push(this.urlImagesAlly)
-                              // console.log('Arrayy images URL: ',this.arrayImagesAlly)
-                              // this.forma.controls['imagesAllies'].setValue(this.urlLogo)
-                            })
-                          })
-                        ).subscribe()
-                    }
-
-                   
-                   
-
-                // put the values of properties establishment
-                let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
-                let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
-
-                this.forma.controls['idTypeOfEstablishment'].setValue(idEstablishment)
-                this.forma.controls['nameTypeOfEstablishment'].setValue(nameEstablishment)
-                // put the values of properties Meals categories
-                let idMeal: any = this.forma.controls['idMealsCategories'].value.id
-                let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
-
-                this.forma.controls['idMealsCategories'].setValue(idMeal)
-                this.forma.controls['nameMealsCategories'].setValue(nameMeal)
-
-                //format of properties by collection AttentatinShedule
-                let addSchedule: object = {
-                  attentionSchedule: this.Schedules
-                }
-                this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
-                  this.idSchedule = schedule._id;
-                  console.log('LAST ONE', this.idSchedule);//delete consle.log
-                  this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
-                  console.log(this.forma.value); // delete console.log
-                  //upload all fields to ally  collection 
-                  let objAllie = this.forma.value
-                  console.log(objAllie); //delete consle.log
-                  //this.allieService.postAllie(objAllie).subscribe()
-                })
-              })
+          const promesasImages = this.imagesAlly.map( fileImage => {
+            return this.uploadImages(fileImage,'ImagesEstablishment') 
+          });
+          Promise
+            .all(promesasImages)
+            .then(urlImageAlly => {
+              console.log(urlImageAlly)
+              this.forma.controls['imagesAllies'].setValue(urlImageAlly)
+              return this.uploadImages(this.fileImgLogo,'logos')
             })
-          ).subscribe();
+          .then(urlImage => {
+            this.urlLogo = urlImage;
+            this.forma.controls['logo'].setValue(this.urlLogo)
+             // put the values of properties establishment
+            let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
+            let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
+
+            this.forma.controls['idTypeOfEstablishment'].setValue(idEstablishment)
+            this.forma.controls['nameTypeOfEstablishment'].setValue(nameEstablishment)
+            // put the values of properties Meals categories
+            let idMeal: any = this.forma.controls['idMealsCategories'].value.id
+            let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
+
+            this.forma.controls['idMealsCategories'].setValue(idMeal)
+            this.forma.controls['nameMealsCategories'].setValue(nameMeal)
+
+            //format of properties by collection AttentatinShedule
+            let addSchedule: object = {
+              attentionSchedule: this.Schedules
+            }
+            this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
+              this.idSchedule = schedule._id;
+              console.log('LAST ONE', this.idSchedule);//delete consle.log
+              this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
+              console.log(this.forma.value); // delete console.log
+              //upload all fields to ally  collection 
+              let objAllie = this.forma.value
+              console.log(objAllie); //delete console.log
+              this.allieService.postAllie(objAllie).subscribe()
+            })
+          })
+          .catch( error => console.log('Paso un error ',error));           
         Swal.fire(
           'Guardado!',
           'Tu nuevo aliado ha sido creado',
@@ -512,7 +487,4 @@ export class CreateAllyComponent implements OnInit {
       }
     })
   }
-
-
-
 }
