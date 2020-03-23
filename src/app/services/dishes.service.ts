@@ -32,8 +32,8 @@ export class DishesService {
         dishes.map(dishes => {
           let obj = {
             id: dishes._id,
-            idMealsCategories: dishes.idMealsCategories,
-            nameMealsCategories: dishes.nameMealsCategories,
+            idDishesCategories: dishes.idDishesCategories,
+            nameDishesCategories: dishes.nameDishesCategories,
             reference: dishes.reference,
             name: dishes.name,
             creationDate: dishes.creationDate,
@@ -61,8 +61,8 @@ export class DishesService {
           dishes.map(dishes => {
             let obj = {
               id: dishes.id,
-              idMealsCategories: dishes.idMealsCategories,
-              nameMealsCategories: dishes.nameMealsCategories,
+              idDishesCategories: dishes.idDishesCategories,
+              nameDishesCategories: dishes.nameDishesCategories,
               reference: dishes.reference,
               name: dishes.name,
               creationDate: dishes.creationDate,

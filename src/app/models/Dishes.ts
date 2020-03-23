@@ -1,7 +1,7 @@
 export class Dishes {
     id?:string;
-    idMealsCategories?:string;
-    nameMealsCategories?:string;
+    idDishesCategories?:string;
+    nameDishesCategories?:string;
     reference?:string;
     name?:string;
     creationDate?:Date;

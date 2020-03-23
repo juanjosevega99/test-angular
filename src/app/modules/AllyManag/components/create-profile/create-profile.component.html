@@ -82,14 +82,14 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Entidad</label>
                 <div class="col-md-7">
-                    <label></label>
+                    <label  class="form-control">{{preProfile.nameAllie}}</label>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Sede</label>
                 <div class="col-md-7">
-                    <label></label>
+                    <label class="form-control">{{preProfile.nameHeadquarter}}</label>
                 </div>
             </div>
 
@@ -136,11 +136,9 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Usuario</label>
                 <div class="col-md-7">
-                    <label name="id" id="id"></label>
+                    <label class="form-control" >{{preProfile.nameAllie}}{{preProfile.identification}}</label>
                 </div>
             </div>
-
-
 
         </section>
 
@@ -168,7 +166,7 @@
                 <label class="col-md-5 col-form-label">Identificación</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" placeholder="Identificación" name="id"
-                        pattern="[0-9.]{8,10}$" #id="ngModel" id="id"
+                        pattern="[0-9.]{8,10}$" #id="ngModel" id="id" (change)="generateCode($event)"
                         [ngClass]="{'is-invalid': (!id.valid && id.touched) || id.errors?.pattern ,'is-valid':(id.valid) }"
                         [(ngModel)]="preProfile.identification" required>
                     <div *ngIf="id.errors?.required" class="invalid-feedback">*Este campo es requerido
@@ -231,8 +229,8 @@
 
     </form>
 
-    <pre>
+   <!--  <pre>
         {{ preProfile | json }}
-    </pre>
+    </pre> -->
 
 </div>

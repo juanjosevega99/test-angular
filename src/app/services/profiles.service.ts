@@ -36,7 +36,7 @@ export class ProfilesService {
         map((profiles: any[]) =>
           profiles.map(profiles => {
             let obj = {
-              id: profiles.id,
+              id: profiles._id,
               state: profiles.state,
               entryDate: profiles.entryDate,
               modificationDate: profiles.modificationDate,

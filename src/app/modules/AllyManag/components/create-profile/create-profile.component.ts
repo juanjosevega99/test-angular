@@ -14,13 +14,13 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./create-profile.component.scss']
 })
 export class CreateProfileComponent implements OnInit {
-
+  
   preProfile: Object = {
     state: [],
     /* entryDate:null,
     modificationDate:null, */
     numberOfModifications: 0,
-    nameAllie: null,
+    nameAllie: "kfc",
     nameHeadquarter: null,
     nameCharge: null,
     userCode: null,
@@ -30,6 +30,8 @@ export class CreateProfileComponent implements OnInit {
     email: null,
     photo: null
   }
+
+ 
 
   //variables for categories
   arrayCategorySelect: boolean = true;
@@ -52,7 +54,7 @@ export class CreateProfileComponent implements OnInit {
 
   //variable for upload images
   fileImagedish: any;
-  urlDish: Observable<string>;
+  urlPorfile: Observable<string>;
 
 
   constructor(private _router: Router, private profiles: ProfilesService, private storage: AngularFireStorage, private profileCategory: ProfilesCategoriesService) {
@@ -120,6 +122,11 @@ export class CreateProfileComponent implements OnInit {
     /* this.preDish['creationDate'] = this.today */
   }
 
+  //Method to generate the user code
+  generateCode(event){
+    this.preProfile['userCode']=this.preProfile['nameAllie']+event.target.value
+  }
+
    //Method for photo of the dish
    onPhotoSelected($event) {
     let input = $event.target;
@@ -136,12 +143,8 @@ export class CreateProfileComponent implements OnInit {
   }
 
   //save new profile
-  saveProfile(shape: NgForm) {
-    console.log("enviando algo");
-    console.log(shape);
-    console.log(shape.value);
-
-
+  saveProfile() {
+    this.swallSave()
   }
 
   //sweet alerts
@@ -201,6 +204,51 @@ export class CreateProfileComponent implements OnInit {
           'Eliminado!',
           'success',
         )
+      }
+    })
+  }
+
+  swallSave(){
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.preProfile);
+        
+        const id = Math.random().toString(36).substring(2);
+        const file = this.fileImagedish;
+        const filePath = `assets/allies/profiles/${id}`;
+        const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file)
+        task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                this.urlPorfile = urlImage;
+                console.log(this.urlPorfile);
+                this.preProfile['photo'] = this.urlPorfile
+                this.profiles.postProfile(this.preProfile).subscribe(message => { })
+              })
+            }
+            )
+          ).subscribe()
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu nuevo perfil ha sido creado!",
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'profiles']);
+          }
+        })
       }
     })
   }

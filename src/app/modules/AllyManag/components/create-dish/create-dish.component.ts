@@ -17,12 +17,12 @@ export class CreateDishComponent implements OnInit {
 
   //Object to save the dates of the form
   preDish: Object = {
-    idMealsCategories: null,
+    idDishesCategories: null,
     state: null,
     /* creationDate: null,
     modificationDate: null, */
     numberOfModifications: 0,
-    nameMealsCategories: null,
+    nameDishesCategories: null,
     reference: null,
     name: null,
     price: null,
@@ -99,7 +99,7 @@ export class CreateDishComponent implements OnInit {
   }
   
   deleteCategory() {
-    let categorySelected = this.preDish['nameMealsCategories']
+    let categorySelected = this.preDish['nameDishesCategories']
     this.swallDeleteDish(categorySelected)
   }
 
