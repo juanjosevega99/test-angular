@@ -39,6 +39,7 @@ export class AlliesService {
         nameTypeOfEstablishment:allies.nameTypeOfEstablishment,
         NumberOfLocations:allies.NumberOfLocations,
         idMealsCategories:allies.idMealsCategories,
+        nameMealsCategories: allies.nameMealsCategories,
         description:allies.description,
         idAttentionSchedule:allies.idAttentionSchedule,
         imagesAllies:allies.imagesAllies,

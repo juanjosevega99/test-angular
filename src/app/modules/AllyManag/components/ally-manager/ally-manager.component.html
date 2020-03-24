@@ -47,36 +47,20 @@
             </thead>
 
             <tbody id="myTable">
-                <tr>
-                    <td>1061345234</td>
-                    <td> <a [routerLink]="['/main', 'headquarts']"> Kfc Kentucky Fried Chicken </a></td>
-                    <td>Pollo</td>
-                    <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
-                    <td>25</td>
+                <tr *ngFor="let ally of allies; let i = index">
+                    <td> {{ally.documentNumber}} </td>
+                    <td> <a [routerLink]="['/main', 'headquarts']"> {{ally.name}} </a></td>
+                    <td> {{ally.nameTypeOfEstablishment}} </td>
+                    <td><img [src]="ally.logo" alt="" class="sizeLogo">  </td>
+                    <td>  {{ally.NumberOfLocations}} </td>
                     <td>
                         <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
                         <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
                         <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
                     </td>
                     <td>Oro</td>
-                    <td>11:00 am - 9:00 pm</td>
-                    <td>
-                        <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1081345</td>
-                    <td><a [routerLink]="['/main', 'headquarts']"> Corrales </a></td>
-                    <td>Comidas rapidas</td>
-                    <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
-                    <td>22</td>
-                    <td>
-                        <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
-                        <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
-                        <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
-                    </td>
-                    <td>plata</td>
-                    <td>8:00 am - 11:00 pm</td>
+                    <!-- todo -->
+                         <td > {{attentionSchedule[i].attentionSchedule[0].from}} - {{attentionSchedule[i].attentionSchedule[0].to}}  </td> 
                     <td>
                         <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
                     </td>
