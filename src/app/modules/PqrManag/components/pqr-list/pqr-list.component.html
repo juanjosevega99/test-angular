@@ -1,6 +1,13 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
 
     <div class="filerControl px-1">
+
+        <div style="width: 5%;" class="d-flex align-items-center">
+            <a [routerLink]='["/main"]' class="d-flex">
+              <img src="assets/icons/Back.png" class="tifi-icon-back">
+            </a>
+          </div>
+
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
                 aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,7 +18,7 @@
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item">
                         <a class="nav-link">Nombre</a>
-                        <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name id="name"
+                        <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name id="nameUser"
                             formControlName="name">
                     </li>
                     <li class="nav-item">
@@ -52,14 +59,10 @@
         </nav>
     </div>
 
-    <div class="m-3 d-flex flex-row ">
+    <div class= "container-fluid m-3 d-flex flex-row ">
 
-        <div class="container-fluid" style="width: 25%;">
-            <a [routerLink]='["/main"]' class="d-flex mr-2">
-                <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
-            </a>
-
-        </div>
+        <input style="width: 50%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
+        #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
 
         <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
             <div class="form-group hidden">
@@ -100,11 +103,6 @@
             <button (click)=" search()" type="button" class="btn btn-outline-primary m-2 my-sm-0">Buscar</button>
             <button (click)="clear() " type="button" class="btn btn-outline-primary my-2 my-sm-0">limpiar</button>
         </form>
-    </div>
-
-    <div class="container-fluid d-flex justify-content-center m-3">
-        <input style="width: 97%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-            #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
     </div>
 
     <div class="tableFixHead">
