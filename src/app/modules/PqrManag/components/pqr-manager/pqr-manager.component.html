@@ -78,10 +78,10 @@
         </div>
         <div>
             <p>RESPUESTA</p>
-            <textarea class="chat" style="padding: 0; margin-bottom: 1rem; padding-top: 2rem;" name="area" id="response"
-                cols="30" rows="10">
+            <textarea class="chat" style=" margin-bottom: 1rem; padding: 2rem;" name="area" id="response" #respo
+                cols="30" rows="10" required="" [(ngModel)]="response" >
             </textarea>
-            <button class="btnForInforms">
+            <button *ngIf="!infoUSer.state" class="btnForInforms" (click)="reply( respo )" >
                 <img src="assets/icons/enviar.png" class="tifi-icon-back">
                 Enviar
             </button>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PqrsService } from 'src/app/services/pqrs.service';
 import { Pqrs } from 'src/app/models/Pqrs';
+import { UsersService } from 'src/app/services/users.service';
+import { Users } from 'src/app/models/Users';
 
 @Component({
   selector: 'app-pqr-manager',
@@ -11,22 +13,29 @@ import { Pqrs } from 'src/app/models/Pqrs';
 export class PqrManagerComponent implements OnInit {
 
   infoUSer: Pqrs = {};
+  response: String = '';
 
-  constructor( private activateParams: ActivatedRoute, private pqrservice: PqrsService ) {
+  constructor( private activateParams: ActivatedRoute, private pqrservice: PqrsService, private userService : UsersService ) {
 
     this.activateParams.params.subscribe( res=> {
       
       this.pqrservice.getCPqrsById(res.id).subscribe(
-        (res: any) => {
+        (pqr: any) => {
+
+          this.userService.getUserById(pqr.idUser).subscribe((user: Users) => {
+            this.infoUSer.id = res.id;
+            this.infoUSer.nameUser = user.name;
+            this.infoUSer.phone = user.phone;
+            this.infoUSer.birthday = this.convertDate( user.birthday );
+            this.infoUSer.gender = user.gender;
+            this.infoUSer.nameAllie = pqr.nameAllie;
+            this.infoUSer.nameHeadquarter = pqr.nameHeadquarter;
+            this.infoUSer.date = this.convertDate( pqr.date );
+            this.infoUSer.state = pqr.state;
+            this.response = pqr.reply;
+            
+          }) 
         
-        this.infoUSer.nameUser = res.nameUser;
-        this.infoUSer.phone = res.phone;
-        this.infoUSer.birthday = this.convertDate( res.birthday );
-        this.infoUSer.gender = res.gender;
-        this.infoUSer.nameAllie = res.nameAllie;
-        this.infoUSer.nameHeadquarter = res.nameHeadquarter;
-        this.infoUSer.date = this.convertDate( res.date );
-        console.log(this.infoUSer);
         
       }
       )
@@ -35,6 +44,19 @@ export class PqrManagerComponent implements OnInit {
    }
 
   ngOnInit() {
+  }
+
+  reply( res ){
+  
+    this.infoUSer['reply'] = this.response.toString();
+    this.infoUSer.state = true;
+    console.log(this.response, this.infoUSer);
+    this.pqrservice.updatePqr( this.infoUSer.id, this.infoUSer ).subscribe(
+      res => console.log("se hizo la actualizacion", res)
+      
+    )
+
+    
   }
 
   convertDate(date: Date): string {

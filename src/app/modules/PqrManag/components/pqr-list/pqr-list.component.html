@@ -145,7 +145,8 @@
                     <td>{{user.nameHeadquarter}}</td>
                     <td>
                         <a [routerLink] ="['/main', 'pqrManager', user.id]">
-                            <i class="fas fa-share" style="color: #542b81; font-size: 1rem;  width:1.5rem; height:1.5rem;"></i>
+                            <img *ngIf="!user.state" src="assets/icons/enviar.png" class="tifi-icon-back">
+                            <img *ngIf="user.state" src="assets/icons/seleccionado.png" class="tifi-icon-back">
                         </a>
                     </td>
                 </tr>
