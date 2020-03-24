@@ -56,7 +56,7 @@ import { AccompanimentsComponent } from './modules/AllyManag/components/accompan
 import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
 import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
 
-import { LoadImagesService } from "./services/providers/load-images.service";
+import { UploadImagesService } from "./services/providers/uploadImages.service";
 import { ValidationsLoadImagesDirective } from './directives/validations-load-images.directive';
 import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
@@ -126,7 +126,7 @@ import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-lis
     NgxPrintModule
   ],
   providers: [
-    LoadImagesService,
+    UploadImagesService,
     LocationServiceService
   ],
   bootstrap: [AppComponent]
