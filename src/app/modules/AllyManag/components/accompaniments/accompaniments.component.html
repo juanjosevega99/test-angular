@@ -1,5 +1,76 @@
-<div class="compenetsstyle">
+<!-- <div class="compenetsstyle " style="background-color: #e9e7e7;" >
 
-    <p>accompaniments works!</p>
+    <form novalidate="" class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm">
 
+
+        <a [routerLink]="['/main','createDish']" class="d-flex mr-2">
+            <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+        </a>
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-light ">
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link">Nombre</a>
+                        <input class="form-control" type="text" >
+                      </li>
+                </ul>
+            </div>
+
+         
+        </nav>
+
+    </form>
+</div>
+ -->
+
+<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+
+    <form novalidate="" class="row" >
+
+        <a [routerLink]="['/main','createDish']" class="d-flex mr-2">
+            <img src="assets/icons/Tifi-back.png " class="tifi-icon-back">
+        </a>
+
+        <section class="col-11">
+            <div class="filerControl px-1">
+
+                <section class="col-4 overflow-auto mr-1">
+                    <nav class="navbar navbar-expand-sm navbar-light bg-light overflow-auto">
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <li *ngFor="let section of sections" class="nav-item">
+                                <button class="mr-2 btn btn-outline-primary">{{section.name}}</button>
+                            </li>
+                        </ul>
+                    </nav>
+                </section>
+
+                <section class="col-4">
+                    <div class="container-fluid d-flex justify-content-center m-1">
+                        <input style="width: 100%;" class="form-control text-center" id="general" type="text"
+                            placeholder="Buscar acompañamiento ..." #general>
+                        <!-- (keyup)="searchbyterm(general.value)" -->
+                    </div>
+                </section>
+
+                <section class="col-4">
+                    <div class="container-fluid d-flex justify-content-center">
+                        <nav class="navbar navbar-expand-sm navbar-light bg-light ">
+                            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                <li class="nav-item">
+                                    <input style="width: 100%;" class="form-control text-center" id="general"
+                                    [(ngModel)]="otherSection" type="text" name="otherSection"
+                                        type="text" placeholder="Nueva sección"></li>
+                                <li class="nav-item">
+                                    <button class="btn btn-outline-primary ml-2" (click)="addSection(otherSection)">Añadir nueva sección</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </section>
+
+            </div>
+
+        </section>
+    </form>
 </div>

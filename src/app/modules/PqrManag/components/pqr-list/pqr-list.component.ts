@@ -65,6 +65,7 @@ export class PqrListComponent implements OnInit {
         obj.gender = order.gender;
         obj.nameAllie = order.nameAllie;
         obj.nameHeadquarter = order.nameHeadquarter;
+        obj.typeOfService = order.typeOfService;
 
       },
       this.usergetting.push(obj)
@@ -206,7 +207,7 @@ SeachingRange(dateFrom: string, dateTo: string) {
 
     this.usergetting.forEach(user => {
 
-      const userdate = new Date(user.registerDate)
+      const userdate = new Date(user.date)
 
       if (userdate >= mydateFrom && userdate <= mydateTo) {
         this.newdateArray.push(user)
@@ -218,7 +219,7 @@ SeachingRange(dateFrom: string, dateTo: string) {
     this.newdateArray = [];
 
     this.filteredArray.forEach(user => {
-      const userdate = new Date(user.registerDate)
+      const userdate = new Date(user.date)
       if (userdate >= mydateFrom && userdate <= mydateTo) {
         this.newdateArray.push(user);
       }
@@ -308,7 +309,8 @@ search(termino?: string, id?: string) {
       }
       else {
         console.log("no filtered array");
-
+        console.log(id);
+        
 
         this.newdateArray = [];
 
@@ -365,22 +367,22 @@ searchbyterm(termino: string) {
 
       this.newdateArray = this.filteredArray.filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+        return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
 
       });
     } else {
 
       this.newdateArray = this.usergetting.filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+        return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
 
       });
       this.filteredArray = this.usergetting.filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+        return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
 
       });
 

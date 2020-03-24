@@ -17,12 +17,12 @@ export class CreateDishComponent implements OnInit {
 
   //Object to save the dates of the form
   preDish: Object = {
-    idMealsCategories: null,
+    idDishesCategories: null,
     state: null,
     /* creationDate: null,
     modificationDate: null, */
     numberOfModifications: 0,
-    nameMealsCategories: null,
+    nameDishesCategories: null,
     reference: null,
     name: null,
     price: null,
@@ -87,6 +87,7 @@ export class CreateDishComponent implements OnInit {
 
   //CRD -- Methos of TypeDish: CREATE ,READ AND DELETE 
   addCategory(name: String) {
+    if (name != null) {
     let newitem = name;
     let newCategory: object = {
       name: newitem
@@ -94,10 +95,11 @@ export class CreateDishComponent implements OnInit {
     this.swallSaveOtherDish(newCategory)
 
     this.handleBoxCategories()
+  } else { alert("Ingrese el nombre de la nueva categoría") }
   }
   
   deleteCategory() {
-    let categorySelected = this.preDish['nameMealsCategories']
+    let categorySelected = this.preDish['nameDishesCategories']
     this.swallDeleteDish(categorySelected)
   }
 
@@ -112,7 +114,7 @@ export class CreateDishComponent implements OnInit {
           .attr('src', e.target.result)
       };
       reader.readAsDataURL(input.files[0]);
-      this.preDish['imageDishe'] = input.files[0].name
+      
     }
 
     return this.fileImagedish = input.files[0]
@@ -211,7 +213,7 @@ export class CreateDishComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
-        this.dishes.postDishe(this.preDish).subscribe(message => { })
+        
         const id = Math.random().toString(36).substring(2);
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;
@@ -223,6 +225,8 @@ export class CreateDishComponent implements OnInit {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlDish = urlImage;
                 console.log(this.urlDish);
+                this.preDish['imageDishe'] = this.urlDish
+                this.dishes.postDishe(this.preDish).subscribe(message => { })
               })
             }
             )
