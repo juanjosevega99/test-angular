@@ -32,4 +32,9 @@ export class UsersService {
       )
     );
   }
+
+  getUserById( id:string ){
+    return this.httpclient.get( environment.UrlBase + "users/" + id );
+  }
+
 }
