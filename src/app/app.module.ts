@@ -55,9 +55,7 @@ import { CreateDishComponent } from './modules/AllyManag/components/create-dish/
 import { AccompanimentsComponent } from './modules/AllyManag/components/accompaniments/accompaniments.component';
 import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
 import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
-
 import { UploadImagesService } from "./services/providers/uploadImages.service";
-import { ValidationsLoadImagesDirective } from './directives/validations-load-images.directive';
 import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 
@@ -101,7 +99,6 @@ import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-lis
     AccompanimentsComponent,
     ProfileComponent,
     CreateProfileComponent,
-    ValidationsLoadImagesDirective,
     PqrListComponent
   ],
   imports: [
