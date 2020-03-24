@@ -53,6 +53,15 @@
                             (keyup)="search(headquart.value, headquart.id)" #headquart
                             formControlName="nameHeadquarter">
                     </li>
+                    <li >
+                        <a class="nav-link">Servicio</a>
+                        <div class="d-flex align-items-center">
+                           <a (click)="search('pidelo', 'typeOfService')"> <img src="assets/icons/pidelo.png" class="tifi-icon-back"> </a>
+                           <a (click)="search('llevalo', 'typeOfService')"> <img src="assets/icons/llevalo.png" class="tifi-icon-back"> </a>
+                           <a (click)="search('reservalo', 'typeOfService')"> <img src="assets/icons/reservalo.png" class="tifi-icon-back"></a>
+                        </div>
+    
+                    </li>
 
                 </ul>
             </div>

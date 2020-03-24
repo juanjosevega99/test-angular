@@ -65,6 +65,7 @@ export class PqrListComponent implements OnInit {
         obj.gender = order.gender;
         obj.nameAllie = order.nameAllie;
         obj.nameHeadquarter = order.nameHeadquarter;
+        obj.typeOfService = order.typeOfService;
 
       },
       this.usergetting.push(obj)
