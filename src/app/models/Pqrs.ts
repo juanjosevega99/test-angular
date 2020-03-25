@@ -15,5 +15,6 @@ export class Pqrs {
     state?:boolean;
     description?:string;
     reply?:string;
+    emailReply?:String;
     typeOfService?:string;
 }

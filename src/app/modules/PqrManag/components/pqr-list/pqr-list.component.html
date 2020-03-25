@@ -4,9 +4,9 @@
 
         <div style="width: 5%;" class="d-flex align-items-center">
             <a [routerLink]='["/main"]' class="d-flex">
-              <img src="assets/icons/Back.png" class="tifi-icon-back">
+                <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
-          </div>
+        </div>
 
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
@@ -18,8 +18,8 @@
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item">
                         <a class="nav-link">Nombre</a>
-                        <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name id="nameUser"
-                            formControlName="name">
+                        <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name
+                            id="nameUser" formControlName="name">
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">Correo</a>
@@ -53,14 +53,23 @@
                             (keyup)="search(headquart.value, headquart.id)" #headquart
                             formControlName="nameHeadquarter">
                     </li>
-                    <li >
+                    <li>
                         <a class="nav-link">Servicio</a>
                         <div class="d-flex align-items-center">
-                           <a (click)="search('pidelo', 'typeOfService')"> <img src="assets/icons/pidelo.png" class="tifi-icon-back"> </a>
-                           <a (click)="search('llevalo', 'typeOfService')"> <img src="assets/icons/llevalo.png" class="tifi-icon-back"> </a>
-                           <a (click)="search('reservalo', 'typeOfService')"> <img src="assets/icons/reservalo.png" class="tifi-icon-back"></a>
+                            <a (click)="searchService('pidelo', 'typeOfService')">
+                                <img src="assets/icons/pidelo.png" class="tifi-icon-back"
+                                    [ngClass]="{'active': servicepidelo}">
+                            </a>
+                            <a (click)="searchService('llevalo', 'typeOfService')">
+                                <img src="assets/icons/llevalo.png" class="tifi-icon-back"
+                                    [ngClass]="{'active': servicellevalo}">
+                            </a>
+                            <a (click)="searchService('reservalo', 'typeOfService')">
+                                <img src="assets/icons/reservalo.png" class="tifi-icon-back"
+                                    [ngClass]="{'active': servicereservalo}">
+                            </a>
                         </div>
-    
+
                     </li>
 
                 </ul>
@@ -68,10 +77,10 @@
         </nav>
     </div>
 
-    <div class= "container-fluid m-3 d-flex flex-row ">
+    <div class="container-fluid m-3 d-flex flex-row ">
 
         <input style="width: 50%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-        #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
+            #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
 
         <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
             <div class="form-group hidden">
@@ -144,7 +153,7 @@
                     <td>{{user.nameAllie}}</td>
                     <td>{{user.nameHeadquarter}}</td>
                     <td>
-                        <a [routerLink] ="['/main', 'pqrManager', user.id]">
+                        <a [routerLink]="['/main', 'pqrManager', user.id]">
                             <img *ngIf="!user.state" src="assets/icons/enviar.png" class="tifi-icon-back">
                             <img *ngIf="user.state" src="assets/icons/seleccionado.png" class="tifi-icon-back">
                         </a>
@@ -159,13 +168,14 @@
         <div class="d-flex justify-content-center container-fluid">
 
             <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
-                data-target="#exampleModalCenter">
+                data-target="#exampleModalCenter"><img src="assets/icons/excel.png" class="tifi-icon-back">
                 Generar Excel</button>
         </div>
         <div class="d-flex justify-content-center container-fluid">
 
             <button type="button" (click)="datafor_pdf()" class="btnForInforms" data-toggle="modal"
-                data-target="#exampleModalCenter">Generar PDF</button>
+                data-target="#exampleModalCenter"><img src="assets/icons/pdf.png" class="tifi-icon-back">
+                Generar PDF</button>
         </div>
     </div>
 

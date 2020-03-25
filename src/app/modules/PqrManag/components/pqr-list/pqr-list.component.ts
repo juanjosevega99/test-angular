@@ -17,6 +17,13 @@ import { Users } from 'src/app/models/Users';
   styleUrls: ['./pqr-list.component.scss']
 })
 export class PqrListComponent implements OnInit {
+
+  // ==========
+  // only styles
+  servicepidelo = false;
+  servicellevalo = false;
+  servicereservalo = false;
+
   /*name of the excel-file which will be downloaded. */
   fileName = 'ExcelSheet.xlsx';
   //var to know if pdf or excel
@@ -47,8 +54,6 @@ export class PqrListComponent implements OnInit {
       "gender": new FormControl(),
       "nameAllie": new FormControl(),
       "nameHeadquarter": new FormControl(),
-      "usability": new FormControl(),
-      "purchaseAmount": new FormControl(),
 
     })
 
@@ -56,33 +61,31 @@ export class PqrListComponent implements OnInit {
 
       if (res.length > 0) {
 
-
-
         res.forEach((order: any) => {
-          
-            if (order.idUser){
 
-              this.userService.getUserById(order.idUser).subscribe((user: Users) => {
-                const obj: Pqrs = {};
-  
-                obj.id = order.id,
-                obj.date = this.convertDate(order.date);
-                obj.nameUser = user.name;
-                obj.email = user.email;
-                obj.phone = user.phone;
-                obj.birthday = this.convertDate(user.birthday);
-                obj.gender = user.gender;
-                obj.nameAllie = order.nameAllie;
-                obj.nameHeadquarter = order.nameHeadquarter;
-                obj.typeOfService = order.typeOfService;
-                obj.state = order.state;
-  
-                this.usergetting.push(obj)
-              })  
-              
-            }else{
-              console.log("problem with order.userid", order.userid);
-            }
+          if (order.idUser) {
+
+            this.userService.getUserById(order.idUser).subscribe((user: Users) => {
+              const obj: Pqrs = {};
+
+              obj.id = order.id,
+              obj.date = this.convertDate(order.date);
+              obj.nameUser = user.name;
+              obj.email = user.email;
+              obj.phone = user.phone;
+              obj.birthday = this.convertDate(user.birthday);
+              obj.gender = user.gender;
+              obj.nameAllie = order.nameAllie;
+              obj.nameHeadquarter = order.nameHeadquarter;
+              obj.typeOfService = order.typeOfService;
+              obj.state = order.state;
+
+              this.usergetting.push(obj)
+            })
+
+          } else {
+            console.log("problem with order.userid", order.userid);
+          }
         },
         )
 
@@ -255,8 +258,7 @@ export class PqrListComponent implements OnInit {
       gender: null,
       nameAllie: null,
       nameHeadquarter: null,
-      usability: null,
-      purchaseAmount: null
+
     });
 
     this.fromDate = null;
@@ -266,6 +268,10 @@ export class PqrListComponent implements OnInit {
     this.newdateArray = this.usergetting;
     this.newdateArray.forEach(item => item.selected = false)
     this.generalsearch = '';
+
+    this.servicepidelo = false;
+    this.servicellevalo = false;
+    this.servicereservalo = false;
   }
 
 
@@ -356,7 +362,7 @@ export class PqrListComponent implements OnInit {
           }
         }
 
-        if (count > 9 && !this.generalsearch) {
+        if (count > 7 && !this.generalsearch) {
 
           this.newdateArray = this.usergetting;
           this.filteredArray = []
@@ -383,7 +389,7 @@ export class PqrListComponent implements OnInit {
         this.newdateArray = this.filteredArray.filter(function (item) {
           //We test each element of the object to see if one string matches the regexp.
           return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) )
 
         });
       } else {
@@ -391,13 +397,13 @@ export class PqrListComponent implements OnInit {
         this.newdateArray = this.usergetting.filter(function (item) {
           //We test each element of the object to see if one string matches the regexp.
           return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) )
 
         });
         this.filteredArray = this.usergetting.filter(function (item) {
           //We test each element of the object to see if one string matches the regexp.
           return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) )
 
         });
 
@@ -412,7 +418,7 @@ export class PqrListComponent implements OnInit {
         }
       }
 
-      if (count > 9 && !this.generalsearch) {
+      if (count > 7 && !this.generalsearch) {
 
         this.newdateArray = this.usergetting;
         this.filteredArray = []
@@ -424,6 +430,32 @@ export class PqrListComponent implements OnInit {
         count = 0;
       }
     }
+
+  }
+
+
+  // ============================
+  // type service filter
+  // ===========================
+  searchService(service: string, tag: string) {
+
+    switch (service) {
+
+      case 'pidelo':
+        this.servicepidelo = !this.servicepidelo;
+        service = this.servicepidelo ? service : "";
+        break;
+      case 'llevalo':
+        this.servicellevalo = !this.servicellevalo;
+        service = this.servicellevalo ? service : "";
+        break;
+      case 'reservalo':
+        this.servicereservalo = !this.servicereservalo;
+        service = this.servicereservalo ? service : "";
+        break;
+    }
+
+    this.searchbyterm( service);
 
   }
 
