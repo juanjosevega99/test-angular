@@ -82,13 +82,13 @@ export class CreateHeadquarterComponent implements OnInit {
         });
       })
 
-    this.services = [{ name: 'Pídelo', img: 'assets/icons/shop.png', select: false }, { name: 'Resérvalo', img: 'assets/icons/calendar.png', select: false }, { name: 'Llévalo', img: 'assets/icons/delivery-bike.png', select: false }]
+    this.services = [{ name: 'Pidelo', img: 'assets/icons/shop.png', select: false }, { name: 'Reservalo', img: 'assets/icons/calendar.png', select: false }, { name: 'Llevalo', img: 'assets/icons/delivery-bike.png', select: false }]
 
     this.aditionalServices = [{ name: 'Parqueadero', img: 'assets/icons/parking.png', select: false }, { name: 'Barra de tragos', img: 'assets/icons/cocktail.png', select: false }, { name: 'Wifi', img: 'assets/icons/wi-fi-zone.png', select: false },
     { name: 'Mesa exterior', img: 'assets/icons/people-table.png', select: false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png', select: false }, { name: 'Show en vivo', img: 'assets/icons/dance.png', select: false },
     { name: 'Zona de fumadores', img: 'assets/icons/no-smoking.png', select: false }, { name: 'Carta braile', img: 'assets/icons/braille.png', select: false }]
 
-    this.cost = [{ name: 'Pídelo', img: 'assets/icons/shop.png' }, { name: 'Resérvalo', img: 'assets/icons/calendar.png' }, { name: 'Llévalo', img: 'assets/icons/delivery-bike.png' }]
+    this.cost = [{ name: 'Pidelo', img: 'assets/icons/shop.png' }, { name: 'Reservalo', img: 'assets/icons/calendar.png' }, { name: 'Llevalo', img: 'assets/icons/delivery-bike.png' }]
   }
 
   ngOnInit() {

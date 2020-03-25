@@ -37,105 +37,135 @@
 
                 </section>
 
-                <section class="col-4">
-                    <div class="container-fluid d-flex justify-content-center m-1">
-                        <input style="width: 100%;" class="form-control text-center" id="general" type="text"
+                <section class="col-4 overflow-auto mr-1" style="flex-direction: column;">
+                    <nav class="navbar navbar-expand-sm navbar-light bg-light" >
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                            <li class="nav-item container-fluid d-flex">
+                            <input  class="form-control text-center" id="general" type="text"
                             placeholder="Buscar acompañamiento ..." #general>
-                        <!-- (keyup)="searchbyterm(general.value)" -->
+                            </li><!-- (keyup)="searchbyterm(general.value)" -->
+                        </ul>
+                    </nav>
+                    <div class="form-group">
+                        <div class="input-group mt-3">
+                        <div class="radio radio-success m-2 form-check form-check-inline">
+                            <input class="form-check-input " type="radio" name="radio2" id="radio3">
+                            <label for="radio3">
+                                Activo
+                            </label>
+                        </div>
+                        <div class="radio radio-danger m-2 form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radio2" id="radio4">
+                            <label for="radio4">
+                                Inactivo
+                            </label>
+                        </div>
+                        <div class="radio m-2 form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radio2" id="radio5">
+                            <label for="radio5">
+                                Eliminar
+                            </label>
+                        </div>
                     </div>
-                </section>
+                    </div>
+        </section>
 
-                <section class="col-4">
-                    <div class="container-fluid d-flex justify-content-center">
-                        <nav class="navbar navbar-expand-sm navbar-light bg-light ">
-                            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                                <li class="nav-item">
-                                    <input style="width: 100%;" class="form-control text-center" id="general"
-                                        [(ngModel)]="otherSection" type="text" name="otherSection" type="text"
-                                        placeholder="Nueva sección"></li>
-                                <li class="nav-item">
-                                    <button class="btn btn-outline-primary ml-2"
-                                        (click)="addSection(otherSection)">Añadir nueva sección</button>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </section>
+        <section class="col-4">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light ">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <input style="width: 100%;" class="form-control text-center" id="general"
+                                [(ngModel)]="otherSection" type="text" name="otherSection" type="text"
+                                placeholder="Nueva sección"></li>
+                        <li class="nav-item">
+                            <button class="btn btn-outline-primary ml-2" (click)="addSection(otherSection)">Añadir nueva sección</button>
+                        </li>
+                    </ul>
+                </nav>
+            
+            <div class="form-group">
+                <div class="input-group mt-2">
+                <select>
+                    <option selected>hola</option>
+                </select>
+            </div>
             </div>
         </section>
-    </form>
+</div>
+</section>
+</form>
 
-    <section class="col-12 " [formGroup]="addForm">
-        <div class="form-group tableFixHead mt-5">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="text-center">Cantidad</th>
-                        <th class="text-center">Unidad</th>
-                        <th class="text-center">Acompañamiento</th>
-                        <th class="text-center">T. de preparación</th>
-                        <th class="text-center">Precio</th>
-                        <th class="text-center">F. creación</th>
-                        <th class="text-center">F. modificación</th>
-                        <th class="text-center">Estado</th>
-                        <th class="text-center">Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
-                        <td><input [formControl]="row.get('quantity')"></td>
-                        <td><input [formControl]="row.get('unitMeasurement')"></td>
-                        <td><input [formControl]="row.get('name')"></td>
-                        <td><input [formControl]="row.get('preparationTime')">
-                            <div class="input-group-append">
-                                <select [formControl]="row.get('preparationTime')" class="input-group-text">
-                                    <option *ngFor="let time of time">
-                                        {{time}}
-                                    </option>
-                                </select>
-                            </div>
-                        </td>
-                        <td><input [formControl]="row.get('accompanimentValue')"></td>
-                        <td><input [formControl]="row.get('name')"></td>
-                        <td><input [formControl]="row.get('name')"></td>
-                        <td><input [formControl]="row.get('name')"></td>
-                        <td> <a (click)="onRemoveRow(index)"><i class="fas fa-trash"></i></a></td>
-                    </tr>
-                </tbody>
-            </table>
+<section class="col-12 " [formGroup]="addForm">
+    <div class="form-group tableFixHead mt-5">
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Unidad</th>
+                    <th class="text-center">Acompañamiento</th>
+                    <th class="text-center">T. de preparación</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">F. creación</th>
+                    <th class="text-center">F. modificación</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
+                    <td><input [formControl]="row.get('quantity')"></td>
+                    <td><input [formControl]="row.get('unitMeasurement')"></td>
+                    <td><input [formControl]="row.get('name')"></td>
+                    <td><input [formControl]="row.get('preparationTime')">
+                        <div class="input-group-append">
+                            <select [formControl]="row.get('preparationTime')" class="input-group-text">
+                                <option *ngFor="let time of time">
+                                    {{time}}
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td><input [formControl]="row.get('accompanimentValue')"></td>
+                    <td><input [formControl]="row.get('name')"></td>
+                    <td><input [formControl]="row.get('name')"></td>
+                    <td><input [formControl]="row.get('name')"></td>
+                    <td> <a (click)="onRemoveRow(index)"><i class="fas fa-trash"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
 
-            <label class="label-control">Items</label>
-            <br>
-            <label class="switch">
-                <input type="checkbox" class="form-control" formControlName="items">
-                <span class="slider round">
-                    <span class="on">
-                        {{addForm.value.items_value}}
-                    </span>
-                    <span class="off">
-                        {{addForm.value.items_value}}
-                    </span>
+        <label class="label-control">Items</label>
+        <br>
+        <label class="switch">
+            <input type="checkbox" class="form-control" formControlName="items">
+            <span class="slider round">
+                <span class="on">
+                    {{addForm.value.items_value}}
                 </span>
-            </label>
-        </div>
-    </section>
+                <span class="off">
+                    {{addForm.value.items_value}}
+                </span>
+            </span>
+        </label>
+    </div>
+</section>
 
-    <section class="col-12 d-flex mt-4 form-group">
-        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-            <button class="btn btn-outline-primary btn-lg">No hay acompañamientos</button>
-        </div>
-        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-            <button (click)="onAddRow()" *ngIf="addForm.get('rows')" class="btn btn-outline-primary btn-lg">
-                Nuevo acompañamiento</button>
-        </div>
-        <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-            <button class="btn btn-outline-primary btn-lg">Guardar</button>
-        </div>
-    </section>
-    <pre>
+<section class="col-12 d-flex mt-4 form-group">
+    <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+        <button class="btn btn-outline-primary btn-lg">No hay acompañamientos</button>
+    </div>
+    <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+        <button (click)="onAddRow()" *ngIf="addForm.get('rows')" class="btn btn-outline-primary btn-lg">
+            Nuevo acompañamiento</button>
+    </div>
+    <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
+        <button class="btn btn-outline-primary btn-lg">Guardar</button>
+    </div>
+</section>
+<pre>
         {{ preAccompaniments | json }}
     </pre>
-    <pre>{{rows.value | json}}</pre>
+<pre>{{rows.value | json}}</pre>
 </div>
 <!-- 
 <div class="compenetsstyle px-5 pt-5" style="background-color: #e9e7e7;">
