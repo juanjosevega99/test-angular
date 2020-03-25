@@ -10,14 +10,31 @@
         <section class="col-11">
             <div class="filerControl px-1">
 
-                <section class="col-4 overflow-auto mr-1">
+                <section class="col-4 overflow-auto mr-1" style="flex-direction: column;">
                     <nav class="navbar navbar-expand-sm navbar-light bg-light overflow-auto">
                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                             <li *ngFor="let section of sections" class="nav-item">
-                                <button class="mr-2 btn btn-outline-primary">{{section.name}}</button>
+                                <button class="mr-2 btn btn-outline-primary"
+                                    (click)="seeValue(section.name,section.id)">{{section.name}}</button>
                             </li>
                         </ul>
                     </nav>
+                    <div class="form-group">
+                        <div class="input-group mt-2">
+                            <div class="inputWithIcon mr-2">
+                                <input class="form-control" type="text" placeholder="Selecciona la categoría" #new
+                                    value="{{sectionSelected}}" name="new">
+                                <i class="far fa-edit" aria-hidden="true"></i>
+                            </div>
+                            <button class="btn1 btn btn-outline-primary mr-2" (click)="deleteSection()">
+                                Borrar
+                            </button>
+                            <button class="btn1 btn btn-outline-primary" (click)="updateSection(new.value)">
+                                Guardar cambios
+                            </button>
+                        </div>
+                    </div>
+
                 </section>
 
                 <section class="col-4">
@@ -46,11 +63,178 @@
                 </section>
             </div>
         </section>
-        
-        <section class="col-11">
-            <input placeholder=dcd>
-        </section>
-
-        
     </form>
+
+    <section class="col-12 " [formGroup]="addForm">
+        <div class="form-group tableFixHead mt-5">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Acompañamiento</th>
+                        <th class="text-center">T. de preparación</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">F. creación</th>
+                        <th class="text-center">F. modificación</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
+                        <td><input [formControl]="row.get('quantity')"></td>
+                        <td><input [formControl]="row.get('unitMeasurement')"></td>
+                        <td><input [formControl]="row.get('name')"></td>
+                        <td><input [formControl]="row.get('preparationTime')">
+                            <div class="input-group-append">
+                                <select [formControl]="row.get('preparationTime')" class="input-group-text">
+                                    <option *ngFor="let time of time">
+                                        {{time}}
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td><input [formControl]="row.get('accompanimentValue')"></td>
+                        <td><input [formControl]="row.get('name')"></td>
+                        <td><input [formControl]="row.get('name')"></td>
+                        <td><input [formControl]="row.get('name')"></td>
+                        <td> <a (click)="onRemoveRow(index)"><i class="fas fa-trash"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <label class="label-control">Items</label>
+            <br>
+            <label class="switch">
+                <input type="checkbox" class="form-control" formControlName="items">
+                <span class="slider round">
+                    <span class="on">
+                        {{addForm.value.items_value}}
+                    </span>
+                    <span class="off">
+                        {{addForm.value.items_value}}
+                    </span>
+                </span>
+            </label>
+        </div>
+    </section>
+
+    <section class="col-12 d-flex mt-4 form-group">
+        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+            <button class="btn btn-outline-primary btn-lg">No hay acompañamientos</button>
+        </div>
+        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+            <button (click)="onAddRow()" *ngIf="addForm.get('rows')" class="btn btn-outline-primary btn-lg">
+                Nuevo acompañamiento</button>
+        </div>
+        <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
+            <button class="btn btn-outline-primary btn-lg">Guardar</button>
+        </div>
+    </section>
+    <pre>
+        {{ preAccompaniments | json }}
+    </pre>
+    <pre>{{rows.value | json}}</pre>
 </div>
+<!-- 
+<div class="compenetsstyle px-5 pt-5" style="background-color: #e9e7e7;">
+    <div class="form-group">
+
+        <div class="tableFixHead mt-5">
+            <table>
+
+                <thead>
+
+
+
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Acompañamiento</th>
+                        <th class="text-center">T. de preparación</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">F. creación</th>
+                        <th class="text-center">F. modificación</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Eliminar</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
+                        <td>
+                            name : <input [formControl]="row.get('name')">
+                        </td>
+                        <td>
+                            description : <input [formControl]="row.get('description')">
+                        </td>
+                        <td>
+                            qty : <input [formControl]="row.get('qty')">
+                        </td>
+                        <td>
+                            <button (click)="onRemoveRow(index)">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+
+
+
+            </table>
+
+
+        </div>
+    </div>
+    <section class="col-12 d-flex mt-4 form-group">
+        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+            <button class="btn btn-outline-primary btn-lg">No hay acompañamientos</button>
+        </div>
+        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+            <button (click)="onAddRow()" class="btn btn-outline-primary btn-lg">Añadir acompañamiento</button>
+        </div>
+        <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
+            <button class="btn btn-outline-primary btn-lg">Guardar</button>
+        </div>
+    </section> -->
+
+<!-- <div class="form-group">
+		<label class="label-control">Items</label>
+		<br>
+		<label class="switch">
+    <input type="checkbox" class="form-control" formControlName="items">
+    <span class="slider round">
+      <span class="on">
+        {{addForm.value.items_value}}
+      </span> 
+      <span class="off">
+        {{addForm.value.items_value}}
+      </span>
+    </span>
+    </label>
+		
+		<table>
+			<thead>
+				<button (click)="onAddRow()" *ngIf="addForm.get('rows')">add row</button>
+			</thead>
+			<tbody>
+				<tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
+          <td>
+            name : <input [formControl]="row.get('name')">
+          </td>
+          <td>
+            description : <input [formControl]="row.get('description')">
+          </td>
+          <td>
+            qty : <input [formControl]="row.get('qty')">
+          </td>
+          <td>
+            <button (click)="onRemoveRow(index)">Remove</button>
+          </td>
+				</tr>
+			</tbody>
+		</table>
+
+
+	</div> -->
+<!-- </div>
+<pre>{{rows.value | json}}</pre> -->
