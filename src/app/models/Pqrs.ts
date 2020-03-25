@@ -15,4 +15,5 @@ export class Pqrs {
     state?:boolean;
     description?:string;
     reply?:string;
+    typeOfService?:string;
 }

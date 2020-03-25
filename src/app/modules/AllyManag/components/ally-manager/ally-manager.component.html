@@ -1,12 +1,12 @@
 <div class="compenetsstyle">
-    <div class="row styleContainer " >
-        <div class="flex-grow-1" >
-            <a [routerLink] = "['/main']" >
+    <div class="row styleContainer ">
+        <div class="flex-grow-1">
+            <a [routerLink]="['/main']">
                 <!-- <i class="fas fa-chevron-left "></i> -->
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
-        <div class="flex-grow-1" >
+        <div class="flex-grow-1">
             <form class="form-inline align-content-start">
                 <div class="input-group">
                     <div class="input-group-append">
@@ -17,11 +17,11 @@
                 </div>
             </form>
         </div>
-        <div >
+        <div>
             <a [routerLink]="['/main','createAlly']" class="btn btn-outline-primary">
                 <p>Crear aliado</p>
             </a>
-        </div>  
+        </div>
     </div>
     <div class="row styleTable table-responsive mt-4">
 
@@ -33,50 +33,37 @@
                 <tr>
                     <!-- <th data-field="name" data-filter-control="input">Nombre</th> -->
                     <th data-field="code" data-filter-control="input">Codigo</th>
+                    <th data-field=""> logo </th>
                     <th data-field="nameStablishment" data-filter-control="input">Nombre del establecimiento</th>
-                    <th data-field="foodType"  data-filter-control="input">Tipo de comida</th>
-                    <th data-field="logo"> logo </th>
                     <th data-field="numberHeadquarters">Número de sedes</th>
                     <th data-field="services">Servicios</th>
                     <th data-field="allyType">Tipo de aliado</th>
+                    <th data-field="foodType" data-filter-control="input">Tipo de comida</th>
                     <th data-field="schedule" class="position-relative">Horario</th>
-                    <th data-field="edit" > </th>
-                    
+                    <th data-field="edit"> </th>
+
                 </tr>
-                             
+
             </thead>
 
             <tbody id="myTable">
-                <tr>
-                    <td>1061345234</td>
-                    <td> <a [routerLink]="['/main', 'headquarts']"> Kfc Kentucky Fried Chicken </a></td>
-                    <td>Pollo</td>
-                    <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
-                    <td>25</td>
+                <tr *ngFor="let ally of arrayAllyManager; ">
+                    <td> {{ally.code}} </td>
+                    <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
+                    <td> <a [routerLink]="['/main', 'headquarts']"> {{ally.nameEstablishment}} </a></td>
+                    <td> {{ally.numberHeadquarters}} </td>
                     <td>
-                        <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
-                        <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
-                        <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
+
+                        <img *ngIf="ally.services ? ally.services[0]? true :false  : ''" [src]="ally.url1" alt=""
+                            class="iconService mx-2">
+                        <img *ngIf="ally.services ? ally.services[1]? true :false  : ''" [src]="ally.url2" alt=""
+                            class="iconService mx-2">
+                        <img *ngIf="ally.services ? ally.services[2]? true :false  : ''" [src]="ally.url3" alt=""
+                            class="iconService mx-2">
                     </td>
-                    <td>Oro</td>
-                    <td>11:00 am - 9:00 pm</td>
-                    <td>
-                        <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1081345</td>
-                    <td><a [routerLink]="['/main', 'headquarts']"> Corrales </a></td>
-                    <td>Comidas rapidas</td>
-                    <td><img src="../../../../../assets/img/kfc-logo.png" alt="" class="sizeLogo">  </td>
-                    <td>22</td>
-                    <td>
-                        <img src="../../../../../assets/icons/shop.png" alt="" class="iconService mx-2"> 
-                        <img src="../../../../../assets/icons/calendar.png" alt="" class="iconService mx-2"> 
-                        <img src="../../../../../assets/icons/delivery-bike.png" alt="" class="iconService mx-2"> 
-                    </td>
-                    <td>plata</td>
-                    <td>8:00 am - 11:00 pm</td>
+                    <td> {{ally.allyType}} </td>
+                    <!-- todo -->
+                    <td> {{ally.mealType}} </td>
                     <td>
                         <a [routerLink]="['/main', 'headquarts']" class="btn"> <i class="far fa-edit"></i> </a>
                     </td>

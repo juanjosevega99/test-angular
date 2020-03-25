@@ -46,7 +46,8 @@ export class PqrsService {
             state: pqrs.state,
             description: pqrs.description,
             reply: pqrs.reply,
-            date: pqrs.date
+            date: pqrs.date,
+            typeOfService: pqrs.typeOfService
           };
           return obj;
         })

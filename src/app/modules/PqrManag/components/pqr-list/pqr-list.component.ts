@@ -8,6 +8,8 @@ import * as jsPDF from 'jspdf';
 import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { PqrsService } from 'src/app/services/pqrs.service';
 import { Pqrs } from 'src/app/models/Pqrs';
+import { UsersService } from 'src/app/services/users.service';
+import { Users } from 'src/app/models/Users';
 
 @Component({
   selector: 'app-pqr-list',
@@ -33,7 +35,8 @@ export class PqrListComponent implements OnInit {
   generalsearch: string;
   table: FormGroup;
 
-  constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private pqrlistservice: PqrsService) {
+  constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private pqrlistservice: PqrsService,
+    private userService: UsersService) {
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -49,32 +52,44 @@ export class PqrListComponent implements OnInit {
 
     })
 
-   this.pqrlistservice.getPqrs().subscribe(res=>{
-     console.log(res);
-     if (res.length > 0) {
+    this.pqrlistservice.getPqrs().subscribe(res => {
 
-      const obj: Pqrs = {};
+      if (res.length > 0) {
 
-      res.forEach((order: any) => {
-        obj.id = order.id,
-        obj.date = this.convertDate( order.date );
-        obj.nameUser = order.nameUser;
-        obj.email = order.email;
-        obj.phone = order.phone;
-        obj.birthday = this.convertDate( order.birthday);
-        obj.gender = order.gender;
-        obj.nameAllie = order.nameAllie;
-        obj.nameHeadquarter = order.nameHeadquarter;
 
-      },
-      this.usergetting.push(obj)
-      )
 
-    }
-     
-   })
-    
-   }
+        res.forEach((order: any) => {
+          
+            if (order.idUser){
+
+              this.userService.getUserById(order.idUser).subscribe((user: Users) => {
+                const obj: Pqrs = {};
+  
+                obj.id = order.id,
+                obj.date = this.convertDate(order.date);
+                obj.nameUser = user.name;
+                obj.email = user.email;
+                obj.phone = user.phone;
+                obj.birthday = this.convertDate(user.birthday);
+                obj.gender = user.gender;
+                obj.nameAllie = order.nameAllie;
+                obj.nameHeadquarter = order.nameHeadquarter;
+                obj.typeOfService = order.typeOfService;
+  
+                this.usergetting.push(obj)
+              })  
+              
+            }else{
+              console.log("problem with order.userid", order.userid);
+            }
+        },
+        )
+
+      }
+
+    })
+
+  }
 
   ngOnInit() {
   }
@@ -111,229 +126,286 @@ export class PqrListComponent implements OnInit {
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
   }
 
-// =====================================================
-// funtion documetns and pdf
-// =====================================================
+  // =====================================================
+  // funtion documetns and pdf
+  // =====================================================
 
-//selected All items
-selectedAll(event) {
-  const checked = event.target.checked;
-  this.newdateArray.forEach(item => item.selected = checked)
-}
-
-selectedOne(event, pos: number) {
-  const checked = event.target.checked;
-  event.target.checked = checked;
-  this.newdateArray[pos].selected = checked;
-
-}
-
-selectforsend() {
-  this.userSelected = []
-  this.newdateArray = this.usergetting;
-}
-
-//get data to export
-datafor_Excel() {
-  this.typepdf = false;
-  this.selectforsend();
-}
-datafor_pdf() {
-  this.typepdf = true;
-  this.selectforsend();
-}
-
-//generate excel file
-generateExcel() {
-
-  /* table id is passed over here */
-  let element = document.getElementById('excel-table');
-  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
-
-  /* generate workbook and add the worksheet */
-  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-  /* save to file */
-  XLSX.writeFile(wb, this.fileName);
-
-}
-
-//generate pdf file
-
-generatePdf(content: any) {
-  console.log(content);
-  //'p', 'mm', 'a4'
-
-  let doc = new jsPDF('landscape');
-  let col = ["Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
-    "Sede"];
-  let rows = [];
-  let auxrow = [];
-  this.usergetting.map((user, i) => {
-    auxrow = [];
-    auxrow[0] = i + 1;
-    for (const key in user) {
-      if (user.hasOwnProperty(key)) {
-        // Mostrando en pantalla la clave junto a su valor
-        auxrow.push(user[key]);
-      }
-    }
-    rows.push(auxrow);
-  });
-
-  //build the pdf file
-  doc.autoTable(col, rows);
-  doc.save('Test.pdf');
-}
-
-
-// ================================
-// filters
-// ================================
-
-SeachingRange(dateFrom: string, dateTo: string) {
-
-  this.from = dateFrom;
-  this.to = dateTo;
-
-  const mydateFrom = new Date(this.from);
-  const mydateTo = new Date(this.to);
-
-  if (!this.filteredArray.length) {
-
-    this.newdateArray = [];
-
-    this.usergetting.forEach(user => {
-
-      const userdate = new Date(user.registerDate)
-
-      if (userdate >= mydateFrom && userdate <= mydateTo) {
-        this.newdateArray.push(user)
-      }
-    });
-
-  } else {
-
-    this.newdateArray = [];
-
-    this.filteredArray.forEach(user => {
-      const userdate = new Date(user.registerDate)
-      if (userdate >= mydateFrom && userdate <= mydateTo) {
-        this.newdateArray.push(user);
-      }
-    });
+  //selected All items
+  selectedAll(event) {
+    const checked = event.target.checked;
+    this.newdateArray.forEach(item => item.selected = checked)
   }
 
-}
+  selectedOne(event, pos: number) {
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    this.newdateArray[pos].selected = checked;
+
+  }
+
+  selectforsend() {
+    this.userSelected = []
+    this.newdateArray = this.usergetting;
+  }
+
+  //get data to export
+  datafor_Excel() {
+    this.typepdf = false;
+    this.selectforsend();
+  }
+  datafor_pdf() {
+    this.typepdf = true;
+    this.selectforsend();
+  }
+
+  //generate excel file
+  generateExcel() {
+
+    /* table id is passed over here */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+
+  }
+
+  //generate pdf file
+
+  generatePdf(content: any) {
+    console.log(content);
+    //'p', 'mm', 'a4'
+
+    let doc = new jsPDF('landscape');
+    let col = ["Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
+      "Sede"];
+    let rows = [];
+    let auxrow = [];
+    this.usergetting.map((user, i) => {
+      auxrow = [];
+      auxrow[0] = i + 1;
+      for (const key in user) {
+        if (user.hasOwnProperty(key)) {
+          // Mostrando en pantalla la clave junto a su valor
+          auxrow.push(user[key]);
+        }
+      }
+      rows.push(auxrow);
+    });
+
+    //build the pdf file
+    doc.autoTable(col, rows);
+    doc.save('Test.pdf');
+  }
 
 
-clear() {
+  // ================================
+  // filters
+  // ================================
 
-  this.table.reset({
-    date: null,
-    name: null,
-    email: null,
-    phone: null,
-    birthday: null,
-    gender: null,
-    nameAllie: null,
-    nameHeadquarter: null,
-    usability: null,
-    purchaseAmount: null
-  });
+  SeachingRange(dateFrom: string, dateTo: string) {
 
-  this.fromDate = null;
-  this.toDate = null;
-  this.filteredArray = [];
-  this.newdateArray = [];
-  this.newdateArray = this.usergetting;
-  this.newdateArray.forEach(item => item.selected = false)
-  this.generalsearch = '';
-}
+    this.from = dateFrom;
+    this.to = dateTo;
 
+    const mydateFrom = new Date(this.from);
+    const mydateTo = new Date(this.to);
 
-search(termino?: string, id?: string) {
+    if (!this.filteredArray.length) {
 
-  if (this.fromDate && this.toDate) {
-
-    if (termino) {
-      this.filteredArray = [];
-      termino = termino.toLowerCase();
-
-      const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-      const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-      this.SeachingRange(fromdate, todate);
-
-      const aux = this.newdateArray;
       this.newdateArray = [];
 
-      aux.forEach(user => {
-        if (user[id].toLowerCase().indexOf(termino) >= 0) {
-          this.newdateArray.push(user);
-          this.filteredArray.push(user);
-        }
+      this.usergetting.forEach(user => {
 
+        const userdate = new Date(user.date)
+
+        if (userdate >= mydateFrom && userdate <= mydateTo) {
+          this.newdateArray.push(user)
+        }
       });
 
     } else {
 
-      const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-      const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-      this.SeachingRange(fromdate, todate);
+      this.newdateArray = [];
 
+      this.filteredArray.forEach(user => {
+        const userdate = new Date(user.date)
+        if (userdate >= mydateFrom && userdate <= mydateTo) {
+          this.newdateArray.push(user);
+        }
+      });
     }
 
+  }
 
-  } else {
 
-    if (termino) {
+  clear() {
 
-      if (this.filteredArray.length) {
+    this.table.reset({
+      date: null,
+      name: null,
+      email: null,
+      phone: null,
+      birthday: null,
+      gender: null,
+      nameAllie: null,
+      nameHeadquarter: null,
+      usability: null,
+      purchaseAmount: null
+    });
 
+    this.fromDate = null;
+    this.toDate = null;
+    this.filteredArray = [];
+    this.newdateArray = [];
+    this.newdateArray = this.usergetting;
+    this.newdateArray.forEach(item => item.selected = false)
+    this.generalsearch = '';
+  }
+
+
+  search(termino?: string, id?: string) {
+
+    if (this.fromDate && this.toDate) {
+
+      if (termino) {
+        this.filteredArray = [];
         termino = termino.toLowerCase();
 
+        const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+        const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
+        this.SeachingRange(fromdate, todate);
+
+        const aux = this.newdateArray;
         this.newdateArray = [];
 
-        this.filteredArray.forEach(user => {
-
-          user[id] = user[id].toString();
-
-          if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user);
-
-          }
-
-        });
-      }
-      else {
-        console.log("no filtered array");
-
-
-        this.newdateArray = [];
-
-        this.usergetting.forEach(user => {
-
-          user[id] = user[id].toString();
-
+        aux.forEach(user => {
           if (user[id].toLowerCase().indexOf(termino) >= 0) {
             this.newdateArray.push(user);
             this.filteredArray.push(user);
-
           }
 
         });
+
+      } else {
+
+        const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+        const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
+        this.SeachingRange(fromdate, todate);
 
       }
 
 
     } else {
 
-      this.table.value[id] = null;
+      if (termino) {
+
+        if (this.filteredArray.length) {
+
+          termino = termino.toLowerCase();
+
+          this.newdateArray = [];
+
+          this.filteredArray.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+
+            }
+
+          });
+        }
+        else {
+          console.log("no filtered array");
+          console.log(id);
+
+
+          this.newdateArray = [];
+
+          this.usergetting.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
+
+            }
+
+          });
+
+        }
+
+
+      } else {
+
+        this.table.value[id] = null;
+
+        let count = 0;
+        for (var i in this.table.value) {
+
+          if (this.table.value[i] == null || this.table.value[i] == "") {
+            count += 1;
+          }
+        }
+
+        if (count > 9 && !this.generalsearch) {
+
+          this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
+
+        } else {
+
+          this.newdateArray = this.filteredArray;
+          count = 0;
+        }
+      }
+    }
+  }
+
+
+  searchbyterm(termino: string) {
+
+    if (termino) {
+      termino = termino.toLowerCase();
+      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+      if (this.filteredArray.length) {
+
+        this.newdateArray = this.filteredArray.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
+
+        });
+      } else {
+
+        this.newdateArray = this.usergetting.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
+
+        });
+        this.filteredArray = this.usergetting.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter))
+
+        });
+
+      }
+
+    } else {
 
       let count = 0;
       for (var i in this.table.value) {
-
         if (this.table.value[i] == null || this.table.value[i] == "") {
           count += 1;
         }
@@ -351,85 +423,29 @@ search(termino?: string, id?: string) {
         count = 0;
       }
     }
+
   }
-}
 
 
-searchbyterm(termino: string) {
+  // ===========================
+  // convert date
+  // ===========================
 
-  if (termino) {
-    termino = termino.toLowerCase();
-    var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
-    if (this.filteredArray.length) {
+  convertDate(date: Date): string {
+    let n: string;
+    try {
 
-      this.newdateArray = this.filteredArray.filter(function (item) {
-        //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-      });
-    } else {
-
-      this.newdateArray = this.usergetting.filter(function (item) {
-        //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-      });
-      this.filteredArray = this.usergetting.filter(function (item) {
-        //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-      });
+      const d = new Date(date);
+      n = d.toISOString().split("T")[0];
+    } catch{
+      console.log(date);
 
     }
-
-  } else {
-
-    let count = 0;
-    for (var i in this.table.value) {
-      if (this.table.value[i] == null || this.table.value[i] == "") {
-        count += 1;
-      }
-    }
-
-    if (count > 9 && !this.generalsearch) {
-
-        this.newdateArray = this.usergetting;
-        this.filteredArray = []
-        count = 0;
-        
-      } else {
-
-        this.newdateArray = this.filteredArray;
-        count = 0;
-      }
+    return n;
   }
 
-}
-
-
-// ===========================
-// convert date
-// ===========================
-
-
-convertDate(date: Date): string {
-  let n:string;
-  try{
-
-    const d = new Date(date);
-    n = d.toISOString().split("T")[0];
-  }catch{
-    console.log(date);
-    
-  }
-  return n;
-}
-
 
 }
 
-  
+
