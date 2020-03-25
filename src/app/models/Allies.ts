@@ -12,7 +12,7 @@ export class Allies{
     idMealsCategories?:string;
     nameMealsCategories?:String;
     typeAlly?:String;
-    IntermediationPercentage?:number;
+    intermediationPercentage?:number;
     description?:string;
     idAttentionSchedule?:string;
     imagesAllies?:string[];
