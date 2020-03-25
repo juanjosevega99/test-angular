@@ -51,7 +51,7 @@ export class CreateAllyComponent implements OnInit {
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
     private _uploadImages: UploadImagesService,
-    private _router: Router) {
+    private _router: Router){
 
     this.forma = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(2),
@@ -77,6 +77,7 @@ export class CreateAllyComponent implements OnInit {
       'idMealsCategories': new FormControl('', [Validators.required]),
       'nameMealsCategories': new FormControl(''),
       'typeAlly': new FormControl('', [Validators.required]),
+      'IntermediationPercentage': new FormControl('', [Validators.required]),
       'description': new FormControl('', [Validators.maxLength(20)]),
       'idAttentionSchedule': new FormControl('', [Validators.required,]),
       'imagesAllies': new FormControl('')

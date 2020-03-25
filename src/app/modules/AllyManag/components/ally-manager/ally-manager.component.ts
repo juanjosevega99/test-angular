@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { AlliesService } from "../../../../services/allies.service";
 import { AttentionScheduleService } from "../../../../services/attention-schedule.service";
 import { HeadquartersService } from '../../../../services/headquarters.service';
-import { log } from 'util';
 import { Allies } from '../../../../models/Allies';
 @Component({
   selector: 'app-ally-manager',
@@ -21,24 +20,20 @@ export class AllyManagerComponent implements OnInit {
               private _headquartService: HeadquartersService) {
     this._alliesService.getAllies().subscribe(allies => {
       this.allies = allies
-/*       console.log(this.allies) */
+       console.log(this.allies) 
 
       allies.forEach( (ally: Allies) =>{
         this._headquartService.getHeadquarterByIdAlly( ally.id ).subscribe( (services:any[]) => {
 
-         /*  sedes.forEach( sede =>{
-
-            let service = sede ['principarlServices']
-            
-          })
- */
           let obj:any = {}
           
           obj = {
             code : ally.nit,
             logo: ally.logo,
             nameEstablishment: ally.name,
-            numberHeadquarters : ally.NumberOfLocations
+            numberHeadquarters : ally.NumberOfLocations,
+            allyType : ally.typeAlly,
+            mealType : ally.nameMealsCategories
             
           }
            if (services ){                

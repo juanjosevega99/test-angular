@@ -11,6 +11,8 @@ export class Allies{
     NumberOfLocations?: number;
     idMealsCategories?:string;
     nameMealsCategories?:String;
+    typeAlly?:String;
+    IntermediationPercentage?:number;
     description?:string;
     idAttentionSchedule?:string;
     imagesAllies?:string[];

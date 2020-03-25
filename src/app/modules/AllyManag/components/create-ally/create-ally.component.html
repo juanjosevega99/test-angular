@@ -186,7 +186,7 @@
                                                                 formControlName="idMealsCategories" [ngClass]="{ 'is-invalid': (!forma.get('idMealsCategories').valid && 
                                                                 forma.get('idMealsCategories').touched ), 
                                                                 'is-valid':( forma.get('idMealsCategories').valid )}"
-                                                                >
+                                                                 >
                                                                 <option *ngFor="let mealCategory of mealsCategories"
                                                                         [ngValue]="mealCategory">
                                                                         {{mealCategory.name}}
@@ -221,22 +221,33 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Tipo de aliado</label>
                                         <div class="col-8">
-                                                <select class="browser-default custom-select selectSize mr-2">
+                                                <select class="browser-default custom-select selectSize mr-2"
+                                                formControlName="typeAlly"
+                                                [ngClass]="{ 'is-invalid': (!forma.get('typeAlly').valid && 
+                                                        forma.get('typeAlly').touched ), 
+                                                        'is-valid':( forma.get('typeAlly').valid )}"
+                                                >
                                                         <option> Oro </option>
                                                         <option> Plata </option>
                                                         <option> Bronce </option>
                                                 </select>
+                                                <div *ngIf="forma.get('typeAlly').errors?.required "
+                                                        class="invalid-feedback">
+                                                        Este campo es requerido
+                                                </div>
+                                                <div class="valid-feedback">Ok!</div>
                                         </div>
                                 </div>
                                 <div class="form-group row">
-                                        <label class="col-3 col-form-label">Numero de puntos</label>
+                                        <label class="col-3 col-form-label">Porcentaje de intermediación</label>
                                         <div class="col-8">
                                                 <input class="form-control" type="number"
-                                                        placeholder="---------------------" min="0" max="30"
-                                                        formControlName="NumberOfLocations" [ngClass]="{ 'is-invalid': (!forma.get('NumberOfLocations').valid && 
-                                                        forma.get('NumberOfLocations').touched ), 
-                                                        'is-valid':( forma.get('NumberOfLocations').valid )}">
-                                                <div *ngIf="forma.get('NumberOfLocations').errors?.required "
+                                                        placeholder="---------------------" min="0" max="100"
+                                                        formControlName="IntermediationPercentage"
+                                                        [ngClass]="{ 'is-invalid': (!forma.get('IntermediationPercentage').valid && 
+                                                        forma.get('IntermediationPercentage').touched ), 
+                                                        'is-valid':( forma.get('IntermediationPercentage').valid )}">
+                                                <div *ngIf="forma.get('IntermediationPercentage').errors?.required "
                                                         class="invalid-feedback">
                                                         Este campo es requerido
                                                 </div>
