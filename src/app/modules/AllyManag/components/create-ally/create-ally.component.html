@@ -85,19 +85,17 @@
                                         <label class="col-3 col-form-label">Logo del establecimiento</label>
                                         <div class="col-8">
                                                 <div class="row align-items-center ">
-                                                        <div class="photo"> 
+                                                        <div class="photo">
                                                                 <img id="photo" width="80px" height="80px">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
                                                                 <button class="btn1 btn btn-outline-primary">
                                                                         Cargar archivo
                                                                 </button>
-                                                                <input type="file" 
-                                                                        (change)="onPhotoSelected($event)"
+                                                                <input type="file" (change)="onPhotoSelected($event)"
                                                                         [ngClass]="{ 'is-invalid': (!forma.get('logo').valid && 
                                                                         forma.get('logo').touched ), 
-                                                                        'is-valid':( forma.get('logo').valid )}" 
-                                                                >
+                                                                        'is-valid':( forma.get('logo').valid )}">
                                                                 <div *ngIf="forma.get('logo').errors?.required "
                                                                         class="invalid-feedback">
                                                                         Este campo es requerido
@@ -187,8 +185,8 @@
                                                                 class="browser-default custom-select selectSize mr-2"
                                                                 formControlName="idMealsCategories" [ngClass]="{ 'is-invalid': (!forma.get('idMealsCategories').valid && 
                                                                 forma.get('idMealsCategories').touched ), 
-                                                                'is-valid':( forma.get('idMealsCategories').valid )}">
-                                                                <option selected>---------------------</option>
+                                                                'is-valid':( forma.get('idMealsCategories').valid )}"
+                                                                >
                                                                 <option *ngFor="let mealCategory of mealsCategories"
                                                                         [ngValue]="mealCategory">
                                                                         {{mealCategory.name}}
@@ -218,6 +216,31 @@
                                                         </div>
 
                                                 </div>
+                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                        <label class="col-3 col-form-label">Tipo de aliado</label>
+                                        <div class="col-8">
+                                                <select class="browser-default custom-select selectSize mr-2">
+                                                        <option> Oro </option>
+                                                        <option> Plata </option>
+                                                        <option> Bronce </option>
+                                                </select>
+                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                        <label class="col-3 col-form-label">Numero de puntos</label>
+                                        <div class="col-8">
+                                                <input class="form-control" type="number"
+                                                        placeholder="---------------------" min="0" max="30"
+                                                        formControlName="NumberOfLocations" [ngClass]="{ 'is-invalid': (!forma.get('NumberOfLocations').valid && 
+                                                        forma.get('NumberOfLocations').touched ), 
+                                                        'is-valid':( forma.get('NumberOfLocations').valid )}">
+                                                <div *ngIf="forma.get('NumberOfLocations').errors?.required "
+                                                        class="invalid-feedback">
+                                                        Este campo es requerido
+                                                </div>
+                                                <div class="valid-feedback">Ok!</div>
                                         </div>
                                 </div>
                                 <div class="form-group row">
@@ -276,7 +299,7 @@
                                                                                 </select>
                                                                         </div>
                                                                         <div>
-                                                                                
+
                                                                                 <select class=" col-sm-11 browser-default custom-select form-control"
                                                                                         #to
                                                                                         (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
@@ -311,8 +334,7 @@
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
                                                                         style="width: 230px; height: 120px; "
                                                                         [imageSize]="imageSize"
-                                                                        [images]="imagesUploaded" 
-                                                                        #nav>
+                                                                        [images]="imagesUploaded" #nav>
                                                                 </ng-image-slider>
 
                                                                 <P *ngIf="imagesUploaded.length==0"

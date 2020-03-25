@@ -29,6 +29,7 @@ export class AlliesService {
   getAllies(): Observable<any[]>{
     return this.httpclient.get<Allies[]>(environment.UrlBase+"allies").pipe(map((allies:any[])=>allies.map((allies)=>{
       let obj = {
+        id : allies._id,
         name: allies.name,
         nit:allies.nit,
         legalRepresentative:allies.legalRepresentative,
