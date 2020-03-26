@@ -4,7 +4,7 @@
 
         <div class="filerControl d-flex justify-content-center px-1 ">
 
-            <nav class="menu">
+            <nav class="menu mt-md-2">
 
                 <ul>
                     <li>
@@ -35,8 +35,8 @@
             </nav>
         </div>
 
-        <div style="overflow: hidden;">
-            <div class="chat" style="margin-top: 1.5rem; overflow: hidden;">
+        <div>
+            <div class="chat" style="margin-top: 1.8rem;">
                 hola
             </div>
         </div>
@@ -44,10 +44,10 @@
     <div class="compenetsstyle " style="background-color: #e9e7e7; width: 35%; padding-left: 0;">
 
         <div class="filerControl d-flex justify-content-center px-1 ">
-            <nav class="menu mt-sm-4 mt-md-2">
+            <nav class="menu mt-sm-5 mt-md-1">
                 <ul>
                     <li style="border: none;">
-                        <a style="font-size: 12px; font-weight: bold;">Agenda de Mesas</a>
+                        <a style="font-size: 15px; font-weight: bold;">Agenda de Mesas</a>
                     </li>
                 </ul>
             </nav>
@@ -73,14 +73,25 @@
 
             <div class="dropdown-divider"></div>
 
-            <div>
-                <div>
-                    <p>MESAS</p>
+            <div style="flex-direction: row; justify-content: center;">
 
+                <div style="width: 50%;">
+
+                    <p>MESAS</p>
+                    <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
+                        <button *ngFor="let table of Tables" (click)="getHour($event)"
+                            class="btn btn-outline-success">{{table}}</button>
+                    </div>
                 </div>
-                <div>
+                <div style="width: 50%;">
+                    
                     <p>PERSONAS</p>
+                    <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
+                        <button *ngFor="let table of Tables" (click)="getHour($event)"
+                            class="btn btn-outline-success">{{table}}</button>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

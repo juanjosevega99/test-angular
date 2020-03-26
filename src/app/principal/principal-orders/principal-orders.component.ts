@@ -8,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 export class PrincipalOrdersComponent implements OnInit {
 
   Hours = []
+  Tables = []
 
   constructor() { 
-    this.createHours()
+    // init hours
+    this.createHours();
+
+    // init Tables
+    this.createTables();
   }
 
   ngOnInit() {
@@ -37,5 +42,15 @@ export class PrincipalOrdersComponent implements OnInit {
       }
       
     }
+  }
+
+  createTables(){
+
+    for (let t = 1; t < 21; t++) {
+      
+      this.Tables.push(t)
+      
+    }
+
   }
 }
