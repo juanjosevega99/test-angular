@@ -7,6 +7,7 @@ import { AttentionScheduleService } from "../../../../services/attention-schedul
 import { AlliesService } from "../../../../services/allies.service";
 import { UploadImagesService } from "../../../../services/providers/uploadImages.service";
 import Swal from 'sweetalert2';
+import { HeadquartersService } from "../../../../services/headquarters.service";
 //other libraris
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
@@ -37,8 +38,8 @@ export class CreateAllyComponent implements OnInit {
   //variables carousel
   imagesUploaded: any = [];
   imageObject: any;
-  imageSize: any
-  contImage: number = this.imagesUploaded.length;
+  imageSize: any;
+  contImage: number = 0;
   //handle button other category
   otherMealSelect: boolean = true
   otherMealInput: boolean = false
@@ -51,6 +52,7 @@ export class CreateAllyComponent implements OnInit {
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
     private _uploadImages: UploadImagesService,
+    private _headquartService: HeadquartersService,
     private _router: Router) {
 
     this.forma = new FormGroup({
@@ -180,6 +182,7 @@ export class CreateAllyComponent implements OnInit {
             .attr('src', e.target.result)
         };
         reader.readAsDataURL(input.files[0]);
+
       }
     }
     return this.fileImgLogo = input.files[0];
@@ -203,31 +206,13 @@ export class CreateAllyComponent implements OnInit {
         }
         reader.readAsDataURL(input.files[0]);
         this.imagesAlly.push(input.files[0])
-        console.log('Array images', this.imagesAlly)
+        this.contImage = this.imagesUploaded.length + 1;
+        console.log('Array images', this.imagesAlly) //delete console.log
       }
 
     }
 
   }
-  // //DIRECTICVES OF VALIDATION LOADIMAGES
-  // fileCanUpload(file: File): boolean {
-  //   if (this._fileAlreadyUpload(file.name) && this.isImage(file.type)) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-
-  // }
-
-  // _fileAlreadyUpload(nameFile: string): boolean {
-  //   for (const file of this.imagesAllies) {
-  //     if (file.nameFile === nameFile) {
-  //       console.log('El archivo ' + nameFile + ' ya esta agregado');
-  //       return true;
-  //     }
-  //   }
-  //   return false
-  // }
 
   // Method for change botton of de CRD in typeEstablihment and MelaCategoryes
   handleBoxEstablishment(): boolean {
@@ -451,6 +436,22 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, cancelar!'
+    }).then((result) => {
+      if (result.value) {
+        this._router.navigate(['/main', 'allyManager'])
+
+      }
+    })
+  }
+  swallLeave() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "que deseas salir!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, salir!'
     }).then((result) => {
       if (result.value) {
         this._router.navigate(['/main', 'allyManager'])

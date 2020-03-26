@@ -3,7 +3,7 @@
                 <div class="row">
                         <div class="col-md-1">
                                 <div class="row justify-content-center">
-                                        <a href="#" [routerLink]="['/main','allyManager']">
+                                        <a (click)="swallLeave()" >
                                                 <img src="assets/icons/Back.png" class="tifi-icon-back">
                                         </a>
                                 </div>
@@ -86,16 +86,18 @@
                                         <div class="col-8">
                                                 <div class="row align-items-center ">
                                                         <div class="photo">
-                                                                <img id="photo" width="80px" height="80px">
+                                                                <img id="photo" width="120px" height="100px" style="border-radius: 1.5rem">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
                                                                 <button class="btn1 btn btn-outline-primary">
-                                                                        Cargar archivo
+                                                                        Cambiar archivo
                                                                 </button>
                                                                 <input type="file" (change)="onPhotoSelected($event)"
                                                                         [ngClass]="{ 'is-invalid': (!forma.get('logo').valid && 
                                                                         forma.get('logo').touched ), 
-                                                                        'is-valid':( forma.get('logo').valid )}">
+                                                                        'is-valid':( forma.get('logo').valid )}"
+                                                                        
+                                                                        >
                                                                 <div *ngIf="forma.get('logo').errors?.required "
                                                                         class="invalid-feedback">
                                                                         Este campo es requerido
@@ -265,7 +267,9 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " formControlName="description" [ngClass]="{ 'is-invalid': (!forma.get('description').valid ), 
+                                                <textarea class="form-control " formControlName="description" 
+                                                [ngClass]="{ 'is-invalid': (!forma.get('description').valid && 
+                                                forma.get('description').touched ),
                                                                 'is-valid':( forma.get('description').valid )}">
                                                 </textarea>
                                                 <div *ngIf="forma.get('description').errors?.maxlength "
@@ -362,12 +366,13 @@
                                                                 </P>
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
-                                                                        <button
-                                                                                class=" container  btn btn-outline-primary ">
+                                                                        <button class=" container  btn btn-outline-primary "
+                                                                                >
                                                                                 Adjuntar archivos {{contImage}}
                                                                         </button>
                                                                         <input type="file" name="photo"
-                                                                                (change)="onImagesSelected($event)" />
+                                                                                (change)="onImagesSelected($event)" 
+                                                                                />
                                                                 </div>
 
                                                         </div>

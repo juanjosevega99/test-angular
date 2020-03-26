@@ -1,9 +1,4 @@
 // styles for form with grid
-
-
-
-
-
 // styles flex for form 
 // .flex-outer{
 //   display: flex;
@@ -26,8 +21,6 @@
 // }
 
 //style reponsive 
-
-
 
 //Styles button primary
 .btn-outline-primary:hover {
@@ -53,9 +46,10 @@
 .photo {
   margin-left: 15px;
   margin-right: 10px;
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 100px;
   border: solid 0.5px gray;
+  border-radius: 1.5rem;
 }
 
 .photo2 {
@@ -115,6 +109,7 @@
   margin-left: 5px;
   background-color: white;
   padding: 5px;
+  border-radius: .5rem;
 }
 
 .upload-btn-wrapper input[type="file"] {
@@ -131,6 +126,7 @@
  //Styles size select  and input  with button other
  .selectSize{
    width: 13rem;
+   border-radius: .5rem;
  }
 
  //Style of labels schedule
@@ -154,4 +150,30 @@
   color: rgb(247, 15, 15);
   background-color: #552183;
 
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .5rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+was-validated textarea.form-control:valid, textarea.form-control.is-valid {
+  padding-right: calc(1.5em + .75rem);
+  background-position: top calc(.375em + .1875rem) right calc(.375em + .1875rem);
+  height: 100%;
+}
+.col-3 {
+  flex: 0 0 31%;
+  max-width: 100%;
 }

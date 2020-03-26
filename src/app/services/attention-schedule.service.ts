@@ -50,18 +50,18 @@ export class AttentionScheduleService {
   getAttentionSchedulesById(id): Observable<any[]> {
     return this.httpclient
       .get<AttentionSchedule[]>(
-        environment.UrlBase + "attentionschedules/" + id
+        environment.UrlBase + "attention-schedule/" + id
       )
-      .pipe(
-        map((attentionschedules: any[]) =>
-          attentionschedules.map(attentionschedules => {
-            let obj = {
-              id: attentionschedules.id,
-              attentionSchedule: attentionschedules.attentionSchedule
-            };
-            return obj;
-          })
-        )
-      );
+      // .pipe(
+      //   map((attentionschedules: any[]) =>
+      //     attentionschedules.map(attentionschedules => {
+      //       let obj = {
+      //         id: attentionschedules._id,
+      //         attentionSchedule: attentionschedules.attentionSchedule
+      //       };
+      //       return obj;
+      //     })
+      //   )
+      // );
   }
 }
