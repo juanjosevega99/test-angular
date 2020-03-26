@@ -1,4 +1,108 @@
-<div class="compenetsstyle">
+<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+    <div class="row">
+        <div style="width: 5%;" class="d-flex align-items-center">
+            <a [routerLink]='["/headquarts"]' class="d-flex">
+                <img src="assets/icons/Back.png" class="tifi-icon-back">
+            </a>
+        </div>
+        <section class="col-11">
+            <div class="filerControl px-1">
+                <section class="col-5 overflow-auto mr-1" style="flex-direction: column;">
+                    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                        <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                <li class="nav-item mr-2">
+                                    <input placeholder="Buscar por código ..." class="form-control" type="text"
+                                        (keyup)="search(reference.value, reference.id)" #reference id="reference"
+                                        formControlName="reference">
+                                </li>
+                                <li class="nav-item">
+                                    <input placeholder="Buscar por nombre ..." class="form-control" type="text"
+                                        (keyup)="search(name.value, name.id)" #name id="name" formControlName="name">
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </section>
+
+                <section class="col-5 overflow-auto mr-1" style="flex-direction: column;">
+                    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                            <li class="nav-item container-fluid d-flex">
+                                <input (keyup)="searchbyterm(general.value)" class="form-control text-center"
+                                    id="general" type="text" placeholder="Buscar menú ..." #general
+                                    [(ngModel)]="generalsearch">
+                            </li>
+                        </ul>
+                    </nav>
+                </section>
+
+                <section class="col-2 overflow-auto">
+                    <nav class="navbar navbar-expand-sm navbar-light bg-light overflow-auto">
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item">
+                                <button [routerLink]="['/main','createDish']"
+                                    class="btn btn-outline-primary ml-2">Ingresar menú</button>
+                            </li>
+                        </ul>
+                    </nav>
+                </section>
+            </div>
+        </section>
+    </div>
+
+    <div class="tableFixHead mt-5">
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-center">Referencia</th>
+                    <th class="text-center">Categoría</th>
+                    <th class="text-center">Nombre del plato</th>
+                    <th class="text-center">Foto del plato</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">Fecha de modificación</th>
+                    <th class="text-center">Hora de modificación</th>
+                    <th class="text-center">Número de modificaciones</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center"> </th>
+                </tr>
+            </thead>
+            <tbody class="mt-5">
+                <tr *ngFor="let menu of newdateArray; let i = index " class="text-center">
+                    <td>{{menu.reference}}</td>
+                    <td>{{menu.dishName}}</td>
+                    <td>{{menu.category}}</td>
+                    <td> <img src={{menu.dishPhoto}} alt="" class="sizeLogo mx-2"></td>
+                    <td>{{menu.price}}</td>
+                    <td>{{menu.modificationDate}}</td>
+                    <td>{{menu.modificationTime}}</td>
+                    <td>{{menu.modificationNumber}}</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="state" #radio1 (click)="State(radio1.value, radio1.id)"
+                                value="active" name="radioInline">
+                            <input type="radio" id="state" #radio2 (click)="State(radio2.value, radio2.id)"
+                                value="inactive" name="radioInline">
+                            <br>
+                            <label> {{menu.state}} </label>
+                        </div>
+
+                    </td>
+                    <td>
+                        <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+
+
+
+
+<!-- <div class="compenetsstyle">
 
 
     <div class="m-2 d-flex flex-row" style="align-items: center;">
@@ -53,10 +157,10 @@
                           
                         </td>
                         <td>
-                            <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
-                        </td>
-                        <!-- <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td> -->
-                    </tr>
+                            <a href="#" class="btn"> <i class="far fa-edit"></i> </a> -->
+<!-- </td> -->
+<!-- <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td> -->
+<!--                    </tr>
                 </tbody>
             </table>
         </div>
@@ -64,4 +168,4 @@
 
     </div>
 
-</div>
+</div> -->

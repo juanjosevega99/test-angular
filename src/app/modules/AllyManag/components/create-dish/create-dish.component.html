@@ -92,7 +92,7 @@
                         <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="dishCategory"
                             #nameMealsCategories="ngModel" required
                             [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid) }"
-                            [(ngModel)]="preDish.nameMealsCategories">
+                            [(ngModel)]="preDish.nameDishesCategories">
                             <option *ngFor="let category of dishesCategories">
                                 {{category.name}}
                             </option>

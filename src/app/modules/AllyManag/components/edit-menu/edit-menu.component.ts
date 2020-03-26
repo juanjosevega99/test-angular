@@ -1,4 +1,74 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, NgModel } from '@angular/forms';
+
+@Component({
+  selector: 'app-edit-menu',
+  templateUrl: './edit-menu.component.html',
+  styleUrls: ['./edit-menu.component.scss']
+})
+export class EditMenuComponent implements OnInit {
+
+  //object that saves the values of the table
+  table: FormGroup;
+
+  //variables for general search
+  generalsearch: string;
+
+  menu = [
+    {
+      reference: '10011235', category: 'Boxes', dishName: 'Big Box Twister', dishPhoto: '../../../../../assets/img/kfc-logo.png', price: '$19.000',
+      modificationDate: '15/04/2019', modificationTime: '11:00 am', modificationNumber: '2', state: '', selected: false
+    },
+
+    {
+      reference: '1001541', category: 'Combos', dishName: 'Combo personal', dishPhoto: '../../../../../assets/img/kfc-logo.png', price: '$15.000',
+      modificationDate: '25/03/2019', modificationTime: '11:00 am', modificationNumber: '1', state: '', selected: false
+    },
+
+    {
+      reference: '1001542', category: 'Postres', dishName: 'Fresas con crema', dishPhoto: '../../../../../assets/img/kfc-logo.png', price: '$9.000',
+      modificationDate: '15/03/2019', modificationTime: '11:00 am', modificationNumber: '0', state: '', selected: false
+    },
+  ]
+
+
+  constructor() { 
+    //inicialization of the table
+    this.table = new FormGroup({
+      "reference": new FormControl(),
+      "nameDishesCategories": new FormControl(),
+      "name": new FormControl(),
+      "imageDishe": new FormControl(),
+      "price": new FormControl(),
+      "modificationDate": new FormControl(),
+      "numberOfModifications": new FormControl(),
+      "state": new FormControl(),
+      "edit": new FormControl(),
+    })
+  }
+
+
+  ngOnInit() {
+  }
+
+  //method for seaching specific values by name and code
+  search(termino?: string, id?: string) {
+  }
+
+  //method for general searching 
+  searchbyterm(termino: string) {}
+}
+
+
+
+
+
+
+
+
+
+
+/* import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-edit-menu',
@@ -51,9 +121,9 @@ export class EditMenuComponent implements OnInit {
 
     var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
-    this.newdateArray = aux.filter(function (item) {
+    this.newdateArray = aux.filter(function (item) { */
       //We test each element of the object to see if one string matches the regexp.
-      return (myRegex.test(item.reference) || myRegex.test(item.category) || myRegex.test(item.dishName) || myRegex.test(item.price) || myRegex.test(item.modificationDate) || myRegex.test(item.modificationTime) ||
+/*       return (myRegex.test(item.reference) || myRegex.test(item.category) || myRegex.test(item.dishName) || myRegex.test(item.price) || myRegex.test(item.modificationDate) || myRegex.test(item.modificationTime) ||
         myRegex.test(item.modificationNumber))
 
     });
@@ -83,7 +153,7 @@ export class EditMenuComponent implements OnInit {
     } 
 }
 
-State(  value:string,id:string){
+State(  value:string,id:string){ */
  /*  if (id == 'active') {
     this.menu
     this.menu['{state}'].push('Activo')
@@ -99,7 +169,7 @@ else if (value=='option2'){
   this.menu[id].push('activo')
 }
  */
-console.log(value);
+/* console.log(value);
 
 }
-}
+} */

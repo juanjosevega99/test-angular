@@ -19,7 +19,7 @@ export class CreateDishComponent implements OnInit {
   //Object to save the dates of the form
   preDish: Object = {
     idDishesCategories: null,
-    state: null,
+    state: [],
     /* creationDate: null,
     modificationDate: null, */
     numberOfModifications: 0,
@@ -125,7 +125,9 @@ export class CreateDishComponent implements OnInit {
   selectedState(event) {
     const value = event.target.value;
     event.target.value = value;
-    this.preDish['state'] = value
+    const check = event.target.checked;
+    event.target.checked = check;
+    this.preDish['state'] = {value,check}
   }
 
   //Method for the admission date
