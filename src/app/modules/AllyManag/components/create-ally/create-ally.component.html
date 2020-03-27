@@ -89,7 +89,8 @@
                                                                 <img id="photo" width="120px" height="100px" style="border-radius: 1.5rem">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
-                                                                <button class="btn1 btn btn-outline-primary">
+                                                                <button class="btn1 btn btn-outline-primary" 
+                                                                data-toggle="tooltip" data-placement="top" title="MihaelPardo">
                                                                         Cambiar archivo
                                                                 </button>
                                                                 <input type="file" (change)="onPhotoSelected($event)"
@@ -103,6 +104,9 @@
                                                                         Este campo es requerido
                                                                 </div>
                                                                 <div class="valid-feedback">Ok!</div>
+                                                                <div class="form-control-feedback">
+                                                                        <small> *Se recomienda subir el archivo con extension png y con las siguientes dimensiones: 300 px Anchura y 168 px Altura </small>
+                                                                </div>
 
                                                         </div>
                                                 </div>
@@ -148,7 +152,8 @@
 
                                                         <button *ngIf="!otherEstablishmentInput"
                                                                 (click)=" handleBoxEstablishment()"
-                                                                class="btn1 btn btn-outline-primary">
+                                                                class="btn1 btn btn-outline-primary"
+                                                                data-toggle="tooltip" data-placement="top" title="MihaelPardo">
                                                                 Otro
                                                         </button>
                                                         <button *ngIf="!otherEstablishmentInput"
