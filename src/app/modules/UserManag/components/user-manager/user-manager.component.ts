@@ -493,7 +493,7 @@ export class UserManagerComponent implements OnInit {
 
   convertDate(date: Date): string {
     const d = new Date(date);
-    const n = d.toISOString().split("T")[0];
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
     return n;
   }
 
