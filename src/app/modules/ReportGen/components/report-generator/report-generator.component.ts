@@ -9,6 +9,11 @@ import { Users } from 'src/app/models/Users';
 //export pdf
 import 'jspdf-autotable';
 import * as jsPDF from 'jspdf';
+import { AlliesService } from 'src/app/services/allies.service';
+import { HeadquartersService } from 'src/app/services/headquarters.service';
+import { environment } from 'src/environments/environment';
+import { DishesService } from 'src/app/services/dishes.service';
+import { ReportGenerate } from 'src/app/models/ReportGenerate';
 
 
 @Component({
@@ -25,7 +30,7 @@ export class ReportGeneratorComponent implements OnInit {
   to: string;
 
   //array for users of service
-  usergetting: OrderByUser[] = [];
+  usergetting: ReportGenerate[] = [];
 
   //Array for filter
   newdateArray = this.usergetting;
@@ -34,7 +39,12 @@ export class ReportGeneratorComponent implements OnInit {
 
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
-    private userservice: UsersService, private orderservice: OrdersService) {
+    private userservice: UsersService, private orderservice: OrdersService, private headquartsservice: HeadquartersService,
+    private allyservice: AlliesService, private dishService: DishesService) {
+
+    this.fromDate = this.calendar.getToday();
+    this.toDate = this.calendar.getToday();
+
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -57,33 +67,75 @@ export class ReportGeneratorComponent implements OnInit {
         this.orderservice.getChargeByUserId(user.id).subscribe((order: Orders[]) => {
           if (order.length > 0) {
 
-            const obj: OrderByUser = {};
-
             order.forEach((order: Orders) => {
-              obj.idHeadquarter = order.idHeadquartes;
-              obj.nameAllie = order.nameAllies;
-              obj.nameHeadquarter = order.nameHeadquartes;
-              obj.id = order._id;
-              obj.name = user.name;
-              obj.typeOfService = order.typeOfService;
-              obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourReservation);
-              obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
-              obj.quantity = order.quantity;
-              obj.nameDishe = order.nameDishe;
-              obj.controlOrder = order.deliveryStatus;
-              obj.valueDishe = order.valueDishe;
+              const obj: ReportGenerate = {};
+
+              // in this place get headquarts by id
+              this.headquartsservice.getHeadquarterById(order.idHeadquartes).subscribe(
+                (headq: any) => {
+
+                  obj.idHeadquarter = order.idHeadquartes;
+                  obj.location = headq.ubication;
+                  obj.codeOrder = order.code;
+                  obj.client = user.name;
+                  obj.typeOfService = order.typeOfService;
+                  obj.purchaseAmount = order.orderValue;
+                  obj.registerDate = this.convertDate(order.dateAndHourReservation);
+                  obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
+                  obj.controlOrder = order.deliveryStatus;
+                  obj.valueTotalWithRes = order.orderValue;
+                  
+                  headq.costPerService.map(service => {
+                    if (service.id == order.typeOfService) {
+                      obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
+                      obj.costReservationIva = parseFloat(service.value);
+                      obj.valueTotalWithoutRes = (order.orderValue - service.value); 
+                    }
+                  })
+
+                  // ally
+                  this.allyservice.getAlliesById(order.idAllies).subscribe((ally: any) => {
+                    obj.ally = ally.name;
+                    obj.percent = ally.intermediationPercentage;
+                    obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
+                    let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
+                    obj.valueIntermediationIva = auxvalue;
+                    obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
+                    obj.valueForAlly = (order.orderValue - ( auxvalue + obj.costReservationIva ));
+                  })
+
+                  // dish
+                  let namedsh = [];
+                  let valueDish = []
+                  let quanty = []
+                  order.idDishe.forEach((object: any) => {
+
+                    quanty.push(object.quantity);
+                    
+                    this.dishService.getDisheById(object.id).subscribe((dish: any) => {
+                      namedsh.push(dish.name);
+
+                      valueDish.push(dish.price * object.quantity );
+                    })
+                    obj.nameDishe = namedsh;
+                    obj.valueDishe = valueDish;
+                    obj.quantity = quanty;
+
+                  })
+
+                }
+              )
 
               this.usergetting.push(obj);
             })
+            console.log("buscando");
+
+            this.SeachingRange();
           }
-          this.SeachingRange();
         })
       })
     })
 
-    this.fromDate = this.calendar.getToday();
-    this.toDate = this.calendar.getToday();
 
   }
 
@@ -133,16 +185,19 @@ export class ReportGeneratorComponent implements OnInit {
     //'p', 'mm', 'a4'
 
     let doc = new jsPDF('landscape');
-    let col = ["#", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
-      "Sede", "Usabilidad", "Monto"];
+
+    let col = ["#","C. Sede", "Establecimiento", "zona", "C. Pedido", "Cliente", "T. servicio", "Valor Pedido", "F. H. Reserva",
+      "F. H Entrega", "Control Pedidos", "Cantidad/Plato", "V. unidad", "Costo reserva IVA", "valor T. con-reserva", "valor T. sin-reserva", 
+      "Costo reserva sin IVA", "% Intermediación", "Valor Intermediación sin IVA", "Valor Intermediación IVA", "Valor T. Intermediación y Reserva", "Valor a pagar-Aliado",];
     let rows = [];
     let auxrow = [];
+    
     this.newdateArray.map((user, i) => {
       auxrow = [];
       auxrow[0] = i + 1;
       for (const key in user) {
         if (user.hasOwnProperty(key)) {
-          // Mostrando en pantalla la clave junto a su valor
+
           auxrow.push(user[key]);
         }
       }
@@ -197,7 +252,6 @@ export class ReportGeneratorComponent implements OnInit {
 
     this.newdateArray = [];
     this.newdateArray = this.usergetting;
-    this.newdateArray.forEach(item => item.selected = false)
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getToday();
     this.SeachingRange();

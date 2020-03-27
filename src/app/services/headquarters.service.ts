@@ -64,38 +64,36 @@ export class HeadquartersService {
       );
   }
 
-  getHeadquarterById(id): Observable<any[]> {
-    return this.httpclient
-      .get<Headquarters[]>(environment.UrlBase + "headquarters/" + id)
-      .pipe(
-        map((headquarters: any[]) =>
-          headquarters.map(headquarters => {
-            let obj = {
-              id: headquarters.id,
-              idAllies: headquarters.idAllies,
-              nameAllies: headquarters.nameAllies,
-              name: headquarters.name,
-              ubication: headquarters.ubication,
-              address: headquarters.address,
-              numberFloor: headquarters.numberFloor,
-              local: headquarters.local,
-              generalContact: headquarters.generalContact,
-              chargeGC: headquarters.chargeGC,
-              mobileGC: headquarters.mobileGC,
-              telephoneGC: headquarters.telephoneGC,
-              principarlServices: headquarters.principarlServices,
-              costPerService: headquarters.costPerService,
-              aditionalServices: headquarters.aditionalServices,
-              averageDeliveryTime: headquarters.averageDeliveryTime,
-              headquartersContact: headquarters.headquartersContact,
-              chargeHC: headquarters.chargeHC,
-              mobileHC: headquarters.mobileHC,
-              telephoneHC: headquarters.telephoneHC,
-              emailHC: headquarters.emailHC
-            };
-            return obj;
-          })
-        )
-      );
+  getHeadquarterById(id): Observable<any> {
+    return this.httpclient.get<Headquarters>(environment.UrlBase + "headquarters/" + id)
+      // .pipe(
+      //   map((headquarters: any)=> {
+      //       let obj = {
+      //         id: headquarters._id,
+      //         idAllies: headquarters.idAllies,
+      //         nameAllies: headquarters.nameAllies,
+      //         name: headquarters.name,
+      //         ubication: headquarters.ubication,
+      //         address: headquarters.address,
+      //         numberFloor: headquarters.numberFloor,
+      //         local: headquarters.local,
+      //         generalContact: headquarters.generalContact,
+      //         chargeGC: headquarters.chargeGC,
+      //         mobileGC: headquarters.mobileGC,
+      //         telephoneGC: headquarters.telephoneGC,
+      //         principarlServices: headquarters.principarlServices,
+      //         costPerService: headquarters.costPerService,
+      //         aditionalServices: headquarters.aditionalServices,
+      //         averageDeliveryTime: headquarters.averageDeliveryTime,
+      //         headquartersContact: headquarters.headquartersContact,
+      //         chargeHC: headquarters.chargeHC,
+      //         mobileHC: headquarters.mobileHC,
+      //         telephoneHC: headquarters.telephoneHC,
+      //         emailHC: headquarters.emailHC
+      //       };
+      //       return obj;
+      //     }
+      //   )
+      // );
   }
 }

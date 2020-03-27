@@ -1,19 +1,40 @@
+// {
+//     // Use IntelliSense to learn about possible attributes.
+//     // Hover to view descriptions of existing attributes.
+//     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "type": "firefox",
+//             "request": "launch",
+//             "name": "Launch tifi firefox",
+//             "url": "http://localhost:4200/",
+//             "reAttach": true,
+//             "webRoot": "${workspaceFolder}"
+//         }
+//     ]
+// }
+
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+
     "configurations": [
-
-        
-
         {
             "type": "firefox",
             "request": "launch",
-            "name": "Launch tifi firefox against localhost",
-            "url": "http://localhost:4200",
             "reAttach": true,
+            "name": "tifi",
+            "url": "http://localhost:4200/",
             "webRoot": "${workspaceFolder}"
+        },
+        
+
+        {
+            "name": "Launch tifi localhost",
+            "type": "firefox",
+            "request": "launch",
+            "url": "http://localhost:4200/",
+            "webRoot": "${workspaceRoot}"
         }
     ]
 }
