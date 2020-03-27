@@ -151,3 +151,18 @@ th {
   border-radius: .5rem;
  
 }
+
+//Styles button primary
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #552183;
+}
+.btn-outline-primary {
+  color: rgba(0, 0, 0, 0.9);
+  border-color: rgba(0, 0, 0, 0.9);
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #5a4183;
+  border-color: #5a4183;
+}

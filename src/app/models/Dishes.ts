@@ -7,7 +7,7 @@ export class Dishes {
     creationDate?:Date;
     modificationDate?:Date;
     numberOfModifications?:number;
-    state?:string;
+    state?:string[];
     price?:number;
     imageDishe?:string;
     description?:string;

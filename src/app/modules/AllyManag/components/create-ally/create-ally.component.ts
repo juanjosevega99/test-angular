@@ -73,9 +73,15 @@ export class CreateAllyComponent implements OnInit {
       'color': new FormControl(this.color),
       'idTypeOfEstablishment': new FormControl('', [Validators.required]),
       'nameTypeOfEstablishment': new FormControl(''),
-      'NumberOfLocations': new FormControl('', [Validators.required]),
+      'NumberOfLocations': new FormControl('', [Validators.required,
+      Validators.pattern("[0123456789,.'--]{1,5}")
+      ]),
       'idMealsCategories': new FormControl('', [Validators.required]),
       'nameMealsCategories': new FormControl(''),
+      'typeAlly': new FormControl('', [Validators.required]),
+      'intermediationPercentage': new FormControl('', [Validators.required,
+      Validators.pattern("[0123456789,.'--]{1,3}")
+      ]),
       'description': new FormControl('', [Validators.maxLength(20)]),
       'idAttentionSchedule': new FormControl('', [Validators.required,]),
       'imagesAllies': new FormControl('')
@@ -247,6 +253,7 @@ export class CreateAllyComponent implements OnInit {
   // method save  and cancel all collection allies
   saveChanges() {
     this.swallSaveAllie()
+    // console.log(this.forma.value);
   }
 
   cancelChanges() {
@@ -394,7 +401,7 @@ export class CreateAllyComponent implements OnInit {
           .then(urlImageAlly => {
             console.log(urlImageAlly)
             this.forma.controls['imagesAllies'].setValue(urlImageAlly)
-            return  this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
+            return this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
           })
           .then(urlImage => {
             this.urlLogo = urlImage;

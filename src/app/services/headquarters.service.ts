@@ -36,7 +36,7 @@ export class HeadquartersService {
         map((headquarters: any[]) =>
           headquarters.map(headquarters => {
             let obj = {
-              id: headquarters.id,
+              id: headquarters._id,
               idAllies: headquarters.idAllies,
               nameAllies: headquarters.nameAllies,
               name: headquarters.name,
@@ -96,4 +96,9 @@ export class HeadquartersService {
       //   )
       // );
   }
+
+  getHeadquarterByIdAlly(idAlly){
+    return this.httpclient.get(environment.UrlBase + "headquarters/ally/" + idAlly)
+  }
+
 }

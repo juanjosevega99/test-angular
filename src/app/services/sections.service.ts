@@ -19,9 +19,8 @@ export class SectionsService {
     );
   }
 
-  putSection(section): Observable<Sections> {
-    return this.httpclient.put<Sections>(
-      environment.UrlBase + "sections" + section.id,
+  putSection(id,section){
+    return this.httpclient.put(environment.UrlBase + "sections/" + id,
       section
     );
   }
@@ -35,7 +34,7 @@ export class SectionsService {
       map((sections: any[]) =>
         sections.map(sections => {
           let obj = {
-            id: sections.id,
+            id: sections._id,
             name: sections.name
           };
           return obj;

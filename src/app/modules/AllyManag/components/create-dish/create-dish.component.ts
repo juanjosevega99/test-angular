@@ -7,6 +7,7 @@ import { DishesCategoriesService } from "src/app/services/dishes-categories.serv
 import { AngularFireStorage } from "@angular/fire/storage";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
+import { Guid } from "guid-typescript";
 
 @Component({
   selector: 'app-create-dish',
@@ -18,7 +19,7 @@ export class CreateDishComponent implements OnInit {
   //Object to save the dates of the form
   preDish: Object = {
     idDishesCategories: null,
-    state: null,
+    state: [],
     /* creationDate: null,
     modificationDate: null, */
     numberOfModifications: 0,
@@ -68,6 +69,16 @@ export class CreateDishComponent implements OnInit {
 
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
+  }
+
+  //Method to see the id of the category selected
+  seeId(selected){
+    for (let i = 0; i < this.dishesCategories.length; i++) {
+      const dishes = this.dishesCategories[i];
+      if (selected == dishes.name) {
+        this.preDish['idDishesCategories'] = dishes.id
+      }
+    }
   }
 
   //Method for showing new view in the categories field
@@ -124,7 +135,9 @@ export class CreateDishComponent implements OnInit {
   selectedState(event) {
     const value = event.target.value;
     event.target.value = value;
-    this.preDish['state'] = value
+    const check = event.target.checked;
+    event.target.checked = check;
+    this.preDish['state'] = {value,check}
   }
 
   //Method for the admission date
@@ -213,8 +226,7 @@ export class CreateDishComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
-        
-        const id = Math.random().toString(36).substring(2);
+        const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;
         const ref = this.storage.ref(filePath);

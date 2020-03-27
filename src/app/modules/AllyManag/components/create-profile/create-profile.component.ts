@@ -7,6 +7,7 @@ import { ProfilesCategoriesService } from "src/app/services/profiles-categories.
 import { AngularFireStorage } from "@angular/fire/storage";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
+import { Guid } from "guid-typescript";
 
 @Component({
   selector: 'app-create-profile',
@@ -220,8 +221,7 @@ export class CreateProfileComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preProfile);
-        
-        const id = Math.random().toString(36).substring(2);
+        const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/profiles/${id}`;
         const ref = this.storage.ref(filePath);
