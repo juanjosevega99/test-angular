@@ -71,6 +71,16 @@ export class CreateDishComponent implements OnInit {
     setInterval(() => this.tick(), 1000);
   }
 
+  //Method to see the id of the category selected
+  seeId(selected){
+    for (let i = 0; i < this.dishesCategories.length; i++) {
+      const dishes = this.dishesCategories[i];
+      if (selected == dishes.name) {
+        this.preDish['idDishesCategories'] = dishes.id
+      }
+    }
+  }
+
   //Method for showing new view in the categories field
   handleBoxCategories(): boolean {
     if (this.addcategoryButton) {
