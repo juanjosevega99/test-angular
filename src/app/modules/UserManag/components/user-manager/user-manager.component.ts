@@ -142,9 +142,9 @@ export class UserManagerComponent implements OnInit {
               obj.purchaseAmount = order.orderValue;
               obj.registerDate = this.convertDate(order.dateAndHourDelivey);
 
-              this.usergetting.push(obj);
             }
             )
+            this.usergetting.push(obj);
 
           }
         })
@@ -400,7 +400,6 @@ export class UserManagerComponent implements OnInit {
             if (user[id].toLowerCase().indexOf(termino) >= 0) {
               this.newdateArray.push(user);
               this.filteredArray.push(user);
-
             }
 
           });
