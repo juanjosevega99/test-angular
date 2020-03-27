@@ -81,7 +81,6 @@ export class EditMenuComponent implements OnInit {
           obj.numberOfModifications = dish.numberOfModifications;
           obj.state = dish.state;
 
-          
           this.dishesgetting.push(obj);
         }
       })
