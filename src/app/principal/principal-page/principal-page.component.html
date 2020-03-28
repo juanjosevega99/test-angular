@@ -1,9 +1,9 @@
 <ngx-spinner bdOpacity=0.6 bdColor="rgba(255,255,255,0.6)" size="medium" color="rgb(207,44,126)" type="ball-atom"
   [fullScreen]="true">
 </ngx-spinner>
-<div class="container-fluid">
+<div class="container-fluid componentsstyle" style="margin-top: 5rem;" >
   <div class="PrincipalContainer">
-    <app-app-navbar></app-app-navbar>
+
     <div class="row">
       <div class="col-7 col-md-7">
 
@@ -40,11 +40,14 @@
             </tr>
           </thead>
         </table>
+
         <div class="table-data overflow-auto">
           <div class="style-div" *ngFor="let item of pedidos">
+
             <p class="heigth-bar">
               <ngb-progressbar [type]="item.color" [value]="item.val"></ngb-progressbar>
             </p>
+
             <table (click)="item.isShow = !item.isShow" class="table table-bordered text-table2 ">
               <thead>
                 <tr *ngIf="item.type == 'llevalo'" class="border-radius border-color table-success">
@@ -188,14 +191,17 @@
         <div class="row">
 
           <div class="calendar-margin">
+
             <ng-template #t let-date let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled"
               let-focused="focused" let-currentMonth="currentMonth" let-currentYear="currentYear">
               <p [ngStyle]="{ 'color': reservacionesFiltered.includes(date.day+'/'+date.month+'/'+date.year)? 'rgb(63,247,4)': 'rgb(0,0,0)'}"
                 [class.bg-info]="selected" style=" text-align: center; width:2rem; height: 2rem; font-weight: 500;">
                 {{date.day}}</p>
             </ng-template>
+
             <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)"
               (navigate)="date = $event.next"></ngb-datepicker>
+              
             <p class="center-text">MESA</p>
             <table class="table table-borderless">
               <tbody>

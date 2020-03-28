@@ -59,6 +59,8 @@ import { UploadImagesService } from "./services/providers/uploadImages.service";
 import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 import { TooltipModule } from 'ng2-tooltip-directive';
+import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -99,7 +101,9 @@ import { TooltipModule } from 'ng2-tooltip-directive';
     AccompanimentsComponent,
     ProfileComponent,
     CreateProfileComponent,
-    PqrListComponent
+    PqrListComponent,
+    PrincipalOrdersComponent,
+
   ],
   imports: [
     HttpClientModule,

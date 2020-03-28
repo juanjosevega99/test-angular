@@ -1,11 +1,12 @@
-export class Dishes {
+export class DishList {
     id?:string;
     idDishesCategories?:string;
     nameDishesCategories?:string;
     reference?:string;
     name?:string;
     creationDate?:Date;
-    modificationDate?:Date;
+    modificationDateDay?:string;
+    modificationDateTime?:string;
     numberOfModifications?:number;
     state?:string[];
     price?:number;

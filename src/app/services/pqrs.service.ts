@@ -63,4 +63,10 @@ export class PqrsService {
         })
       )
   }
+
+
+  updatePqr(idPqr:string, body: any){
+    return this.httpclient.put( environment.UrlBase + "pqrs/" + idPqr, body  );
+  }
+  
 }

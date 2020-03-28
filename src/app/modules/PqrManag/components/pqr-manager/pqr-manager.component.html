@@ -19,9 +19,9 @@
                 </li>
                 <li style="border: none;">
                     <a>Servicio</a>
-                    <img src="assets/icons/pidelo.png" class="tifi-icon-back">
-                    <img src="assets/icons/llevalo.png" class="tifi-icon-back">
-                    <img src="assets/icons/reservalo.png" class="tifi-icon-back">
+                    <img src="assets/icons/pidelo.png" class="tifi-icon-back" [ngClass]="{'active': infoUSer.typeOfService == 'pidelo' }">
+                    <img src="assets/icons/llevalo.png" class="tifi-icon-back" [ngClass]="{'active': infoUSer.typeOfService == 'llevalo' }">
+                    <img src="assets/icons/reservalo.png" class="tifi-icon-back" [ngClass]="{'active': infoUSer.typeOfService == 'reservalo' }">
 
                 </li>
             </ul>
@@ -71,17 +71,17 @@
                 W3.CSS Tutorial
 
             </p>
-            <button class="btnForInforms">
+            <button (click)="dataforPdf()" class="btnForInforms">
                 <img src="assets/icons/descargar.png" class="tifi-icon-back">
                 Descargar</button>
 
         </div>
         <div>
             <p>RESPUESTA</p>
-            <textarea class="chat" style="padding: 0; margin-bottom: 1rem; padding-top: 2rem;" name="area" id="response"
-                cols="30" rows="10">
+            <textarea class="chat" style=" margin-bottom: 1rem; padding: 2rem;" name="area" id="response" #respo
+                cols="30" rows="10" required="" [(ngModel)]="response" >
             </textarea>
-            <button class="btnForInforms">
+            <button *ngIf="!infoUSer.state" class="btnForInforms" (click)="reply( respo )" >
                 <img src="assets/icons/enviar.png" class="tifi-icon-back">
                 Enviar
             </button>
