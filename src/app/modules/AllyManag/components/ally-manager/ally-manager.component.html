@@ -1,4 +1,24 @@
-<div class="compenetsstyle">
+<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+
+    <div class="filerControl px-1">
+
+        <div style="width: 5%;" class="d-flex align-items-center">
+            <a [routerLink]='["/main"]' class="d-flex">
+                <img src="assets/icons/Back.png" class="tifi-icon-back">
+            </a>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- to do -->
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table"> 
+
+            </div>
+        </nav>
+    </div>
+
     <div class="row styleContainer ">
         <div class="flex-grow-1">
             <a [routerLink]="['/main']">
@@ -28,7 +48,7 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th class="text-center" >Codigo</th>
+                    <th class="text-center">Codigo</th>
                     <th> logo </th>
                     <th>Nombre del establecimiento</th>
                     <th>Número de sedes</th>

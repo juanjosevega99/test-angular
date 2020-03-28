@@ -1,4 +1,35 @@
 @import "../../../../../styles.scss" ;
+//new styles
+.filerControl{
+  display: flex;
+  background-color: #d2d2d2;
+  width: 100%;
+  margin-top: 0;
+  border: 1px solid #d2d2d2;
+  font-size: .7rem;
+  padding-top: 5rem;
+  padding-bottom: 1rem;
+  border-radius: 1rem;
+
+}
+.navbar-expand-lg .navbar-nav .nav-link {
+  padding-right: .5rem;
+  padding-left: .5rem;
+}
+
+.navbar-light .navbar-nav .nav-link {
+
+  color: #4e4f4f;
+
+}
+
+.navbar{
+  padding: .5rem .1rem;
+  border-radius: .5rem;
+ 
+}
+
+
 //syles of input search
 .sizeInput {
   width: 25rem;
