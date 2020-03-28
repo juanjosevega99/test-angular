@@ -42,62 +42,12 @@ export class UserManagerComponent implements OnInit {
 
   generalsearch: string;
 
-  users = [
-    {
-      registerDate: '2020-02-01', name: 'Andrea', email: 'john@example.com', phone: '3245672341', birthday: '09/01/1997',
-      gender: 'femenino', nameAllie: 'KFC', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2020-02-02', name: 'Kenny', email: 'mary@mail.com', phone: '3125672341', birthday: '19/01/1995',
-      gender: 'femenino', nameAllie: 'KFC', nameHeadquarter: 'Centro', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2020-02-03', name: 'Ana', email: 'july@greatstuff.com', phone: '3214577223', birthday: '11/05/1945',
-      gender: 'femenino', nameAllie: 'Corral', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2020-02-04', name: 'Sofia', email: 'a_r@test.com', phone: '3214577223', birthday: '1999-03-19',
-      gender: 'femenino', nameAllie: 'Corral', nameHeadquarter: 'Centro', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2019-02-01', name: 'Edwin', email: 'a_r@test.com', phone: '3145332122', birthday: '2013-02-07',
-      gender: 'masculino', nameAllie: 'Corral', nameHeadquarter: 'Norte', usability: 0, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2018-02-01', name: 'Isabella', email: 'a_r@test.com', phone: '3245672341', birthday: '1992-01-05',
-      gender: 'femenino', nameAllie: 'Qbano', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2018-02-05', name: 'kenny', email: 'a_r@test.com', phone: '3245672341', birthday: '1995-06-25',
-      gender: 'femenino', nameAllie: 'Qbano', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2018-02-05', name: 'kenny', email: 'a_r@test.com', phone: '3245672341', birthday: '1994-05-15',
-      gender: 'femenino', nameAllie: 'kfc', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-  ]
 
   usergetting: OrderByUser[] = [];
   //newdateArray: OrderByUser[] = this.users;
   newdateArray = this.usergetting;
-  // {
-  // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
-  // headquart: string, usability: string, quantity: string, selected: boolean
-  // }[] = this.users;
-  // 
+
   filteredArray: OrderByUser[] = [];
-  //  {
-  // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
-  // headquart: string, usability: string, quantity: string, selected: boolean
-  // }[] = [];
 
   userSelected: {}[] = [];
 
@@ -371,11 +321,14 @@ export class UserManagerComponent implements OnInit {
       if (termino) {
 
         if (this.filteredArray.length) {
+          console.log("si filtred array");
+          
 
           termino = termino.toLowerCase();
 
           this.newdateArray = [];
-
+          console.log("buscando en filteredarray");
+          
           this.filteredArray.forEach(user => {
 
             user[id] = user[id].toString();
