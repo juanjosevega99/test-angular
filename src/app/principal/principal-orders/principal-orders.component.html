@@ -1,0 +1,98 @@
+<div class="PqrGeneral">
+
+    <div class="compenetsstyle " style="background-color: #e9e7e7; width: 65%;">
+
+        <div class="filerControl d-flex justify-content-center px-1 ">
+
+            <nav class="menu mt-md-2">
+
+                <ul>
+                    <li>
+                        <a>Código Pedido</a>
+                    </li>
+                    <li>
+                        <a>Cliente</a>
+                    </li>
+                    <li>
+                        <a>Modo entrega</a>
+                    </li>
+                    <li>
+                        <a>Valor pedido</a>
+                    </li>
+                    <li>
+                        <a>Reserva fecha y hora </a>
+                    </li>
+                    <li>
+                        <a>Cronómetro</a>
+                    </li>
+                    <li>
+                        <a>Estado pedido</a>
+                    </li>
+                    <li style="border: none;">
+                        <a>Estatus entrega</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div>
+            <div class="chat" style="margin-top: 1.8rem;">
+                hola
+            </div>
+        </div>
+    </div>
+    <div class="compenetsstyle " style="background-color: #e9e7e7; width: 35%; padding-left: 0;">
+
+        <div class="filerControl d-flex justify-content-center px-1 ">
+            <nav class="menu mt-sm-5 mt-md-1">
+                <ul>
+                    <li style="border: none;">
+                        <a style="font-size: 15px; font-weight: bold;">Agenda de Mesas</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class=" calendarTables" style="margin-top: 1.5rem;">
+
+            <div style="margin-bottom: .7rem;">
+                <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)"
+                    (navigate)="date = $event.next"></ngb-datepicker>
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <div class="HoursTable">
+                <p>Hora Reserva</p>
+
+                <div>
+                    <button *ngFor="let hour of Hours" (click)="getHour($event)"
+                        class="btn btn-outline-success">{{hour}}</button>
+                </div>
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <div style="flex-direction: row; justify-content: center;">
+
+                <div style="width: 50%;">
+
+                    <p>MESAS</p>
+                    <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
+                        <button *ngFor="let table of Tables" (click)="getHour($event)"
+                            class="btn btn-outline-success">{{table}}</button>
+                    </div>
+                </div>
+                <div style="width: 50%;">
+                    
+                    <p>PERSONAS</p>
+                    <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
+                        <button *ngFor="let table of Tables" (click)="getHour($event)"
+                            class="btn btn-outline-success">{{table}}</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

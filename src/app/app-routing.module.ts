@@ -36,6 +36,7 @@ import { AccompanimentsComponent } from './modules/AllyManag/components/accompan
 import { ProfileComponent } from './modules/AllyManag/components/profile/profile.component';
 import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
+import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
 
 
 const routes: Routes = [
@@ -59,6 +60,8 @@ const routes: Routes = [
     component: MainComponent,
     children: [
 
+      { path: "principal", component: PrincipalPageComponent },
+      { path: "principal-orders", component: PrincipalOrdersComponent },
       { path: "options", component: OptionsComponent },
       { path: "userManager", component: UserManagerComponent },
       { path: "allyManager", component: AllyManagerComponent },
@@ -85,7 +88,6 @@ const routes: Routes = [
     
   },
   { path: "navbar", component: AppNavbarComponent },
-  { path: "principal", component: PrincipalPageComponent },
   { path: "menu", component: MainMenuComponent },
   { path: "aliados", component: ListAliadosComponent },
   { path: "add-aliado", component: AddEstablecimientoComponent },

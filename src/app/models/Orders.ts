@@ -6,8 +6,8 @@ export class Orders {
     nameAllies?:string;
     idHeadquartes?:string;
     nameHeadquartes?:string;
-    idDishe?:string;
-    nameDishe?:string;
+    idDishe?:string[];
+    nameDishe?:string[];
     valueDishe?:number;
     typeOfService?:string;
     orderValue?:number;

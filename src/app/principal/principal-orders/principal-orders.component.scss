@@ -1,0 +1,73 @@
+@import '../../modules/PqrManag/components/pqr-manager/pqr-manager.component.scss';
+
+.menu li {
+    font-size: .7rem;
+    padding: .1rem;
+}
+
+.menu li a {
+    margin: 0;
+    text-align: center;
+}
+
+.menu ul {
+    flex-wrap: nowrap;
+}
+
+.compenetsstyle{
+    padding: 1rem;
+    margin: 0;
+}
+
+.PqrGeneral div {
+    margin: 0;
+    flex-grow: initial;
+    flex-wrap: wrap;
+}
+.filerControl{
+    padding-top: 6rem;
+}
+
+.calendarTables{
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // flex-wrap: wrap;
+    // width: 90%;
+    // height: 20rem;
+    background-color:#f6f6f6;
+    border-radius: .5rem;
+    color: #9f9f9f;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    overflow: auto;
+}
+
+.HoursTable{
+    width: 10rem;
+    overflow: auto;
+
+}
+
+.HoursTable div{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 6.5rem; 
+    padding-bottom: .5rem;
+    overflow: auto;
+    margin-bottom: 1rem;
+    border: 1px solid #9f9f9f;
+    border-radius: .3rem;
+}
+
+.btn-outline-success{
+    width: 2.6rem;
+    height: 2.5rem;
+    border-radius: .3rem;
+    font-size: .8rem;
+    padding: .1rem;
+    margin: .3rem;
+    font-style: unset;
+}
+
