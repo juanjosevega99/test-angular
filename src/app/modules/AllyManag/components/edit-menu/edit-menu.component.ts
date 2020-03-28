@@ -108,43 +108,159 @@ export class EditMenuComponent implements OnInit {
 
   //method for seaching specific values by name and code
   search(termino?: string, id?: string) {
-    if (termino) {
+
+
+      if (termino) {
+
+        if (this.filteredArray.length) {
+
+          termino = termino.toLowerCase();
+
+          this.newdateArray = [];
+
+          this.filteredArray.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+            }
+
+          });
+        }
+        else {
+          console.log("no filtered array");
+
+
+          this.newdateArray = [];
+          this.dishesgetting.forEach(user => {
+            user[id] = user[id].toString();
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
+            }
+          });
+        }
+      } else {
+        console.log(this.table.value[id]);
+        
+        this.table.value[id] = null;
+        console.log(this.table.value[id]);
+        let count = 0;
+        for (var i in this.table.value) {
+          console.log(count);
+          console.log(this.table.value[i]);
+          
+          
+          console.log(this.table.value)
+          if (this.table.value[i] == null || this.table.value[i] == "") {
+            count += 1;
+          }
+        }
+        if (count > 3 && !this.generalsearch) { 
+          this.newdateArray = this.dishesgetting;
+          this.filteredArray = []
+          count = 0;
+        } else {
+          this.newdateArray = this.filteredArray;
+          count = 0;
+        }
+      
+    /* 
+    
+     } else {
+
+      if (termino) {
+
+        if (this.filteredArray.length) {
+
+          termino = termino.toLowerCase();
+
+          this.newdateArray = [];
+
+          this.filteredArray.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+
+            }
+
+          });
+        }
+        else {
+          console.log("no filtered array");
+
+
+          this.newdateArray = [];
+
+          this.usergetting.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
+
+            }
+
+          });
+
+        }
+
+
+      } else {
+
+        this.table.value[id] = null;
+
+        let count = 0;
+        for (var i in this.table.value) {
+
+          if (this.table.value[i] == null || this.table.value[i] == "") {
+            count += 1;
+          }
+        }
+
+        if (count > 9 && !this.generalsearch) {
+
+          this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
+
+        } else {
+
+          this.newdateArray = this.filteredArray;
+          count = 0;
+        }
+      }*/
+  }}
+  /* if (termino) {
+    if (this.filteredArray.length) {
       termino = termino.toLowerCase();
       this.newdateArray = [];
-      this.filteredArray = [];
-      this.dishesgetting.forEach(menus => {
-        if (menus[id].toLowerCase().indexOf(termino) >= 0) {
-          this.newdateArray.push(menus);
-          this.filteredArray.push(menus);
+      this.filteredArray.forEach(menu => {
+        menu[id] = menu[id].toString();
+        if (menu[id].toLowerCase().indexOf(termino) >= 0) {
+          this.newdateArray.push(menu);
         }
       });
     } else {
-      if (termino) {
-        if (this.filteredArray.length) {
-          termino = termino.toLowerCase();
-          this.newdateArray = [];
-          this.filteredArray.forEach(menu => {
-            menu[id] = menu[id].toString();
-            if (menu[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(menu);
-            }
-          });
-        } else {
-          console.log("no results");
+      console.log("no results");
 
-          this.newdateArray = [];
-          this.dishesgetting.forEach(dish => {
-            dish[id] = dish[id].toString();
-            if (dish[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(dish);
-              this.filteredArray.push(dish);
-            }
-          });
+      this.newdateArray = [];
+      this.dishesgetting.forEach(dish => {
+        dish[id] = dish[id].toString();
+        if (dish[id].toLowerCase().indexOf(termino) >= 0) {
+          this.newdateArray.push(dish);
+          this.filteredArray.push(dish);
         }
-      }
-      /* this.newdateArray = this.dishesgetting;
-      this.filteredArray = []; */}
-  }
+      });
+    } */
+
+  /* this.newdateArray = this.dishesgetting;
+  this.filteredArray = []; */
+
 
   //method for general searching 
   searchbyterm(termino: string) {
@@ -192,6 +308,7 @@ export class EditMenuComponent implements OnInit {
       }
     }
   }
+
   convertDate(date: Date): string {
     const d = new Date(date);
     const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });

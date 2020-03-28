@@ -63,7 +63,7 @@
                     <th class="text-center">Fecha de modificación</th>
                     <th class="text-center">Hora de modificación</th>
                     <th class="text-center">Número de modificaciones</th>
-                    <th class="text-center">Estado</th>
+                    <th class="text-center" colspan="2" >Estado</th>
                     <th class="text-center"> </th>
                 </tr>
             </thead>
@@ -77,17 +77,18 @@
                     <td>{{menu.modificationDateDay}}</td>
                     <td>{{menu.modificationDateTime}}</td>
                     <td>{{menu.numberOfModifications}}</td>
-                    <td>
-                        <div class="radio radio-info radio-inline">
-                            <input type="radio" id="state" #radio1 (click)="State(radio1.value, radio1.id)"
-                                value="active" name="radioInline">
-                            <input type="radio" id="state" #radio2 (click)="State(radio2.value, radio2.id)"
-                                value="inactive" name="radioInline">
-                            <br>
-                            <label>  </label>
-                        </div>
-
-                    </td>
+                    <td><div class="radio radio-success m-2 form-check-inline">
+                        <input  value="active" type="radio" name={{i}} id="state" >
+                        <label  style="font-size: 15px;">
+                            Activo
+                        </label>
+                    </div></td>
+                    <td><div class="radio radio-danger m-2 form-check-inline">
+                        <input value="inactive" type="radio" name={{i}} id="state" >
+                        <label style="font-size: 15px;" >
+                            Inactivo
+                        </label>
+                    </div></td>
                     <td>
                         <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
                 </tr>

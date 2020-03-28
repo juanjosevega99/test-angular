@@ -5,10 +5,11 @@
     "version": "0.2.0",
     "configurations": [
 
+
         
 
         {
-            "type": "chrome",
+            "type": "firefox",
             "request": "launch",
             "name": "Launch tifi firefox against localhost",
             "url": "http://localhost:4200",
