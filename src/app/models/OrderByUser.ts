@@ -9,10 +9,16 @@ export class OrderByUser{
     purchaseAmount?:number;
     registerDate?:string;
     dateAndHourDelivery?:string;
-    quantity?:number;
-    nameDishe?:string;
+    quantity?:number[];
+    nameDishe?:string[];
     controlOrder?:boolean;
-    valueDishe?:number;
+    valueDishe?:number[];
+    location?:string;
+    costReservation?:number;
+    costReservationIva?:number;
+    percent?:number;
+    valueIntermediation? :number;
+    valueIntermediationIva? :number;
 
     lastname?:string;
     email?:string;

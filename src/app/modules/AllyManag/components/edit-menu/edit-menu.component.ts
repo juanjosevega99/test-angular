@@ -108,63 +108,88 @@ export class EditMenuComponent implements OnInit {
 
   //method for seaching specific values by name and code
   search(termino?: string, id?: string) {
+    console.log(termino,id);
+    
+    if (termino) {
 
+      if (this.filteredArray.length) {
 
-      if (termino) {
+        termino = termino.toLowerCase();
+        console.log(this.filteredArray);
+        let aux=this.filteredArray;
+        this.newdateArray = [];
+        this.filteredArray = []
+        aux.forEach(user => {
 
-        if (this.filteredArray.length) {
+          user[id] = user[id].toString();
 
-          termino = termino.toLowerCase();
-
-          this.newdateArray = [];
-
-          this.filteredArray.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-            }
-
-          });
-        }
-        else {
-          console.log("no filtered array");
-
-
-          this.newdateArray = [];
-          this.dishesgetting.forEach(user => {
-            user[id] = user[id].toString();
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-              this.filteredArray.push(user);
-            }
-          });
-        }
-      } else {
-        console.log(this.table.value[id]);
-        
-        this.table.value[id] = null;
-        console.log(this.table.value[id]);
-        let count = 0;
-        for (var i in this.table.value) {
-          console.log(count);
-          console.log(this.table.value[i]);
-          
-          
-          console.log(this.table.value)
-          if (this.table.value[i] == null || this.table.value[i] == "") {
-            count += 1;
+          if (user[id].toLowerCase().indexOf(termino) >= 0) {
+            this.newdateArray.push(user);
+            this.filteredArray.push(user)
           }
+
+        });
+      }
+      else {
+        console.log("no filtered array");
+
+
+        this.newdateArray = [];
+
+        this.dishesgetting.forEach(user => {
+
+          user[id] = user[id].toString();
+
+          if (user[id].toLowerCase().indexOf(termino) >= 0) {
+            this.newdateArray.push(user);
+            this.filteredArray.push(user);
+          }
+
+        });
+
+      }
+
+
+    } else {
+
+      this.table.value[id] = null;
+
+      let count = 0;
+      for (var i in this.table.value) {
+        console.log(this.table.value[i],"dentro for table");
+        
+        if (this.table.value[i] == null || this.table.value[i] == "") {
+          count += 1;
+          
         }
-        if (count > 3 && !this.generalsearch) { 
-          this.newdateArray = this.dishesgetting;
+        console.log(count);
+        
+      }
+
+      if (count > 1 && !this.generalsearch) {
+        console.log(count);
+        
+        this.newdateArray = this.dishesgetting;
+        this.filteredArray = []
+        count = 0;
+
+      } else {
+        console.log(count);
+        for (var i in this.table.value) {
           this.filteredArray = []
           count = 0;
-        } else {
-          this.newdateArray = this.filteredArray;
-          count = 0;
+          if (this.table.value[i] == null && this.table.value[i] == "") {
+            this.search(this.table.value[i],this.table[i])
+            console.log(this.table.value[i],this.table[i]);
+             
+          }
+
         }
+        /* this.newdateArray = this.filteredArray; */
+      
+        
+      }
+    }
       
     /* 
     
@@ -234,7 +259,7 @@ export class EditMenuComponent implements OnInit {
           count = 0;
         }
       }*/
-  }}
+  }
   /* if (termino) {
     if (this.filteredArray.length) {
       termino = termino.toLowerCase();

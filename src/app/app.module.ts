@@ -58,6 +58,7 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
 import { UploadImagesService } from "./services/providers/uploadImages.service";
 import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
+import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,9 @@ import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-lis
     AccompanimentsComponent,
     ProfileComponent,
     CreateProfileComponent,
-    PqrListComponent
+    PqrListComponent,
+    PrincipalOrdersComponent,
+
   ],
   imports: [
     HttpClientModule,
