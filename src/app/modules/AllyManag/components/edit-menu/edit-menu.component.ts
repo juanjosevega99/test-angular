@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { DishesService } from 'src/app/services/dishes.service';
-import { Dishes } from 'src/app/models/Dishes'
+import { Dishes } from 'src/app/models/Dishes';
+import { DishList } from 'src/app/models/DishList';
 
 @Component({
   selector: 'app-edit-menu',
@@ -43,17 +44,17 @@ export class EditMenuComponent implements OnInit {
    }[] = this.menu; */
 
   //varibales to obtain data
-  dishesgetting: Dishes[] = [];
+  dishesgetting: DishList[] = [];
   newdateArray = this.dishesgetting;
   newArrarSearch: Dishes[] = [];
-  filteredArray: Dishes[] = []
+  filteredArray: DishList[] = []
 
   //variables for modification date
-  time:string;
-  date:string;
-  modificationDate:Date;
+  time: string;
+  date: string;
+  modificationDate: Date;
   modification: Date;
-  
+
   /* filteredArray: {
     reference: string, category: string, dishName: string, dishPhoto: string, price: string,
     modificationDate: string, modificationTime: string, modificationNumber: string, state: string, selected: boolean
@@ -71,13 +72,14 @@ export class EditMenuComponent implements OnInit {
     this.dishesService.getDishes().subscribe(res => {
       res.forEach((dish: Dishes) => {
         if (res.length > 0) {
-          const obj: Dishes = {};
+          const obj: DishList = {};
           obj.reference = dish.reference;
           obj.nameDishesCategories = dish.nameDishesCategories;
           obj.name = dish.name;
           obj.imageDishe = dish.imageDishe;
           obj.price = dish.price;
-          obj.modificationDate = dish.modificationDate;
+          obj.modificationDateDay = this.convertDateday(dish.modificationDate);
+          obj.modificationDateTime = this.convertDatetime(dish.modificationDate)
           obj.numberOfModifications = dish.numberOfModifications;
           obj.state = dish.state;
 
@@ -92,56 +94,252 @@ export class EditMenuComponent implements OnInit {
   }
 
   //method to convert the modification date
-  convertDate(date: Date): string {
+  convertDateday(date: Date): string {
     const d = new Date(date);
-    const n = d.toISOString().split("T")[0];
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+    return n;
+  }
+
+  convertDatetime(date: Date): string {
+    const d = new Date(date);
+    const n = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     return n;
   }
 
   //method for seaching specific values by name and code
   search(termino?: string, id?: string) {
+    console.log(termino,id);
+    
     if (termino) {
+
+      if (this.filteredArray.length) {
+
+        termino = termino.toLowerCase();
+        console.log(this.filteredArray);
+        let aux=this.filteredArray;
+        this.newdateArray = [];
+        this.filteredArray = []
+        aux.forEach(user => {
+
+          user[id] = user[id].toString();
+
+          if (user[id].toLowerCase().indexOf(termino) >= 0) {
+            this.newdateArray.push(user);
+            this.filteredArray.push(user)
+          }
+
+        });
+      }
+      else {
+        console.log("no filtered array");
+
+
+        this.newdateArray = [];
+
+        this.dishesgetting.forEach(user => {
+
+          user[id] = user[id].toString();
+
+          if (user[id].toLowerCase().indexOf(termino) >= 0) {
+            this.newdateArray.push(user);
+            this.filteredArray.push(user);
+          }
+
+        });
+
+      }
+
+
+    } else {
+
+      this.table.value[id] = null;
+
+      let count = 0;
+      for (var i in this.table.value) {
+        console.log(this.table.value[i],"dentro for table");
+        
+        if (this.table.value[i] == null || this.table.value[i] == "") {
+          count += 1;
+          
+        }
+        console.log(count);
+        
+      }
+
+      if (count > 1 && !this.generalsearch) {
+        console.log(count);
+        
+        this.newdateArray = this.dishesgetting;
+        this.filteredArray = []
+        count = 0;
+
+      } else {
+        console.log(count);
+        for (var i in this.table.value) {
+          this.filteredArray = []
+          count = 0;
+          if (this.table.value[i] == null && this.table.value[i] == "") {
+            this.search(this.table.value[i],this.table[i])
+            console.log(this.table.value[i],this.table[i]);
+             
+          }
+
+        }
+        /* this.newdateArray = this.filteredArray; */
+      
+        
+      }
+    }
+      
+    /* 
+    
+     } else {
+
+      if (termino) {
+
+        if (this.filteredArray.length) {
+
+          termino = termino.toLowerCase();
+
+          this.newdateArray = [];
+
+          this.filteredArray.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+
+            }
+
+          });
+        }
+        else {
+          console.log("no filtered array");
+
+
+          this.newdateArray = [];
+
+          this.usergetting.forEach(user => {
+
+            user[id] = user[id].toString();
+
+            if (user[id].toLowerCase().indexOf(termino) >= 0) {
+              this.newdateArray.push(user);
+              this.filteredArray.push(user);
+
+            }
+
+          });
+
+        }
+
+
+      } else {
+
+        this.table.value[id] = null;
+
+        let count = 0;
+        for (var i in this.table.value) {
+
+          if (this.table.value[i] == null || this.table.value[i] == "") {
+            count += 1;
+          }
+        }
+
+        if (count > 9 && !this.generalsearch) {
+
+          this.newdateArray = this.usergetting;
+          this.filteredArray = []
+          count = 0;
+
+        } else {
+
+          this.newdateArray = this.filteredArray;
+          count = 0;
+        }
+      }*/
+  }
+  /* if (termino) {
+    if (this.filteredArray.length) {
       termino = termino.toLowerCase();
       this.newdateArray = [];
-      this.filteredArray = [];
-      this.dishesgetting.forEach(menus => {
-        if (menus[id].toLowerCase().indexOf(termino) >= 0) {
-          this.newdateArray.push(menus);
-          this.filteredArray.push(menus);
+      this.filteredArray.forEach(menu => {
+        menu[id] = menu[id].toString();
+        if (menu[id].toLowerCase().indexOf(termino) >= 0) {
+          this.newdateArray.push(menu);
         }
       });
     } else {
-      if(termino){
-        if (this.filteredArray.length) {
-          termino = termino.toLowerCase();
-          this.newdateArray = [];
-          this.filteredArray.forEach(menu=>{
-            menu[id] = menu[id].toString();
-            if (menu[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(menu);
-            }
-          });
-        } else{
-          console.log("no results");
-          
-          this.newdateArray = [];
-          this.dishesgetting.forEach(dish =>{
-            dish[id] = dish[id].toString();
-            if(dish[id].toLowerCase().indexOf(termino)>=0){
-              this.newdateArray.push(dish);
-              this.filteredArray.push(dish);
-            }
-          });
+      console.log("no results");
+
+      this.newdateArray = [];
+      this.dishesgetting.forEach(dish => {
+        dish[id] = dish[id].toString();
+        if (dish[id].toLowerCase().indexOf(termino) >= 0) {
+          this.newdateArray.push(dish);
+          this.filteredArray.push(dish);
         }
-      }
-      /* this.newdateArray = this.dishesgetting;
-      this.filteredArray = []; */}
-  }
+      });
+    } */
+
+  /* this.newdateArray = this.dishesgetting;
+  this.filteredArray = []; */
+
 
   //method for general searching 
   searchbyterm(termino: string) {
+    if (termino) {
+      termino = termino.toLowerCase();
+      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
+      if (this.filteredArray.length) {
+        this.newdateArray = this.filteredArray.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+            myRegex.test(item.numberOfModifications.toString()))
+        });
+      } else {
+        this.newdateArray = this.dishesgetting.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+            myRegex.test(item.numberOfModifications.toString()))
+        });
+        this.filteredArray = this.dishesgetting.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+            myRegex.test(item.numberOfModifications.toString()))
+        });
+      }
+    } else {
+
+      let count = 0;
+      for (var i in this.table.value) {
+        if (this.table.value[i] == null || this.table.value[i] == "") {
+          count += 1;
+        }
+      }
+
+      if (count > 1 && !this.generalsearch) {
+
+        this.newdateArray = this.dishesgetting;
+        this.filteredArray = []
+        count = 0;
+
+      } else {
+
+        this.newdateArray = this.filteredArray;
+        count = 0;
+      }
+    }
   }
+
+  convertDate(date: Date): string {
+    const d = new Date(date);
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+    return n;
+  }
+
 
   //method for the state
   State(value: string, id: string) {
@@ -151,13 +349,13 @@ export class EditMenuComponent implements OnInit {
   //method to convert modification date
   tick(): void {
     const aux = this.newdateArray;
-    aux.forEach(item=>{
+    aux.forEach(item => {
       this.modificationDate = item['modificationDate']
       this.modification = new Date(this.modificationDate)
       this.time = this.modification.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       this.date = this.modification.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
     })
-   }
+  }
 }
 
 
