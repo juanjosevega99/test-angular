@@ -108,14 +108,17 @@ export class EditMenuComponent implements OnInit {
     let count = 0;
     let termsearch = '';
     let idsearch = '';
-    for (var i in this.table.value) {
 
+    for (var i in this.table.value) {
+      // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
         count += 1;
         termsearch = this.table.value[i];
         idsearch = i;
       }
     }
+
+    console.log("campos llenos: ", count);
 
     if (count > 0 && count < 2 && !this.generalsearch) {
 
@@ -129,23 +132,52 @@ export class EditMenuComponent implements OnInit {
 
       this.filteredArray = this.newdateArray;
 
-    } else {
-      // campos llenos o vacios && general search existe
+    } else if (count == 2 && this.generalsearch) {
 
-      if (count == 0 && !this.generalsearch) {
+      let aux = this.newdateArray;
+
+      this.newdateArray = aux.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
+        }
+      });
+
+    }
+    else {
+
+      if (this.generalsearch) {
+
+      }
+
+      if (count == 0) {
         // campos vacios
-        // no existe general search
+        // existe general search?
         this.newdateArray = this.dishesgetting;
 
+        if (this.generalsearch) {
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
+        }
       } else {
+
         // campos llenos
-        // existe eneral search
+        // existe general search?
+
         this.newdateArray = this.filteredArray.filter(function (dish: Dishes) {
           //We test each element of the object to see if one string matches the regexp.
-          if (dish[id].toLowerCase().indexOf(termino) >= 0) {
+          if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
             return dish;
           }
         });
+
+        if (this.generalsearch) {
+
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
+        }
       }
     }
   }
@@ -157,16 +189,26 @@ export class EditMenuComponent implements OnInit {
     termino = termino.toLowerCase();
     var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
+    // campos de la tabla
     let count = 0;
-    for (var i in this.table.value) {
+    let termsearch = '';
+    let idsearch = '';
 
+    for (var i in this.table.value) {
+      // search empty fields
       if (this.table.value[i] == null || this.table.value[i] == "") {
         // campo vacio
         count += 1;
+      } else {
+        termsearch = this.table.value[i];
+        idsearch = i;
       }
     }
 
-    if ( count > 1 ) {
+    console.log("campos vacios: ", count);
+
+
+    if (count > 1) {
       // campos vacios
 
       this.newdateArray = this.dishesgetting.filter(function (item) {
@@ -177,36 +219,18 @@ export class EditMenuComponent implements OnInit {
       this.filteredArray = this.newdateArray;
 
     } else {
+      // un campo lleno
 
       this.newdateArray = this.filteredArray.filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
           myRegex.test(item.numberOfModifications.toString()))
       });
-      
+      // this.filteredArray = this.newdateArray;
+
     }
 
-    // else {
-
-    //   let count = 0;
-    //   for (var i in this.table.value) {
-    //     if (this.table.value[i] == null || this.table.value[i] == "") {
-    //       count += 1;
-    //     }
-    //   }
-
-    //   if (count > 1 && !this.generalsearch) {
-
-    //     this.newdateArray = this.dishesgetting;
-    //     this.filteredArray = []
-    //     count = 0;
-
-    //   } else {
-
-    //     this.newdateArray = this.filteredArray;
-    //     count = 0;
-    //   }
-    // }
+    
   }
 
 
