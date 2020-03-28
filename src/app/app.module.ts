@@ -58,7 +58,7 @@ import { CreateProfileComponent } from './modules/AllyManag/components/create-pr
 import { UploadImagesService } from "./services/providers/uploadImages.service";
 import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
-
+import { TooltipModule } from 'ng2-tooltip-directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -120,7 +120,8 @@ import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-lis
     BrowserAnimationsModule,
     NgImageSliderModule,
     ReactiveFormsModule,
-    NgxPrintModule
+    NgxPrintModule,
+    TooltipModule
   ],
   providers: [
     UploadImagesService,

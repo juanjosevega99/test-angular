@@ -13,6 +13,8 @@ export class AllyManagerComponent implements OnInit {
 
   attentionSchedule: string;
   arrayAllyManager: any[] = []
+  filteredArray = [];
+  newdateArray = this.arrayAllyManager;
 
   constructor(private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
@@ -58,6 +60,61 @@ export class AllyManagerComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+  searchbyterm(termino: string) {
+
+    // if (termino) {
+      termino = termino.toLowerCase();
+      let myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+    //   if (this.filteredArray.length) {
+
+    //     this.newdateArray = this.filteredArray.filter(function (item) {
+    //        //We test each element of the object to see if one string matches the regexp.
+    //       return (myRegex.test(item.nameEstablishment))
+
+    //     });
+    //   } else {
+
+        this.newdateArray = this.arrayAllyManager.filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          console.log(item.nameEstablishment, termino);
+          
+          return (myRegex.test(item.nameEstablishment) || myRegex.test(item.fhsd) )
+
+
+        });
+    //     this.filteredArray = this.arrayAllyManager.filter(function (item) {
+    //       //We test each element of the object to see if one string matches the regexp.
+    //       return (myRegex.test(item.nameEstablishment))
+
+    //     });
+
+    //   }
+
+    // } 
+    
+    // else {
+
+    //   // let count = 0;
+    //   // for (var i in this.table.value) {
+    //   //   if (this.table.value[i] == null || this.table.value[i] == "") {
+    //   //     count += 1;
+    //   //   }
+    //   // }
+
+    //   // if (count > 9 && !this.generalsearch) {
+
+    //       this.newdateArray = this.arrayAllyManager;
+    //       this.filteredArray = []
+    //   //     count = 0;
+          
+    //   //   } else {
+
+    //   //     this.newdateArray = this.filteredArray;
+    //   //     count = 0;
+    //   //   }
+    // }
 
   }
 

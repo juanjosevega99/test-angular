@@ -11,7 +11,7 @@
                 <div class="input-group">
                     <div class="input-group-append">
                         <input class="form-control sizeInput" id="myInput" type="text" placeholder="Buscar"
-                            aria-label="Search">
+                            aria-label="Search" (keyup)="searchbyterm(termino.value)" #termino>
                         <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
                     </div>
                 </div>
@@ -25,29 +25,25 @@
     </div>
     <div class="row styleTable table-responsive mt-4">
 
-        <table class="table table-bordered table-striped" id="table" data-toggle="table" data-show-columns="true"
-            data-multiple-select-row="true" data-click-to-select="true" data-show-search-clear-button="true"
-            data-filter-control="true">
-            <!-- data-search="true" -->
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <!-- <th data-field="name" data-filter-control="input">Nombre</th> -->
-                    <th data-field="code" data-filter-control="input">Codigo</th>
-                    <th data-field=""> logo </th>
-                    <th data-field="nameStablishment" data-filter-control="input">Nombre del establecimiento</th>
-                    <th data-field="numberHeadquarters">Número de sedes</th>
-                    <th data-field="services">Servicios</th>
-                    <th data-field="allyType">Tipo de aliado</th>
-                    <th data-field="foodType" data-filter-control="input">Tipo de comida</th>
-                    <th data-field="schedule" class="position-relative">Horario</th>
-                    <th data-field="edit"> </th>
+                    <th class="text-center" >Codigo</th>
+                    <th> logo </th>
+                    <th>Nombre del establecimiento</th>
+                    <th>Número de sedes</th>
+                    <th>Servicios</th>
+                    <th>Tipo de aliado</th>
+                    <th>Tipo de comida</th>
+                    <th>Horario</th>
+                    <th> </th>
 
                 </tr>
 
             </thead>
 
-            <tbody id="myTable">
-                <tr *ngFor="let ally of arrayAllyManager; ">
+            <tbody>
+                <tr *ngFor="let ally of newdateArray; ">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
                     <td> <a [routerLink]="['/main', 'headquarts']"> {{ally.nameEstablishment}} </a></td>
@@ -65,7 +61,7 @@
                     <!-- todo -->
                     <td> {{ally.mealType}} </td>
                     <td> {{ally.schedules}} </td>
-                    
+
                     <td>
                         <a [routerLink]="['/main', 'headquarts']" class="btn"> <i class="far fa-edit"></i> </a>
                     </td>

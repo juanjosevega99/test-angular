@@ -86,28 +86,27 @@
                                         <div class="col-8">
                                                 <div class="row align-items-center ">
                                                         <div class="photo">
-                                                                <img id="photo" width="120px" height="100px" style="border-radius: 1.5rem">
+                                                                <img [tooltip]="HtmlContent" content-type="template" id="photo" width="120px" height="100px" style="border-radius: 1.5rem">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
-                                                                <button class="btn1 btn btn-outline-primary" 
-                                                                data-toggle="tooltip" data-placement="top" title="MihaelPardo">
+                                                                <ng-template #HtmlContent>
+                                                                        <p>Se recomienda subir el archivo con extension png y 
+                                                                        con las siguientes dimensiones: 300 px Anchura y 168 px Altura</p>
+                                                                </ng-template>
+                                                                <button class="btn1 btn btn-outline-primary">
                                                                         Cambiar archivo
                                                                 </button>
+                                                                <span tooltip="Tooltip text"></span>
                                                                 <input type="file" (change)="onPhotoSelected($event)"
                                                                         [ngClass]="{ 'is-invalid': (!forma.get('logo').valid && 
                                                                         forma.get('logo').touched ), 
-                                                                        'is-valid':( forma.get('logo').valid )}"
-                                                                        
-                                                                        >
+                                                                        'is-valid':( forma.get('logo').valid )}">
+
                                                                 <div *ngIf="forma.get('logo').errors?.required "
                                                                         class="invalid-feedback">
                                                                         Este campo es requerido
                                                                 </div>
                                                                 <div class="valid-feedback">Ok!</div>
-                                                                <div class="form-control-feedback">
-                                                                        <small> *Se recomienda subir el archivo con extension png y con las siguientes dimensiones: 300 px Anchura y 168 px Altura </small>
-                                                                </div>
-
                                                         </div>
                                                 </div>
                                         </div>
@@ -153,7 +152,7 @@
                                                         <button *ngIf="!otherEstablishmentInput"
                                                                 (click)=" handleBoxEstablishment()"
                                                                 class="btn1 btn btn-outline-primary"
-                                                                data-toggle="tooltip" data-placement="top" title="MihaelPardo">
+                                                                tooltip="Tooltip on left" placement="top">
                                                                 Otro
                                                         </button>
                                                         <button *ngIf="!otherEstablishmentInput"
