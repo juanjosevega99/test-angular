@@ -3,6 +3,7 @@ import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { Profiles } from 'src/app/models/Profiles';
 import { ProfileList } from 'src/app/models/ProfileList';
 import { ProfilesService } from 'src/app/services/profiles.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -19,8 +20,12 @@ export class ProfileComponent implements OnInit {
   newArray = this.profilesgetting;
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
+
+  //variables for sections
+
   /*  selectedA : boolean = false;
    selectedD : boolean = false;
+   
  
    Profiles = [
      {
@@ -61,6 +66,7 @@ export class ProfileComponent implements OnInit {
       res.forEach((profile: Profiles) => {
         if (res.length > 0) {
           const obj: ProfileList = {};
+          obj.id = profile.id;
           obj.nameCharge = profile.nameCharge;
           obj.identification = profile.identification;
           obj.name = profile.name;
@@ -86,6 +92,35 @@ export class ProfileComponent implements OnInit {
     const n = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
     return n;
   }
+
+  //method for updating the state to active
+  changeStateA(idProfile) {
+    let newstate: object ={
+      state : [{
+        state: "active",
+        check: true
+      }, {
+        state: "inactive",
+        check: false
+      }]
+    } 
+    this.swallUpdateState(idProfile, newstate)
+  }
+
+  //method for updating the state to inactive
+  changeStateI(idProfile) {
+    let newstate: object ={
+      state : [{
+        state: "active",
+        check: false
+      }, {
+        state: "inactive",
+        check: true
+      }]
+    } 
+    this.swallUpdateState(idProfile, newstate)
+  }
+
 
   searchbyterm(termino: string) {
     if (termino) {
@@ -136,5 +171,31 @@ export class ProfileComponent implements OnInit {
 
   search(termino?: string, id?: string) {
 
+  }
+
+
+  //sweets alerts
+  swallUpdateState(idProfile, newState) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas actualizar el estado de este perfil!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, actualizar!'
+    }).then((result) => {
+      if (result.value) {
+        this.profilesService.putProfile(idProfile, newState).subscribe(res => {
+          this.profilesService.getProfiles().subscribe(profile => {
+            this.profilesgetting = profile
+          })
+        })
+        Swal.fire(
+          'Actualizado!',
+          'success',
+        )
+      }
+    })
   }
 }

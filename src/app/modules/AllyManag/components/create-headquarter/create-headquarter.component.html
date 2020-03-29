@@ -172,7 +172,7 @@
                     <div class="form-check form-check-inline" *ngFor="let service of services; let i=index">
                         <label class="form-check-label">
                             <img src={{service.img}} height="30px" width="30px">
-                            {{service.name}}
+                            <!-- {{service.name}} -->
                         </label>
                         <input class="form-check-input" type="checkbox" [checked]="service.select"
                             (change)="selectedService($event,i)" [value]="service.name">
@@ -208,7 +208,7 @@
                     <div class="form-check form-check-inline" *ngFor="let x of aditionalServices;let i=index">
                         <input class="form-check-input" type="checkbox" [checked]="x.select"
                             (click)="getAdditionalService(nameService.textContent,imageService.src,i,$event)"
-                            (change)="selectedAditionalService($event,i)" [value]="x.name">
+                            (change)="selectedAditionalService($event,i,imageService.src)" [value]="x.name">
                         <label class="form-check-label servicio" #nameService>
                             <img id={{i}} src={{x.img}} height="25px" width="25px" #imageService>
                             {{x.name}}
@@ -329,7 +329,8 @@
                 <div class="form-group row" style="margin-bottom: 5rem;">
                     <label class="">&nbsp;</label>
                     <div class="input-group  ">
-                        <button [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary" id="btnguardar">
+                        <!-- [disabled]="!shape.valid" -->
+                        <button  type="submit" class="btn btn-outline-primary" id="btnguardar">
                             Guardar
                         </button>
                     </div>

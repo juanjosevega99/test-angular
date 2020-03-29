@@ -57,8 +57,15 @@ export class CreateDishComponent implements OnInit {
   urlDish: Observable<string>;
 
   constructor(private _router: Router, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService) {
-    /*  this.Categories = ["Boxes", "Combos", "Postes"] */
-    this.State = [{ name: 'Activo', selected: true }, { name: 'Inactivo', selected: false }, { name: 'Eliminar', selected: false }]
+ 
+    this.State = [{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }]
+    this.preDish['state'] = this.State;
     this.time = ['segundos', 'minutos', 'horas']
 
     //inicialization service with collections dishes-categories
@@ -72,7 +79,7 @@ export class CreateDishComponent implements OnInit {
   }
 
   //Method to see the id of the category selected
-  seeId(selected){
+  seeId(selected) {
     for (let i = 0; i < this.dishesCategories.length; i++) {
       const dishes = this.dishesCategories[i];
       if (selected == dishes.name) {
@@ -99,16 +106,16 @@ export class CreateDishComponent implements OnInit {
   //CRD -- Methos of TypeDish: CREATE ,READ AND DELETE 
   addCategory(name: String) {
     if (name != null) {
-    let newitem = name;
-    let newCategory: object = {
-      name: newitem
-    }
-    this.swallSaveOtherDish(newCategory)
+      let newitem = name;
+      let newCategory: object = {
+        name: newitem
+      }
+      this.swallSaveOtherDish(newCategory)
 
-    this.handleBoxCategories()
-  } else { alert("Ingrese el nombre de la nueva categoría") }
+      this.handleBoxCategories()
+    } else { alert("Ingrese el nombre de la nueva categoría") }
   }
-  
+
   deleteCategory() {
     let categorySelected = this.preDish['nameDishesCategories']
     this.swallDeleteDish(categorySelected)
@@ -125,19 +132,27 @@ export class CreateDishComponent implements OnInit {
           .attr('src', e.target.result)
       };
       reader.readAsDataURL(input.files[0]);
-      
+
     }
 
     return this.fileImagedish = input.files[0]
   }
 
   //Method for selecting the state
-  selectedState(event) {
-    const value = event.target.value;
-    event.target.value = value;
-    const check = event.target.checked;
-    event.target.checked = check;
-    this.preDish['state'] = {value,check}
+  selectedState(valueA, checkedA, valueB,checkedB) {
+    let fullstate: any = [{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }];
+
+    fullstate = [
+      { state: valueA, check: checkedA},
+      {state: valueB, check: checkedB}]
+
+    this.preDish['state'] = fullstate
   }
 
   //Method for the admission date
@@ -220,8 +235,8 @@ export class CreateDishComponent implements OnInit {
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
@@ -247,7 +262,7 @@ export class CreateDishComponent implements OnInit {
           title: 'Guardado',
           text: "Tu nuevo plato ha sido creado!",
           icon: 'warning',
-          confirmButtonColor: '#3085d6',
+          confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {

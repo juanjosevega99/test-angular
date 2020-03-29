@@ -60,7 +60,14 @@ export class CreateProfileComponent implements OnInit {
 
   constructor(private _router: Router, private profiles: ProfilesService, private storage: AngularFireStorage, private profileCategory: ProfilesCategoriesService) {
 
-    this.State = [{ name: 'Activo', selected: true }, { name: 'Inactivo', selected: false }, { name: 'Eliminar', selected: false }]
+    this.State = [{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }]
+    this.preProfile['state'] = this.State;    
     this.permiss = ["permiso1","permiso2"]
     //inicialization service with collections dishes-categories
     this.profileCategory.getProfileCategory().subscribe(profileCat => {
@@ -86,13 +93,22 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-  //Metod for selecting the state
-  selectedState(event) {
-    const checked = event.target.checked;
-    const value = event.target.value;
+  
+  //Method for selecting the state
+  selectedState(valueA, checkedA, valueB,checkedB) {
+    let fullstate: any = [{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }];
 
-    event.target.value = value;
-    this.preProfile['state'] = { value, checked }
+    fullstate = [
+      { state: valueA, check: checkedA},
+      {state: valueB, check: checkedB}]
+
+    this.preProfile['state'] = fullstate
   }
 
   //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
@@ -215,8 +231,8 @@ export class CreateProfileComponent implements OnInit {
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
@@ -242,7 +258,7 @@ export class CreateProfileComponent implements OnInit {
           title: 'Guardado',
           text: "Tu nuevo perfil ha sido creado!",
           icon: 'warning',
-          confirmButtonColor: '#3085d6',
+          confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
