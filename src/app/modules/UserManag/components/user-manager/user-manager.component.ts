@@ -40,64 +40,14 @@ export class UserManagerComponent implements OnInit {
   from: string;
   to: string;
 
-  generalsearch: string;
+  generalsearch: string = '';
 
-  users = [
-    {
-      registerDate: '2020-02-01', name: 'Andrea', email: 'john@example.com', phone: '3245672341', birthday: '09/01/1997',
-      gender: 'femenino', nameAllie: 'KFC', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2020-02-02', name: 'Kenny', email: 'mary@mail.com', phone: '3125672341', birthday: '19/01/1995',
-      gender: 'femenino', nameAllie: 'KFC', nameHeadquarter: 'Centro', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2020-02-03', name: 'Ana', email: 'july@greatstuff.com', phone: '3214577223', birthday: '11/05/1945',
-      gender: 'femenino', nameAllie: 'Corral', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2020-02-04', name: 'Sofia', email: 'a_r@test.com', phone: '3214577223', birthday: '1999-03-19',
-      gender: 'femenino', nameAllie: 'Corral', nameHeadquarter: 'Centro', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2019-02-01', name: 'Edwin', email: 'a_r@test.com', phone: '3145332122', birthday: '2013-02-07',
-      gender: 'masculino', nameAllie: 'Corral', nameHeadquarter: 'Norte', usability: 0, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2018-02-01', name: 'Isabella', email: 'a_r@test.com', phone: '3245672341', birthday: '1992-01-05',
-      gender: 'femenino', nameAllie: 'Qbano', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2018-02-05', name: 'kenny', email: 'a_r@test.com', phone: '3245672341', birthday: '1995-06-25',
-      gender: 'femenino', nameAllie: 'Qbano', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-    {
-      registerDate: '2018-02-05', name: 'kenny', email: 'a_r@test.com', phone: '3245672341', birthday: '1994-05-15',
-      gender: 'femenino', nameAllie: 'kfc', nameHeadquarter: 'Galerías', usability: 1, purchaseAmount: 12000, selected: false
-    },
-
-  ]
 
   usergetting: OrderByUser[] = [];
   //newdateArray: OrderByUser[] = this.users;
   newdateArray = this.usergetting;
-  // {
-  // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
-  // headquart: string, usability: string, quantity: string, selected: boolean
-  // }[] = this.users;
-  // 
+
   filteredArray: OrderByUser[] = [];
-  //  {
-  // date: string, name: string, email: string, cellphone: string, birthday: string, gender: string, establishment: string,
-  // headquart: string, usability: string, quantity: string, selected: boolean
-  // }[] = [];
 
   userSelected: {}[] = [];
 
@@ -287,7 +237,11 @@ export class UserManagerComponent implements OnInit {
 
       this.usergetting.forEach(user => {
 
-        const userdate = new Date(user.registerDate)
+        // const userdate = new Date(user.registerDate)
+        let datetransform = user.registerDate.split("/");
+        let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
+
+        const userdate = new Date(newdatetransform);
 
         if (userdate >= mydateFrom && userdate <= mydateTo) {
           this.newdateArray.push(user)
@@ -299,7 +253,11 @@ export class UserManagerComponent implements OnInit {
       this.newdateArray = [];
 
       this.filteredArray.forEach(user => {
-        const userdate = new Date(user.registerDate)
+        // const userdate = new Date(user.registerDate)
+        let datetransform = user.registerDate.split("/");
+        let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
+
+        const userdate = new Date(newdatetransform);
         if (userdate >= mydateFrom && userdate <= mydateTo) {
           this.newdateArray.push(user);
         }
@@ -334,161 +292,296 @@ export class UserManagerComponent implements OnInit {
   }
 
 
+  // search(termino?: string, id?: string) {
+
+  //   if (this.fromDate && this.toDate) {
+
+  //     if (termino) {
+  //       this.filteredArray = [];
+  //       termino = termino.toLowerCase();
+
+  //       const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+  //       const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
+  //       this.SeachingRange(fromdate, todate);
+
+  //       const aux = this.newdateArray;
+  //       this.newdateArray = [];
+
+  //       aux.forEach(user => {
+  //         if (user[id].toLowerCase().indexOf(termino) >= 0) {
+  //           this.newdateArray.push(user);
+  //           this.filteredArray.push(user);
+  //         }
+
+  //       });
+
+  //     } else {
+
+  //       const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+  //       const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
+  //       this.SeachingRange(fromdate, todate);
+
+  //     }
+
+
+  //   } else {
+
+  //     if (termino) {
+
+  //       if (this.filteredArray.length) {
+  //         console.log("si filtred array");
+
+
+  //         termino = termino.toLowerCase();
+
+  //         this.newdateArray = [];
+  //         console.log("buscando en filteredarray");
+
+  //         this.filteredArray.forEach(user => {
+
+  //           user[id] = user[id].toString();
+
+  //           if (user[id].toLowerCase().indexOf(termino) >= 0) {
+  //             this.newdateArray.push(user);
+
+  //           }
+
+  //         });
+  //       }
+  //       else {
+  //         console.log("no filtered array");
+
+
+  //         this.newdateArray = [];
+
+  //         this.usergetting.forEach(user => {
+
+  //           user[id] = user[id].toString();
+
+  //           if (user[id].toLowerCase().indexOf(termino) >= 0) {
+  //             this.newdateArray.push(user);
+  //             this.filteredArray.push(user);
+  //           }
+
+  //         });
+
+  //       }
+
+
+  //     } else {
+
+  //       this.table.value[id] = null;
+
+  //       let count = 0;
+  //       for (var i in this.table.value) {
+
+  //         if (this.table.value[i] == null || this.table.value[i] == "") {
+  //           count += 1;
+  //         }
+  //       }
+
+  //       if (count > 9 && !this.generalsearch) {
+
+  //         this.newdateArray = this.usergetting;
+  //         this.filteredArray = []
+  //         count = 0;
+
+  //       } else {
+
+  //         this.newdateArray = this.filteredArray;
+  //         count = 0;
+  //       }
+  //     }
+  //   }
+  // }
+
   search(termino?: string, id?: string) {
 
-    if (this.fromDate && this.toDate) {
+    // vars to filter table
+    let objsearch = {
 
-      if (termino) {
-        this.filteredArray = [];
-        termino = termino.toLowerCase();
+      name: "",
+      email: "",
+      phone: "",
+      birthday: "",
+      gender: "",
+      nameAllie: "",
+      nameHeadquarter: "",
+      usability: "",
+      purchaseAmount: ""
+    };
+    // let for date search
+    let objdate = {
+      fromdate: this.fromDate != null ?  [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-') : '',
+      todate: this.toDate != null ? [this.toDate.year, this.toDate.month, this.toDate.day].join('-') : ''
+    }
 
-        const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-        const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-        this.SeachingRange(fromdate, todate);
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
 
-        const aux = this.newdateArray;
-        this.newdateArray = [];
-
-        aux.forEach(user => {
-          if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user);
-            this.filteredArray.push(user);
-          }
-
-        });
-
-      } else {
-
-        const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-        const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-        this.SeachingRange(fromdate, todate);
-
-      }
-
-
-    } else {
-
-      if (termino) {
-
-        if (this.filteredArray.length) {
-
-          termino = termino.toLowerCase();
-
-          this.newdateArray = [];
-
-          this.filteredArray.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-
-            }
-
-          });
-        }
-        else {
-          console.log("no filtered array");
-
-
-          this.newdateArray = [];
-
-          this.usergetting.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-              this.filteredArray.push(user);
-            }
-
-          });
-
-        }
-
-
-      } else {
-
-        this.table.value[id] = null;
-
-        let count = 0;
-        for (var i in this.table.value) {
-
-          if (this.table.value[i] == null || this.table.value[i] == "") {
-            count += 1;
-          }
-        }
-
-        if (count > 9 && !this.generalsearch) {
-
-          this.newdateArray = this.usergetting;
-          this.filteredArray = []
-          count = 0;
-
-        } else {
-
-          this.newdateArray = this.filteredArray;
-          count = 0;
-        }
+        objsearch[i] = this.table.value[i];
       }
     }
-  }
 
+    // let for general searhch
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
 
-  searchbyterm(termino: string) {
+    // const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+    // const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
 
-    if (termino) {
-      termino = termino.toLowerCase();
-      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-      if (this.filteredArray.length) {
-
-        this.newdateArray = this.filteredArray.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-        });
-      } else {
-
-        this.newdateArray = this.usergetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-        });
-        this.filteredArray = this.usergetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-        });
-
-      }
-
-    } else {
-
-      let count = 0;
-      for (var i in this.table.value) {
-        if (this.table.value[i] == null || this.table.value[i] == "") {
-          count += 1;
+    this.newdateArray = this.usergetting.
+      filter(function (dish) {
+        if (dish["name"].toLowerCase().indexOf(this.name) >= 0) {
+          return dish;
         }
-      }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["email"].toLowerCase().indexOf(this.email) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["phone"].toLowerCase().indexOf(this.phone) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["birthday"].toLowerCase().indexOf(this.birthday) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["gender"].toLowerCase().indexOf(this.gender) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["nameAllie"].toLowerCase().indexOf(this.nameAllie) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["nameHeadquarter"].toLowerCase().indexOf(this.nameHeadquarter) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["usability"].toString().indexOf(this.usability) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["purchaseAmount"].toString().indexOf(this.purchaseAmount) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
 
-      if (count > 9 && !this.generalsearch) {
-
-          this.newdateArray = this.usergetting;
-          this.filteredArray = []
-          count = 0;
+      }).
+      filter(function (item) {
+        
+        if (this.fromdate != '' && this.todate != '' ){
+          console.log("existe fecha");
           
-        } else {
-
-          this.newdateArray = this.filteredArray;
-          count = 0;
+          const mydateFrom = new Date(this.fromdate);
+          const mydateTo = new Date(this.todate);
+  
+          let datetransform = item.registerDate.split("/");
+          let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
+          const userdate = new Date(newdatetransform);
+          if (userdate >= mydateFrom && userdate <= mydateTo) {
+            return item;
+          }else{
+            return null
+          }
+        }else{
+          return item;
         }
-    }
+      }, objdate)
 
   }
+
+
+  // searchbyterm(termino: string) {
+
+  //   termino = termino.toLowerCase();
+  //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+  //   if (this.newdateArray.length == this.usergetting.length) {
+
+  //     this.newdateArray = this.usergetting.filter(function (item) {
+  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //     });
+
+  //   } else {
+
+  //     let aux = this.newdateArray;
+  //     this.newdateArray = aux.filter(function (item) {
+  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //     });
+
+  //   }
+
+  //   // if (termino) {
+  //   //   termino = termino.toLowerCase();
+  //   //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+  //   //   if (this.filteredArray.length) {
+
+  //   //     this.newdateArray = this.filteredArray.filter(function (item) {
+  //   //       //We test each element of the object to see if one string matches the regexp.
+  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //   //     });
+  //   //   } else {
+
+  //   //     this.newdateArray = this.usergetting.filter(function (item) {
+  //   //       //We test each element of the object to see if one string matches the regexp.
+  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //   //     });
+  //   //     this.filteredArray = this.usergetting.filter(function (item) {
+  //   //       //We test each element of the object to see if one string matches the regexp.
+  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //   //     });
+
+  //   //   }
+
+  //   // } else {
+
+  //   //   let count = 0;
+  //   //   for (var i in this.table.value) {
+  //   //     if (this.table.value[i] == null || this.table.value[i] == "") {
+  //   //       count += 1;
+  //   //     }
+  //   //   }
+
+  //   //   if (count > 9 && !this.generalsearch) {
+
+  //   //     this.newdateArray = this.usergetting;
+  //   //     this.filteredArray = []
+  //   //     count = 0;
+
+  //   //   } else {
+
+  //   //     this.newdateArray = this.filteredArray;
+  //   //     count = 0;
+  //   //   }
+  //   // }
+
+  // }
 
   convertDate(date: Date): string {
     const d = new Date(date);

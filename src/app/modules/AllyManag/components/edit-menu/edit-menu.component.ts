@@ -16,7 +16,7 @@ export class EditMenuComponent implements OnInit {
 
   //variables for general search
   generalsearch: string;
-
+  terminoaux = '';
   //variables for the state
   selectedA: boolean = false;
   selectedD: boolean = false;
@@ -55,10 +55,6 @@ export class EditMenuComponent implements OnInit {
   modificationDate: Date;
   modification: Date;
 
-  /* filteredArray: {
-    reference: string, category: string, dishName: string, dishPhoto: string, price: string,
-    modificationDate: string, modificationTime: string, modificationNumber: string, state: string, selected: boolean
-  }[] = []; */
 
 
   constructor(private dishesService: DishesService) {
@@ -108,231 +104,135 @@ export class EditMenuComponent implements OnInit {
 
   //method for seaching specific values by name and code
   search(termino?: string, id?: string) {
-    console.log(termino,id);
-    
-    if (termino) {
 
-      if (this.filteredArray.length) {
+    let count = 0;
+    let termsearch = '';
+    let idsearch = '';
 
-        termino = termino.toLowerCase();
-        console.log(this.filteredArray);
-        let aux=this.filteredArray;
-        this.newdateArray = [];
-        this.filteredArray = []
-        aux.forEach(user => {
-
-          user[id] = user[id].toString();
-
-          if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user);
-            this.filteredArray.push(user)
-          }
-
-        });
-      }
-      else {
-        console.log("no filtered array");
-
-
-        this.newdateArray = [];
-
-        this.dishesgetting.forEach(user => {
-
-          user[id] = user[id].toString();
-
-          if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user);
-            this.filteredArray.push(user);
-          }
-
-        });
-
-      }
-
-
-    } else {
-
-      this.table.value[id] = null;
-
-      let count = 0;
-      for (var i in this.table.value) {
-        console.log(this.table.value[i],"dentro for table");
-        
-        if (this.table.value[i] == null || this.table.value[i] == "") {
-          count += 1;
-          
-        }
-        console.log(count);
-        
-      }
-
-      if (count > 1 && !this.generalsearch) {
-        console.log(count);
-        
-        this.newdateArray = this.dishesgetting;
-        this.filteredArray = []
-        count = 0;
-
-      } else {
-        console.log(count);
-        for (var i in this.table.value) {
-          this.filteredArray = []
-          count = 0;
-          if (this.table.value[i] == null && this.table.value[i] == "") {
-            this.search(this.table.value[i],this.table[i])
-            console.log(this.table.value[i],this.table[i]);
-             
-          }
-
-        }
-        /* this.newdateArray = this.filteredArray; */
-      
-        
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
+        count += 1;
+        termsearch = this.table.value[i];
+        idsearch = i;
       }
     }
-      
-    /* 
-    
-     } else {
 
-      if (termino) {
+    console.log("campos llenos: ", count);
 
-        if (this.filteredArray.length) {
+    if (count > 0 && count < 2 && !this.generalsearch) {
 
-          termino = termino.toLowerCase();
-
-          this.newdateArray = [];
-
-          this.filteredArray.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-
-            }
-
-          });
+      //  un campo lleno
+      this.newdateArray = this.dishesgetting.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
         }
-        else {
-          console.log("no filtered array");
+      });
 
+      this.filteredArray = this.newdateArray;
 
-          this.newdateArray = [];
+    } else if (count == 2 && this.generalsearch) {
 
-          this.usergetting.forEach(user => {
+      let aux = this.newdateArray;
 
-            user[id] = user[id].toString();
+      this.newdateArray = aux.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
+        }
+      });
 
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-              this.filteredArray.push(user);
+    }
+    else {
 
-            }
+      if (this.generalsearch) {
 
-          });
+      }
+
+      if (count == 0) {
+        // campos vacios
+        // existe general search?
+        this.newdateArray = this.dishesgetting;
+
+        if (this.generalsearch) {
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
 
         }
-
-
       } else {
 
-        this.table.value[id] = null;
+        // campos llenos
+        // existe general search?
 
-        let count = 0;
-        for (var i in this.table.value) {
-
-          if (this.table.value[i] == null || this.table.value[i] == "") {
-            count += 1;
+        this.newdateArray = this.filteredArray.filter(function (dish: Dishes) {
+          //We test each element of the object to see if one string matches the regexp.
+          if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+            return dish;
           }
+        });
+
+        if (this.generalsearch) {
+
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
         }
-
-        if (count > 9 && !this.generalsearch) {
-
-          this.newdateArray = this.usergetting;
-          this.filteredArray = []
-          count = 0;
-
-        } else {
-
-          this.newdateArray = this.filteredArray;
-          count = 0;
-        }
-      }*/
+      }
+    }
   }
-  /* if (termino) {
-    if (this.filteredArray.length) {
-      termino = termino.toLowerCase();
-      this.newdateArray = [];
-      this.filteredArray.forEach(menu => {
-        menu[id] = menu[id].toString();
-        if (menu[id].toLowerCase().indexOf(termino) >= 0) {
-          this.newdateArray.push(menu);
-        }
-      });
-    } else {
-      console.log("no results");
-
-      this.newdateArray = [];
-      this.dishesgetting.forEach(dish => {
-        dish[id] = dish[id].toString();
-        if (dish[id].toLowerCase().indexOf(termino) >= 0) {
-          this.newdateArray.push(dish);
-          this.filteredArray.push(dish);
-        }
-      });
-    } */
-
-  /* this.newdateArray = this.dishesgetting;
-  this.filteredArray = []; */
 
 
   //method for general searching 
   searchbyterm(termino: string) {
-    if (termino) {
-      termino = termino.toLowerCase();
-      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
 
-      if (this.filteredArray.length) {
-        this.newdateArray = this.filteredArray.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
-            myRegex.test(item.numberOfModifications.toString()))
-        });
+    termino = termino.toLowerCase();
+    var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+    // campos de la tabla
+    let count = 0;
+    let termsearch = '';
+    let idsearch = '';
+
+    for (var i in this.table.value) {
+      // search empty fields
+      if (this.table.value[i] == null || this.table.value[i] == "") {
+        // campo vacio
+        count += 1;
       } else {
-        this.newdateArray = this.dishesgetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
-            myRegex.test(item.numberOfModifications.toString()))
-        });
-        this.filteredArray = this.dishesgetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
-            myRegex.test(item.numberOfModifications.toString()))
-        });
-      }
-    } else {
-
-      let count = 0;
-      for (var i in this.table.value) {
-        if (this.table.value[i] == null || this.table.value[i] == "") {
-          count += 1;
-        }
-      }
-
-      if (count > 1 && !this.generalsearch) {
-
-        this.newdateArray = this.dishesgetting;
-        this.filteredArray = []
-        count = 0;
-
-      } else {
-
-        this.newdateArray = this.filteredArray;
-        count = 0;
+        termsearch = this.table.value[i];
+        idsearch = i;
       }
     }
+
+    console.log("campos vacios: ", count);
+
+
+    if (count > 1) {
+      // campos vacios
+
+      this.newdateArray = this.dishesgetting.filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+          myRegex.test(item.numberOfModifications.toString()))
+      });
+      this.filteredArray = this.newdateArray;
+
+    } else {
+      // un campo lleno
+
+      this.newdateArray = this.filteredArray.filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+          myRegex.test(item.numberOfModifications.toString()))
+      });
+      // this.filteredArray = this.newdateArray;
+
+    }
+
+    
   }
+
 
   convertDate(date: Date): string {
     const d = new Date(date);
@@ -345,6 +245,7 @@ export class EditMenuComponent implements OnInit {
   State(value: string, id: string) {
     console.log(value, id);
   }
+
 
   //method to convert modification date
   tick(): void {
