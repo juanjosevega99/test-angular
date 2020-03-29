@@ -12,17 +12,45 @@
                 aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- to do -->
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table"> 
+            
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03"> 
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ">
+                    <li class="nav-item">
+                        <!-- <a class="nav-link">Buscar por código</a> -->
+                        <div class="mx-3">
+                            <input class="form-control " type="text" placeholder="Buscar por código" (keyup)="searchbyterm(code.value)" #code >
 
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <!-- <a class="nav-link">Buscar por tipo de comida</a> -->
+                        <div class="mx-3">
+                            <input class="form-control " type="text" placeholder="Buscar por tipo de comida" (keyup)="searchbyterm( mealType.value)" #mealType>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <!-- <a class="nav-link">Buscar establecimiento</a> -->
+                        <div class="input-group-append mx-3">
+                            <input class="form-control" type="text" placeholder="Buscar establecimiento" (keyup)="searchbyterm( nameEstablishment.value)" #nameEstablishment>
+                            <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <!-- <a class="nav-link" >Buscar establecimiento</a> -->
+                        <!-- <input class="form-control" type="text" (keyup)="searchbyterm( mealType.value)" #mealType> -->
+                        <div class="mx-3">
+                            <a [routerLink]="['/main','createAlly']" class="form-control nav-link ">Crear aliado </a>
+                        </div>
+                        <!-- nav-link mt-4 btn-CreateAlly -->
+                    </li>
+                </ul>
             </div>
         </nav>
     </div>
 
-    <div class="row styleContainer ">
+    <!-- <div class="row styleContainer ">
         <div class="flex-grow-1">
             <a [routerLink]="['/main']">
-                <!-- <i class="fas fa-chevron-left "></i> -->
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -38,11 +66,9 @@
             </form>
         </div>
         <div>
-            <a [routerLink]="['/main','createAlly']" class="btn btn-outline-primary">
-                <p>Crear aliado</p>
-            </a>
+            <a [routerLink]="['/main','createAlly']" class="btn btn-outline-primary">Crear aliado </a>
         </div>
-    </div>
+    </div> -->
     <div class="row styleTable table-responsive mt-4">
 
         <table class="table table-bordered table-striped">
