@@ -59,6 +59,7 @@ import { UploadImagesService } from "./services/providers/uploadImages.service";
 import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
+import { OrderComponent } from './principal/order/order.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { PrincipalOrdersComponent } from './principal/principal-orders/principal
     CreateProfileComponent,
     PqrListComponent,
     PrincipalOrdersComponent,
+    OrderComponent,
 
   ],
   imports: [

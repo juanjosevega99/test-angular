@@ -1,8 +1,9 @@
 @import '../../modules/PqrManag/components/pqr-manager/pqr-manager.component.scss';
 
 .menu li {
-    font-size: .7rem;
+    font-size: .9rem;
     padding: .1rem;
+    align-items: center;
 }
 
 .menu li a {
@@ -69,5 +70,10 @@
     padding: .1rem;
     margin: .3rem;
     font-style: unset;
+}
+
+.chat{
+    flex-flow: column;
+    height: 30rem;
 }
 
