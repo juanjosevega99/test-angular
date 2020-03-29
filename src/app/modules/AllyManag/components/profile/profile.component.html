@@ -2,7 +2,7 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
-            <a [routerLink]='["/headquarts"]' class="d-flex">
+            <a [routerLink]="['/main','headquarts']" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -14,8 +14,8 @@
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                 <li class="nav-item mr-2">
                                     <input placeholder="Buscar por cédula ..." class="form-control" type="text"
-                                        (keyup)="search(reference.value, reference.id)" #reference id="reference"
-                                        formControlName="reference">
+                                        (keyup)="search(identification.value, identification.id)" #identification id="identification"
+                                        formControlName="identification">
                                 </li>
                                 <li class="nav-item">
                                     <input placeholder="Buscar por nombre ..." class="form-control" type="text"

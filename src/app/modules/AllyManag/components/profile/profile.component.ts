@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
   constructor(private profilesService: ProfilesService) {
 
     this.table = new FormGroup({
-      "reference": new FormControl(),
+      "identification": new FormControl(),
       "name": new FormControl(),
     })
 
@@ -121,7 +121,81 @@ export class ProfileComponent implements OnInit {
     this.swallUpdateState(idProfile, newstate)
   }
 
+  //method for a specific search
+  search(termino?: string, id?: string) {
+    let count = 0;
+    let termsearch = '';
+    let idsearch = '';
 
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
+        count += 1;
+        termsearch = this.table.value[i];
+        idsearch = i;
+      }
+    }
+
+    console.log("campos llenos: ", count);
+
+    if (count > 0 && count < 2 && !this.generalsearch) {
+
+      //  un campo lleno
+      this.newArray = this.profilesgetting.filter(function (profile: ProfileList) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (profile[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return profile;
+        }
+      });
+
+      this.filteredArray = this.newArray;
+
+    } else if (count == 2 && this.generalsearch) {
+
+      let aux = this.newArray;
+
+      this.newArray = aux.filter(function (profile: ProfileList) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (profile[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return profile;
+        }
+      });
+
+    }
+    else {
+
+      if (this.generalsearch) {
+      }
+      if (count == 0) {
+        // campos vacios
+        // existe general search?
+        this.newArray = this.profilesgetting;
+
+        if (this.generalsearch) {
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+        }
+      } else {
+
+        // campos llenos
+        // existe general search?
+
+        this.newArray = this.filteredArray.filter(function (profile: ProfileList) {
+          //We test each element of the object to see if one string matches the regexp.
+          if (profile[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+            return profile;
+          }
+        });
+
+        if (this.generalsearch) {
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+        }
+      }
+    }
+  }
+
+  //method for a general search.
   searchbyterm(termino: string) {
     if (termino) {
       termino = termino.toLowerCase();
@@ -167,12 +241,6 @@ export class ProfileComponent implements OnInit {
       }
     }
   }
-
-
-  search(termino?: string, id?: string) {
-
-  }
-
 
   //sweets alerts
   swallUpdateState(idProfile, newState) {
