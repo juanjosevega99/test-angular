@@ -3,6 +3,7 @@ import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { DishesService } from 'src/app/services/dishes.service';
 import { Dishes } from 'src/app/models/Dishes';
 import { DishList } from 'src/app/models/DishList';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-menu',
@@ -18,8 +19,8 @@ export class EditMenuComponent implements OnInit {
   generalsearch: string;
   terminoaux = '';
   //variables for the state
-  selectedA: boolean = false;
-  selectedD: boolean = false;
+  selectedA: [] =[]
+  selectedD: []=[]
 
   /*  menu = [
      {
@@ -55,6 +56,11 @@ export class EditMenuComponent implements OnInit {
   modificationDate: Date;
   modification: Date;
 
+  /* filteredArray: {
+    reference: string, category: string, dishName: string, dishPhoto: string, price: string,
+    modificationDate: string, modificationTime: string, modificationNumber: string, state: string, selected: boolean
+  }[] = []; */
+  state: any[] = [];
 
 
   constructor(private dishesService: DishesService) {
@@ -69,6 +75,7 @@ export class EditMenuComponent implements OnInit {
       res.forEach((dish: Dishes) => {
         if (res.length > 0) {
           const obj: DishList = {};
+          obj.id = dish.id;
           obj.reference = dish.reference;
           obj.nameDishesCategories = dish.nameDishesCategories;
           obj.name = dish.name;
@@ -83,13 +90,16 @@ export class EditMenuComponent implements OnInit {
         }
       })
     })
+
+    this.state = [{ name: 'active', selected: false}, { name: 'inactive', selected: false}]
+
   }
 
 
   ngOnInit() {
   }
 
-  //method to convert the modification date
+  //methods to convert the modification date
   convertDateday(date: Date): string {
     const d = new Date(date);
     const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
@@ -100,6 +110,34 @@ export class EditMenuComponent implements OnInit {
     const d = new Date(date);
     const n = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     return n;
+  }
+
+  //method for updating the state to active
+  changeStateA(idDish) {
+    let newstate: object ={
+      state : [{
+        state: "active",
+        check: true
+      }, {
+        state: "inactive",
+        check: false
+      }]
+    } 
+    this.swallUpdateState(idDish, newstate)
+  }
+
+  //method for updating the state to inactive
+  changeStateI(idDish) {
+    let newstate: object ={
+      state : [{
+        state: "active",
+        check: false
+      }, {
+        state: "inactive",
+        check: true
+      }]
+    }
+    this.swallUpdateState(idDish, newstate) 
   }
 
   //method for seaching specific values by name and code
@@ -243,10 +281,35 @@ export class EditMenuComponent implements OnInit {
 
 
   //method for the state
-  State(value: string, id: string) {
-    console.log(value, id);
+  State(value: string, event) {
+    const check = event.target.checked;
+    console.log(value, check);
+    this.dishesService.getDishes().subscribe(res => {
+      res.forEach((dish: Dishes) => {
+        let state: any=[]
+        state = dish.state
+        console.log(state);
+      })
+    
+    
+    })
   }
 
+/*   seeState(value:string){
+    this.dishesService.getDishes().subscribe(res => {
+      res.forEach((dish: Dishes) => {
+        let state: any=[]
+        state = dish.state
+        if(value ==state.value){
+          let check: boolean = false
+          check = state.check
+        }
+      })
+    
+    
+    })
+ 
+  } */
 
   //method to convert modification date
   tick(): void {
@@ -256,6 +319,31 @@ export class EditMenuComponent implements OnInit {
       this.modification = new Date(this.modificationDate)
       this.time = this.modification.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       this.date = this.modification.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    })
+  }
+
+  //sweets alerts
+  swallUpdateState(idDish, newState) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas actualizar el estado de este perfil!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, actualizar!'
+    }).then((result) => {
+      if (result.value) {
+        this.dishesService.putDishe(idDish,newState).subscribe(res=>{
+          this.dishesService.getDishes().subscribe(dish=>{
+            this.dishesgetting= dish
+          })
+        })
+        Swal.fire(
+          'Actualizado!',
+          'success',
+        )
+      }
     })
   }
 }

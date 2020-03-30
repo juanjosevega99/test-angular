@@ -15,9 +15,8 @@ export class DishesService {
     return this.httpclient.post<Dishes>(environment.UrlBase + "dishes/", dishe);
   }
 
-  putDishe(dishe): Observable<Dishes> {
-    return this.httpclient.put<Dishes>(
-      environment.UrlBase + "dishes" + dishe.id,
+  putDishe(id,dishe) {
+    return this.httpclient.put(environment.UrlBase + "dishes/" + id,
       dishe
     );
   }

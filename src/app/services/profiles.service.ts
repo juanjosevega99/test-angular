@@ -18,9 +18,8 @@ export class ProfilesService {
     );
   }
 
-  putProfile(profile): Observable<Profiles> {
-    return this.httpclient.put<Profiles>(
-      environment.UrlBase + "profiles" + profile.id,
+  putProfile(id,profile) {
+    return this.httpclient.put(environment.UrlBase + "profiles/" + id,
       profile
     );
   }

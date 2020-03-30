@@ -2,7 +2,7 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
-            <a [routerLink]='["/headquarts"]' class="d-flex">
+            <a [routerLink]="['/main','headquarts']" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -14,8 +14,8 @@
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                 <li class="nav-item mr-2">
                                     <input placeholder="Buscar por cédula ..." class="form-control" type="text"
-                                        (keyup)="search(reference.value, reference.id)" #reference id="reference"
-                                        formControlName="reference">
+                                        (keyup)="search(identification.value, identification.id)" #identification id="identification"
+                                        formControlName="identification">
                                 </li>
                                 <li class="nav-item">
                                     <input placeholder="Buscar por nombre ..." class="form-control" type="text"
@@ -60,7 +60,7 @@
                     <th class="text-center">Fecha de ingreso</th>
                     <th class="text-center">Fecha de modificación</th>
                     <th class="text-center">Número de modificaciones</th>
-                    <th class="text-center">Estado</th>
+                    <th class="text-center" colspan="2" >Estado</th>
                     <th class="text-center"> </th>
                 </tr>
             </thead>
@@ -74,15 +74,20 @@
                     <td>{{prof.entryDate}}</td>
                     <td>{{prof.modificationDate}}</td>
                     <td>{{prof.numberOfModifications}}</td>
-                    <td>
-                        <div class="radio radio-info radio-inline">
-                            <input type="radio" id="state" #radio1 value="active" name="radioInline" >
-                            <input type="radio" id="state" #radio2 value="inactive" name="radioInline">
-                            <br>
-                            <label > {{prof.state.value}} </label>
-                        </div>
-                      
-                    </td>
+                    <td><div class="radio radio-success m-2 form-check-inline">
+                        <input [checked]="prof.state[0].check" value="{{prof.id}}" type="radio" name={{i}} id="state" #active
+                        (click)="changeStateA(active.value)" >
+                        <label  style="font-size: 15px;">
+                            Activo
+                        </label>
+                    </div></td>
+                    <td><div class="radio radio-danger m-2 form-check-inline">
+                        <input [checked]="prof.state[1].check"  value="{{prof.id}}" type="radio" name={{i}} id="state" #inactive
+                        (click)="changeStateI(inactive.value)">
+                        <label style="font-size: 15px;" >
+                            Inactivo
+                        </label>
+                    </div></td>
                     <td>
                         <a href="#" class="btn"> <i class="far fa-edit"></i> </a>
                     </td>
