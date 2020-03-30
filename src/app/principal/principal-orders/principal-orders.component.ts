@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./principal-orders.component.scss']
 })
 export class PrincipalOrdersComponent implements OnInit {
+  isCollapsed = false;
 
   Hours = []
   Tables = []

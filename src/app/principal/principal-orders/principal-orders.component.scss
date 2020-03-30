@@ -1,4 +1,7 @@
 @import '../../modules/PqrManag/components/pqr-manager/pqr-manager.component.scss';
+.menu{
+    border: 1px solid #9f9f9f36;
+}
 
 .menu li {
     font-size: .9rem;
@@ -27,6 +30,7 @@
 }
 .filerControl{
     padding-top: 6rem;
+    border: 1px solid #9f9f9f36;
 }
 
 .calendarTables{
@@ -36,7 +40,7 @@
     // flex-wrap: wrap;
     // width: 90%;
     // height: 20rem;
-    background-color:#f6f6f6;
+    background-color:#fff;
     border-radius: .5rem;
     color: #9f9f9f;
     padding-top: 1rem;
@@ -45,16 +49,17 @@
 }
 
 .HoursTable{
-    width: 10rem;
+    // width: 90%;
     overflow: auto;
 
 }
 
 .HoursTable div{
+    width: 90%;
+    height: 7.5rem; 
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    height: 6.5rem; 
     padding-bottom: .5rem;
     overflow: auto;
     margin-bottom: 1rem;
@@ -62,18 +67,90 @@
     border-radius: .3rem;
 }
 
+
+.chat{
+    flex-flow: column;
+    height: 31rem;
+    background-color: #fff;
+}
+
 .btn-outline-success{
-    width: 2.6rem;
-    height: 2.5rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: .3rem;
     font-size: .8rem;
     padding: .1rem;
     margin: .3rem;
     font-style: unset;
+    border: 1px solid #ac0f17;
+    color: #ac0f17;
+}
+.order-list {
+    background-color: #e9e7e7; 
+    width: 65% !important;
 }
 
-.chat{
-    flex-flow: column;
-    height: 30rem;
+.order-table{
+    background-color: #e9e7e7; 
+    width: 35% !important; 
+    padding-left: 0;
+}
+
+
+.button-order{
+    width: 40%;
+    background-color: #001f7f;
+    border-radius: .5rem;
+    color: #fff;
+    padding: 0.3rem;
+    font-weight: bold;
+    margin-top: .4rem;
+}
+
+// ================================
+// =========medias querys=========
+
+@media ( min-width: 1520px ){
+    .menu li {
+        font-size: 1.1rem;
+        padding: .3rem;
+    }
+    .btn-outline-success{
+        width: 4rem;
+        height: 4rem;
+        border-radius: .3rem;
+        font-size: 1rem;
+    }
+
+    .HoursTable div{
+
+        height: 9.5rem; 
+    }
+
+}
+
+@media ( max-width: 414px ){
+    .menu ul {
+        flex-wrap: wrap;
+    }
+
+    .order-list {
+        width: 100% !important;
+    }
+    
+    .order-table{
+        width: 100% !important;
+    }
+
+    .compenetsstyle{
+        padding: 0rem;    
+    }
+
+    .chat{
+        padding: .1rem;
+    }
+    .calendarTables p{
+        font-size: .7rem;
+    }
 }
 

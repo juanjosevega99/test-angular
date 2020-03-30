@@ -14,4 +14,7 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
   }
 
+  showDetail(){
+    console.log("clic en item");
+  }
 }
