@@ -1,101 +1,76 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
 
-    <div class="filerControl px-1">
-
+    <div class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
             <a [routerLink]='["/main"]' class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03"> 
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ">
-                    <li class="nav-item">
-                        <!-- <a class="nav-link">Buscar por código</a> -->
-                        <div class="mx-3">
-                            <input class="form-control " type="text" placeholder="Buscar por código" (keyup)="searchbyterm(code.value)" #code >
+        <section class="col-11">
+            <div class="filerControl px-1">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
 
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <!-- <a class="nav-link">Buscar por tipo de comida</a> -->
-                        <div class="mx-3">
-                            <input class="form-control " type="text" placeholder="Buscar por tipo de comida" (keyup)="searchbyterm( mealType.value)" #mealType>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <!-- <a class="nav-link">Buscar establecimiento</a> -->
-                        <div class="input-group-append mx-3">
-                            <input class="form-control" type="text" placeholder="Buscar establecimiento" (keyup)="searchbyterm( nameEstablishment.value)" #nameEstablishment>
-                            <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <!-- <a class="nav-link" >Buscar establecimiento</a> -->
-                        <!-- <input class="form-control" type="text" (keyup)="searchbyterm( mealType.value)" #mealType> -->
-                        <div class="mx-3">
-                            <a [routerLink]="['/main','createAlly']" class="form-control nav-link ">Crear aliado </a>
-                        </div>
-                        <!-- nav-link mt-4 btn-CreateAlly -->
-                    </li>
-                </ul>
+                        <ul class=" navbar-nav mr-auto mt-2 mt-lg-0 ">
+                            <li class="nav-item mx-5">
+                                <input class="form-control " type="text" placeholder="Buscar por código ..."
+                                    (keyup)="search(code.value, code.id)" #code id="code"
+                                    formControlName="code" style="width: 100%;">
+                            </li>
+                            <li class="nav-item mx-5">
+                                <input class="form-control container-fluid" type="text" placeholder="Buscar por tipo de comida ..."
+                                    (keyup)="search( mealType.value, mealType.id)" #mealType id="nameMealsCategories"
+                                    formControlName="mealType"  style="width: 100%;">
+                            </li>
+
+                            <li class="nav-item mx-5  ">
+                                <div class="input-group-append">
+                                    <input class="form-control text-center" type="text" 
+                                        placeholder="Buscar establecimiento ..."
+                                        (keyup)="searchbyterm( general.value)" #general 
+                                        id="general" formControlName="generalsearch">
+                                    <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
+                                </div>
+                            </li>
+                            
+                            <li class="nav-item mx-5">
+                                    <button [routerLink]="['/main','createAlly']"
+                                    class="btn btn-outline-primary ml-2">Crear aliado</button>
+                                </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </section>
     </div>
 
-    <!-- <div class="row styleContainer ">
-        <div class="flex-grow-1">
-            <a [routerLink]="['/main']">
-                <img src="assets/icons/Back.png" class="tifi-icon-back">
-            </a>
-        </div>
-        <div class="flex-grow-1">
-            <form class="form-inline align-content-start">
-                <div class="input-group">
-                    <div class="input-group-append">
-                        <input class="form-control sizeInput" id="myInput" type="text" placeholder="Buscar"
-                            aria-label="Search" (keyup)="searchbyterm(termino.value)" #termino>
-                        <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div>
-            <a [routerLink]="['/main','createAlly']" class="btn btn-outline-primary">Crear aliado </a>
-        </div>
-    </div> -->
-    <div class="row styleTable table-responsive mt-4">
-
-        <table class="table table-bordered table-striped">
+    <div class="tableFixHead mt-5">
+        <table>
             <thead>
                 <tr>
                     <th class="text-center">Codigo</th>
-                    <th> logo </th>
-                    <th>Nombre del establecimiento</th>
-                    <th>Número de sedes</th>
-                    <th>Servicios</th>
-                    <th>Tipo de aliado</th>
-                    <th>Tipo de comida</th>
-                    <th>Horario</th>
-                    <th> </th>
-
+                    <th class="text-center">Logo </th>
+                    <th class="text-center">Nombre del establecimiento</th>
+                    <th class="text-center">Número de sedes</th>
+                    <th class="text-center">Servicios</th>
+                    <th class="text-center">Tipo de aliado</th>
+                    <th class="text-center">Tipo de comida</th>
+                    <th class="text-center">Horario</th>
+                    <th class="text-center"> </th>
                 </tr>
-
             </thead>
-
-            <tbody>
-                <tr *ngFor="let ally of newdateArray; ">
+            <tbody class="mt-5" >
+                <tr *ngFor="let ally of newdateArray; " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
                     <td> <a [routerLink]="['/main', 'headquarts']"> {{ally.nameEstablishment}} </a></td>
                     <td> {{ally.numberHeadquarters}} </td>
                     <td>
-
                         <img *ngIf="ally.services ? ally.services[0]? true :false  : ''" [src]="ally.url1" alt=""
                             class="iconService mx-2">
                         <img *ngIf="ally.services ? ally.services[1]? true :false  : ''" [src]="ally.url2" alt=""

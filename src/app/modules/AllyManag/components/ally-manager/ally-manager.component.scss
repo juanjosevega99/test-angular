@@ -1,44 +1,5 @@
-// @import "../../../../../styles.scss" ;
 @import "../../../UserManag/components/user-manager/user-manager.component.scss";
 
-// //new styles
-// .filerControl{
-//   display: flex;
-//   background-color: #d2d2d2;
-//   width: 100%;
-//   margin-top: 0;
-//   border: 1px solid #d2d2d2;
-//   font-size: .7rem;
-//   padding-top: 5rem;
-//   padding-bottom: 1rem;
-//   border-radius: 1rem;
-
-// }
-// .navbar-expand-lg .navbar-nav .nav-link {
-//   padding-right: .5rem;
-//   padding-left: .5rem;
-// }
-
-// .navbar-light .navbar-nav .nav-link {
-
-//   color: #4e4f4f;
-
-// }
-
-// .navbar{
-//   padding: .5rem .1rem;
-//   border-radius: .5rem;
- 
-// }
-
-
-//syles of input search
-.sizeInput {
-  width: 25rem;
-}
-.backgroundIcon {
-  background-color: white;
-}
 // styles buttons primary
 .btn-outline-primary {
   color: rgba(0, 0, 0, 0.87);
@@ -57,19 +18,6 @@
   border-color: #5a4183;
 }
 
-//Style of section searach
-.styleContainer {
-  display: flex;
-  flex-direction: row;
-}
-//Styles of table
-.styleTable {
-  display: flex;
-}
-//Styles of size icons
-.icon-size {
-  font-size: 2rem;
-}
 .sizeLogo {
   width: 120px;
   height: 100px;
