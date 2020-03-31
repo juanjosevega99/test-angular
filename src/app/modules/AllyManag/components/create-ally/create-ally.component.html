@@ -157,8 +157,7 @@
 
                                                         <button *ngIf="!otherEstablishmentInput"
                                                                 (click)=" handleBoxEstablishment()"
-                                                                class="btn1 btn btn-outline-primary"
-                                                                tooltip="Tooltip on left" placement="top">
+                                                                class="btn1 btn btn-outline-primary">
                                                                 Otro
                                                         </button>
                                                         <button *ngIf="!otherEstablishmentInput"
@@ -376,11 +375,13 @@
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
                                                                         <button
-                                                                                class=" container  btn btn-outline-primary ">
+                                                                                class=" container  btn btn-outline-primary"
+                                                                                disabled="true">
                                                                                 Adjuntar archivos {{contImage}}
                                                                         </button>
                                                                         <input type="file" name="photo"
-                                                                                (change)="onImagesSelected($event)" />
+                                                                                (change)="onImagesSelected($event)" 
+                                                                                disabled="false"/>
                                                                 </div>
 
                                                         </div>
