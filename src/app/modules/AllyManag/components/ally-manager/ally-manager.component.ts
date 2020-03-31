@@ -6,6 +6,7 @@ import { AttentionScheduleService } from "../../../../services/attention-schedul
 import { HeadquartersService } from '../../../../services/headquarters.service';
 import { Allies } from '../../../../models/Allies';
 import { Router } from '@angular/router';
+import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
 @Component({
   selector: 'app-ally-manager',
   templateUrl: './ally-manager.component.html',
@@ -32,8 +33,11 @@ export class AllyManagerComponent implements OnInit {
     private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
     private _headquartService: HeadquartersService,
-    private _router:Router){
+    private _router:Router,
+    private _saveLocalStorageService : SaveLocalStorageService){
     
+    //inicialization local storage IdAlly
+      this._saveLocalStorageService.saveLocalStorageIdAlly;
     // inicialization date
     this.today = new Date()
     this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
@@ -261,8 +265,10 @@ export class AllyManagerComponent implements OnInit {
     }
   }
   //method edit ally
-  editAlly(idAlly:string){
-    this._router.navigate( ['/main','editAlly',idAlly] )
+  editAlly(idAlly:string, i){
+    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+    this._router.navigate( ['/main','editAlly',i] )
+
   }
 
 }
