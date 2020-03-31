@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { Guid } from "guid-typescript";
 import { ProfileList } from 'src/app/models/ProfileList';
+import { Profiles } from 'src/app/models/Profiles';
 
 @Component({
   selector: 'app-create-profile',
@@ -17,26 +18,6 @@ import { ProfileList } from 'src/app/models/ProfileList';
 })
 export class CreateProfileComponent implements OnInit {
 
-  /*  profilegetting: Profiles = {
-     state: [],
-     entryDate:null,
-     modificationDate:null,
-     numberOfModifications: 0,
-     idAllies:null,
-     nameAllie: "kfc",
-     idHeadquarter:null,
-     nameHeadquarter: null,
-     idCharge:null,
-     nameCharge: null,
-     userCode: null,
-     permis: null,
-     identification: null,
-     name: null,
-     email: null,
-     photo: null
-   };
- 
-   preProfile = this.profilegetting */
 
   preProfile: Object = {
     state: [],
@@ -76,10 +57,9 @@ export class CreateProfileComponent implements OnInit {
     photo: null
   }
 
-
-
   //variables for receiving the profile that will be edited
-  identificatorbyRoot:string;
+  identificatorbyRoot: any;
+  buttonPut : boolean;
 
   //variables for categories
   arrayCategorySelect: boolean = true;
@@ -93,9 +73,13 @@ export class CreateProfileComponent implements OnInit {
   State: any[] = [];
 
   //variables for tick
-  date: String;
-  times: String;
+  dateEntry: String;
+  timesEntry: String;
   today: Date;
+
+  newDate: Date;
+  dateModication: String;
+  timesModification: String;
 
   //variable for the permission
   permiss: string[] = [];
@@ -111,6 +95,7 @@ export class CreateProfileComponent implements OnInit {
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeProfiles: ProfilesService, private profiles: ProfilesService, private storage: AngularFireStorage, private profileCategory: ProfilesCategoriesService) {
 
     this.loading = true;
+    this.buttonPut = true;
 
     this.State = [{
       state: "active",
@@ -131,6 +116,7 @@ export class CreateProfileComponent implements OnInit {
         this.getProfile(identificator)
       } else if (identificator == -1) {
         this.loading = false
+        this.buttonPut = false
       }
       this.identificatorbyRoot = identificator
     })
@@ -145,28 +131,40 @@ export class CreateProfileComponent implements OnInit {
     setInterval(() => this.tick(), 1000);
   }
 
+  //Method to see the id of the category of profile selected
+  seeId(selected: any) {
+    this.Categories.forEach((element: any) => {
+      if (selected == element.name) {
+        this.preProfile['idCharge'] = element.id
+      }
+    })
+  }
+
   //charge a profile with the id
   getProfile(id: string) {
     this.loading;
     this.chargeProfiles.getProfiles().subscribe(profiles => {
-      let profile: ProfileList = {}
+      let profile: Profiles = {}
+      let obj: Profiles = {}
       profile = profiles[id]
-      this.editProfile = profile
-      this.preProfile = this.editProfile
+      this.editProfile = profile;
+      this.preProfile = this.editProfile;
       this.loading = false;
     })
   }
 
   //method for delete a profile
-  deleteProfile(){
-    /* this.chargeProfiles.getProfiles().subscribe(profiles => {
-      let profile: ProfileList = {}
-      profile = profiles[id]
-      let realId = profile.id
-      this.swallDelete(realId)
-    }) */
-    console.log(this.identificatorbyRoot);
-    
+  deleteProfile() {
+    if (this.identificatorbyRoot == -1) {
+      Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
+    } else {
+      this.chargeProfiles.getProfiles().subscribe(profiles => {
+        let profile: ProfileList = {}
+        profile = profiles[this.identificatorbyRoot]
+        let realId = profile.id
+        this.swallDelete(realId)
+      })
+    }
   }
 
   //Method for showing new view in the categories field
@@ -209,17 +207,9 @@ export class CreateProfileComponent implements OnInit {
         fullstate = [
           { state: valueA, check: checkedA },
           { state: valueB, check: checkedB }]
-
         this.preProfile['state'] = fullstate
-
       }
     })
-
-    /* fullstate = [
-      { state: valueA, check: checkedA },
-      { state: valueB, check: checkedB }]
-
-    this.preProfile['state'] = fullstate */
   }
 
   //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
@@ -242,12 +232,31 @@ export class CreateProfileComponent implements OnInit {
   }
 
 
-  //Metod for the admission date
+  //Metod for the admission and modification date
   tick(): void {
-    this.today = new Date();
-    this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-    this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
-    /* this.preDish['creationDate'] = this.today */
+    if (this.identificatorbyRoot == -1) {
+      this.today = new Date();
+      this.timesEntry = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateEntry = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+      this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    }
+    else {
+      this.today = new Date();
+      this.newDate = this.editProfile['entryDate']
+      const d = new Date(this.newDate);
+      this.timesEntry = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateEntry = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+      this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+
+    }
+  }
+
+  convertDate(date: Date): string {
+    const d = new Date(date);
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+    return n;
   }
 
   //Method to generate the user code
@@ -266,13 +275,18 @@ export class CreateProfileComponent implements OnInit {
       };
       reader.readAsDataURL(input.files[0]);
     }
-
     return this.fileImagedish = input.files[0]
   }
 
   //save new profile
   saveProfile() {
     this.swallSave()
+  }
+
+  //putProfile
+  putProfile(){
+  console.log("holi");
+  
   }
 
   //sweet alerts
@@ -381,7 +395,7 @@ export class CreateProfileComponent implements OnInit {
     })
   }
 
-  swallDelete(realId){
+  swallDelete(realId) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar este perfil!",
@@ -393,7 +407,7 @@ export class CreateProfileComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.chargeProfiles.deleteProfile(realId).subscribe()
-      
+
         Swal.fire(
           'Eliminado!',
           'success',
