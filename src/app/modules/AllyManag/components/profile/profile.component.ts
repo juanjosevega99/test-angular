@@ -21,39 +21,6 @@ export class ProfileComponent implements OnInit {
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
 
-  //variables for sections
-
-  /*  selectedA : boolean = false;
-   selectedD : boolean = false;
-   
- 
-   Profiles = [
-     {
-       nameCharge: 'Cajero', idCharge: '1015452638', name: 'Andrés Mauricio Reyes', photo: '../../../../../assets/img/kfc-logo.png', nameHeadquarter: 'KFC-Galerías',
-       entryDate: null, modificationDate: null, numberOfModifications: 2, state: false
-     },
-     {
-       nameCharge: 'Admin. PDV', idCharge: '10015416', name: 'Yesid Alfonso Pintor', photo: '../../../../../assets/img/kfc-logo.png', nameHeadquarter: 'KFC-Galerías',
-       entryDate: null, modificationDate: null, numberOfModifications: 1, state: false
-     },
-     {
-       nameCharge: 'Gerente', idCharge: '10015427', name: 'Juan Sebastian Hoyos', photo: '../../../../../assets/img/kfc-logo.png', nameHeadquarter: 'KFC-Galerías',
-       entryDate: null, modificationDate: null, numberOfModifications: 1, state: false
-     },
-   ] */
-  /* 
-    newArray: {
-      nameCharge: string, idCharge: string, name: string, photo: string, nameHeadquarter: string,
-      entryDate: Date, modificationDate: Date, numberOfModifications: number, state: boolean
-    }[] = this.Profiles;
-  
-    filteredArray: {
-      nameCharge: string, idCharge: string, name: string, photo: string, nameHeadquarter: string,
-      entryDate: Date, modificationDate: Date, numberOfModifications: number, state: boolean
-    }[] = []; */
-
-
-
   constructor(private profilesService: ProfilesService) {
 
     this.table = new FormGroup({
