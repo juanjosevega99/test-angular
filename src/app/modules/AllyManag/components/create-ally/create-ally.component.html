@@ -15,7 +15,7 @@
                                                 <input class="form-control" type="text" formControlName="name"
                                                         [ngClass]="{ 'is-invalid': (!forma.get('name').valid && 
                                                         forma.get('name').touched ),
-                                                         'is-valid':( forma.get('name').valid )}">
+                                                         'is-valid':( forma.get('name').valid )}"> 
                                                 <div *ngIf="forma.get('name').errors?.required "
                                                         class="invalid-feedback">
                                                         Este campo es requerido
@@ -88,7 +88,8 @@
                                                         <div class="photo">
                                                                 <img [tooltip]="HtmlContent" content-type="template"
                                                                         id="photo" width="150px" height="120px"
-                                                                        style="border-radius: 1.5rem">
+                                                                        style="border-radius: 1.5rem"
+                                                                        src="">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
                                                                 <ng-template #HtmlContent>
@@ -376,12 +377,12 @@
                                                                 <div class="upload-btn-wrapper mt-3  ">
                                                                         <button
                                                                                 class=" container  btn btn-outline-primary"
-                                                                                disabled="true">
+                                                                                >
                                                                                 Adjuntar archivos {{contImage}}
                                                                         </button>
                                                                         <input type="file" name="photo"
                                                                                 (change)="onImagesSelected($event)" 
-                                                                                disabled="false"/>
+                                                                                />
                                                                 </div>
 
                                                         </div>

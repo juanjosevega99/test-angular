@@ -66,6 +66,7 @@ const routes: Routes = [
       { path: "userManager", component: UserManagerComponent },
       { path: "allyManager", component: AllyManagerComponent },
       { path: "createAlly", component: CreateAllyComponent },
+      { path: "editAlly/:id", component: CreateAllyComponent },
       { path: "promoManager", component: PromoManagerComponent },
       { path: "cuponManager", component: CuponManagerComponent },
       { path: "reportGenerator", component: ReportGeneratorComponent },
