@@ -11,6 +11,7 @@ export class Profiles {
   idCharge?:string;
   nameCharge?:string;
   userCode?:string;
+  permis?:string;
   identification?:string;
   name?:string;
   email?:string;

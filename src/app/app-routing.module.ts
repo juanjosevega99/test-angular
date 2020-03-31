@@ -79,7 +79,7 @@ const routes: Routes = [
       { path: "createDish", component: CreateDishComponent },
       { path : "accompaniments", component: AccompanimentsComponent},
       { path : "profiles", component: ProfileComponent},
-      { path : "createProfile", component: CreateProfileComponent},
+      { path : "createProfile/:id", component: CreateProfileComponent},
       { path: "headquarts", component: HeadquartersOptionsComponent },
       
       { path: "**", redirectTo: "options", pathMatch: 'full' },

@@ -60,6 +60,7 @@ import { LocationServiceService } from './services/location-service.service';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
+import { LoadingComponent } from './shared/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { PrincipalOrdersComponent } from './principal/principal-orders/principal
     CreateProfileComponent,
     PqrListComponent,
     PrincipalOrdersComponent,
+    LoadingComponent,
 
   ],
   imports: [
