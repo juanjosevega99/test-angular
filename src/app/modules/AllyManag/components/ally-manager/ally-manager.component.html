@@ -86,6 +86,16 @@
                     <td>
                         <a  class="btn" (click)="editAlly(ally.idAlly)"> <i class="far fa-edit"></i> </a>
                     </td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngIf="noResults">
+                        <!-- <a  class="btn" (click)="editAlly(ally.idAlly)"> <i class="far fa-edit"></i> </a> -->
+                        <a> No se encontraron resultados </a>
+                    </td>
                 </tr>
 
             </tbody>

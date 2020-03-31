@@ -25,6 +25,8 @@ export class AllyManagerComponent implements OnInit {
   today:Date ;
   date:String;
   dateDay : any ;
+  //variable of don't results
+  noResults = false
 
   constructor(
     private _alliesService: AlliesService,
@@ -127,6 +129,14 @@ export class AllyManagerComponent implements OnInit {
       });
 
       this.filteredArray = this.newdateArray;
+      
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
 
     } else if (count == 2 && this.table.controls['generalsearch'].value) {
 
@@ -137,8 +147,17 @@ export class AllyManagerComponent implements OnInit {
           return ally;
         }
       });
+      
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
 
     }
+    
     else {
 
       if (this.table.controls['generalsearch'].value) {
@@ -152,6 +171,13 @@ export class AllyManagerComponent implements OnInit {
 
           this.searchbyterm(this.table.controls['generalsearch'].value);
         }
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
       } else {
 
         // campos llenos
@@ -162,6 +188,14 @@ export class AllyManagerComponent implements OnInit {
             return ally;
           }
         });
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
+
 
         if (this.table.controls['generalsearch'].value) {
 
@@ -202,6 +236,13 @@ export class AllyManagerComponent implements OnInit {
           myRegex.test(item.mealType) || myRegex.test(item.schedules))
       });
       this.filteredArray = this.newdateArray;
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
     } else {
       // un campo lleno
       this.newdateArray = this.filteredArray.filter(function (item) {
@@ -210,6 +251,13 @@ export class AllyManagerComponent implements OnInit {
           myRegex.test(item.numberHeadquarters) || myRegex.test(item.allyType) ||
           myRegex.test(item.mealType) || myRegex.test(item.schedules))
       });
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
     }
   }
   //method edit ally
