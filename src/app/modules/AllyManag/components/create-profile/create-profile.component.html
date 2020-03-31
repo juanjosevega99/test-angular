@@ -1,12 +1,13 @@
-<div class="compenetsstyle">
 
-    <form novalidate="" class="row" (ngSubmit)="saveProfile(shape)" #shape="ngForm">
+<div class="compenetsstyle"  >
+    <app-loading *ngIf="loading"></app-loading>
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveProfile(shape)" #shape="ngForm" *ngIf="!loading" >
 
         <a [routerLink]="['/main','profiles']" class="d-flex mr-2">
             <img src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
 
-        <section class="col-6">
+        <section class="col-6  " >
 
             <div class="form-group row" style="align-items: center;">
                 <label class="col-md-5 col-form-label">Estado</label>
@@ -14,7 +15,8 @@
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
                         <input class="form-check-input " type="radio" name="radio2" id="radio3" [checked]="State[0].check" #active
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" [value]="State[0].state">
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" 
+                            [value]="State[0].state" [checked]="preProfile.state[0].check"  >
                         <label for="radio3">
                             Activo
                         </label>
@@ -22,14 +24,15 @@
 
                     <div class="radio radio-danger m-2 form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="radio2" id="radio4" [checked]="State[1].check" #inactive
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" [value]="State[1].state">
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" 
+                            [value]="State[1].state" [checked]="preProfile.state[1].check" >
                         <label for="radio4">
                             Inactivo
                         </label>
                     </div>
 
                     <div class="radio m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio5"  disabled>
+                        <input class="form-check-input" type="radio" name="radio2" id="radio5" (click)="deleteProfile()" >
                         <label for="radio5">
                             Eliminar
                         </label>
@@ -147,12 +150,12 @@
                 <label class="col-md-5 col-form-label">Permisos de informes</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <select class="form-control " name="permission"
-                            #permission="ngModel" required
-                            [ngClass]="{'is-invalid': (!permission.valid),'is-valid':(permission.valid) }"
+                        <select class="form-control" name="permis"
+                            #permis="ngModel" required
+                            [ngClass]="{'is-invalid': (!permis.valid),'is-valid':(permis.valid) }"
                             [(ngModel)]="preProfile.permis">
-                            <option *ngFor="let permis of permiss">
-                                {{permis}}
+                            <option *ngFor="let type of permiss">
+                                {{type}}
                             </option>
                         </select>
                         <div class="invalid-feedback">*Este campo es requerido </div>
@@ -207,7 +210,7 @@
 
                     <div class="row align-items-center ">
                         <div class="photo"> 
-                            <img id="photo" width="100px" height="100px" title="No hay foto subida">
+                            <img [src]="preProfile.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -228,8 +231,8 @@
 
     </form>
 
-    <!-- <pre>
+    <pre>
         {{ preProfile | json }}
-    </pre> -->
+    </pre>
 
 </div>
