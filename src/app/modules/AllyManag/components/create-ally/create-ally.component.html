@@ -1,21 +1,21 @@
 <div class="margin-container">
         <form [formGroup]="forma" (ngSubmit)="saveChanges()" novalidate="">
                 <div class="row">
-                        <div class="col-md-1">
+                        <div class="col-1 col-sm-1 col-md-1 col-log-1">
                                 <div class="row justify-content-center">
-                                        <a (click)="swallLeave()" >
+                                        <a (click)="swallLeave()">
                                                 <img src="assets/icons/Back.png" class="tifi-icon-back">
                                         </a>
                                 </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-5 col-xl-5">
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Nombre del establecimiento</label>
                                         <div class="col-8">
                                                 <input class="form-control" type="text" formControlName="name"
                                                         [ngClass]="{ 'is-invalid': (!forma.get('name').valid && 
                                                         forma.get('name').touched ),
-                                                         'is-valid':( forma.get('name').valid )}">
+                                                         'is-valid':( forma.get('name').valid )}"> 
                                                 <div *ngIf="forma.get('name').errors?.required "
                                                         class="invalid-feedback">
                                                         Este campo es requerido
@@ -86,14 +86,19 @@
                                         <div class="col-8">
                                                 <div class="row align-items-center ">
                                                         <div class="photo">
-                                                                <img [tooltip]="HtmlContent" content-type="template" id="photo" width="120px" height="100px" style="border-radius: 1.5rem">
+                                                                <img [tooltip]="HtmlContent" content-type="template"
+                                                                        id="photo" width="150px" height="120px"
+                                                                        style="border-radius: 1.5rem"
+                                                                        src="">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
                                                                 <ng-template #HtmlContent>
-                                                                        <p>Se recomienda subir el archivo con extension png y 
-                                                                        con las siguientes dimensiones: 300 px Anchura y 168 px Altura</p>
+                                                                        <p>Se recomienda subir el archivo con extension
+                                                                                png y
+                                                                                con las siguientes dimensiones: 300 px
+                                                                                Anchura y 168 px Altura</p>
                                                                 </ng-template>
-                                                                <button class="btn1 btn btn-outline-primary">
+                                                                <button class="btn1 btn btn-outline-primary mt-2">
                                                                         Cambiar archivo
                                                                 </button>
                                                                 <span tooltip="Tooltip text"></span>
@@ -115,7 +120,8 @@
                                         <label class="col-3 col-form-label">Color para la entidad</label>
                                         <div class="col-8">
                                                 <div class="row margin-left2">
-                                                        <input class="form-control " type="text" [value]="color">
+                                                        <input class="form-control mr-2" style="width: 75%;" type="text"
+                                                                [value]="color">
 
                                                         <input type="color" (change)="getColour($event)">
                                                 </div>
@@ -126,21 +132,22 @@
                                         <div class="col-8">
                                                 <div class="row  margin-left2 ">
                                                         <select *ngIf="otherEstablishmentSelect"
-                                                                class="browser-default custom-select selectSize mr-2 text-capitalize"
+                                                                class=" form-control custom-select  mr-2 text-capitalize"
+                                                                style="width: 65%;"
                                                                 formControlName="idTypeOfEstablishment"
                                                                 [ngClass]="{ 'is-invalid': (!forma.get('idTypeOfEstablishment').valid && 
                                                                         forma.get('idTypeOfEstablishment').touched ), 
                                                                         'is-valid':( forma.get('idTypeOfEstablishment').valid )}">
 
-                                                                <option selected>---------------------</option>
                                                                 <option *ngFor="let category of alliesCategories"
                                                                         [ngValue]="category">
                                                                         {{category.name}}
                                                                 </option>
                                                         </select>
-                                                        <input *ngIf="otherEstablishmentInput" class="selectSize mr-2"
+                                                        <input *ngIf="otherEstablishmentInput"
                                                                 id="nameTypeOfEstablishment" type="text"
-                                                                formControlName="nameTypeOfEstablishment">
+                                                                formControlName="nameTypeOfEstablishment"
+                                                                class="form-control mr-2" style="width: 57%;">
 
                                                         <button *ngIf="otherEstablishmentInput"
                                                                 class="btn1 btn btn-outline-primary" type="button"
@@ -151,8 +158,7 @@
 
                                                         <button *ngIf="!otherEstablishmentInput"
                                                                 (click)=" handleBoxEstablishment()"
-                                                                class="btn1 btn btn-outline-primary"
-                                                                tooltip="Tooltip on left" placement="top">
+                                                                class="btn1 btn btn-outline-primary">
                                                                 Otro
                                                         </button>
                                                         <button *ngIf="!otherEstablishmentInput"
@@ -192,18 +198,19 @@
                                         <div class="col-8">
                                                 <div class="row  margin-left2 ">
                                                         <select *ngIf="otherMealSelect"
-                                                                class="browser-default custom-select selectSize mr-2"
-                                                                formControlName="idMealsCategories" [ngClass]="{ 'is-invalid': (!forma.get('idMealsCategories').valid && 
+                                                                class="browser-default custom-select form-control mr-2"
+                                                                style="width: 65%;" formControlName="idMealsCategories"
+                                                                [ngClass]="{ 'is-invalid': (!forma.get('idMealsCategories').valid && 
                                                                 forma.get('idMealsCategories').touched ), 
-                                                                'is-valid':( forma.get('idMealsCategories').valid )}"
-                                                                 >
+                                                                'is-valid':( forma.get('idMealsCategories').valid )}">
                                                                 <option *ngFor="let mealCategory of mealsCategories"
                                                                         [ngValue]="mealCategory">
                                                                         {{mealCategory.name}}
                                                                 </option>
                                                         </select>
-                                                        <input *ngIf="otherMealInput" class="selectSize mr-2"
-                                                                type="text" formControlName="nameMealsCategories">
+                                                        <input *ngIf="otherMealInput" type="text"
+                                                                formControlName="nameMealsCategories"
+                                                                class="form-control mr-2" style="width: 57%;">
                                                         <button *ngIf="otherMealInput"
                                                                 class="btn1 btn btn-outline-primary" type="button"
                                                                 (click)="changeStateToSelectMeal()"> Cancelar
@@ -231,12 +238,10 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Tipo de aliado</label>
                                         <div class="col-8">
-                                                <select class="browser-default custom-select selectSize mr-2"
-                                                formControlName="typeAlly"
-                                                [ngClass]="{ 'is-invalid': (!forma.get('typeAlly').valid && 
+                                                <select class="browser-default custom-select form-control mr-2"
+                                                        formControlName="typeAlly" [ngClass]="{ 'is-invalid': (!forma.get('typeAlly').valid && 
                                                         forma.get('typeAlly').touched ), 
-                                                        'is-valid':( forma.get('typeAlly').valid )}"
-                                                >
+                                                        'is-valid':( forma.get('typeAlly').valid )}">
                                                         <option> Oro </option>
                                                         <option> Plata </option>
                                                         <option> Bronce </option>
@@ -253,8 +258,7 @@
                                         <div class="col-8">
                                                 <input class="form-control" type="number"
                                                         placeholder="---------------------" min="0" max="100"
-                                                        formControlName="intermediationPercentage"
-                                                        [ngClass]="{ 'is-invalid': (!forma.get('intermediationPercentage').valid && 
+                                                        formControlName="intermediationPercentage" [ngClass]="{ 'is-invalid': (!forma.get('intermediationPercentage').valid && 
                                                         forma.get('intermediationPercentage').touched ), 
                                                         'is-valid':( forma.get('intermediationPercentage').valid )}">
                                                 <div *ngIf="forma.get('intermediationPercentage').errors?.required "
@@ -271,8 +275,7 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " formControlName="description" 
-                                                [ngClass]="{ 'is-invalid': (!forma.get('description').valid && 
+                                                <textarea class="form-control " formControlName="description" [ngClass]="{ 'is-invalid': (!forma.get('description').valid && 
                                                 forma.get('description').touched ),
                                                                 'is-valid':( forma.get('description').valid )}">
                                                 </textarea>
@@ -284,21 +287,24 @@
                                 </div>
 
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-5 ">
 
-                                <div class="row ">
+                                <div class=" form-group row ">
                                         <div class="col-2"> <label>Horario</label> </div>
                                         <div class="col">
                                                 <div class="row">
-                                                        <div class="col">
+                                                        <div class="col ">
                                                                 <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
+                                                                        <div
+                                                                                class="horario center mr-3 col-sm-3 col-md-3 col-lg-3">
                                                                                 <p>Día</p>
                                                                         </div>
-                                                                        <div class="horario center mx-2 col-sm-3">
+                                                                        <div
+                                                                                class="horario center mr-3 col-sm-4 col-md-3 col-lg-3">
                                                                                 <p>Apertura</p>
                                                                         </div>
-                                                                        <div class="horario center mx-2 col-sm-3">
+                                                                        <div
+                                                                                class="horario center  col-sm-3 col-md-3 col-lg-3">
                                                                                 <p>Cerrado</p>
                                                                         </div>
                                                                 </div>
@@ -309,12 +315,12 @@
                                                         class="row my-3 form-group ">
                                                         <div class="col">
                                                                 <div class="row ">
-                                                                        <div class="horario center mx-2 col-sm-3">
+                                                                        <div class="horario center col-sm-3 col-md-3 col-lg-3">
                                                                                 <label #dayl>{{day}}</label>
                                                                         </div>
-                                                                        <div class=" mx-2 ">
-                                                                                <select class=" col-sm-11 browser-default custom-select form-control "
-                                                                                        #from
+                                                                        <div class=" mr-3 col-sm-3 col-md-3 col-lg-3 .col-xl-3" >
+                                                                                <select class=" browser-default custom-select form-control "
+                                                                                        style="width: 140%;" #from
                                                                                         (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
                                                                                         <option selected>
                                                                                                 ---------------------
@@ -325,10 +331,10 @@
                                                                                         </option>
                                                                                 </select>
                                                                         </div>
-                                                                        <div>
+                                                                        <div class=" col-sm-3 col-md-3 col-lg-3">
 
-                                                                                <select class=" col-sm-11 browser-default custom-select form-control"
-                                                                                        #to
+                                                                                <select class=" browser-default custom-select form-control"
+                                                                                        style="width: 140%;" #to
                                                                                         (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
                                                                                         <option selected>
                                                                                                 ---------------------
@@ -353,9 +359,8 @@
                                                         Fotos del establecimiento
                                                 </label>
                                         </div>
-                                        <div class="  col align-items-center">
-                                                <div
-                                                        class="d-flex flex-column justify-content-center align-items-center ">
+                                        <div class=" col align-items-center">
+                                                <div class="d-flex flex-column justify-content-center align-items-center mt-5 ">
                                                         <div class="d-flex flex-column ">
                                                                 <ng-image-slider
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
@@ -370,7 +375,8 @@
                                                                 </P>
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
-                                                                        <button class=" container  btn btn-outline-primary "
+                                                                        <button
+                                                                                class=" container  btn btn-outline-primary"
                                                                                 >
                                                                                 Adjuntar archivos {{contImage}}
                                                                         </button>
@@ -380,7 +386,6 @@
                                                                 </div>
 
                                                         </div>
-
                                                 </div>
                                         </div>
                                 </div>
@@ -388,7 +393,8 @@
 
 
                         </div>
-                        <div class="col-1 d-flex flex-column justify-content-center align-items-center ">
+                        <div
+                                class="col-sm-12 col-md-2 col-lg-1 d-flex flex-column justify-content-center align-items-center ">
                                 <div class="form-group row d-flex flex-column ">
 
                                         <button type="submit" class="btn btn-outline-primary mb-5">
@@ -408,7 +414,7 @@
 
 <!-- <form>
 
-        
+
 
                 <div class="form-group row">
                         <label class="col-2 col-form-label">Nombre</label>

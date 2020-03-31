@@ -5,7 +5,7 @@ import { AlliesService } from "../../../../services/allies.service";
 import { AttentionScheduleService } from "../../../../services/attention-schedule.service";
 import { HeadquartersService } from '../../../../services/headquarters.service';
 import { Allies } from '../../../../models/Allies';
-import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-ally-manager',
   templateUrl: './ally-manager.component.html',
@@ -29,16 +29,14 @@ export class AllyManagerComponent implements OnInit {
   constructor(
     private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
-    private _headquartService: HeadquartersService){
+    private _headquartService: HeadquartersService,
+    private _router:Router){
     
     // inicialization date
-
     this.today = new Date()
     this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
     // const primeraLetraMayuscula = (cadena) => cadena.charAt(0).toUpperCase().concat(cadena.substring(1, cadena.length));
     let day = this.date.charAt(0).toUpperCase().concat(this.date.substring(1, this.date.length));
-  
-
     
     //inicialization of the table
     this.table = new FormGroup({
@@ -53,6 +51,7 @@ export class AllyManagerComponent implements OnInit {
 
         this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
           .subscribe((schedule) => {
+            
             console.log('fecha',day);
             // console.log(schedule)
             // let nothing:String = 'No hay servicio';
@@ -72,6 +71,7 @@ export class AllyManagerComponent implements OnInit {
           let obj: any = {}
 
           obj = {
+            idAlly : ally.id,
             code: ally.nit,
             logo: ally.logo,
             nameEstablishment: ally.name,
@@ -211,6 +211,10 @@ export class AllyManagerComponent implements OnInit {
           myRegex.test(item.mealType) || myRegex.test(item.schedules))
       });
     }
+  }
+  //method edit ally
+  editAlly(idAlly:string){
+    this._router.navigate( ['/main','editAlly',idAlly] )
   }
 
 }

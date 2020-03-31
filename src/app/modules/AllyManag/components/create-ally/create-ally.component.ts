@@ -10,7 +10,8 @@ import Swal from 'sweetalert2';
 import { HeadquartersService } from "../../../../services/headquarters.service";
 //other libraris
 import * as $ from 'jquery';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { loadavg } from 'os';
 
 @Component({
   selector: 'app-create-ally',
@@ -46,6 +47,10 @@ export class CreateAllyComponent implements OnInit {
   //handle button other type Establishment
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
+  //variable for the loading
+  loading: boolean;
+   //variables for receiving the profile that will be edited
+   identificatorbyRoot:string;
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -53,7 +58,22 @@ export class CreateAllyComponent implements OnInit {
     private allieService: AlliesService,
     private _uploadImages: UploadImagesService,
     private _headquartService: HeadquartersService,
-    private _router: Router) {
+    private _router: Router,
+    private _activateRoute: ActivatedRoute) {
+
+    this.loading = true;
+      //inicialization for charging the data of an Ally to edit
+    this._activateRoute.params.subscribe(params => {
+      console.log('Parametro', params['id']);
+      let identificator = params['id']
+      if (identificator != undefined) {
+        this.getAlly(identificator)
+      } else {
+        this.loading = false
+      }
+      this.identificatorbyRoot = identificator;
+
+    })
 
     this.forma = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(2),
@@ -114,6 +134,23 @@ export class CreateAllyComponent implements OnInit {
   }
   ngOnInit() {
 
+  }
+  //charge a ally with the id
+  getAlly(id: string) {
+    this.loading;
+    console.log('function getAlly', id);
+    this.allieService.getAlliesById(id).subscribe( ally => {
+      console.log(ally)
+      this.forma.setValue(ally)
+      console.log('new data edit: ', this.forma.value)
+    })
+    // this.chargeProfiles.getProfiles().subscribe(profiles => {
+    //   let profile: ProfileList = {}
+    //   profile = profiles[id]
+    //   this.editProfile = profile
+    //   this.preProfile = this.editProfile
+    //   this.loading = false;
+    // })
   }
   getColour(event) {
     this.color = event.target.value
@@ -414,8 +451,15 @@ export class CreateAllyComponent implements OnInit {
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
               console.log(objAllie); //delete console.log
-              this.allieService.postAllie(objAllie).subscribe()
-              this._router.navigate(['/main', 'allyManager'])
+              if (this.identificatorbyRoot != undefined) {
+                objAllie._id = this.identificatorbyRoot
+                this.allieService.putAllie(objAllie).subscribe( ()=> alert('ally update') )
+                this._router.navigate(['/main', 'allyManager'])
+              } else{
+                this.loading = false
+                this.allieService.postAllie(objAllie).subscribe()
+                this._router.navigate(['/main', 'allyManager'])
+              }
             })
           })
           .catch(error => console.log('error al subir las imagenes a fireBase: ', error));

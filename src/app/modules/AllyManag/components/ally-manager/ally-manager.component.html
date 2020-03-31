@@ -84,7 +84,7 @@
                     <td> {{ally.schedules}} </td>
 
                     <td>
-                        <a [routerLink]="['/main', 'headquarts']" class="btn"> <i class="far fa-edit"></i> </a>
+                        <a  class="btn" (click)="editAlly(ally.idAlly)"> <i class="far fa-edit"></i> </a>
                     </td>
                 </tr>
 

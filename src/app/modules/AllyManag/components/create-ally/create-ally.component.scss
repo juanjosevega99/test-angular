@@ -21,21 +21,6 @@
 // }
 
 //style reponsive 
-
-//Styles button primary
-.btn-outline-primary:hover {
-  color: #fff;
-  background-color: #552183;
-}
-.btn-outline-primary {
-  color: rgba(0, 0, 0, 0.9);
-  border-color: rgba(0, 0, 0, 0.9);
-}
-.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
-  color: #fff;
-  background-color: #5a4183;
-  border-color: #5a4183;
-}
 //paddin of container father
 .margin-container {
   padding-top: 7rem;
@@ -46,8 +31,8 @@
 .photo {
   margin-left: 15px;
   margin-right: 10px;
-  width: 120px;
-  height: 100px;
+  width: 150px;
+  height: 120px;
   border: solid 0.5px gray;
   border-radius: 1.5rem;
 }
@@ -80,12 +65,6 @@
   margin-top: 9px;
 }
 
-.horario {
-  border: solid 1px rgb(170, 170, 170);
-  border-radius: .3rem;
-  // padding: 1px;
-}
-
 .corousel-info {
   margin-top: 8px;
 }
@@ -98,6 +77,61 @@
   margin-left: 10px;
 }
 
+.main {
+  height: 120px;
+}
+// styles of swall but don't working
+.swal2-styled.swal2-confirm {
+  border: 0;
+  border-radius: .25em;
+  background: initial;
+  background-color: #3085d6;
+  color: rgb(7, 7, 7);
+  font-size: 1.0625em;
+}
+
+.swal2-actions:not(.swal2-loading) .swal2-styled:hover {
+  // background-image: linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1));
+  color: rgb(247, 15, 15);
+  background-color: #552183;
+  
+}
+
+//Styles working 
+
+.horario {
+  border: solid 1px rgb(170, 170, 170);
+  border-radius: .3rem;
+  // padding: 1px;
+}
+
+//Styles button primary
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #552183;
+}
+.btn-outline-primary {
+  color: rgba(0, 0, 0, 0.9);
+  border-color: rgba(0, 0, 0, 0.9);
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #5a4183;
+  border-color: #5a4183;
+}
+
+//Styles size select  and input  with button other
+.selectSize{
+  width: 13rem;
+  border-radius: .5rem;
+}
+
+//Style of labels schedule
+.containerSchedule{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
 .upload-btn-wrapper {
   position: relative;
   overflow: hidden;
@@ -119,39 +153,6 @@
   top: 0;
   opacity: 0;
 }
-
-.main {
-  height: 120px;
-}
- //Styles size select  and input  with button other
- .selectSize{
-   width: 13rem;
-   border-radius: .5rem;
- }
-
- //Style of labels schedule
- .containerSchedule{
-   display:flex;
-   flex-direction: column;
-   align-items: center;
- }
-// styles of swall but don't working
- .swal2-styled.swal2-confirm {
-  border: 0;
-  border-radius: .25em;
-  background: initial;
-  background-color: #3085d6;
-  color: rgb(7, 7, 7);
-  font-size: 1.0625em;
-}
-
-.swal2-actions:not(.swal2-loading) .swal2-styled:hover {
-  // background-image: linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1));
-  color: rgb(247, 15, 15);
-  background-color: #552183;
-
-}
-
 .form-control {
   display: block;
   width: 100%;
