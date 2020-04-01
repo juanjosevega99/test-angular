@@ -9,6 +9,7 @@ export class OrderByUser{
     purchaseAmount?:number;
     registerDate?:string;
     dateAndHourDelivery?:string;
+    DateDelivery?: Date;
     quantity?:number[];
     nameDishe?:string[];
     controlOrder?:boolean;
@@ -19,6 +20,8 @@ export class OrderByUser{
     percent?:number;
     valueIntermediation? :number;
     valueIntermediationIva? :number;
+    timeTotal?:string;
+    timeTotalCronometer?:string;
 
     lastname?:string;
     email?:string;

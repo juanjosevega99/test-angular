@@ -1,8 +1,8 @@
 <div class="PqrGeneral">
 
-    <div class="compenetsstyle " style="background-color: #e9e7e7; width: 65%;">
+    <div class="compenetsstyle order-list ">
 
-        <div class="filerControl d-flex justify-content-center px-1 ">
+        <div class="filerControl d-flex justify-content-center">
 
             <nav class="menu mt-md-2">
 
@@ -20,7 +20,10 @@
                         <a>Valor pedido</a>
                     </li>
                     <li>
-                        <a>Reserva fecha y hora </a>
+                        <a>fecha y hora Reserva</a>
+                    </li>
+                    <li>
+                        <a>fecha y hora Entrega</a>
                     </li>
                     <li>
                         <a>Cronómetro</a>
@@ -36,18 +39,23 @@
         </div>
 
         <div>
-            <div class="chat" style="margin-top: 1.8rem;">
-                hola
+            <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
+                <app-order [order]="order" *ngFor="let order of orders2" style="width: 100%;"></app-order>
+            </div>
+        </div>
+        <div>
+            <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
+                <app-order [order]="order2" *ngFor="let order2 of testlist2" style="width: 100%;"></app-order>
             </div>
         </div>
     </div>
-    <div class="compenetsstyle " style="background-color: #e9e7e7; width: 35%; padding-left: 0;">
+    <div class="compenetsstyle order-table ">
 
         <div class="filerControl d-flex justify-content-center px-1 ">
             <nav class="menu mt-sm-5 mt-md-1">
                 <ul>
                     <li style="border: none;">
-                        <a style="font-size: 15px; font-weight: bold;">Agenda de Mesas</a>
+                        <a style=" font-weight: bold;">Agenda de Mesas</a>
                     </li>
                 </ul>
             </nav>
@@ -63,7 +71,7 @@
             <div class="dropdown-divider"></div>
 
             <div class="HoursTable">
-                <p>Hora Reserva</p>
+                <p>HORA RESERVA</p>
 
                 <div>
                     <button *ngFor="let hour of Hours" (click)="getHour($event)"
@@ -84,7 +92,7 @@
                     </div>
                 </div>
                 <div style="width: 50%;">
-                    
+
                     <p>PERSONAS</p>
                     <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
                         <button *ngFor="let table of Tables" (click)="getHour($event)"
@@ -94,5 +102,10 @@
 
             </div>
         </div>
+        <div style="flex-direction: row; justify-content: space-evenly;">
+            <button class="button-order">LIBERAR</button>
+            <button class="button-order">OCUPAR</button>
+        </div>
     </div>
+
 </div>

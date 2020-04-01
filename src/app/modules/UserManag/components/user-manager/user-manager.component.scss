@@ -129,7 +129,7 @@ th {
   padding-top: 5rem;
   padding-bottom: 1rem;
   border-radius: 1rem;
-
+  justify-content: space-around;
 }
 
 .bg-light {
@@ -165,4 +165,60 @@ th {
   color: #fff;
   background-color: #5a4183;
   border-color: #5a4183;
+}
+
+// ============================
+// filter seconds
+// ============================
+
+.filterDateGen{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: .5rem;
+
+}
+
+.filterGen{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+.filterDate{
+  width: 45%;
+  display: flex;
+  justify-content: center;
+}
+
+// ================================
+// for btns
+
+.btnInfos{
+  flex-direction: row;
+}
+
+// ================================
+// medias
+// ================================
+
+@media ( max-width:414px ){
+
+  .filterGen{
+    width: 100%;
+    margin: .5rem;
+  }
+  .filterDate{
+    width: 100%;
+  }
+
+  .btnInfos{
+    flex-direction: column;
+  }
+
+  .btnInfos div{
+    margin: .5rem;
+  }
+
 }
