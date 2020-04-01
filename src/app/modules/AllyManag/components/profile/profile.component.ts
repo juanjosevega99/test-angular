@@ -11,17 +11,24 @@ import Swal from 'sweetalert2';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  
   //object that saves the values of the table
   table: FormGroup;
+  
   //variables for general search
   generalsearch: string;
+  
   //varibales to obtain data
   profilesgetting: ProfileList[] = [];
   newArray = this.profilesgetting;
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
 
+   
+
+
   constructor(private profilesService: ProfilesService) {
+
 
     this.table = new FormGroup({
       "identification": new FormControl(),
@@ -32,6 +39,7 @@ export class ProfileComponent implements OnInit {
     this.profilesService.getProfiles().subscribe(res => {
       res.forEach((profile: Profiles) => {
         if (res.length > 0) {
+          
           const obj: ProfileList = {};
           obj.id = profile.id;
           obj.nameCharge = profile.nameCharge;

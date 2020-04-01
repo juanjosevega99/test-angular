@@ -41,7 +41,6 @@
                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                             <li class="nav-item">
                                 <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary" style="width: 12rem;">Ingresar nuevo perfil</a>
-                            <!-- </li>[routerLink]="[ '/main/createProfile', i ]" [routerLink]="['/main','createProfile']" -->
                         </ul>
                     </nav>
                 </section>
@@ -64,7 +63,7 @@
                     <th class="text-center"> </th>
                 </tr>
             </thead>
-            <tbody class="mt-5">
+            <tbody  class="mt-5">
                 <tr *ngFor="let prof of newArray; let i = index " class="text-center">
                     <td>{{prof.nameCharge}}</td>
                     <td>{{prof.identification}}</td>
