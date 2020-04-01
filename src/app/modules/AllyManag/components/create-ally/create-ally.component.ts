@@ -53,6 +53,7 @@ export class CreateAllyComponent implements OnInit {
   loading: boolean;
    //variables for receiving the profile that will be edited
    identificatorbyRoot:string;
+   idParams:number;
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -76,6 +77,7 @@ export class CreateAllyComponent implements OnInit {
       } else {
         this.loading = false
       }
+      this.idParams = identificator;
       this.identificatorbyRoot = idAlly;
 
     })
@@ -456,7 +458,7 @@ export class CreateAllyComponent implements OnInit {
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
               console.log(objAllie); //delete console.log
-              if (this.identificatorbyRoot != undefined) {
+              if (this.idParams != -1) {
                 objAllie._id = this.identificatorbyRoot
                 this.allieService.putAllie(objAllie).subscribe( ()=> alert('ally update') )
                 this._router.navigate(['/main', 'allyManager'])
