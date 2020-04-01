@@ -7,13 +7,10 @@ import { AttentionScheduleService } from "../../../../services/attention-schedul
 import { AlliesService } from "../../../../services/allies.service";
 import { UploadImagesService } from "../../../../services/providers/uploadImages.service";
 import Swal from 'sweetalert2';
-import { HeadquartersService } from "../../../../services/headquarters.service";
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
-
 //other libraris
 import * as $ from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
-import { loadavg } from 'os';
 
 @Component({
   selector: 'app-create-ally',
@@ -38,12 +35,12 @@ export class CreateAllyComponent implements OnInit {
   fileImgLogo: any;
   //Variables of upload ImagesAlly to firebase
   imagesAlly: any = []
-  //variables carousel
+  //variables carousel of images Establisment
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any;
   contImage: number = 0;
-  //handle button other category
+  //handle button other category Meal
   otherMealSelect: boolean = true
   otherMealInput: boolean = false
   //handle button other type Establishment
@@ -60,13 +57,12 @@ export class CreateAllyComponent implements OnInit {
     private scheduleServices: AttentionScheduleService,
     private allieService: AlliesService,
     private _uploadImages: UploadImagesService,
-    private _headquartService: HeadquartersService,
     private _router: Router,
     private _activateRoute: ActivatedRoute,
     private _saveLocalStorageService : SaveLocalStorageService) {
 
-    this.loading = true;
-      //inicialization for charging the data of an Ally to edit
+    // this.loading = true;
+    //inicialization for charging the data of an Ally to edit
     this._activateRoute.params.subscribe(params => {
       console.log('Parametro', params['id']);
       console.log('this is new:', this._saveLocalStorageService.getLocalStorageIdAlly());
@@ -75,7 +71,7 @@ export class CreateAllyComponent implements OnInit {
       if (identificator != -1) {
         this.getAlly(idAlly)
       } else {
-        this.loading = false
+        // this.loading = false
       }
       this.idParams = identificator;
       this.identificatorbyRoot = idAlly;
@@ -144,7 +140,7 @@ export class CreateAllyComponent implements OnInit {
   }
   //charge a ally with the id
   getAlly(id: string) {
-    this.loading;
+    // this.loading;
     console.log('function getAlly', id);
     this.allieService.getAlliesById(id).subscribe( ally => {
       console.log(ally)
@@ -282,7 +278,7 @@ export class CreateAllyComponent implements OnInit {
   // method save  and cancel all collection allies
   saveChanges() {
     this.swallSaveAllie()
-    // console.log(this.forma.value);
+    console.log(this.forma.value);
   }
 
   cancelChanges() {
