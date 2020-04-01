@@ -1,0 +1,100 @@
+<div class="mb-2">
+    <nav class="order">
+
+        <ul (click)="showDetail()" style="cursor: pointer">
+            <li>
+                <a>{{order.id}}</a>
+            </li>
+            <li>
+                <a>{{order.name}}</a>
+            </li>
+            <li>
+                <img src="assets/icons/pidelo.png" class="tifi-icon-order">
+                <a>{{order.typeOfService}} </a>
+            </li>
+            <li>
+                <a>$ {{order.purchaseAmount}}</a>
+            </li>
+            <li>
+                <a>{{order.registerDate}}</a>
+            </li>
+            <li>
+                <a>{{order.DateDelivery | date:'short'}}</a>
+            </li>
+            <li>
+                <img src="assets/icons/cronometro.png" class="tifi-icon-order">
+                <a>{{order.timeTotalCronometer}}</a>
+            </li>
+            <li>
+                <a>listo para la entrega</a>
+            </li>
+            <li style="border: none;">
+                <input type="radio">
+            </li>
+        </ul>
+
+    </nav>
+
+    <div *ngIf="showdetail">
+        <nav class="detail">
+            <ul style="font-weight: bold;">
+                <li>
+                    <a>Cantidad</a>
+                </li>
+                <li>
+                    <a>Nombre del Plato</a>
+                </li>
+                <li>
+                    <a>Detalle del plato </a>
+                </li>
+                <li>
+                    <a>Tiempo preparación</a>
+                </li>
+                <li style="border: none;">
+                    <a>Valor</a>
+                </li>
+            </ul>
+            <ul *ngFor="let dish of order.nameDishe" >
+                <li>
+                    <a>{{ dish.quantity }}</a>
+                </li>
+                <li>
+                    <a>{{dish.name}}</a>
+                </li>
+                <li>
+                    <a>{{dish.description}} </a>
+                </li>
+                <li>
+                    <a>{{dish.timedish}}</a>
+                </li>
+                <li style="border: none;">
+                    <a>{{dish.valueDish}}</a>
+                </li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li>Valor servicio</li>
+                <li>1500</li>
+            </ul>
+            <ul style="font-weight: bold;">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li>Valor Total</li>
+                <li>{{order.purchaseAmount}}</li>
+            </ul>
+
+        </nav>
+    </div>
+
+    <div style="display: flex;">
+        <div style=" width: 87%;">
+            <ngb-progressbar type="warning" [value]="75"></ngb-progressbar>
+        </div>
+        <div style=" display: flex; width: 13%; justify-content: center;">
+            <a style="font-size: 1rem;" [ngStyle]="{'color': expresionColor}"> !Relajate¡ </a>
+        </div>
+    </div>
+</div>
