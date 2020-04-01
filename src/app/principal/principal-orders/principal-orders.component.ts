@@ -35,7 +35,7 @@ export class PrincipalOrdersComponent implements OnInit {
       id: 1,
       DateDelivery: "2020-03-27T14:20:04.671Z"
     }
-    
+
   ];
 
   testlist2 = [];
@@ -49,7 +49,7 @@ export class PrincipalOrdersComponent implements OnInit {
     // init Tables
     this.createTables();
     let or = []
-    this.serviceOrders.getOrders().subscribe( async (orders: Orders[]) => {
+    this.serviceOrders.getOrders().subscribe(async (orders: Orders[]) => {
 
       await orders.forEach(order => {
 
@@ -117,20 +117,19 @@ export class PrincipalOrdersComponent implements OnInit {
       })
 
     })
-    
+
   }
 
   ngOnInit() {
 
     // this.orderList();
     this.orders2 = this.orders;
-    
+
   }
 
   getHour(event) {
     // get the text in button
     console.log(event.target.textContent);
-
   }
 
   createHours() {
@@ -164,18 +163,17 @@ export class PrincipalOrdersComponent implements OnInit {
 
   orderList() {
 
-    this.testlist2 = this.testlist.sort( function (a,b){
+    this.testlist2 = this.testlist.sort(function (a, b) {
       return new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime();
     }
     );
     console.log("on funtion", this.orders2);
     console.log("on funtion", this.testlist2);
 
-    this.orders2 = this.orders.sort( function (a,b){
+    this.orders2 = this.orders.sort(function (a, b) {
       return new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime();
     }
     );
-    
   }
 
 
