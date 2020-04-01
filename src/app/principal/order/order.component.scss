@@ -13,7 +13,7 @@
     // padding: 1px;
     padding-left: 0;
     list-style: none;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
 }
 
 .order li {
@@ -39,6 +39,53 @@
     text-align: center;
     flex-wrap: wrap;
 }
+
+// =======================
+// detail
+
+.detail{
+    background-color: #fff;
+    width: 100%;
+    border-radius: .4rem;
+    margin-bottom: .5rem;
+    border: 2px solid #d2d2d2;
+}
+.detail ul {
+    display: flex;
+    margin: 0;
+    // padding: 1px;
+    padding-left: 0;
+    list-style: none;
+    flex-wrap: wrap;
+    border-bottom:1px solid #d2d2d2 ;
+}
+.detail li {
+    font-size: .7rem;
+    display: flex;
+    margin: 0;
+    // margin-bottom: .5rem;
+    // margin-top: .5rem;
+    padding: 2px;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    width: 20%;
+    border-right: 1px solid #d2d2d2;
+}
+
+.detail li a{
+    // margin-right: 10px;
+    // padding: 5px;
+    color: #4e4f4f;
+    display: flex;    
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+// =====================
+// angular
+
 
 ::ng-deep .progress {
     width: 100%;
@@ -75,4 +122,11 @@
         margin-right: 5px;
     }
 
+}
+
+@media ( max-width: 760px ){
+    .order li {
+        font-size: .6rem;
+        padding: 5px;
+    }
 }

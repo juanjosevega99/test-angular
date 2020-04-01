@@ -2,7 +2,7 @@
 
     <div class="compenetsstyle order-list ">
 
-        <div class="filerControl d-flex justify-content-center px-1 ">
+        <div class="filerControl d-flex justify-content-center">
 
             <nav class="menu mt-md-2">
 
@@ -20,7 +20,10 @@
                         <a>Valor pedido</a>
                     </li>
                     <li>
-                        <a>Reserva fecha y hora </a>
+                        <a>fecha y hora Reserva</a>
+                    </li>
+                    <li>
+                        <a>fecha y hora Entrega</a>
                     </li>
                     <li>
                         <a>Cronómetro</a>
@@ -37,12 +40,12 @@
 
         <div>
             <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
-                <app-order style="width: 100%;"></app-order>
-                <app-order style="width: 100%;"></app-order>
-                <app-order style="width: 100%;"></app-order>
-                <app-order style="width: 100%;"></app-order>
-                <app-order style="width: 100%;"></app-order>
-
+                <app-order [order]="order" *ngFor="let order of orders2" style="width: 100%;"></app-order>
+            </div>
+        </div>
+        <div>
+            <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
+                <app-order [order]="order2" *ngFor="let order2 of testlist2" style="width: 100%;"></app-order>
             </div>
         </div>
     </div>
