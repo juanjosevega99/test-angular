@@ -463,12 +463,13 @@ export class CreateProfileComponent implements OnInit {
                     this.urlPorfile = urlImage;
                     console.log(this.urlPorfile);
                     this.preProfile['photo'] = this.urlPorfile
-                    this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
+                    
                   })
                 }
                 )
               ).subscribe()
           }
+          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
         })
         Swal.fire({
           title: 'Guardado',
