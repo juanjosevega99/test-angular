@@ -21,8 +21,6 @@ export class CreateProfileComponent implements OnInit {
 
   preProfile: Object = {
     state: [],
-    /* entryDate:null,
-    modificationDate:null, */
     numberOfModifications: 0,
     idAllies: null,
     nameAllie: "kfc",
@@ -38,7 +36,7 @@ export class CreateProfileComponent implements OnInit {
     photo: null
   }
 
-  editProfile: Object = {
+  editProfile: Profiles = {
     state: [],
     entryDate: null,
     modificationDate: null,
@@ -59,7 +57,8 @@ export class CreateProfileComponent implements OnInit {
 
   //variables for receiving the profile that will be edited
   identificatorbyRoot: any;
-  buttonPut : boolean;
+  buttonPut: boolean;
+  seeNewPhoto: boolean;
 
   //variables for categories
   arrayCategorySelect: boolean = true;
@@ -96,6 +95,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.loading = true;
     this.buttonPut = true;
+    this.seeNewPhoto = false;
 
     this.State = [{
       state: "active",
@@ -253,12 +253,6 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-  convertDate(date: Date): string {
-    const d = new Date(date);
-    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-    return n;
-  }
-
   //Method to generate the user code
   generateCode(event) {
     this.preProfile['userCode'] = this.preProfile['nameAllie'] + event.target.value
@@ -268,6 +262,9 @@ export class CreateProfileComponent implements OnInit {
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
+      this.seeNewPhoto = true;
+      console.log(this.seeNewPhoto);
+
       var reader = new FileReader();
       reader.onload = function (e: any) {
         $('#photo')
@@ -284,9 +281,27 @@ export class CreateProfileComponent implements OnInit {
   }
 
   //putProfile
-  putProfile(){
-  console.log("holi");
-  
+  putProfile() {
+    this.chargeProfiles.getProfiles().subscribe(profiles => {
+      let profile: Profiles = {};
+      profile = profiles[this.identificatorbyRoot];
+      let realId = profile.id;
+      this.editProfile.state = this.preProfile['state'];
+      this.editProfile.entryDate = profile.entryDate;
+      this.editProfile.modificationDate = this.today;
+      this.editProfile.idAllies = profile.idAllies;
+      this.editProfile.nameAllie = profile.nameAllie;
+      this.editProfile.idHeadquarter = profile.idHeadquarter;
+      this.editProfile.nameHeadquarter = profile.nameHeadquarter;
+      this.editProfile.idCharge = this.preProfile['idCharge'];
+      this.editProfile.nameCharge = this.preProfile['nameCharge'];
+      this.editProfile.userCode = this.preProfile['userCode'];
+      this.editProfile.permis = this.preProfile['permis'];
+      this.editProfile.identification = this.preProfile['identification'];
+      this.editProfile.name = this.preProfile['name'];
+      this.editProfile.email = this.preProfile['email'];
+      this.swallUpdate(realId)
+    })
   }
 
   //sweet alerts
@@ -413,6 +428,59 @@ export class CreateProfileComponent implements OnInit {
           'success',
         )
         this._router.navigate(['/main', 'profiles']);
+      }
+    })
+  }
+
+  swallUpdate(realId) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.editProfile);
+        this.chargeProfiles.getProfiles().subscribe(profiles => {
+          let profile: Profiles = {};
+          profile = profiles[this.identificatorbyRoot];
+          this.editProfile.numberOfModifications = this.preProfile['numberOfModifications'] + 1;
+          if (this.seeNewPhoto == false) {
+            this.editProfile.photo = profile.photo;
+          } else if (this.seeNewPhoto == true) {
+            const id: Guid = Guid.create();
+            const file = this.fileImagedish;
+            const filePath = `assets/allies/profiles/${id}`;
+            const ref = this.storage.ref(filePath);
+            const task = this.storage.upload(filePath, file)
+            task.snapshotChanges()
+              .pipe(
+                finalize(() => {
+                  ref.getDownloadURL().subscribe(urlImage => {
+                    this.urlPorfile = urlImage;
+                    console.log(this.urlPorfile);
+                    this.preProfile['photo'] = this.urlPorfile
+                    this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
+                  })
+                }
+                )
+              ).subscribe()
+          }
+        })
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu perfil ha sido actualizado!",
+          icon: 'warning',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'profiles']);
+          }
+        })
       }
     })
   }
