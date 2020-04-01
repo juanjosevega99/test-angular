@@ -223,49 +223,6 @@ export class UserManagerComponent implements OnInit {
     doc.save('Test.pdf');
   }
 
-  SeachingRange(dateFrom: string, dateTo: string) {
-
-    this.from = dateFrom;
-    this.to = dateTo;
-
-    const mydateFrom = new Date(this.from);
-    const mydateTo = new Date(this.to);
-
-    if (!this.filteredArray.length) {
-
-      this.newdateArray = [];
-
-      this.usergetting.forEach(user => {
-
-        // const userdate = new Date(user.registerDate)
-        let datetransform = user.registerDate.split("/");
-        let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
-
-        const userdate = new Date(newdatetransform);
-
-        if (userdate >= mydateFrom && userdate <= mydateTo) {
-          this.newdateArray.push(user)
-        }
-      });
-
-    } else {
-
-      this.newdateArray = [];
-
-      this.filteredArray.forEach(user => {
-        // const userdate = new Date(user.registerDate)
-        let datetransform = user.registerDate.split("/");
-        let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
-
-        const userdate = new Date(newdatetransform);
-        if (userdate >= mydateFrom && userdate <= mydateTo) {
-          this.newdateArray.push(user);
-        }
-      });
-    }
-
-  }
-
 
   clear() {
 
@@ -291,109 +248,6 @@ export class UserManagerComponent implements OnInit {
     this.generalsearch = '';
   }
 
-
-  // search(termino?: string, id?: string) {
-
-  //   if (this.fromDate && this.toDate) {
-
-  //     if (termino) {
-  //       this.filteredArray = [];
-  //       termino = termino.toLowerCase();
-
-  //       const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-  //       const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-  //       this.SeachingRange(fromdate, todate);
-
-  //       const aux = this.newdateArray;
-  //       this.newdateArray = [];
-
-  //       aux.forEach(user => {
-  //         if (user[id].toLowerCase().indexOf(termino) >= 0) {
-  //           this.newdateArray.push(user);
-  //           this.filteredArray.push(user);
-  //         }
-
-  //       });
-
-  //     } else {
-
-  //       const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-  //       const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-  //       this.SeachingRange(fromdate, todate);
-
-  //     }
-
-
-  //   } else {
-
-  //     if (termino) {
-
-  //       if (this.filteredArray.length) {
-  //         console.log("si filtred array");
-
-
-  //         termino = termino.toLowerCase();
-
-  //         this.newdateArray = [];
-  //         console.log("buscando en filteredarray");
-
-  //         this.filteredArray.forEach(user => {
-
-  //           user[id] = user[id].toString();
-
-  //           if (user[id].toLowerCase().indexOf(termino) >= 0) {
-  //             this.newdateArray.push(user);
-
-  //           }
-
-  //         });
-  //       }
-  //       else {
-  //         console.log("no filtered array");
-
-
-  //         this.newdateArray = [];
-
-  //         this.usergetting.forEach(user => {
-
-  //           user[id] = user[id].toString();
-
-  //           if (user[id].toLowerCase().indexOf(termino) >= 0) {
-  //             this.newdateArray.push(user);
-  //             this.filteredArray.push(user);
-  //           }
-
-  //         });
-
-  //       }
-
-
-  //     } else {
-
-  //       this.table.value[id] = null;
-
-  //       let count = 0;
-  //       for (var i in this.table.value) {
-
-  //         if (this.table.value[i] == null || this.table.value[i] == "") {
-  //           count += 1;
-  //         }
-  //       }
-
-  //       if (count > 9 && !this.generalsearch) {
-
-  //         this.newdateArray = this.usergetting;
-  //         this.filteredArray = []
-  //         count = 0;
-
-  //       } else {
-
-  //         this.newdateArray = this.filteredArray;
-  //         count = 0;
-  //       }
-  //     }
-  //   }
-  // }
 
   search(termino?: string, id?: string) {
 
@@ -485,7 +339,6 @@ export class UserManagerComponent implements OnInit {
       filter(function (item) {
         
         if (this.fromdate != '' && this.todate != '' ){
-          console.log("existe fecha");
           
           const mydateFrom = new Date(this.fromdate);
           const mydateTo = new Date(this.todate);

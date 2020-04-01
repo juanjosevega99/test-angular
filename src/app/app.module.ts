@@ -61,6 +61,7 @@ import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-lis
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { OrderComponent } from './principal/order/order.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { LoadingComponent } from './shared/loading/loading.component';
     PqrListComponent,
     PrincipalOrdersComponent,
     LoadingComponent,
+    OrderComponent
 
   ],
   imports: [
