@@ -6,6 +6,7 @@ import { AttentionScheduleService } from "../../../../services/attention-schedul
 import { HeadquartersService } from '../../../../services/headquarters.service';
 import { Allies } from '../../../../models/Allies';
 import { Router } from '@angular/router';
+import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
 @Component({
   selector: 'app-ally-manager',
   templateUrl: './ally-manager.component.html',
@@ -25,13 +26,18 @@ export class AllyManagerComponent implements OnInit {
   today:Date ;
   date:String;
   dateDay : any ;
+  //variable of don't results
+  noResults = false
 
   constructor(
     private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
     private _headquartService: HeadquartersService,
-    private _router:Router){
+    private _router:Router,
+    private _saveLocalStorageService : SaveLocalStorageService){
     
+    //inicialization local storage IdAlly
+      this._saveLocalStorageService.saveLocalStorageIdAlly;
     // inicialization date
     this.today = new Date()
     this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
@@ -127,6 +133,14 @@ export class AllyManagerComponent implements OnInit {
       });
 
       this.filteredArray = this.newdateArray;
+      
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
 
     } else if (count == 2 && this.table.controls['generalsearch'].value) {
 
@@ -137,8 +151,17 @@ export class AllyManagerComponent implements OnInit {
           return ally;
         }
       });
+      
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
 
     }
+    
     else {
 
       if (this.table.controls['generalsearch'].value) {
@@ -152,6 +175,13 @@ export class AllyManagerComponent implements OnInit {
 
           this.searchbyterm(this.table.controls['generalsearch'].value);
         }
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
       } else {
 
         // campos llenos
@@ -162,6 +192,14 @@ export class AllyManagerComponent implements OnInit {
             return ally;
           }
         });
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
+
 
         if (this.table.controls['generalsearch'].value) {
 
@@ -202,6 +240,13 @@ export class AllyManagerComponent implements OnInit {
           myRegex.test(item.mealType) || myRegex.test(item.schedules))
       });
       this.filteredArray = this.newdateArray;
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
     } else {
       // un campo lleno
       this.newdateArray = this.filteredArray.filter(function (item) {
@@ -210,11 +255,20 @@ export class AllyManagerComponent implements OnInit {
           myRegex.test(item.numberHeadquarters) || myRegex.test(item.allyType) ||
           myRegex.test(item.mealType) || myRegex.test(item.schedules))
       });
+      // condition by when don't exit results in the table
+      if (this.newdateArray.length == 0) {
+        this.noResults = true;
+        
+      }else{
+        this.noResults = false;
+      }
     }
   }
   //method edit ally
-  editAlly(idAlly:string){
-    this._router.navigate( ['/main','editAlly',idAlly] )
+  editAlly(idAlly:string, i){
+    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+    this._router.navigate( ['/main','editAlly',i] )
+
   }
 
 }

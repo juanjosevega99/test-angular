@@ -8,6 +8,8 @@ import { AlliesService } from "../../../../services/allies.service";
 import { UploadImagesService } from "../../../../services/providers/uploadImages.service";
 import Swal from 'sweetalert2';
 import { HeadquartersService } from "../../../../services/headquarters.service";
+import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
+
 //other libraris
 import * as $ from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -59,19 +61,22 @@ export class CreateAllyComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private _headquartService: HeadquartersService,
     private _router: Router,
-    private _activateRoute: ActivatedRoute) {
+    private _activateRoute: ActivatedRoute,
+    private _saveLocalStorageService : SaveLocalStorageService) {
 
     this.loading = true;
       //inicialization for charging the data of an Ally to edit
     this._activateRoute.params.subscribe(params => {
       console.log('Parametro', params['id']);
+      console.log('this is new:', this._saveLocalStorageService.getLocalStorageIdAlly());
+      let idAlly = this._saveLocalStorageService.getLocalStorageIdAlly();
       let identificator = params['id']
-      if (identificator != undefined) {
-        this.getAlly(identificator)
+      if (identificator != -1) {
+        this.getAlly(idAlly)
       } else {
         this.loading = false
       }
-      this.identificatorbyRoot = identificator;
+      this.identificatorbyRoot = idAlly;
 
     })
 

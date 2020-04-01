@@ -39,7 +39,7 @@
                             </li>
                             
                             <li class="nav-item mx-5">
-                                    <button [routerLink]="['/main','createAlly']"
+                                    <button [routerLink]="['/main','createAlly', -1]"
                                     class="btn btn-outline-primary ml-2">Crear aliado</button>
                                 </li>
                         </ul>
@@ -65,7 +65,7 @@
                 </tr>
             </thead>
             <tbody class="mt-5" >
-                <tr *ngFor="let ally of newdateArray; " class="text-center">
+                <tr *ngFor="let ally of newdateArray; let i = index " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
                     <td> <a [routerLink]="['/main', 'headquarts']"> {{ally.nameEstablishment}} </a></td>
@@ -84,7 +84,16 @@
                     <td> {{ally.schedules}} </td>
 
                     <td>
-                        <a  class="btn" (click)="editAlly(ally.idAlly)"> <i class="far fa-edit"></i> </a>
+                        <a  class="btn" (click)="editAlly(ally.idAlly, i)"> <i class="far fa-edit"></i> </a>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngIf="noResults">
+                        <a> No se encontraron resultados </a>
                     </td>
                 </tr>
 
