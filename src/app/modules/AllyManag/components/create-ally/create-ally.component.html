@@ -15,7 +15,7 @@
                                                 <input class="form-control" type="text" formControlName="name"
                                                         [ngClass]="{ 'is-invalid': (!forma.get('name').valid && 
                                                         forma.get('name').touched ),
-                                                         'is-valid':( forma.get('name').valid )}"> 
+                                                         'is-valid':( forma.get('name').valid )}">
                                                 <div *ngIf="forma.get('name').errors?.required "
                                                         class="invalid-feedback">
                                                         Este campo es requerido
@@ -88,8 +88,7 @@
                                                         <div class="photo">
                                                                 <img [tooltip]="HtmlContent" content-type="template"
                                                                         id="photo" width="150px" height="120px"
-                                                                        style="border-radius: 1.5rem"
-                                                                        src="">
+                                                                        style="border-radius: 1.5rem" src="">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
                                                                 <ng-template #HtmlContent>
@@ -311,31 +310,92 @@
                                                         </div>
 
                                                 </div>
-                                                <div *ngFor="let day of days; let i = index"
+                                                <div *ngIf="!flagShowShedule">
+
+                                                        <div *ngFor="let day of days; let i = index"
+                                                                class="row my-3 form-group ">
+                                                                <div class="col">
+                                                                        <div class="row ">
+                                                                                <div
+                                                                                        class="horario center col-sm-3 col-md-3 col-lg-3">
+                                                                                        <label #dayl>{{day}}</label>
+                                                                                </div>
+                                                                                <div
+                                                                                        class=" mr-3 col-sm-3 col-md-3 col-lg-3 .col-xl-3">
+                                                                                        <select class=" browser-default custom-select form-control "
+                                                                                                style="width: 140%;" #from
+                                                                                                (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)"
+                                                                                                >
+                                                                                                <option selected>
+                                                                                                        ---------------------
+                                                                                                </option>
+                                                                                                <option *ngFor="let time of hours"
+                                                                                                        [value]="time">
+                                                                                                        {{time}}
+                                                                                                </option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class=" col-sm-3 col-md-3 col-lg-3">
+        
+                                                                                        <select class=" browser-default custom-select form-control"
+                                                                                                style="width: 140%;" #to
+                                                                                                (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)"
+                                                                                                >
+                                                                                                <option selected>
+                                                                                                        ---------------------
+                                                                                                </option>
+                                                                                                <option *ngFor="let time of hours"
+                                                                                                        [value]="time">
+                                                                                                        {{time}}
+                                                                                                </option>
+                                                                                        </select>
+                                                                                </div>
+        
+                                                                        </div>
+        
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                                <!-- <div *ngIf="flagShowShedule">
+                                                        <div *ngFor="let day of days; let i = index"
                                                         class="row my-3 form-group ">
                                                         <div class="col">
                                                                 <div class="row ">
-                                                                        <div class="horario center col-sm-3 col-md-3 col-lg-3">
-                                                                                <label #dayl>{{day}}</label>
+                                                                        <div
+                                                                                class="horario center col-sm-3 col-md-3 col-lg-3">
+                                                                                <label #dayl>hola</label>
                                                                         </div>
-                                                                        <div class=" mr-3 col-sm-3 col-md-3 col-lg-3 .col-xl-3" >
+                                                                        <div
+                                                                                class=" mr-3 col-sm-3 col-md-3 col-lg-3 .col-xl-3">
                                                                                 <select class=" browser-default custom-select form-control "
                                                                                         style="width: 140%;" #from
-                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
+                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)"
+                                                                                        >
                                                                                         <option selected>
                                                                                                 ---------------------
-                                                                                        </option>
-                                                                                        <option *ngFor="let time of hours"
-                                                                                                [value]="time">
-                                                                                                {{time}}
-                                                                                        </option>
+                                                                                        </option> 
+                                                                                        <div *ngIf="!flagShowShedule">
+                                                                                                <option *ngFor="let time of hours"
+                                                                                                        [value]="time">
+                                                                                                        {{time}}
+                                                                                                </option>
+                                                                                        </div>
+                                                                                        <div *ngIf="flagShowShedule">
+                                                                                                
+                                                                                                <option *ngFor="let schedule of getSchedule"
+                                                                                                [value]="schedule.from">
+                                                                                                {{schedule.from}}
+                                                                                                </option>
+                                                                                        </div>
+                                                                                        
                                                                                 </select>
                                                                         </div>
                                                                         <div class=" col-sm-3 col-md-3 col-lg-3">
 
                                                                                 <select class=" browser-default custom-select form-control"
                                                                                         style="width: 140%;" #to
-                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
+                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)"
+                                                                                        >
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
@@ -349,7 +409,9 @@
                                                                 </div>
 
                                                         </div>
-                                                </div>
+                                                </div> -->
+                                                              
+                                                <!-- </div> -->
                                         </div>
 
                                 </div>
@@ -360,7 +422,8 @@
                                                 </label>
                                         </div>
                                         <div class=" col align-items-center">
-                                                <div class="d-flex flex-column justify-content-center align-items-center mt-5 ">
+                                                <div
+                                                        class="d-flex flex-column justify-content-center align-items-center mt-5 ">
                                                         <div class="d-flex flex-column ">
                                                                 <ng-image-slider
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
@@ -376,13 +439,11 @@
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
                                                                         <button
-                                                                                class=" container  btn btn-outline-primary"
-                                                                                >
+                                                                                class=" container  btn btn-outline-primary">
                                                                                 Adjuntar archivos {{contImage}}
                                                                         </button>
                                                                         <input type="file" name="photo"
-                                                                                (change)="onImagesSelected($event)" 
-                                                                                />
+                                                                                (change)="onImagesSelected($event)" />
                                                                 </div>
 
                                                         </div>
