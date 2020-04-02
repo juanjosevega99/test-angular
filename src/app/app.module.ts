@@ -62,6 +62,8 @@ import { TooltipModule } from 'ng2-tooltip-directive';
 import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { OrderComponent } from './principal/order/order.component';
+import { TypeServiceImgDirective } from './directives/type-service-img.directive';
+import { CronometerStateDirective } from './directives/cronometer-state.directive';
 
 @NgModule({
   declarations: [
@@ -106,7 +108,9 @@ import { OrderComponent } from './principal/order/order.component';
     PqrListComponent,
     PrincipalOrdersComponent,
     LoadingComponent,
-    OrderComponent
+    OrderComponent,
+    TypeServiceImgDirective,
+    CronometerStateDirective
 
   ],
   imports: [
