@@ -59,11 +59,12 @@ export class PrincipalOrdersComponent implements OnInit {
 
           ordertosave.id = order.code;
           ordertosave.name = user.name + " " + user.lastname;
-          ordertosave.typeOfService = order.typeOfService;
+          ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " "+order.typeOfService['tables'] + " mesas": order.typeOfService['type'] ;
           ordertosave.purchaseAmount = order.orderValue;
           ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
           ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
           ordertosave.DateDelivery = order.dateAndHourDelivey;
+          ordertosave.orderStatus = order.orderStatus;
 
         })
 
