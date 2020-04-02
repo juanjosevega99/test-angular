@@ -18,6 +18,10 @@ export class OrderComponent implements OnInit {
   timeToralOut = '';
   timeInMinutos = 0;
   stopOrder = false;
+  percent = 0;
+
+  // to progress bar
+  progressbar;
 
   @Input()
   order: OrderByUser = {};
@@ -26,7 +30,20 @@ export class OrderComponent implements OnInit {
 
   ngOnInit() {
 
-    // let precronometer = setInterval(() => {
+
+    let initprogress = setInterval(() => {
+
+      this.changeStatusProgressBar();
+
+      if (this.stopOrder) {
+
+        clearInterval(initprogress);
+
+      }
+
+    }, 3000);
+
+    // let cronometer = setInterval(() => {
 
     //   this.InitCronometer();
 
@@ -36,7 +53,7 @@ export class OrderComponent implements OnInit {
 
     // }, 1000);
 
-    // let postcronometer = setInterval(() => {
+    // let precronometer = setInterval(() => {
 
     //   this.cronometer();
 
@@ -47,6 +64,7 @@ export class OrderComponent implements OnInit {
     //   }
 
     // }, 1000);
+
 
   }
 
@@ -148,6 +166,7 @@ export class OrderComponent implements OnInit {
         if (hoursCronometer < 0 && minutsCronometer < 0) {
           this.stopOrder = true;
         }
+        this.changeStatusOrder(this.timeInMinutos);
 
         // asign new cronometer
         this.order.timeTotalCronometer = this.timeToralOut;
@@ -178,7 +197,26 @@ export class OrderComponent implements OnInit {
       this.expresionColor.fontSmall = 'Prepara';
 
     }
+  }
 
+  changeStatusProgressBar() {
+
+      let today = new Date().getTime();
+      let goal = new Date(this.order.DateDelivery).getTime();
+      let percent = 100;
+
+      if (today <= goal) {
+  
+        percent = Math.floor(100 / ((goal - today) / (1000 * 60)));
+        console.log(percent, (100 / ((goal - today) / (1000 * 60))));
+        this.percent = percent;
+  
+      }
+      else {
+        this.percent = 100;
+        // stop count
+        clearTimeout(this.progressbar);
+      }
   }
 
 }
