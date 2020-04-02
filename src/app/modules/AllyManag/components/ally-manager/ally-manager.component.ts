@@ -22,10 +22,10 @@ export class AllyManagerComponent implements OnInit {
   arrayAllyManager: any[] = []
   newdateArray = this.arrayAllyManager;
   filteredArray = [];
-  // variables date
+  // variables for date
   today:Date ;
   date:String;
-  dateDay : any ;
+  dateDay : any[]= [];
   //variable of don't results
   noResults = false
 
@@ -68,8 +68,8 @@ export class AllyManagerComponent implements OnInit {
                 return days
               }
             })
-            // console.log(this.dateDay);
-            this.attentionSchedule = this.dateDay[0].from + " - " + this.dateDay[0].to;
+            console.log(this.dateDay);
+            // this.attentionSchedule = this.dateDay[0].from + " - " + this.dateDay[0].to;
           })
 
         this._headquartService.getHeadquarterByIdAlly(ally.id).subscribe((services: any[]) => {
