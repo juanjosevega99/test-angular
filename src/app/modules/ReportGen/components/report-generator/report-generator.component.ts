@@ -76,7 +76,7 @@ export class ReportGeneratorComponent implements OnInit {
                   obj.location = headq.ubication;
                   obj.codeOrder = order.code;
                   obj.client = user.name +" "+ user.lastname;
-                  obj.typeOfService = order.typeOfService;
+                  obj.typeOfService = order.typeOfService['type'];
                   obj.purchaseAmount = order.orderValue;
                   obj.registerDate = this.convertDate(order.dateAndHourReservation);
                   obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);

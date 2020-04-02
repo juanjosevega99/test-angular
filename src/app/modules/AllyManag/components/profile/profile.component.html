@@ -1,4 +1,3 @@
-
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
@@ -8,74 +7,57 @@
         </div>
         <section class="col-11">
             <div class="filerControl px-1">
-                <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light" style="width: 100%;">
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
-                        <ul class=" navbar-nav mr-auto mt-2 mt-lg-0 ">
-                            <li class="nav-item mx-5">
-                                <input placeholder="Buscar por cédula ..." class="form-control" type="text"
-                                        (keyup)="search(identification.value, identification.id)" #identification id="identification"
-                                        formControlName="identification">
-                            </li>
-                            <li class="nav-item mx-5">
-                                <input placeholder="Buscar por nombre ..." class="form-control" type="text"
-                                        (keyup)="search(name.value, name.id)" #name id="name" formControlName="name">
-                            </li>
-                            <li class="nav-item mx-5  ">
-                                <div class="input-group-append">
-                                    <input class="form-control text-center" type="text" 
-                                        placeholder="Buscar perfil ..."
-                                        (keyup)="searchg( general.value)" #general  formControlName="general" id="general"
-                                        id="general" > 
-                                    <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
+
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03" >
+
+                        <section class="col-md-5 mr-1 " style="flex-direction: column;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                        <li class="nav-item mr-md-2">
+                                            <input placeholder="Buscar por cédula ..." class="form-control text-center" type="text"
+                                                (keyup)="search(identification.value, identification.id)"
+                                                #identification id="identification" formControlName="identification">
+                                        </li>
+                                        <li class="nav-item">
+                                            <input placeholder="Buscar por nombre ..." class="form-control text-center" type="text"
+                                                (keyup)="search(name.value, name.id)" #name id="name"
+                                                formControlName="name">
+                                        </li>
+                                    </ul>
                                 </div>
-                            </li>
-                            <li class="nav-item mx-5">
-                                <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary" style="width: 12rem;">Ingresar nuevo perfil</a>
-                            </li>
-                        </ul>
+                            </nav>
+                        </section>
+                        <section class="col-md-5 overflow-auto mr-1" style="flex-direction: column;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                                    <li class="nav-item container-fluid d-flex">
+                                        <input (keyup)="search(general.value)" class="form-control text-center"
+                                            id="general" type="text" placeholder="Buscar perfil ..." #general
+                                            [(ngModel)]="generalsearch">
+                                    </li>
+                                </ul>
+                            </nav>
+                        </section>
+                        <section class="col-md-2">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-center ">
+                                <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
+                                    <li class="nav-item">
+                                        <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary"
+                                           >Ingresar nuevo perfil</a>
+                                        <!-- </li>[routerLink]="[ '/main/createProfile', i ]" [routerLink]="['/main','createProfile']" -->
+                                </ul>
+                            </nav>
+                        </section>
                     </div>
                 </nav>
-               <!--  <section class="col-5 overflow-auto mr-1" style="flex-direction: column;">
-                    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                        <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
-                            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                                <li class="nav-item mr-2">
-                                    <input placeholder="Buscar por cédula ..." class="form-control" type="text"
-                                        (keyup)="search(identification.value, identification.id)" #identification id="identification"
-                                        formControlName="identification">
-                                </li>
-                                <li class="nav-item">
-                                    <input placeholder="Buscar por nombre ..." class="form-control" type="text"
-                                        (keyup)="search(name.value, name.id)" #name id="name" formControlName="name">
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </section>
-                <section class="col-5 overflow-auto mr-1" style="flex-direction: column;">
-                    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
-                            <li class="nav-item container-fluid d-flex">
-                                <input (keyup)="searchbyterm(general.value)" class="form-control text-center"
-                                    id="general" type="text" placeholder="Buscar perfil ..." #general
-                                    [(ngModel)]="generalsearch">
-                            </li>
-                        </ul>
-                    </nav>
-                </section>
-                <section class="col-2 overflow-auto">
-                    <nav class="navbar navbar-expand-sm navbar-light bg-light overflow-auto">
-                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                            <li class="nav-item">
-                                <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary" style="width: 12rem;">Ingresar nuevo perfil</a>
-                        </ul>
-                    </nav>
-                </section> -->
             </div>
         </section>
     </div>
@@ -91,7 +73,7 @@
                     <th class="text-center">Fecha de ingreso</th>
                     <th class="text-center">Fecha de modificación</th>
                     <th class="text-center">Número de modificaciones</th>
-                    <th class="text-center" colspan="2" >Estado</th>
+                    <th class="text-center" colspan="2">Estado</th>
                     <th class="text-center"> </th>
                 </tr>
             </thead>
@@ -105,25 +87,29 @@
                     <td>{{prof.entryDate}}</td>
                     <td>{{prof.modificationDate}}</td>
                     <td>{{prof.numberOfModifications}}</td>
-                    <td><div class="radio radio-success m-2 form-check-inline">
-                        <input [checked]="prof.state[0].check" value="{{prof.id}}" type="radio" name={{i}} id="state" #active
-                        (click)="changeStateA(active.value)" >
-                        <label  style="font-size: 15px;">
-                            Activo
-                        </label>
-                    </div></td>
-                    <td><div class="radio radio-danger m-2 form-check-inline">
-                        <input [checked]="prof.state[1].check"  value="{{prof.id}}" type="radio" name={{i}} id="state" #inactive
-                        (click)="changeStateI(inactive.value)">
-                        <label style="font-size: 15px;" >
-                            Inactivo
-                        </label>
-                    </div></td>
+                    <td>
+                        <div class="radio radio-success m-2 form-check-inline">
+                            <input [checked]="prof.state[0].check" value="{{prof.id}}" type="radio" name={{i}}
+                                id="state" #active (click)="changeStateA(active.value)">
+                            <label style="font-size: 15px;">
+                                Activo
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="radio radio-danger m-2 form-check-inline">
+                            <input [checked]="prof.state[1].check" value="{{prof.id}}" type="radio" name={{i}}
+                                id="state" #inactive (click)="changeStateI(inactive.value)">
+                            <label style="font-size: 15px;">
+                                Inactivo
+                            </label>
+                        </div>
+                    </td>
                     <td>
                         <a [routerLink]="[ '/main/createProfile', i ]" class="btn"> <i class="far fa-edit"></i> </a>
                     </td>
-                    
-                    
+
+
                 </tr>
                 <tr>
                     <td></td>
@@ -139,4 +125,3 @@
 
 
 </div>
-

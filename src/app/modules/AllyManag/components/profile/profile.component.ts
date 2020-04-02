@@ -16,8 +16,7 @@ export class ProfileComponent implements OnInit {
   table: FormGroup;
   
   //variables for general search
- /*  generalsearch: string = ''; */
-  
+  generalsearch: string = "";
   //varibales to obtain data
   profilesgetting: ProfileList[] = [];
   newArray = this.profilesgetting;
@@ -68,49 +67,40 @@ export class ProfileComponent implements OnInit {
 
   //method for updating the state to active
   changeStateA(idProfile) {
-    let newstate: object ={
-      state : [{
+    let newstate: object = {
+      state: [{
         state: "active",
         check: true
       }, {
         state: "inactive",
         check: false
       }]
-    } 
+    }
     this.swallUpdateState(idProfile, newstate)
   }
 
   //method for updating the state to inactive
   changeStateI(idProfile) {
-    let newstate: object ={
-      state : [{
+    let newstate: object = {
+      state: [{
         state: "active",
         check: false
       }, {
         state: "inactive",
         check: true
       }]
-    } 
+    }
     this.swallUpdateState(idProfile, newstate)
   }
 
   //method for a specific search
   search(termino?: string, id?: string) {
-    
-    // vars to filter table
+
     let objsearch = {
       identification: "",
       name: ""
-    }
+    };
 
-    
-
-    let gener ={
-      general:""
-    }
-
-    gener.general = this.table.controls['general'].value
-     
 
     for (var i in this.table.value) {
       // search full fields
@@ -119,33 +109,28 @@ export class ProfileComponent implements OnInit {
       }
     }
 
-     // let for general search
-     var myRegex = new RegExp('.*' + gener.general.toLowerCase() + '.*', 'gi');
+    // let for general searhch
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
 
-     this.newArray = this.profilesgetting.
-      filter(function (profile) {
-        if (profile["identification"].toLowerCase().indexOf(this.identification) >= 0) {
-          return profile;
+    this.newArray = this.profilesgetting.
+      filter(function (dish) {
+        if (dish["name"].toLowerCase().indexOf(this.name) >= 0) {
+          return dish;
         }
       }, objsearch).
-      filter(function (profile) {
-        if (profile["name"].toLowerCase().indexOf(this.name) >= 0) {
-          return profile;
+      filter(function (dish) {
+        if (dish["identification"].toLowerCase().indexOf(this.identification) >= 0) {
+          return dish;
         }
       }, objsearch).
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.nameCharge) || myRegex.test(item.identification) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.entryDate) || myRegex.test(item.modificationDate) ||
-          myRegex.test(item.numberOfModifications.toString()) )
-
+          myRegex.test(item.numberOfModifications.toString()))
       })
+
   }
-  searchg(value){
-    console.log( this.table.controls['general'].value);
-    
-  }
-  
-  
+
 
   //sweets alerts
   swallUpdateState(idProfile, newState) {
