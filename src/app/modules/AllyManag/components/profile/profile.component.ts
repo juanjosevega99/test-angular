@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   table: FormGroup;
   
   //variables for general search
-  generalsearch: string;
+ /*  generalsearch: string = ''; */
   
   //varibales to obtain data
   profilesgetting: ProfileList[] = [];
@@ -24,15 +24,13 @@ export class ProfileComponent implements OnInit {
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
 
-   
 
 
   constructor(private profilesService: ProfilesService) {
-
-
     this.table = new FormGroup({
       "identification": new FormControl(),
       "name": new FormControl(),
+      "general":new FormControl()
     })
 
     //inicialization of profiles
@@ -98,124 +96,56 @@ export class ProfileComponent implements OnInit {
 
   //method for a specific search
   search(termino?: string, id?: string) {
-    let count = 0;
-    let termsearch = '';
-    let idsearch = '';
+    
+    // vars to filter table
+    let objsearch = {
+      identification: "",
+      name: ""
+    }
+
+    
+
+    let gener ={
+      general:""
+    }
+
+    gener.general = this.table.controls['general'].value
+     
 
     for (var i in this.table.value) {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
-        count += 1;
-        termsearch = this.table.value[i];
-        idsearch = i;
+        objsearch[i] = this.table.value[i];
       }
     }
 
-    console.log("campos llenos: ", count);
+     // let for general search
+     var myRegex = new RegExp('.*' + gener.general.toLowerCase() + '.*', 'gi');
 
-    if (count > 0 && count < 2 && !this.generalsearch) {
-
-      //  un campo lleno
-      this.newArray = this.profilesgetting.filter(function (profile: ProfileList) {
-        //We test each element of the object to see if one string matches the regexp.
-        if (profile[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+     this.newArray = this.profilesgetting.
+      filter(function (profile) {
+        if (profile["identification"].toLowerCase().indexOf(this.identification) >= 0) {
           return profile;
         }
-      });
-
-      this.filteredArray = this.newArray;
-
-    } else if (count == 2 && this.generalsearch) {
-
-      let aux = this.newArray;
-
-      this.newArray = aux.filter(function (profile: ProfileList) {
-        //We test each element of the object to see if one string matches the regexp.
-        if (profile[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+      }, objsearch).
+      filter(function (profile) {
+        if (profile["name"].toLowerCase().indexOf(this.name) >= 0) {
           return profile;
         }
-      });
+      }, objsearch).
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.nameCharge) || myRegex.test(item.identification) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.entryDate) || myRegex.test(item.modificationDate) ||
+          myRegex.test(item.numberOfModifications.toString()) )
 
-    }
-    else {
-
-      if (this.generalsearch) {
-      }
-      if (count == 0) {
-        // campos vacios
-        // existe general search?
-        this.newArray = this.profilesgetting;
-
-        if (this.generalsearch) {
-          console.log("buscando general searhc");
-          this.searchbyterm(this.generalsearch);
-        }
-      } else {
-
-        // campos llenos
-        // existe general search?
-
-        this.newArray = this.filteredArray.filter(function (profile: ProfileList) {
-          //We test each element of the object to see if one string matches the regexp.
-          if (profile[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
-            return profile;
-          }
-        });
-
-        if (this.generalsearch) {
-          console.log("buscando general searhc");
-          this.searchbyterm(this.generalsearch);
-        }
-      }
-    }
+      })
   }
-
-  //method for a general search.
-  searchbyterm(termino: string) {
-    if (termino) {
-      termino = termino.toLowerCase();
-      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-      if (this.filteredArray.length) {
-        this.newArray = this.filteredArray.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.nameCharge) || myRegex.test(item.identification) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.entryDate) || myRegex.test(item.modificationDate) ||
-            myRegex.test(item.numberOfModifications.toString()))
-        });
-      } else {
-        this.newArray = this.profilesgetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.nameCharge) || myRegex.test(item.identification) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.entryDate) || myRegex.test(item.modificationDate) ||
-            myRegex.test(item.numberOfModifications.toString()))
-        });
-        this.filteredArray = this.profilesgetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.nameCharge) || myRegex.test(item.identification) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.entryDate) || myRegex.test(item.modificationDate) ||
-            myRegex.test(item.numberOfModifications.toString()))
-        });
-      }
-    } else {
-
-      let count = 0;
-      for (var i in this.table.value) {
-        if (this.table.value[i] == null || this.table.value[i] == "") {
-          count += 1;
-        }
-      }
-
-      if (count > 1 && !this.generalsearch) {
-
-        this.newArray = this.profilesgetting;
-        this.filteredArray = []
-        count = 0;
-
-      } else {
-
-        this.newArray = this.filteredArray;
-        count = 0;
-      }
-    }
+  searchg(value){
+    console.log( this.table.controls['general'].value);
+    
   }
+  
+  
 
   //sweets alerts
   swallUpdateState(idProfile, newState) {

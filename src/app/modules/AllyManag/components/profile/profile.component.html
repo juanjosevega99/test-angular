@@ -8,7 +8,39 @@
         </div>
         <section class="col-11">
             <div class="filerControl px-1">
-                <section class="col-5 overflow-auto mr-1" style="flex-direction: column;">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                        <ul class=" navbar-nav mr-auto mt-2 mt-lg-0 ">
+                            <li class="nav-item mx-5">
+                                <input placeholder="Buscar por cédula ..." class="form-control" type="text"
+                                        (keyup)="search(identification.value, identification.id)" #identification id="identification"
+                                        formControlName="identification">
+                            </li>
+                            <li class="nav-item mx-5">
+                                <input placeholder="Buscar por nombre ..." class="form-control" type="text"
+                                        (keyup)="search(name.value, name.id)" #name id="name" formControlName="name">
+                            </li>
+                            <li class="nav-item mx-5  ">
+                                <div class="input-group-append">
+                                    <input class="form-control text-center" type="text" 
+                                        placeholder="Buscar perfil ..."
+                                        (keyup)="searchg( general.value)" #general  formControlName="general" id="general"
+                                        id="general" > 
+                                    <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
+                                </div>
+                            </li>
+                            <li class="nav-item mx-5">
+                                <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary" style="width: 12rem;">Ingresar nuevo perfil</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+               <!--  <section class="col-5 overflow-auto mr-1" style="flex-direction: column;">
                     <nav class="navbar navbar-expand-sm navbar-light bg-light">
                         <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -43,7 +75,7 @@
                                 <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary" style="width: 12rem;">Ingresar nuevo perfil</a>
                         </ul>
                     </nav>
-                </section>
+                </section> -->
             </div>
         </section>
     </div>
@@ -92,6 +124,14 @@
                     </td>
                     
                     
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngIf="noResults">
+                        <a> No se encontraron resultados </a>
+                    </td>
                 </tr>
             </tbody>
         </table>
