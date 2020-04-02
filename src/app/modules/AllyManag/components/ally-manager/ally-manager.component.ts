@@ -62,13 +62,13 @@ export class AllyManagerComponent implements OnInit {
             // console.log(schedule)
             // let nothing:String = 'No hay servicio';
 
-            this.dateDay = schedule['attentionSchedule'].filter(days => {
-              // console.log(days.day);
-              if (days.day == day){
-                return days
-              }
-            })
-            console.log(this.dateDay);
+            // this.dateDay = schedule['attentionSchedule'].filter(days => {
+            //   // console.log(days.day);
+            //   if (days.day == day){
+            //     return days
+            //   }
+            // })
+            // console.log(this.dateDay);
             // this.attentionSchedule = this.dateDay[0].from + " - " + this.dateDay[0].to;
           })
 

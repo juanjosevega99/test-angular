@@ -52,8 +52,10 @@ export class AlliesService {
   }
 
   getAlliesById(id): Observable<Allies>{
-    return this.httpclient.get<Allies>(environment.UrlBase+"allies/"+id).pipe(map(
-      (allies:Allies)=> {
+    return this.httpclient
+    .get<Allies>(environment.UrlBase+"allies/"+id)
+    .pipe(
+      map((allies:Allies)=> {
       let obj = {
         name: allies.name,
         nit:allies.nit,

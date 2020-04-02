@@ -20,14 +20,14 @@ export class AttentionScheduleService {
 
   putAttentionSchedule(attentionschedule): Observable<AttentionSchedule> {
     return this.httpclient.put<AttentionSchedule>(
-      environment.UrlBase + "attention-schedules" + attentionschedule.id,
+      environment.UrlBase + "attention-schedule/" + attentionschedule._id,
       attentionschedule
     );
   }
 
   deleteAttentionSchedule(id): Observable<{}> {
     return this.httpclient.delete(
-      environment.UrlBase + "attention-schedules/" + id
+      environment.UrlBase + "attention-schedule/" + id
     );
   }
 
@@ -47,21 +47,19 @@ export class AttentionScheduleService {
       );
   }
 
-  getAttentionSchedulesById(id): Observable<any[]> {
+  getAttentionSchedulesById(id): Observable<AttentionSchedule> {
     return this.httpclient
-      .get<AttentionSchedule[]>(
-        environment.UrlBase + "attention-schedule/" + id
-      )
-      // .pipe(
-      //   map((attentionschedules: any[]) =>
-      //     attentionschedules.map(attentionschedules => {
-      //       let obj = {
-      //         id: attentionschedules._id,
-      //         attentionSchedule: attentionschedules.attentionSchedule
-      //       };
-      //       return obj;
-      //     })
-      //   )
-      // );
+      .get<AttentionSchedule>(
+        environment.UrlBase + "attention-schedule/" + id)
+      .pipe(
+        map((attentionschedules: AttentionSchedule) => {
+            let obj = {
+              // id: attentionschedules._id,
+              attentionSchedule: attentionschedules.attentionSchedule
+            };
+            return obj;
+          }
+        )
+      );
   }
 }

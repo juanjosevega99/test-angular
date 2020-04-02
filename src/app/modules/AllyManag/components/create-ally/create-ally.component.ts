@@ -29,6 +29,11 @@ export class CreateAllyComponent implements OnInit {
   hours: String[] = [];
   Schedules: any[] = [];
   idSchedule: string;
+  // flag  for show schedules saved
+  flagShowShedule= false;
+  getSchedule: any[]= [];
+  valueSchedule :FormGroup;
+  //variable for color
   color: String = "#000000";
   //Variables of upload Logo to firebase
   urlLogo: any;
@@ -51,6 +56,7 @@ export class CreateAllyComponent implements OnInit {
    //variables for receiving the profile that will be edited
    identificatorbyRoot:string;
    idParams:number;
+
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -113,9 +119,15 @@ export class CreateAllyComponent implements OnInit {
 
     })
 
+    this.valueSchedule = new FormGroup({
+      'day': new FormControl('', [Validators.required]),
+      'from': new FormControl('', [Validators.required]),
+      'to': new FormControl('', [Validators.required])
+    })
+
     this.imageSize = { width: 230, height: 120 }; //to do 
-    this.days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-    this.hours = ["10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
+    this.days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    this.hours = ["08:00 am","09:00 am","10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
 
     //inicialization service with collections allies-categories
@@ -146,14 +158,15 @@ export class CreateAllyComponent implements OnInit {
       console.log(ally)
       this.forma.setValue(ally)
       console.log('new data edit: ', this.forma.value)
+      let idSchedule = this.forma.controls['idAttentionSchedule'].value
+      this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe( shedule => {
+        this.getSchedule =  shedule.attentionSchedule
+        console.log('print shedule:', this.getSchedule);
+        this.flagShowShedule=true
+      })
+      
+
     })
-    // this.chargeProfiles.getProfiles().subscribe(profiles => {
-    //   let profile: ProfileList = {}
-    //   profile = profiles[id]
-    //   this.editProfile = profile
-    //   this.preProfile = this.editProfile
-    //   this.loading = false;
-    // })
   }
   getColour(event) {
     this.color = event.target.value
@@ -286,6 +299,8 @@ export class CreateAllyComponent implements OnInit {
   }
 
   getAttentionSchedule(day: String, from: String, to: String, i: number) {
+    console.log(this.valueSchedule.value);
+    
     console.log(from); //delete console log
     console.log(to, i); //delete console log
     let schedule: object = {
@@ -443,27 +458,31 @@ export class CreateAllyComponent implements OnInit {
             this.forma.controls['nameMealsCategories'].setValue(nameMeal)
 
             //format of properties by collection AttentatinShedule
-            let addSchedule: object = {
+            let addSchedule: any = {
               attentionSchedule: this.Schedules
             }
-            this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
-              this.idSchedule = schedule._id;
-              console.log('LAST ONE', this.idSchedule);//delete consle.log
-              this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
-              console.log(this.forma.value); // delete console.log
-              //upload all fields to ally  collection 
+            if (this.idParams != -1) {
+              addSchedule._id = this.forma.controls['idAttentionSchedule'].value;
+              this.scheduleServices.putAttentionSchedule(addSchedule).subscribe( ()=> alert('shedule updated'))
               let objAllie = this.forma.value
-              console.log(objAllie); //delete console.log
-              if (this.idParams != -1) {
-                objAllie._id = this.identificatorbyRoot
+              console.log('Objeto de aliado editado sin id: ',objAllie); //delete console.log
+              objAllie._id = this.identificatorbyRoot
                 this.allieService.putAllie(objAllie).subscribe( ()=> alert('ally update') )
                 this._router.navigate(['/main', 'allyManager'])
-              } else{
-                this.loading = false
-                this.allieService.postAllie(objAllie).subscribe()
-                this._router.navigate(['/main', 'allyManager'])
-              }
-            })
+            }else{
+              this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
+                this.idSchedule = schedule._id;
+                console.log('LAST ONE', this.idSchedule);//delete consle.log
+                this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
+                console.log(this.forma.value); // delete console.log
+                //upload all fields to ally  collection 
+                let objAllie = this.forma.value
+                console.log(objAllie); //delete console.log
+                  this.allieService.postAllie(objAllie).subscribe()
+                  this._router.navigate(['/main', 'allyManager'])
+                
+              })
+            }
           })
           .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
         Swal.fire(
