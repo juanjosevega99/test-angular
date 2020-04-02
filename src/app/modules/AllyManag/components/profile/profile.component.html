@@ -7,7 +7,7 @@
         </div>
         <section class="col-11">
             <div class="filerControl px-1">
-                <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light" style="width: 100%;">
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
@@ -39,7 +39,7 @@
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
                                     <li class="nav-item container-fluid d-flex">
-                                        <input (keyup)="searchbyterm(general.value)" class="form-control text-center"
+                                        <input (keyup)="search(general.value)" class="form-control text-center"
                                             id="general" type="text" placeholder="Buscar perfil ..." #general
                                             [(ngModel)]="generalsearch">
                                     </li>
@@ -51,7 +51,7 @@
                                 <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
                                     <li class="nav-item">
                                         <a [routerLink]="[ '/main/createProfile', -1 ]" class="btn btn-outline-primary"
-                                            style="width: 12rem;">Ingresar nuevo perfil</a>
+                                           >Ingresar nuevo perfil</a>
                                         <!-- </li>[routerLink]="[ '/main/createProfile', i ]" [routerLink]="['/main','createProfile']" -->
                                 </ul>
                             </nav>
