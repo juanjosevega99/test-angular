@@ -9,7 +9,7 @@
                 <a>{{order.name}}</a>
             </li>
             <li>
-                <img src="assets/icons/pidelo.png" class="tifi-icon-order">
+                <img [appTypeServiceImg] = "order.typeOfService" class="tifi-icon-order">
                 <a>{{order.typeOfService}} </a>
             </li>
             <li>
@@ -19,7 +19,7 @@
                 <a>{{order.registerDate}}</a>
             </li>
             <li>
-                <a>{{order.DateDelivery | date:'short'}}</a>
+                <a>{{order.dateAndHourDelivery}}</a>
             </li>
             <li>
                 <img src="assets/icons/cronometro.png" class="tifi-icon-order">
@@ -91,10 +91,10 @@
 
     <div style="display: flex;">
         <div style=" width: 87%;">
-            <ngb-progressbar type="warning" [value]="75"></ngb-progressbar>
+            <ngb-progressbar [type]="expresionColor.colorProgress" [value]="percent"></ngb-progressbar>
         </div>
         <div style=" display: flex; width: 13%; justify-content: center;">
-            <a style="font-size: 1rem;" [ngStyle]="{'color': expresionColor}"> !Relajate¡ </a>
+            <a style="font-size: 1rem;" [ngStyle]="{'color': expresionColor.colorFont}">! {{expresionColor.fontSmall}} ¡ </a>
         </div>
     </div>
 </div>

@@ -22,6 +22,7 @@ export class OrderByUser{
     valueIntermediationIva? :number;
     timeTotal?:string;
     timeTotalCronometer?:string;
+    orderStatus?:string;
 
     lastname?:string;
     email?:string;
