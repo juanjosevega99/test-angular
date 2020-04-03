@@ -1,5 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OrderByUser } from 'src/app/models/OrderByUser';
+import { OrdersService } from 'src/app/services/orders.service';
+// swall pop up
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-order',
@@ -20,11 +24,11 @@ export class OrderComponent implements OnInit {
   showdetail = false;
 
   // variables to manage start or not cronometer
-  startCronometer = false;
-  stopOrder = false;
+  // startCronometer = false;
+  // stopOrder = false;
 
   // to manage the hour to show in cronometer
-  timeToralOut = '';
+  // timeToralOut = '';
 
   timeInMinutos = 0;
 
@@ -33,12 +37,16 @@ export class OrderComponent implements OnInit {
 
   // percent to progressbar
   percent = 0;
-  maxpercent = this.percent + 100;
+  // maxpercent = this.percent + 100;
 
   // to progress bar reset function setTimeout
   progressbar: any;
 
-  startCount: any;
+  // to disable button
+  buttonDisable = {
+    disable:true,
+    color:"#d2d2d2"
+  }
 
   @Input()
   order: OrderByUser = {};
@@ -48,7 +56,7 @@ export class OrderComponent implements OnInit {
 
   @Output() indexOrder: EventEmitter<number>;
 
-  constructor() {
+  constructor(private orderservice: OrdersService) {
     this.indexOrder = new EventEmitter();
   }
 
@@ -214,7 +222,10 @@ export class OrderComponent implements OnInit {
       this.expresionColor.colorProgress = "success";
       this.expresionColor.fontSmall = "Confirmar";
       this.expresionColor.backgroundTimer = '#bfd5b2'
-      this.order.timeTotalCronometer = 0 +" "+ 'minutos';
+      this.order.timeTotalCronometer = 0 + " " + 'minutos';
+      this.buttonDisable.disable = false;
+      this.buttonDisable.color = "#bfd5b2";
+
 
     } else if (minuts <= 10) {
 
@@ -223,8 +234,9 @@ export class OrderComponent implements OnInit {
       this.expresionColor.colorProgress = "danger";
       this.expresionColor.fontSmall = 'Falta poco';
       this.expresionColor.backgroundTimer = '#ffb6b9';
-      this.startCronometer = true;
-      this.order.timeTotalCronometer = minuts +" "+ 'minutos';
+      // this.startCronometer = true;
+      this.order.timeTotalCronometer = minuts + " " + 'minutos';
+      this.buttonDisable.color = '#ffb6b9';
 
     } else if (minuts <= this.timeLimit) {
       this.order.orderStatus = 'empieza a preparar el pedido';
@@ -232,7 +244,7 @@ export class OrderComponent implements OnInit {
       this.expresionColor.colorProgress = "danger";
       this.expresionColor.fontSmall = 'Prepara';
       this.expresionColor.backgroundTimer = '#ffb6b9';
-      this.order.timeTotalCronometer = minuts +" "+ 'minutos';
+      this.order.timeTotalCronometer = minuts > 60 ? this.convertToHours(minuts) : minuts + " " + 'minutos';
 
     }
     else {
@@ -305,13 +317,53 @@ export class OrderComponent implements OnInit {
 
   }
 
-  confirOrder(){
+  confirOrder() {
 
-    console.log(this.index);
-    this.expresionColor.fontSmall= "Entregado";
-    
-    this.indexOrder.emit(this.index);
-    
+    let status = {
+      orderStatus: "Entregado",
+      id: this.order.id
+    };
+
+    this.orderservice.putCharge(status).subscribe(res => {
+      console.log(res);
+      this.expresionColor.fontSmall = "Entregado";
+      this.showdetail = false;
+
+      this.indexOrder.emit(this.index);
+    })
+
+    document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+
+  }
+
+  convertToHours(minuts: number): string {
+
+    let hours = minuts / 60;
+    let minut = minuts % 60;
+    return hours + ":" + minut + " " + "min"
+
+  }
+
+  // pop up to confim order
+  swallUpdateState(idProfile?, newState?) {
+    Swal.fire({
+
+      title: 'Estás seguro?',
+      text: "de que deseas actualizar el estado de este perfil!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, actualizar!'
+      
+    })
+    .then((result) => {
+
+      if (result.value) {
+        console.log("aceptado")
+      }
+
+    })
   }
 
 }

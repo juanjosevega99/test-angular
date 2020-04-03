@@ -3,7 +3,7 @@
 
         <ul (click)="showDetail()" style="cursor: pointer">
             <li>
-                <a>{{order.id}}</a>
+                <a>{{order.code}}</a>
             </li>
             <li>
                 <a>{{order.name}}</a>
@@ -30,7 +30,7 @@
             </li>
             <li style="border: none;">
                 <!-- <input type="radio"> -->
-                <button type="button" class="radiobutton" (click)="confirOrder()" > </button>
+                <button [ngStyle]="{'border-color': buttonDisable.color}" [disabled] = "buttonDisable.disable" type="button" class="radiobutton" (click)="swallUpdateState()" [id]="order.code" > </button>
             </li>
         </ul>
 
@@ -92,7 +92,7 @@
 
     <div style="display: flex;">
         <div style=" width: 87%;">
-            <ngb-progressbar [type]="expresionColor.colorProgress" [value]="percent" [max]="maxpercent" ></ngb-progressbar>
+            <ngb-progressbar [type]="expresionColor.colorProgress" [value]="percent" ></ngb-progressbar>
         </div>
         <div class="smallfontprogress" style=" display: flex; width: 13%; justify-content: center;">
             <a [ngStyle]="{'color': expresionColor.colorFont}">! {{expresionColor.fontSmall}} ¡ </a>

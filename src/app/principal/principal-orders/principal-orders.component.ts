@@ -53,11 +53,11 @@ export class PrincipalOrdersComponent implements OnInit {
 
       await orders.forEach(order => {
 
-        let ordertosave: OrderByUser = {}
+        let ordertosave: OrderByUser = {};
 
         this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
-
-          ordertosave.id = order.code;
+          ordertosave.code = order.code;
+          ordertosave.id = order.id;
           ordertosave.name = user.name + " " + user.lastname;
           ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " "+order.typeOfService['tables'] + " mesas": order.typeOfService['type'] ;
           ordertosave.purchaseAmount = order.orderValue;
