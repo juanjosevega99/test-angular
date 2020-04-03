@@ -5,7 +5,7 @@ import { AlliesService } from "../../../../services/allies.service";
 import { AttentionScheduleService } from "../../../../services/attention-schedule.service";
 import { HeadquartersService } from '../../../../services/headquarters.service';
 import { Allies } from '../../../../models/Allies';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
 @Component({
   selector: 'app-ally-manager',
@@ -17,15 +17,19 @@ export class AllyManagerComponent implements OnInit {
   //object that saves the values of the table
   table: FormGroup;
 
+  //flags to redirect: headquarters and promotions
+  manageHq: boolean;
+  manageProm: boolean;
+
   //varibales to obtain data
   attentionSchedule: string;
   arrayAllyManager: any[] = []
   newdateArray = this.arrayAllyManager;
   filteredArray = [];
   // variables for date
-  today:Date ;
-  date:String;
-  dateDay : any[]= [];
+  today: Date;
+  date: String;
+  dateDay: any[] = [];
   //variable of don't results
   noResults = false
 
@@ -33,17 +37,35 @@ export class AllyManagerComponent implements OnInit {
     private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
     private _headquartService: HeadquartersService,
-    private _router:Router,
-    private _saveLocalStorageService : SaveLocalStorageService){
-    
+    private _router: Router,
+    private _saveLocalStorageService: SaveLocalStorageService,
+    private activatedRoute: ActivatedRoute) {
+
+    this.manageHq = false;
+    this.manageProm = false;
+
+    //inicialization for charging the data of a profile to edit
+    this.activatedRoute.params.subscribe(params => {
+      let identificator = params['id']
+      if (identificator == -1) {
+        this.manageHq = true;
+        this.manageProm = false;
+        /* this.manageHq(); */
+      } else if (identificator == -2) {
+        /* this.manageProm(); */
+        this.manageProm = true;
+        this.manageHq = false;
+      }
+    })
+
     //inicialization local storage IdAlly
-      this._saveLocalStorageService.saveLocalStorageIdAlly;
+    this._saveLocalStorageService.saveLocalStorageIdAlly;
     // inicialization date
     this.today = new Date()
-    this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
+    this.date = this.today.toLocaleString('es-ES', { weekday: 'long' });
     // const primeraLetraMayuscula = (cadena) => cadena.charAt(0).toUpperCase().concat(cadena.substring(1, cadena.length));
     let day = this.date.charAt(0).toUpperCase().concat(this.date.substring(1, this.date.length));
-    
+
     //inicialization of the table
     this.table = new FormGroup({
       "code": new FormControl(),
@@ -57,8 +79,8 @@ export class AllyManagerComponent implements OnInit {
 
         this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
           .subscribe((schedule) => {
-            
-            console.log('fecha',day);
+
+            console.log('fecha', day);
             // console.log(schedule)
             // let nothing:String = 'No hay servicio';
 
@@ -77,7 +99,7 @@ export class AllyManagerComponent implements OnInit {
           let obj: any = {}
 
           obj = {
-            idAlly : ally.id,
+            idAlly: ally.id,
             code: ally.nit,
             logo: ally.logo,
             nameEstablishment: ally.name,
@@ -133,12 +155,12 @@ export class AllyManagerComponent implements OnInit {
       });
 
       this.filteredArray = this.newdateArray;
-      
+
       // condition by when don't exit results in the table
       if (this.newdateArray.length == 0) {
         this.noResults = true;
-        
-      }else{
+
+      } else {
         this.noResults = false;
       }
 
@@ -151,17 +173,17 @@ export class AllyManagerComponent implements OnInit {
           return ally;
         }
       });
-      
+
       // condition by when don't exit results in the table
       if (this.newdateArray.length == 0) {
         this.noResults = true;
-        
-      }else{
+
+      } else {
         this.noResults = false;
       }
 
     }
-    
+
     else {
 
       if (this.table.controls['generalsearch'].value) {
@@ -175,13 +197,13 @@ export class AllyManagerComponent implements OnInit {
 
           this.searchbyterm(this.table.controls['generalsearch'].value);
         }
-      // condition by when don't exit results in the table
-      if (this.newdateArray.length == 0) {
-        this.noResults = true;
-        
-      }else{
-        this.noResults = false;
-      }
+        // condition by when don't exit results in the table
+        if (this.newdateArray.length == 0) {
+          this.noResults = true;
+
+        } else {
+          this.noResults = false;
+        }
       } else {
 
         // campos llenos
@@ -192,13 +214,13 @@ export class AllyManagerComponent implements OnInit {
             return ally;
           }
         });
-      // condition by when don't exit results in the table
-      if (this.newdateArray.length == 0) {
-        this.noResults = true;
-        
-      }else{
-        this.noResults = false;
-      }
+        // condition by when don't exit results in the table
+        if (this.newdateArray.length == 0) {
+          this.noResults = true;
+
+        } else {
+          this.noResults = false;
+        }
 
 
         if (this.table.controls['generalsearch'].value) {
@@ -243,8 +265,8 @@ export class AllyManagerComponent implements OnInit {
       // condition by when don't exit results in the table
       if (this.newdateArray.length == 0) {
         this.noResults = true;
-        
-      }else{
+
+      } else {
         this.noResults = false;
       }
     } else {
@@ -258,16 +280,16 @@ export class AllyManagerComponent implements OnInit {
       // condition by when don't exit results in the table
       if (this.newdateArray.length == 0) {
         this.noResults = true;
-        
-      }else{
+
+      } else {
         this.noResults = false;
       }
     }
   }
   //method edit ally
-  editAlly(idAlly:string, i){
+  editAlly(idAlly: string, i) {
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
-    this._router.navigate( ['/main','editAlly',i] )
+    this._router.navigate(['/main', 'editAlly', i])
 
   }
 

@@ -1,12 +1,12 @@
-<div class="continer compenetsstyle d-flex justify-content-center flex-column align-items-center padre ">
-  <div class="row container-fluid d-flex justify-content-center col-xl-9 align-items-center hijo">
+<div class="continer compenetsstyle d-flex justify-content-center flex-column align-items-center father ">
+  <div class="row container-fluid d-flex justify-content-center col-xl-9 align-items-center son">
   <div class="col-sm-6 col-md-4 col-lg-3">
     <div class="card border-primary mb-3">
       <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
         <img class="card-img-top imageI" src="assets/img/ManagerAllys.png">
       </div>
       <div class="card-body">
-        <a [routerLink]="['/main','allyManager']" class="btn btn-lg btn-block buttonstyle">Admin de Aliados</a>
+        <a [routerLink]="['/main/allyManager',-1]" class="btn btn-lg btn-block buttonstyle">Admin de Aliados</a>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@
         <img class="card-img-top imageI" src="assets/img/ManagerPromo.png" alt="Card image cap">
       </div>
       <div class="card-body">
-        <a [routerLink]="['/main','allyManager']" class="btn-lg btn-block buttonstyle btn">Admin de Promos</a>
+        <a [routerLink]="['/main/allyManager',-2]" class="btn-lg btn-block buttonstyle btn">Admin de Promos</a>
       </div>
     </div>
   </div>
