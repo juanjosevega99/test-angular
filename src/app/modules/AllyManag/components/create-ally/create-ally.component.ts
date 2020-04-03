@@ -31,8 +31,8 @@ export class CreateAllyComponent implements OnInit {
   idSchedule: string;
   // flag  for show schedules saved
   flagShowShedule= false;
-  getSchedule: any[]= [];
-  valueSchedule :FormGroup;
+  // getSchedule: any[]= [];
+  // valueSchedule :FormGroup;
   //variable for color
   color: String = "#000000";
   //Variables of upload Logo to firebase
@@ -119,11 +119,11 @@ export class CreateAllyComponent implements OnInit {
 
     })
 
-    this.valueSchedule = new FormGroup({
-      'day': new FormControl('', [Validators.required]),
-      'from': new FormControl('', [Validators.required]),
-      'to': new FormControl('', [Validators.required])
-    })
+    // this.valueSchedule = new FormGroup({
+    //   'day': new FormControl('', [Validators.required]),
+    //   'from': new FormControl('', [Validators.required]),
+    //   'to': new FormControl('', [Validators.required])
+    // })
 
     this.imageSize = { width: 230, height: 120 }; //to do 
     this.days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
@@ -160,8 +160,8 @@ export class CreateAllyComponent implements OnInit {
       console.log('new data edit: ', this.forma.value)
       let idSchedule = this.forma.controls['idAttentionSchedule'].value
       this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe( shedule => {
-        this.getSchedule =  shedule.attentionSchedule
-        console.log('print shedule:', this.getSchedule);
+        this.Schedules =  shedule.attentionSchedule
+        console.log('print shedule:', this.Schedules);
         this.flagShowShedule=true
       })
       
@@ -299,7 +299,7 @@ export class CreateAllyComponent implements OnInit {
   }
 
   getAttentionSchedule(day: String, from: String, to: String, i: number) {
-    console.log(this.valueSchedule.value);
+    // console.log(this.valueSchedule.value);
     
     console.log(from); //delete console log
     console.log(to, i); //delete console log
