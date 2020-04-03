@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DishesService } from 'src/app/services/dishes.service';
 import { DishesCategoriesService } from "src/app/services/dishes-categories.service";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { Guid } from "guid-typescript";
+import { Dishes } from 'src/app/models/Dishes';
+import { DishList } from 'src/app/models/DishList';
+
 
 @Component({
   selector: 'app-create-dish',
@@ -34,10 +37,36 @@ export class CreateDishComponent implements OnInit {
     idPromotion: null
   }
 
+  editDish: Dishes = {
+    idDishesCategories: null,
+    nameDishesCategories: null,
+    reference: null,
+    name: null,
+    creationDate: null,
+    modificationDate: null,
+    numberOfModifications: null,
+    state: [],
+    price: null,
+    imageDishe: null,
+    description: null,
+    preparationTime: null,
+    idAccompaniments: [],
+    idPromotion: null
+  }
+
+  //variables for receiving the profile that will be edited
+  identificatorbyRoot: any;
+  buttonPut: boolean;
+  seeNewPhoto: boolean;
+
   //variables for tick
-  date: string;
-  times: string;
+  dateEntry: String;
+  timesEntry: String;
   today: Date;
+
+  newDate: Date;
+  dateModication: String;
+  timesModification: String;
 
   //variables for categories
   /* Categories: String[] = []; */
@@ -56,8 +85,17 @@ export class CreateDishComponent implements OnInit {
   fileImagedish: any;
   urlDish: Observable<string>;
 
-  constructor(private _router: Router, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService) {
- 
+  //variable for the loading
+  loading: boolean;
+
+
+  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService) {
+
+    //flags
+    this.loading = true;
+    this.buttonPut = true;
+    this.seeNewPhoto = false;
+
     this.State = [{
       state: "active",
       check: false
@@ -67,6 +105,18 @@ export class CreateDishComponent implements OnInit {
     }]
     this.preDish['state'] = this.State;
     this.time = ['segundos', 'minutos', 'horas']
+
+    //inicialization for charging the data of a dish to edit
+    this.activatedRoute.params.subscribe(params => {
+      let identificator = params['id']
+      if (identificator != -1) {
+        this.getDish(identificator)
+      } else if (identificator == -1) {
+        this.loading = false
+        this.buttonPut = false
+      }
+      this.identificatorbyRoot = identificator
+    })
 
     //inicialization service with collections dishes-categories
     this.dishCategory.getDishCategory().subscribe(dishesCat => {
@@ -86,6 +136,19 @@ export class CreateDishComponent implements OnInit {
         this.preDish['idDishesCategories'] = dishes.id
       }
     }
+  }
+
+  //charge a profile with the id
+  getDish(id: string) {
+    this.loading;
+    this.chargeDishes.getDishes().subscribe(dishes => {
+      let dish: Dishes = {}
+      let obj: Dishes = {}
+      dish = dishes[id]
+      this.editDish = dish;
+      this.preDish = this.editDish;
+      this.loading = false;
+    })
   }
 
   //Method for showing new view in the categories field
@@ -125,8 +188,9 @@ export class CreateDishComponent implements OnInit {
   onPhotoSelected($event) {
     let input = $event.target;
     if (input.files && input.files[0]) {
+      this.seeNewPhoto = true;
+      console.log(this.seeNewPhoto);
       var reader = new FileReader();
-
       reader.onload = function (e: any) {
         $('#photo')
           .attr('src', e.target.result)
@@ -139,7 +203,7 @@ export class CreateDishComponent implements OnInit {
   }
 
   //Method for selecting the state
-  selectedState(valueA, checkedA, valueB,checkedB) {
+  selectedState(valueA, checkedA, valueB, checkedB) {
     let fullstate: any = [{
       state: "active",
       check: false
@@ -148,24 +212,84 @@ export class CreateDishComponent implements OnInit {
       check: false
     }];
 
-    fullstate = [
-      { state: valueA, check: checkedA},
-      {state: valueB, check: checkedB}]
-
-    this.preDish['state'] = fullstate
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas colocar este estado al perfil!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si!'
+    }).then((result) => {
+      if (result.value) {
+        fullstate = [
+          { state: valueA, check: checkedA },
+          { state: valueB, check: checkedB }]
+        this.preDish['state'] = fullstate
+      }
+    })
   }
 
   //Method for the admission date
   tick(): void {
-    this.today = new Date();
-    this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-    this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
-    /* this.preDish['creationDate'] = this.date.concat("-",this.times) */
+    if (this.identificatorbyRoot == -1) {
+      this.today = new Date();
+      this.timesEntry = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateEntry = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+      this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    }
+    else {
+      this.today = new Date();
+      this.newDate = this.editDish['creationDate']
+      const d = new Date(this.newDate);
+      this.timesEntry = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateEntry = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+      this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+
+    }
   }
 
   //save new dish
   saveDish(shape: NgForm) {
     this.swallSaveDish(this.preDish)
+  }
+
+  //delete the dish
+  deleteDish() {
+    if (this.identificatorbyRoot == -1) {
+      Swal.fire('No puedes eliminar este plato ya que no ha sido creado!!')
+    } else {
+      this.chargeDishes.getDishes().subscribe(dishes => {
+        let dish: DishList = {}
+        dish = dishes[this.identificatorbyRoot]
+        let realId = dish.id
+        this.swallDelete(realId)
+      })
+    }
+  }
+
+  //put the dish
+  putDish() {
+    this.chargeDishes.getDishes().subscribe(dishes => {
+      let dish: Dishes = {};
+      dish = dishes[this.identificatorbyRoot];
+      let realId = dish.id;
+      this.editDish.state = this.preDish['state'];
+      this.editDish.creationDate = dish.creationDate;
+      this.editDish.modificationDate = this.today;
+      this.editDish.idAccompaniments = dish.idAccompaniments;
+      this.editDish.idPromotion = dish.idPromotion;
+      this.editDish.nameDishesCategories = this.preDish['nameDishesCategories'];
+      this.editDish.idDishesCategories = this.preDish['idDishesCategories'];
+      this.editDish.reference = this.preDish['reference'];
+      this.editDish.name = this.preDish['name'];
+      this.editDish.price = this.preDish['price'];
+      this.editDish.description = this.preDish['description'];
+      this.editDish.preparationTime = this.preDish['preparationTime'];
+      this.swallUpdate(realId)
+    })
   }
 
   //sweet alerts
@@ -271,7 +395,81 @@ export class CreateDishComponent implements OnInit {
         })
       }
     })
+  }
 
+  swallDelete(realId) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar este plato!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.chargeDishes.deleteDishe(realId).subscribe()
+        Swal.fire(
+          'Eliminado!',
+          'success',
+        )
+        this._router.navigate(['/main', 'editmenu']);
+      }
+    })
+  }
+
+  swallUpdate(realId) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then(async (result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.editDish);
+        this.chargeDishes.getDishes().subscribe(dishes => {
+          let dish: Dishes = {};
+          dish = dishes[this.identificatorbyRoot];
+          this.editDish.numberOfModifications = this.editDish['numberOfModifications'] + 1;
+          if (this.seeNewPhoto == false) {
+            this.editDish.imageDishe = dish.imageDishe;
+          } else if (this.seeNewPhoto == true) {
+            const id: Guid = Guid.create();
+            const file = this.fileImagedish;
+            const filePath = `assets/allies/menu/${id}`;
+            const ref = this.storage.ref(filePath);
+            const task = this.storage.upload(filePath, file);
+            task.snapshotChanges()
+              .pipe(
+                finalize(() => {
+                  ref.getDownloadURL().subscribe(urlImage => {
+                    this.urlDish = urlImage;
+                    console.log(this.urlDish);
+                    this.preDish['imageDishe'] = this.urlDish
+                    this.chargeDishes.putDishe(realId, this.editDish).subscribe()
+                  })
+                }
+                )
+              ).subscribe()
+          }
+          this.chargeDishes.putDishe(realId, this.editDish).subscribe()
+        })
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu plato ha sido actualizado!",
+          icon: 'warning',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'editmenu']);
+          }
+        })
+      }
+    })
   }
 
 }

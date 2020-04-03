@@ -17,12 +17,14 @@ export class ProfileComponent implements OnInit {
   
   //variables for general search
   generalsearch: string = "";
+
   //varibales to obtain data
   profilesgetting: ProfileList[] = [];
   newArray = this.profilesgetting;
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
 
+  
 
 
   constructor(private profilesService: ProfilesService) {

@@ -443,10 +443,10 @@ export class CreateProfileComponent implements OnInit {
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
-    }).then((result) => {
+    }).then(async (result) => {
     if (result.value) {
         console.log("Array FINAL: ", this.editProfile);
-         this.chargeProfiles.getProfiles().subscribe(profiles => {
+       await  this.chargeProfiles.getProfiles().subscribe(profiles => {
           let profile: Profiles = {};
           profile = profiles[this.identificatorbyRoot];
           this.editProfile.numberOfModifications = this.preProfile['numberOfModifications'] + 1;

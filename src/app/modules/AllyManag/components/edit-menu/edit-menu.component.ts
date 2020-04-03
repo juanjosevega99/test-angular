@@ -301,7 +301,7 @@ export class EditMenuComponent implements OnInit {
   swallUpdateState(idDish, newState) {
     Swal.fire({
       title: 'Estás seguro?',
-      text: "de que deseas actualizar el estado de este perfil!",
+      text: "de que deseas actualizar el estado de este plato!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
