@@ -207,12 +207,12 @@ export class OrderComponent implements OnInit {
 
       if (today <= goal) {
   
-        percent = Math.floor(100 / ((goal - today) / (1000 * 60)));
-        console.log(percent, (100 / ((goal - today) / (1000 * 60))));
+        percent = Math.floor(100 / ((goal - today) / (1000 * 60*60)));
+        console.log(percent, (100 / ((goal - today) / (1000 * 60*60))));
         this.percent = percent;
   
       }
-      else {
+      else { 
         this.percent = 100;
         // stop count
         clearTimeout(this.progressbar);

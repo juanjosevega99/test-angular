@@ -91,7 +91,6 @@ export class UserManagerComponent implements OnInit {
               obj.usability = order.orderValue ? 1 : 0;
               obj.purchaseAmount = order.orderValue;
               obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-
             }
             )
             this.usergetting.push(obj);

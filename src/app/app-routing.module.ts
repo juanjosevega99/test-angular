@@ -77,7 +77,7 @@ const routes: Routes = [
       { path: "add-sede", component: AddSedeComponent },
       { path: "createHeadquarter", component: CreateHeadquarterComponent },
       { path: "editmenu", component: EditMenuComponent },
-      { path: "createDish", component: CreateDishComponent },
+      { path: "createDish/:id", component: CreateDishComponent },
       { path : "accompaniments", component: AccompanimentsComponent},
       { path : "profiles", component: ProfileComponent},
       { path : "createProfile/:id", component: CreateProfileComponent},

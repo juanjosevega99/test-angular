@@ -7,7 +7,7 @@
             <img src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
 
-        <section class="col-6  " >
+        <section class="col-6">
 
             <div class="form-group row" style="align-items: center;">
                 <label class="col-md-5 col-form-label">Estado</label>
@@ -103,6 +103,7 @@
                         <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="nameCharge" #nameCharge="ngModel"
                             required [ngClass]="{'is-invalid': (!nameCharge.valid ),'is-valid':(nameCharge.valid) }"
                             [(ngModel)]="preProfile.nameCharge" #select (change)="seeId(select.value)" >
+                            <option selected>{{preProfile.nameCharge}}</option>
                             <option *ngFor="let profile of Categories">
                                 {{profile.name}}
                             </option>
@@ -231,8 +232,8 @@
 
     </form>
 
-    <pre>
+   <!--  <pre>
         {{ preProfile | json }}
-    </pre>
+    </pre> -->
 
 </div>
