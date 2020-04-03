@@ -11,6 +11,7 @@ import { SaveLocalStorageService } from "../../../../services/save-local-storage
 //other libraris
 import * as $ from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-create-ally',
@@ -27,7 +28,7 @@ export class CreateAllyComponent implements OnInit {
   attentionSchedule: any[] = [];
 
   //variables of attentin Schedule
-  days: string[] = []
+  days: any[] = []
   hours: String[] = [];
   Schedules: any[] = [];
   idSchedule: string;
@@ -145,14 +146,27 @@ export class CreateAllyComponent implements OnInit {
     //   'to': new FormControl('', [Validators.required])
     // })
 
+
     this.imageSize = { width: 230, height: 120 }; //to do 
-    this.days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     this.hours = ["08:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
-      "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
+    "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
+    this.days = [
+      {name: 'Lunes', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
+      {name: 'Martes', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
+      {name: 'Miércoles', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
+      {name: 'Jueves', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
+      {name: 'Viernes', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
+      {name: 'Sábado', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
+      {name: 'Domingo', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''} 
+      ]
 
     //inicialization service with collections allies-categories
     this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
       this.alliesCategories = alliesCat;
+      if (this.forma.controls['idTypeOfEstablishment'].value) {
+        var cat = this.alliesCategories.find(element => element.id === this.forma.controls['idTypeOfEstablishment'].value)
+        this.forma.controls['idTypeOfEstablishment'].setValue(cat);
+      }
       console.log(this.alliesCategories) //delete console log
     })
     //inicialization service with collections meals-categorie
@@ -170,6 +184,8 @@ export class CreateAllyComponent implements OnInit {
   ngOnInit() {
 
   }
+
+
   //charge a ally with the id
   getAlly(id: string) {
     // this.loading;
@@ -318,6 +334,7 @@ export class CreateAllyComponent implements OnInit {
   }
   // method save  and cancel all collection allies
   saveChanges() {
+    
     this.swallSaveAllie()
     console.log(this.forma.value);
   }
@@ -626,7 +643,13 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, salir!'
     }).then((result) => {
       if (result.value) {
-        this._router.navigate(['/main', 'allyManager'])
+
+        if (this.idParams != -1) {
+          this._router.navigate(['/main', 'headquarts', this.idParams])
+        } else {
+          this._router.navigate(['/main', 'allyManager'])
+        }
+
 
       }
     })

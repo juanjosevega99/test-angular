@@ -318,39 +318,40 @@
                                                                 <div class="row ">
                                                                         <div
                                                                                 class="horario center col-sm-3 col-md-3 col-lg-3">
-                                                                                <label #dayl>{{day}}</label>
+                                                                                <label #dayl>{{day.name}}</label>
                                                                         </div>
                                                                         <div
                                                                                 class=" mr-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                                                                <!-- (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i) -->
                                                                                 <select class=" browser-default custom-select form-control "
-                                                                                        style="width: 140%;" #from
-                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
+                                                                                        style="width: 140%;"  [(ngModel)]="day.from"
+                                                                                        [ngModelOptions]="{standalone: true}" >
 
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
-                                                                                        <option *ngFor="let time of hours"
+                                                                                        <option *ngFor="let time of day.hoursFrom"
                                                                                                 [value]="time">
                                                                                                 {{time}}
                                                                                         </option>
-                                                                                        <option *ngFor="let schedule of Schedules"
+                                                                                        <!-- <option *ngFor="let schedule of Schedules"
                                                                                                 [value]="schedule.from"
                                                                                                 >
                                                                                                 {{schedule.from}}
-                                                                                        </option>
+                                                                                        </option> -->
 
 
                                                                                 </select>
                                                                         </div>
                                                                         <div class=" col-sm-3 col-md-3 col-lg-3">
-
+                                                                                <!-- (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i) -->
                                                                                 <select class=" browser-default custom-select form-control"
-                                                                                        style="width: 140%;" #to
-                                                                                        (click)="getAttentionSchedule(dayl.textContent, from.value, to.value, i)">
+                                                                                        style="width: 140%;" [(ngModel)]="day.to"
+                                                                                        [ngModelOptions]="{standalone: true}">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
-                                                                                        <option *ngFor="let time of hours"
+                                                                                        <option *ngFor="let time of day.hoursTo"
                                                                                                 [value]="time">
                                                                                                 {{time}}
                                                                                         </option>
@@ -435,8 +436,7 @@
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
                                                                         style="width: 230px; height: 120px; "
                                                                         [imageSize]="imageSize"
-                                                                        [images]="imagesUploaded" #nav
-                                                                        >
+                                                                        [images]="imagesUploaded" #nav>
                                                                 </ng-image-slider>
 
                                                                 <P *ngIf="imagesUploaded.length==0"
@@ -466,13 +466,14 @@
                                         <button *ngIf="!buttonPut" type="submit" class="btn btn-outline-primary mb-5">
                                                 Guardar
                                         </button>
-                                        <button *ngIf="buttonPut" type="button" class="btn btn-outline-primary mb-5" (click)="swallPutAllie()">
+                                        <button *ngIf="buttonPut" type="button" class="btn btn-outline-primary mb-5"
+                                                (click)="swallPutAllie()">
                                                 Actualizar
                                         </button>
                                         <button class="btn btn-outline-primary" type="button" (click)="cancelChanges()">
                                                 Cancelar
                                         </button>
-            <!-- <button *ngIf="buttonPut"  type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button> -->
+                                        <!-- <button *ngIf="buttonPut"  type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button> -->
 
 
                                 </div>
