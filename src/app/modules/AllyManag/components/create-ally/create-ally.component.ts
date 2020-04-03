@@ -33,11 +33,6 @@ export class CreateAllyComponent implements OnInit {
   Schedules: any[] = [];
   idSchedule: string;
 
-  // flag  for show schedules saved
-  flagShowShedule = false;
-  // getSchedule: any[]= [];
-  // valueSchedule :FormGroup;
-
   //variable for color
   color: String = "#000000";
 
@@ -90,8 +85,6 @@ export class CreateAllyComponent implements OnInit {
 
     //inicialization for charging the data of an Ally to edit
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
-      console.log('this is new:', this._saveLocalStorageService.getLocalStorageIdAlly());
       let idAlly = this._saveLocalStorageService.getLocalStorageIdAlly();
       let identificator = params['id']
       if (identificator != -1) {
@@ -140,25 +133,18 @@ export class CreateAllyComponent implements OnInit {
 
     })
 
-    // this.valueSchedule = new FormGroup({
-    //   'day': new FormControl('', [Validators.required]),
-    //   'from': new FormControl('', [Validators.required]),
-    //   'to': new FormControl('', [Validators.required])
-    // })
-
-
     this.imageSize = { width: 230, height: 120 }; //to do 
     this.hours = ["08:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
-    "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
+      "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
     this.days = [
-      {name: 'Lunes', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
-      {name: 'Martes', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
-      {name: 'Miércoles', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
-      {name: 'Jueves', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
-      {name: 'Viernes', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
-      {name: 'Sábado', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''}, 
-      {name: 'Domingo', hoursFrom: this.hours, hoursTo: this.hours, from:'', to:''} 
-      ]
+      { name: 'Lunes', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' },
+      { name: 'Martes', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' },
+      { name: 'Miércoles', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' },
+      { name: 'Jueves', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' },
+      { name: 'Viernes', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' },
+      { name: 'Sábado', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' },
+      { name: 'Domingo', hoursFrom: this.hours, hoursTo: this.hours, from: '', to: '' }
+    ]
 
     //inicialization service with collections allies-categories
     this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
@@ -167,47 +153,42 @@ export class CreateAllyComponent implements OnInit {
         var cat = this.alliesCategories.find(element => element.id === this.forma.controls['idTypeOfEstablishment'].value)
         this.forma.controls['idTypeOfEstablishment'].setValue(cat);
       }
-      console.log(this.alliesCategories) //delete console log
     })
     //inicialization service with collections meals-categorie
     this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
       this.mealsCategories = mealCat;
-      console.log(this.mealsCategories);// delete console log
+      if (this.forma.controls['idMealsCategories'].value) {
+        var cat = this.mealsCategories.find(element => element.id === this.forma.controls['idMealsCategories'].value)
+        this.forma.controls['idMealsCategories'].setValue(cat);
+      }
     })
     //inicialization service with collections attention-schedule
     this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
       this.attentionSchedule = schedule;
-      console.log(this.attentionSchedule);// delete console log
     })
 
   }
   ngOnInit() {
 
   }
-
-
   //charge a ally with the id
   getAlly(id: string) {
     // this.loading;
-    console.log('function getAlly', id);
     this.allieService.getAlliesById(id).subscribe(ally => {
-      console.log(ally)
       this.forma.setValue(ally)
-      console.log('new data edit: ', this.forma.value)
       let idSchedule = this.forma.controls['idAttentionSchedule'].value
-      this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe(shedule => {
-        this.Schedules = shedule.attentionSchedule
-        console.log('print shedule:', this.Schedules);
-        this.flagShowShedule = true
+      this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe(schedule => {
+        this.days.forEach(element => {
+          var scheDb = schedule.attentionSchedule.find(e => e.day == element.name)
+          element.from = scheDb.from
+          element.to = scheDb.to
+        });
       })
-
-
     })
   }
   getColour(event) {
     this.color = event.target.value
     this.forma.controls['color'].setValue(this.color)
-    console.log(this.color) // delete console log
   }
   //CRD -- METHODS OF TypeEstablishment: CREATE ,READ AND DELETE 
   addEstablishment() {
@@ -216,7 +197,6 @@ export class CreateAllyComponent implements OnInit {
       name: newitem
     }
     this.swallSaveOtherEstablishment(newEstablishment)
-    console.log(this.alliesCategories) // delete console log
     this.forma.controls['nameTypeOfEstablishment'].reset() // reset input add new category establishment
     this.changeStateToSelect();
 
@@ -224,7 +204,6 @@ export class CreateAllyComponent implements OnInit {
   //method delete Type Establishment
   deleteCategory() {
     let idCategory: any = this.forma.controls['idTypeOfEstablishment'].value.id
-    console.log(idCategory) // delete console log
     this.swallDeleteCatEstablishment(idCategory)
   }
   //Method for change of oring buttons
@@ -246,7 +225,6 @@ export class CreateAllyComponent implements OnInit {
   //method delete Type MealCategory
   deleteMealCategory() {
     let idMealCat: any = this.forma.controls['idMealsCategories'].value.id
-    console.log(idMealCat) // delete console log
     this.swallDeleteMealCategory(idMealCat)
   }
   //Method for change of oring buttons
@@ -266,8 +244,6 @@ export class CreateAllyComponent implements OnInit {
     } else {
       if (input.files && input.files[0]) {
         this.seeNewPhoto = true;
-        console.log(this.seeNewPhoto);
-
         var reader = new FileReader();
         reader.onload = function (e: any) {
           $('#photo')
@@ -292,25 +268,21 @@ export class CreateAllyComponent implements OnInit {
     } else {
       if (input.files && input.files[0]) {
         this.seeNewImagesAlly = true;
-        console.log(this.seeNewPhoto);
 
         var reader = new FileReader();
         reader.onload = (e: any) => {
           image = e.target.result;
           this.imagesUploaded.push({ image: image, thumbImage: image })
         }
-        console.log('Array images upload', this.imagesUploaded);
 
         reader.readAsDataURL(input.files[0]);
         this.imagesAlly.push(input.files[0])
         this.contImage = this.imagesUploaded.length + 1;
-        console.log('Array images', this.imagesAlly) //delete console.log
       }
 
     }
 
   }
-
   // Method for change botton of de CRD in typeEstablihment and MelaCategoryes
   handleBoxEstablishment(): boolean {
     if (this.otherEstablishmentSelect) {
@@ -334,33 +306,12 @@ export class CreateAllyComponent implements OnInit {
   }
   // method save  and cancel all collection allies
   saveChanges() {
-    
+
     this.swallSaveAllie()
-    console.log(this.forma.value);
   }
 
   cancelChanges() {
     this.swallCancelAlly()
-  }
-
-  getAttentionSchedule(day: String, from: String, to: String, i: number) {
-    // console.log(this.valueSchedule.value);
-
-    console.log(from); //delete console log
-    console.log(to, i); //delete console log
-    let schedule: object = {
-      day: day,
-      from: from,
-      to: to
-    }
-    // function to replace the values of array 
-    if (this.Schedules[i]) {
-      this.Schedules[i] = schedule;
-    }
-    else {
-      this.Schedules.push(schedule);
-    }
-    console.log(this.Schedules); //delete console log 
   }
   // method by sweetalert2 
   //saveTypeEstablishment 
@@ -378,7 +329,6 @@ export class CreateAllyComponent implements OnInit {
         this.alliesCatServices.postAllieCategorie(newEstablishment).subscribe(() => {
           this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
             this.alliesCategories = alliesCat;
-            console.log(this.alliesCategories)
           })
         })
         Swal.fire(
@@ -404,7 +354,6 @@ export class CreateAllyComponent implements OnInit {
         this.alliesCatServices.deleteAllieCategorie(id).subscribe(() => {
           this.alliesCatServices.getAlliesCategories().subscribe(alliesCat => {
             this.alliesCategories = alliesCat;
-            console.log(this.alliesCategories)
           })
         })
         Swal.fire(
@@ -429,7 +378,6 @@ export class CreateAllyComponent implements OnInit {
         this.mealsCatServices.postMealCategorie(newMeal).subscribe(() => {
           this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
             this.mealsCategories = mealCat;
-            console.log(this.mealsCategories)
           })
         })
         Swal.fire(
@@ -454,7 +402,6 @@ export class CreateAllyComponent implements OnInit {
         this.mealsCatServices.deleteMealCategorie(id).subscribe(() => {
           this.mealsCatServices.getMealsCategories().subscribe(mealCat => {
             this.mealsCategories = mealCat;
-            console.log(this.mealsCategories)
           })
         })
         Swal.fire(
@@ -484,7 +431,6 @@ export class CreateAllyComponent implements OnInit {
         Promise
           .all(promesasImages)
           .then(urlImageAlly => {
-            console.log(urlImageAlly)
             this.forma.controls['imagesAllies'].setValue(urlImageAlly)
             return this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
           })
@@ -501,19 +447,23 @@ export class CreateAllyComponent implements OnInit {
             let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
             this.forma.controls['idMealsCategories'].setValue(idMeal)
             this.forma.controls['nameMealsCategories'].setValue(nameMeal)
-
+            this.days.forEach(dayElem => {
+              this.Schedules.push({
+                day: dayElem.name,
+                from: dayElem.from,
+                to: dayElem.to
+              })
+            });
             //format of properties by collection AttentatinShedule
             let addSchedule: any = {
               attentionSchedule: this.Schedules
             }
             this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
               this.idSchedule = schedule._id;
-              console.log('LAST ONE', this.idSchedule);//delete consle.log
               this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
-              console.log(this.forma.value); // delete console.log
+              console.log(this.forma.value); //delete console.log
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
-              console.log(objAllie); //delete console.log
               this.allieService.postAllie(objAllie).subscribe()
               this._router.navigate(['/main', 'allyManager'])
             })
@@ -539,6 +489,13 @@ export class CreateAllyComponent implements OnInit {
     let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
     this.forma.controls['idMealsCategories'].setValue(idMeal)
     this.forma.controls['nameMealsCategories'].setValue(nameMeal)
+    this.days.forEach(dayElem => {
+      this.Schedules.push({
+        day: dayElem.name,
+        from: dayElem.from,
+        to: dayElem.to
+      })
+    });
 
     //format of properties by collection AttentatinShedule
     let addSchedule: any = {
@@ -547,7 +504,6 @@ export class CreateAllyComponent implements OnInit {
     addSchedule._id = this.forma.controls['idAttentionSchedule'].value;
     this.scheduleServices.putAttentionSchedule(addSchedule).subscribe(() => alert('shedule updated'))
     let objAllie = this.forma.value
-    console.log('Objeto de aliado editado sin id: ', objAllie); //delete console.log
     objAllie._id = this.identificatorbyRoot
     this.allieService.putAllie(objAllie).subscribe(() => alert('ally update'))
     this._router.navigate(['/main', 'allyManager'])
@@ -563,11 +519,8 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
         //read promise of upladImages
         if (this.seeNewPhoto == false && this.seeNewImagesAlly == false) {
-          // this.editProfile.photo = profile.photo;
-          console.log('LOGO DONT UPLOAD ALREADY UP');
           this.uploadFielstoCollectionUpdate()
 
         } else if (this.seeNewPhoto == true && this.seeNewImagesAlly == true) {
@@ -577,7 +530,6 @@ export class CreateAllyComponent implements OnInit {
           Promise
             .all(promesasImages)
             .then(urlImageAlly => {
-              console.log(urlImageAlly)
               this.forma.controls['imagesAllies'].setValue(urlImageAlly)
               return this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
             })
@@ -602,7 +554,6 @@ export class CreateAllyComponent implements OnInit {
           Promise
             .all(promesasImages)
             .then(urlImageAlly => {
-              console.log(urlImageAlly)
               this.forma.controls['imagesAllies'].setValue(urlImageAlly)
               this.uploadFielstoCollectionUpdate()
             })
@@ -628,7 +579,6 @@ export class CreateAllyComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this._router.navigate(['/main', 'allyManager'])
-
       }
     })
   }
@@ -643,14 +593,11 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, salir!'
     }).then((result) => {
       if (result.value) {
-
         if (this.idParams != -1) {
           this._router.navigate(['/main', 'headquarts', this.idParams])
         } else {
           this._router.navigate(['/main', 'allyManager'])
         }
-
-
       }
     })
   }
