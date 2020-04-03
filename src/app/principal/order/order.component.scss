@@ -108,6 +108,14 @@
     margin-right: 3px;
 }
 
+.radiobutton{
+
+    width: 18px;
+    height: 18px;
+    border: 1px solid gray;
+    border-radius: 9px ;
+    padding: 3px;
+}
 
 @media ( min-width: 1520px ){
 
@@ -128,5 +136,9 @@
     .order li {
         font-size: .6rem;
         padding: 5px;
+    }
+
+    .smallfontprogress{
+        font-size: .7rem;
     }
 }

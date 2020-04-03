@@ -21,15 +21,16 @@
             <li>
                 <a>{{order.dateAndHourDelivery}}</a>
             </li>
-            <li>
+            <li [ngStyle]="{'background-color': expresionColor.backgroundTimer}" >
                 <img src="assets/icons/cronometro.png" class="tifi-icon-order">
                 <a>{{order.timeTotalCronometer}}</a>
             </li>
             <li>
-                <a>listo para la entrega</a>
+                <a>{{order.orderStatus}}</a>
             </li>
             <li style="border: none;">
-                <input type="radio">
+                <!-- <input type="radio"> -->
+                <button type="button" class="radiobutton" (click)="confirOrder()" > </button>
             </li>
         </ul>
 
@@ -91,10 +92,10 @@
 
     <div style="display: flex;">
         <div style=" width: 87%;">
-            <ngb-progressbar [type]="expresionColor.colorProgress" [value]="percent"></ngb-progressbar>
+            <ngb-progressbar [type]="expresionColor.colorProgress" [value]="percent" [max]="maxpercent" ></ngb-progressbar>
         </div>
-        <div style=" display: flex; width: 13%; justify-content: center;">
-            <a style="font-size: 1rem;" [ngStyle]="{'color': expresionColor.colorFont}">! {{expresionColor.fontSmall}} ¡ </a>
+        <div class="smallfontprogress" style=" display: flex; width: 13%; justify-content: center;">
+            <a [ngStyle]="{'color': expresionColor.colorFont}">! {{expresionColor.fontSmall}} ¡ </a>
         </div>
     </div>
 </div>

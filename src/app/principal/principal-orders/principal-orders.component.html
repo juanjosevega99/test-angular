@@ -40,12 +40,7 @@
 
         <div>
             <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
-                <app-order [order]="order" *ngFor="let order of orders2" style="width: 100%;"></app-order>
-            </div>
-        </div>
-        <div>
-            <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
-                <app-order [order]="order2" *ngFor="let order2 of testlist2" style="width: 100%;"></app-order>
+                <app-order [order]="order" [index] = "i" *ngFor="let order of orders2; let i = index" style="width: 100%;"></app-order>
             </div>
         </div>
     </div>
