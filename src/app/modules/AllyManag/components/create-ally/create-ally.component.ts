@@ -20,42 +20,54 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class CreateAllyComponent implements OnInit {
   // object ally
   forma: FormGroup;
+
   // Variables for list data from backend collection parameterized
   alliesCategories: any[] = [];
   mealsCategories: any[] = [];
   attentionSchedule: any[] = [];
+
   //variables of attentin Schedule
   days: string[] = []
   hours: String[] = [];
   Schedules: any[] = [];
   idSchedule: string;
+
   // flag  for show schedules saved
-  flagShowShedule= false;
+  flagShowShedule = false;
   // getSchedule: any[]= [];
   // valueSchedule :FormGroup;
+
   //variable for color
   color: String = "#000000";
+
   //Variables of upload Logo to firebase
   urlLogo: any;
   fileImgLogo: any;
   //Variables of upload ImagesAlly to firebase
   imagesAlly: any = []
+
   //variables carousel of images Establisment
   imagesUploaded: any = [];
   imageObject: any;
   imageSize: any;
   contImage: number = 0;
+
   //handle button other category Meal
   otherMealSelect: boolean = true
   otherMealInput: boolean = false
   //handle button other type Establishment
   otherEstablishmentSelect: boolean = true
   otherEstablishmentInput: boolean = false
+
   //variable for the loading
   loading: boolean;
-   //variables for receiving the profile that will be edited
-   identificatorbyRoot:string;
-   idParams:number;
+
+  //variables for receiving the ally that will be edited
+  identificatorbyRoot: string;
+  idParams: number;
+  buttonPut: boolean;
+  seeNewPhoto: boolean;
+  seeNewImagesAlly: boolean;
 
   constructor(
     private alliesCatServices: AlliesCategoriesService,
@@ -65,9 +77,16 @@ export class CreateAllyComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private _router: Router,
     private _activateRoute: ActivatedRoute,
-    private _saveLocalStorageService : SaveLocalStorageService) {
+    private _saveLocalStorageService: SaveLocalStorageService) {
 
     // this.loading = true;
+
+    //flags
+    this.loading = true;
+    this.buttonPut = true;
+    this.seeNewPhoto = false;
+    this.seeNewImagesAlly = false;
+
     //inicialization for charging the data of an Ally to edit
     this._activateRoute.params.subscribe(params => {
       console.log('Parametro', params['id']);
@@ -78,6 +97,7 @@ export class CreateAllyComponent implements OnInit {
         this.getAlly(idAlly)
       } else {
         // this.loading = false
+        this.buttonPut = false
       }
       this.idParams = identificator;
       this.identificatorbyRoot = idAlly;
@@ -127,7 +147,7 @@ export class CreateAllyComponent implements OnInit {
 
     this.imageSize = { width: 230, height: 120 }; //to do 
     this.days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-    this.hours = ["08:00 am","09:00 am","10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
+    this.hours = ["08:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm",
       "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm", "12:00 am"]
 
     //inicialization service with collections allies-categories
@@ -154,17 +174,17 @@ export class CreateAllyComponent implements OnInit {
   getAlly(id: string) {
     // this.loading;
     console.log('function getAlly', id);
-    this.allieService.getAlliesById(id).subscribe( ally => {
+    this.allieService.getAlliesById(id).subscribe(ally => {
       console.log(ally)
       this.forma.setValue(ally)
       console.log('new data edit: ', this.forma.value)
       let idSchedule = this.forma.controls['idAttentionSchedule'].value
-      this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe( shedule => {
-        this.Schedules =  shedule.attentionSchedule
+      this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe(shedule => {
+        this.Schedules = shedule.attentionSchedule
         console.log('print shedule:', this.Schedules);
-        this.flagShowShedule=true
+        this.flagShowShedule = true
       })
-      
+
 
     })
   }
@@ -229,6 +249,9 @@ export class CreateAllyComponent implements OnInit {
       return false;
     } else {
       if (input.files && input.files[0]) {
+        this.seeNewPhoto = true;
+        console.log(this.seeNewPhoto);
+
         var reader = new FileReader();
         reader.onload = function (e: any) {
           $('#photo')
@@ -252,11 +275,16 @@ export class CreateAllyComponent implements OnInit {
       return false;
     } else {
       if (input.files && input.files[0]) {
+        this.seeNewImagesAlly = true;
+        console.log(this.seeNewPhoto);
+
         var reader = new FileReader();
         reader.onload = (e: any) => {
           image = e.target.result;
           this.imagesUploaded.push({ image: image, thumbImage: image })
         }
+        console.log('Array images upload', this.imagesUploaded);
+
         reader.readAsDataURL(input.files[0]);
         this.imagesAlly.push(input.files[0])
         this.contImage = this.imagesUploaded.length + 1;
@@ -300,7 +328,7 @@ export class CreateAllyComponent implements OnInit {
 
   getAttentionSchedule(day: String, from: String, to: String, i: number) {
     // console.log(this.valueSchedule.value);
-    
+
     console.log(from); //delete console log
     console.log(to, i); //delete console log
     let schedule: object = {
@@ -461,28 +489,18 @@ export class CreateAllyComponent implements OnInit {
             let addSchedule: any = {
               attentionSchedule: this.Schedules
             }
-            if (this.idParams != -1) {
-              addSchedule._id = this.forma.controls['idAttentionSchedule'].value;
-              this.scheduleServices.putAttentionSchedule(addSchedule).subscribe( ()=> alert('shedule updated'))
+            this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
+              this.idSchedule = schedule._id;
+              console.log('LAST ONE', this.idSchedule);//delete consle.log
+              this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
+              console.log(this.forma.value); // delete console.log
+              //upload all fields to ally  collection 
               let objAllie = this.forma.value
-              console.log('Objeto de aliado editado sin id: ',objAllie); //delete console.log
-              objAllie._id = this.identificatorbyRoot
-                this.allieService.putAllie(objAllie).subscribe( ()=> alert('ally update') )
-                this._router.navigate(['/main', 'allyManager'])
-            }else{
-              this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
-                this.idSchedule = schedule._id;
-                console.log('LAST ONE', this.idSchedule);//delete consle.log
-                this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
-                console.log(this.forma.value); // delete console.log
-                //upload all fields to ally  collection 
-                let objAllie = this.forma.value
-                console.log(objAllie); //delete console.log
-                  this.allieService.postAllie(objAllie).subscribe()
-                  this._router.navigate(['/main', 'allyManager'])
-                
-              })
-            }
+              console.log(objAllie); //delete console.log
+              this.allieService.postAllie(objAllie).subscribe()
+              this._router.navigate(['/main', 'allyManager'])
+            })
+
           })
           .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
         Swal.fire(
@@ -493,6 +511,94 @@ export class CreateAllyComponent implements OnInit {
       }
     })
   }
+  uploadFielstoCollectionUpdate() {
+    // put the values of properties establishment
+    let idEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.id
+    let nameEstablishment: any = this.forma.controls['idTypeOfEstablishment'].value.name
+    this.forma.controls['idTypeOfEstablishment'].setValue(idEstablishment)
+    this.forma.controls['nameTypeOfEstablishment'].setValue(nameEstablishment)
+    // put the values of properties Meals categories
+    let idMeal: any = this.forma.controls['idMealsCategories'].value.id
+    let nameMeal: any = this.forma.controls['idMealsCategories'].value.name
+    this.forma.controls['idMealsCategories'].setValue(idMeal)
+    this.forma.controls['nameMealsCategories'].setValue(nameMeal)
+
+    //format of properties by collection AttentatinShedule
+    let addSchedule: any = {
+      attentionSchedule: this.Schedules
+    }
+    addSchedule._id = this.forma.controls['idAttentionSchedule'].value;
+    this.scheduleServices.putAttentionSchedule(addSchedule).subscribe(() => alert('shedule updated'))
+    let objAllie = this.forma.value
+    console.log('Objeto de aliado editado sin id: ', objAllie); //delete console.log
+    objAllie._id = this.identificatorbyRoot
+    this.allieService.putAllie(objAllie).subscribe(() => alert('ally update'))
+    this._router.navigate(['/main', 'allyManager'])
+  }
+  swallPutAllie() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
+        //read promise of upladImages
+        if (this.seeNewPhoto == false && this.seeNewImagesAlly == false) {
+          // this.editProfile.photo = profile.photo;
+          console.log('LOGO DONT UPLOAD ALREADY UP');
+          this.uploadFielstoCollectionUpdate()
+
+        } else if (this.seeNewPhoto == true && this.seeNewImagesAlly == true) {
+          const promesasImages = this.imagesAlly.map(fileImage => {
+            return this._uploadImages.uploadImages(fileImage, 'ImagesEstablishment')
+          });
+          Promise
+            .all(promesasImages)
+            .then(urlImageAlly => {
+              console.log(urlImageAlly)
+              this.forma.controls['imagesAllies'].setValue(urlImageAlly)
+              return this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
+            })
+            .then(urlImage => {
+              this.urlLogo = urlImage;
+              this.forma.controls['logo'].setValue(this.urlLogo)
+              this.uploadFielstoCollectionUpdate()
+            })
+            .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
+        } else if (this.seeNewPhoto == true && this.seeNewImagesAlly == false) {
+          this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
+            .then(urlImage => {
+              this.urlLogo = urlImage;
+              this.forma.controls['logo'].setValue(this.urlLogo)
+              this.uploadFielstoCollectionUpdate()
+            })
+            .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
+        } else if (this.seeNewPhoto == false && this.seeNewImagesAlly == true) {
+          const promesasImages = this.imagesAlly.map(fileImage => {
+            return this._uploadImages.uploadImages(fileImage, 'ImagesEstablishment')
+          });
+          Promise
+            .all(promesasImages)
+            .then(urlImageAlly => {
+              console.log(urlImageAlly)
+              this.forma.controls['imagesAllies'].setValue(urlImageAlly)
+              this.uploadFielstoCollectionUpdate()
+            })
+        }
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo aliado ha sido Actualizado',
+          'success',
+        )
+      }
+    })
+  }
+
   swallCancelAlly() {
     Swal.fire({
       title: 'Estás seguro?',

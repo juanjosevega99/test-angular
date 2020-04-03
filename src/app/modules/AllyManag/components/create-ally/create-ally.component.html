@@ -88,7 +88,8 @@
                                                         <div class="photo">
                                                                 <img [tooltip]="HtmlContent" content-type="template"
                                                                         id="photo" width="150px" height="120px"
-                                                                        style="border-radius: 1.5rem" src="">
+                                                                        style="border-radius: 1.5rem"
+                                                                        [src]="forma.get('logo').value">
                                                         </div>
                                                         <div class="upload-btn-wrapper">
                                                                 <ng-template #HtmlContent>
@@ -434,7 +435,8 @@
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
                                                                         style="width: 230px; height: 120px; "
                                                                         [imageSize]="imageSize"
-                                                                        [images]="imagesUploaded" #nav>
+                                                                        [images]="imagesUploaded" #nav
+                                                                        >
                                                                 </ng-image-slider>
 
                                                                 <P *ngIf="imagesUploaded.length==0"
@@ -456,19 +458,22 @@
                                         </div>
                                 </div>
 
-
-
                         </div>
                         <div
                                 class="col-sm-12 col-md-2 col-lg-1 d-flex flex-column justify-content-center align-items-center ">
                                 <div class="form-group row d-flex flex-column ">
 
-                                        <button type="submit" class="btn btn-outline-primary mb-5">
+                                        <button *ngIf="!buttonPut" type="submit" class="btn btn-outline-primary mb-5">
                                                 Guardar
+                                        </button>
+                                        <button *ngIf="buttonPut" type="button" class="btn btn-outline-primary mb-5" (click)="swallPutAllie()">
+                                                Actualizar
                                         </button>
                                         <button class="btn btn-outline-primary" type="button" (click)="cancelChanges()">
                                                 Cancelar
                                         </button>
+            <!-- <button *ngIf="buttonPut"  type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button> -->
+
 
                                 </div>
                         </div>
