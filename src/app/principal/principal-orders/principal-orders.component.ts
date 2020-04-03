@@ -8,6 +8,8 @@ import { DishesService } from 'src/app/services/dishes.service';
 import { Dishes } from 'src/app/models/Dishes';
 import { async } from '@angular/core/testing';
 
+import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
   selector: 'app-principal-orders',
   templateUrl: './principal-orders.component.html',

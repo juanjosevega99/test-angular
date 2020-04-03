@@ -3,6 +3,7 @@ import { OrderByUser } from 'src/app/models/OrderByUser';
 import { OrdersService } from 'src/app/services/orders.service';
 // swall pop up
 import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -23,13 +24,6 @@ export class OrderComponent implements OnInit {
   // variable to desplegate table detail
   showdetail = false;
 
-  // variables to manage start or not cronometer
-  // startCronometer = false;
-  // stopOrder = false;
-
-  // to manage the hour to show in cronometer
-  // timeToralOut = '';
-
   timeInMinutos = 0;
 
   // time to start cronometer
@@ -44,8 +38,8 @@ export class OrderComponent implements OnInit {
 
   // to disable button
   buttonDisable = {
-    disable:true,
-    color:"#d2d2d2"
+    disable: true,
+    color: "#d2d2d2"
   }
 
   @Input()
@@ -56,13 +50,13 @@ export class OrderComponent implements OnInit {
 
   @Output() indexOrder: EventEmitter<number>;
 
-  constructor(private orderservice: OrdersService) {
+  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService) {
     this.indexOrder = new EventEmitter();
   }
 
   ngOnInit() {
 
-
+    this.spinner.show();
     this.progressbar = setInterval(() => {
 
       this.changeStatusProgressBar();
@@ -217,14 +211,24 @@ export class OrderComponent implements OnInit {
   changeStatusOrder(minuts: number) {
 
     if (minuts <= 0) {
-      this.order.orderStatus = 'El pedido esta listo'
+
       this.expresionColor.colorFont = "#dfb308";
       this.expresionColor.colorProgress = "success";
-      this.expresionColor.fontSmall = "Confirmar";
       this.expresionColor.backgroundTimer = '#bfd5b2'
       this.order.timeTotalCronometer = 0 + " " + 'minutos';
-      this.buttonDisable.disable = false;
-      this.buttonDisable.color = "#bfd5b2";
+
+      if (this.order.orderStatus != "Entregado") {
+        this.order.orderStatus = 'El pedido esta listo'
+        this.expresionColor.fontSmall = "Confirmar";
+        this.buttonDisable.disable = false;
+        this.buttonDisable.color = "#bfd5b2";
+
+      } else {
+        this.expresionColor.fontSmall = "Entregado";
+        document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+        this.indexOrder.emit(this.index);
+
+      }
 
 
     } else if (minuts <= 10) {
@@ -283,6 +287,7 @@ export class OrderComponent implements OnInit {
       // stop count
       clearTimeout(this.progressbar);
     }
+    this.spinner.hide();
 
   }
 
@@ -317,24 +322,30 @@ export class OrderComponent implements OnInit {
 
   }
 
-  confirOrder() {
+  // ====================================
+  // ========= Confirm orders ===========
+
+  confirmOrder() {
 
     let status = {
       orderStatus: "Entregado",
       id: this.order.id
     };
-
+    this.spinner.show();
     this.orderservice.putCharge(status).subscribe(res => {
-      console.log(res);
       this.expresionColor.fontSmall = "Entregado";
       this.showdetail = false;
 
       this.indexOrder.emit(this.index);
+      this.spinner.hide();
     })
 
     document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
 
   }
+
+  // ====================================
+  // ========= minuts to hours ==========
 
   convertToHours(minuts: number): string {
 
@@ -345,25 +356,39 @@ export class OrderComponent implements OnInit {
   }
 
   // pop up to confim order
-  swallUpdateState(idProfile?, newState?) {
+  swallUpdateState() {
+
+    let mensaje = '';
+
+    switch (this.order.typeOfService) {
+      case 'llevalo' || 'pidelo':
+        mensaje = `¿confirmar la entrega del pedido con el código ${this.order.code} del ${this.order.dateAndHourDelivery} ?`;
+        break;
+
+      default:
+        mensaje = `¿confirmar la entrega del pedido con el código ${this.order.code} del ${this.order.dateAndHourDelivery} con ${this.order.typeOfService.split(' ')[1]} mesas?`;
+        break;
+    }
+
     Swal.fire({
 
-      title: 'Estás seguro?',
-      text: "de que deseas actualizar el estado de este perfil!",
+      title: '¿Estás seguro?',
+      text: mensaje,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, actualizar!'
-      
-    })
-    .then((result) => {
-
-      if (result.value) {
-        console.log("aceptado")
-      }
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
 
     })
+      .then((result) => {
+
+        if (result.value) {
+          this.confirmOrder();
+        }
+
+      })
   }
 
 }
