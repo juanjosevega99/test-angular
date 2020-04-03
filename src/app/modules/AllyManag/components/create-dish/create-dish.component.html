@@ -1,7 +1,6 @@
 <div class="compenetsstyle">
-
-    <form novalidate="" class="row" (ngSubmit)="saveDish(shape)" #shape="ngForm">
-
+    <app-loading *ngIf="loading"></app-loading>
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveDish(shape)" #shape="ngForm" *ngIf="!loading">
 
         <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
             <img src="assets/icons/Back.png" class="tifi-icon-back">
@@ -15,24 +14,27 @@
                 <div class="col-md-7">
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
-                        <input class="form-check-input " type="radio" name="radio2" id="radio3" [checked]="State[0].check" #active
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" [value]="State[0].state">
+                        <input class="form-check-input " type="radio" name="radio2" id="radio3"
+                            [checked]="State[0].check" #active [checked]="preDish.state[0].check"
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)"
+                            [value]="State[0].state">
                         <label for="radio3">
                             Activo
                         </label>
                     </div>
 
                     <div class="radio radio-danger m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio4" [checked]="State[1].check" #inactive
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" [value]="State[1].state">
+                        <input class="form-check-input" type="radio" name="radio2" id="radio4"
+                            [checked]="State[1].check" #inactive [checked]="preDish.state[1].check"
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)"
+                            [value]="State[1].state">
                         <label for="radio4">
                             Inactivo
                         </label>
                     </div>
 
                     <div class="radio m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio5"
-                             disabled>
+                        <input class="form-check-input" type="radio" name="radio2" id="radio5" (click)="deleteDish()">
                         <label for="radio5">
                             Eliminar
                         </label>
@@ -45,18 +47,16 @@
                 <div class="col-md-7">
                     <label class="dt">
                         <p class="text-center">
-                            {{date}}
+                            {{dateEntry}}
                         </p>
                     </label>
 
                     <label class="dt" style="margin-right: 10px;">
                         <p class="text-center">
-                            {{times}}
+                            {{timesEntry}}
                         </p>
                     </label>
-
                 </div>
-
             </div>
 
             <div class="form-group row">
@@ -64,13 +64,13 @@
                 <div class="col-md-7">
                     <label class="dt">
                         <p class="text-center">
-                            {{date}}
+                            {{dateModication}}
                         </p>
                     </label>
 
                     <label class="dt" style="margin-right: 10px;">
                         <p class="text-center">
-                            {{times}}
+                            {{timesModification}}
                         </p>
                     </label>
                 </div>
@@ -92,14 +92,16 @@
                         <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="dishCategory"
                             #nameMealsCategories="ngModel" required
                             [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid) }"
-                            [(ngModel)]="preDish.nameDishesCategories" #select (change)="seeId(select.value)" > 
+                            [(ngModel)]="preDish.nameDishesCategories" #select (change)="seeId(select.value)">
+                            <option selected>{{preDish.nameDishesCategories}}</option>
                             <option *ngFor="let category of dishesCategories">
                                 {{category.name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #category="ngModel" 
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCat" type="text" name="otherCat"
+                        <input *ngIf="otherCategoryInput" placeholder="Otra categoría" required #category="ngModel"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCat" type="text"
+                            name="otherCat"
                             [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}">
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
@@ -108,7 +110,7 @@
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
                             (click)="addCategory(otherCat)"> Guardar</button>
 
-                        <button *ngIf="addcategoryButton"(click)="handleBoxCategories()"
+                        <button *ngIf="addcategoryButton" (click)="handleBoxCategories()"
                             class="btn1 btn btn-outline-primary">
                             Otro
                         </button>
@@ -172,8 +174,8 @@
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
-                        <div class="photo"> 
-                            <img id="photo" width="100px" height="100px" title="No hay foto subida">
+                        <div class="photo">
+                            <img [src]="preDish.imageDishe" id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -233,8 +235,10 @@
 
         <section class="col-12 d-flex" style="justify-content: center;">
 
-            <button [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-
+            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit"
+                class="btn btn-outline-primary btn-lg">Guardar</button>
+            <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="putDish()"
+                class="btn btn-outline-primary btn-lg">Actualizar</button>
         </section>
     </form>
 
