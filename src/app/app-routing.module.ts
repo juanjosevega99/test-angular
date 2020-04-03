@@ -75,13 +75,13 @@ const routes: Routes = [
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
       { path: "add-sede", component: AddSedeComponent },
-      { path: "createHeadquarter", component: CreateHeadquarterComponent },
-      { path: "editmenu", component: EditMenuComponent },
+      { path: "createHeadquarter/:id", component: CreateHeadquarterComponent },
+      { path: "editmenu/:id", component: EditMenuComponent },
       { path: "createDish/:id", component: CreateDishComponent },
       { path : "accompaniments", component: AccompanimentsComponent},
       { path : "profiles", component: ProfileComponent},
       { path : "createProfile/:id", component: CreateProfileComponent},
-      { path: "headquarts", component: HeadquartersOptionsComponent },
+      { path: "headquarts/:id", component: HeadquartersOptionsComponent },
       
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 

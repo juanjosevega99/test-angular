@@ -264,6 +264,12 @@ export class AllyManagerComponent implements OnInit {
       }
     }
   }
+  //method Get in Option Ally
+  getInHeadquarts(idAlly:string, i){
+    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+    this._router.navigate( ['/main','headquarts',i] )
+  }
+
   //method edit ally
   editAlly(idAlly:string, i){
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)

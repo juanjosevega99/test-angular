@@ -25,7 +25,7 @@
                     <i class="fas fa-info imageI" style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a [routerLink]="['/main','allyManager']" class="btn btn-lg btn-block buttonstyle">Info del establecimiento</a>
+                    <a (click)="editAlly()"  class="btn btn-lg btn-block buttonstyle">Info del establecimiento</a>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                     <i class="fas fa-folder-open imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a [routerLink]="['/main','editmenu']" class="btn btn-lg btn-block buttonstyle">Editar menu</a>
+                    <a (click)="editMenu()" class="btn btn-lg btn-block buttonstyle">Editar menu</a>
                 </div>
             </div>
         </div>
@@ -58,7 +58,8 @@
                     <i class="fas fa-warehouse imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a [routerLink]="['/main','createHeadquarter']" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
+                    <a  (click)="createHeadquart()" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
+                    <!-- [routerLink]="['/main','createHeadquarter']" -->
                 </div>
             </div>
         </div>
