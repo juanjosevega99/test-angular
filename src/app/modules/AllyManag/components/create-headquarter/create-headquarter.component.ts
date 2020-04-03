@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlliesService } from 'src/app/services/allies.service';
 import { AdditionalServicesService } from 'src/app/services/additional-services.service'
 import { LocationServiceService } from 'src/app/services/location-service.service';
@@ -10,6 +10,10 @@ import { AngularFireStorage } from "@angular/fire/storage";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { Guid } from "guid-typescript";
+//services
+import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
+
+
 
 @Component({
   selector: 'app-create-headquarter',
@@ -71,14 +75,30 @@ export class CreateHeadquarterComponent implements OnInit {
   collectionAddService: any[] = [];
 
   nameAlli: any[] = [];
+   //variables of idAlly
+   idAlly:number;
+   idAllyLocalStorage:string;
 
   constructor(
     private storage: AngularFireStorage,
     private allies: AlliesService,
     private _router: Router,
+    private _activateRoute: ActivatedRoute,
     private headquarters: HeadquartersService,
     private additionalServices: AdditionalServicesService,
-    private locationService: LocationServiceService) {
+    private locationService: LocationServiceService,
+    private _saveLocalStorageService: SaveLocalStorageService) {
+
+      //get Ally's id of LocalStorage
+      this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
+      
+      //get Ally's parameter
+      this._activateRoute.params.subscribe(params => {
+        console.log('Parametro', params['id']);
+        this.idAlly =  params['id']
+      });
+
+
     this.locationService.getLocations()
       .subscribe((data: any) => {
         this.Location = data.facet_groups[0].facets
@@ -101,6 +121,9 @@ export class CreateHeadquarterComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+  goBackHeadquarterOptions(){
+    this._router.navigate( ['/main','headquarts',this.idAlly] )
   }
 
   getNameAlly() {
@@ -207,6 +230,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for saving the new headquarter
   saveHq() {
+    this.preHeadquarters['idAllies'] = this.idAllyLocalStorage;
     this.swallSaveHeadquarter(this.preHeadquarters)
   }
 
