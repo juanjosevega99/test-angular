@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OrderByUser } from 'src/app/models/OrderByUser';
 
 @Component({
@@ -46,7 +46,11 @@ export class OrderComponent implements OnInit {
   @Input()
   index: number;
 
-  constructor() { }
+  @Output() indexOrder: EventEmitter<number>;
+
+  constructor() {
+    this.indexOrder = new EventEmitter();
+  }
 
   ngOnInit() {
 
@@ -302,7 +306,11 @@ export class OrderComponent implements OnInit {
   }
 
   confirOrder(){
+
     console.log(this.index);
+    this.expresionColor.fontSmall= "Entregado";
+    
+    this.indexOrder.emit(this.index);
     
   }
 

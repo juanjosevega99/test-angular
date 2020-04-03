@@ -177,6 +177,16 @@ export class PrincipalOrdersComponent implements OnInit {
     );
   }
 
+  tolast( index:number ){
+
+    let auxOrder:Orders = this.orders2[index];
+    this.orders2.splice(index, 1);
+    auxOrder.orderStatus = "Entregado";
+    this.orders2.push(auxOrder);
+
+    console.log(index);
+    
+  }
 
 
 }
