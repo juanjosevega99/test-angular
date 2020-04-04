@@ -20,13 +20,23 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 })
 export class PrincipalOrdersComponent implements OnInit {
 
-  // full calendar
+  // ========================
+  // ==== full calendar =====
   calendarPlugins = [dayGridPlugin, interactionPlugin, dayGridPlugin];
+
+  datereservation: string = '';
+  hourreservation = { valueToShow: '', value: '' };
+  Tablereservation: string = '';
+  Peoplereservation:string = '';
+  idButton = '';
+  idTable = '';
+  idPeople = '';
 
   calendarEvents = [
     { title: 'event 1', date: '2020-04-04' },
-    { title: 'event 1', date: '2020-04-04' },
-    { title: 'event 2', date: '2020-04-05' }
+    { title: 'event 1', date: '2020-04-06' },
+    { title: 'event 2', date: '2020-04-05' },
+
   ];
 
   Hours = []
@@ -52,7 +62,7 @@ export class PrincipalOrdersComponent implements OnInit {
           ordertosave.code = order.code;
           ordertosave.id = order.id;
           ordertosave.name = user.name + " " + user.lastname;
-          ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " "+order.typeOfService['tables'] + " mesas": order.typeOfService['type'] ;
+          ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables'] + " mesas" : order.typeOfService['type'];
           ordertosave.purchaseAmount = order.orderValue;
           ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
           ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
@@ -121,22 +131,24 @@ export class PrincipalOrdersComponent implements OnInit {
 
   }
 
-  getHour(event) {
-    // get the text in button
-    console.log(event.target.textContent);
-  }
-
+  
   createHours() {
     for (let hour = 0; hour < 24; hour++) {
       for (let min = 0; min < 31; min += 30) {
         let toHour = ''
+        let objHour = { valueToShow: '', value: '' };
+
         if (hour < 12) {
           toHour = hour < 10 ? "0" + hour + ":" + (min < 30 ? '0' + min : min) + " am" : hour + ":" + (min < 30 ? '0' + min : min) + " am";
         } else {
           toHour = (hour - 12 && hour - 12 < 10) ? '0' + (hour - 12) + ":" + (min < 30 ? '0' + min : min) + " pm" : (hour - 12 > 0 ? (hour - 12) : hour)
             + ":" + (min < 30 ? '0' + min : min) + " pm";
         }
-        this.Hours.push(toHour);
+
+        objHour.valueToShow = toHour;
+        objHour.value = hour + ':' + (min < 30 ? '0' + min : min);
+
+        this.Hours.push(objHour);
       }
     }
   }
@@ -156,24 +168,111 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
 
-  tolast( index:number ){
+  tolast(index: number) {
 
-    let auxOrder:Orders = this.orders2[index];
+    let auxOrder: Orders = this.orders2[index];
     this.orders2.splice(index, 1);
     auxOrder.orderStatus = "Entregado";
     this.orders2.push(auxOrder);
 
     console.log(index);
-    
+
   }
 
   // ============================
   // ======= Calendar ===========
   handleDateClick(arg) {
 
-    console.log(arg.dateStr);
+    if (this.datereservation) {
+
+      this.calendarEvents.splice(this.calendarEvents.length-1, 1);
+      
+    }
+
+    this.datereservation = arg.dateStr;
+    let objdate = { title: 'programar', date: this.datereservation }
+    this.calendarEvents.push(objdate);
 
   }
 
+  getHour(event, id) {
+    if ( this.idButton ){
+
+    document.getElementById(this.idButton).style.backgroundColor= "#fff";
+
+    }
+    
+    document.getElementById(id).style.backgroundColor= "green";
+    this.hourreservation = this.Hours[id];
+    this.idButton = id;
+    console.log(this.hourreservation);
+    
+  }
+
+  getTables(event, id) {
+    if ( this.idTable ){
+
+    document.getElementById(this.idTable).style.backgroundColor= "#fff";
+
+    }
+    
+    document.getElementById(id + 't').style.backgroundColor= "green";
+    this.Tablereservation = event.target.textContent;
+    this.idTable = id + 't';
+
+  }
+
+  getPeople(event, id){
+    if ( this.idPeople ){
+
+      document.getElementById(this.idPeople).style.backgroundColor= "#fff";
+  
+      }
+      
+      document.getElementById(id+'p').style.backgroundColor= "green";
+      this.Peoplereservation = event.target.textContent;
+      this.idPeople = id + 'p';
+
+  }
+
+  // ==========================================
+  // ========= setReservation && setfree ======
+
+  setFree(){
+
+  }
+
+  setReservation(){
+    // comprobation if date is corect
+    let reservation = {
+      date: '',
+      hour: {},
+      tables: '',
+      people: ''
+    }
+
+    if(this.datereservation && this.hourreservation.value && this.Peoplereservation && this.Tablereservation){
+
+    let dateres = new Date( this.datereservation + "T" + this.hourreservation.value );
+    let today = new Date();
+    
+    if( dateres >= today ){
+      reservation.date = this.datereservation;
+      reservation.hour = this.hourreservation;
+      reservation.tables = this.Tablereservation;
+      reservation.people = this.Peoplereservation;
+      console.log(reservation);
+      
+    }else{
+      console.log("fecha incorrecta");
+      
+    }
+
+    }else{
+      console.log("falta campos por llenar");
+      
+    }
+
+  }
 
 }

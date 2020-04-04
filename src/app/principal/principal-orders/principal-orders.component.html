@@ -74,8 +74,8 @@
                 <p>HORA RESERVA</p>
 
                 <div>
-                    <button *ngFor="let hour of Hours" (click)="getHour($event)"
-                        class="btn btn-outline-success">{{hour}}</button>
+                    <button *ngFor="let hour of Hours; let idb = index" (click)="getHour($event, idb)" [id]="idb"
+                        class="btn btn-outline-success">{{hour.valueToShow}}</button>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
 
                     <p>MESAS</p>
                     <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
-                        <button *ngFor="let table of Tables" (click)="getHour($event)"
+                        <button *ngFor="let table of Tables; let idt = index" (click)="getTables($event, idt)" [id] = "idt + 't'"
                             class="btn btn-outline-success">{{table}}</button>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
 
                     <p>PERSONAS</p>
                     <div style="flex-direction: row; justify-content: center; height: 6rem; overflow: auto;">
-                        <button *ngFor="let table of Tables" (click)="getHour($event)"
+                        <button *ngFor="let table of Tables; let idp = index" (click)="getPeople($event, idp)" [id]="idp + 'p'"
                             class="btn btn-outline-success">{{table}}</button>
                     </div>
                 </div>
@@ -103,8 +103,8 @@
             </div>
         </div>
         <div style="flex-direction: row; justify-content: space-evenly;">
-            <button class="button-order">LIBERAR</button>
-            <button class="button-order">OCUPAR</button>
+            <button class="button-order" (click)="setFree()">LIBERAR</button>
+            <button class="button-order" (click)="setReservation()">OCUPAR</button>
         </div>
     </div>
 

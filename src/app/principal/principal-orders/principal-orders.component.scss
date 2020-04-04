@@ -123,6 +123,10 @@
     border: none;
 }
 
+::ng-deep .fc table {
+    cursor: pointer;
+}
+
 // ================================
 // =========medias querys =========
 
