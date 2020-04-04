@@ -40,7 +40,8 @@
 
         <div>
             <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
-                <app-order (indexOrder)="tolast( $event )" [order]="order" [index] = "i" *ngFor="let order of orders2; let i = index" style="width: 100%;"></app-order>
+                <app-order (indexOrder)="tolast( $event )" [order]="order" [index]="i"
+                    *ngFor="let order of orders2; let i = index" style="width: 100%;"></app-order>
             </div>
         </div>
     </div>
@@ -58,9 +59,13 @@
 
         <div class=" calendarTables" style="margin-top: 1.5rem;">
 
-            <div style="margin-bottom: .7rem;">
-                <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)"
-                    (navigate)="date = $event.next"></ngb-datepicker>
+            <div style="margin-bottom: .7rem; padding: .5rem;">
+                <!-- <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)"
+                    (navigate)="date = $event.next"></ngb-datepicker> -->
+                <full-calendar deepChangeDetection="true" [plugins]="calendarPlugins" [events]="calendarEvents"
+                    (dateClick)="handleDateClick($event)">
+
+                </full-calendar>
             </div>
 
             <div class="dropdown-divider"></div>

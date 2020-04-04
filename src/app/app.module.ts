@@ -65,6 +65,9 @@ import { OrderComponent } from './principal/order/order.component';
 import { TypeServiceImgDirective } from './directives/type-service-img.directive';
 import { CronometerStateDirective } from './directives/cronometer-state.directive';
 
+// full calendar
+import { FullCalendarModule } from '@fullcalendar/angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -133,7 +136,10 @@ import { CronometerStateDirective } from './directives/cronometer-state.directiv
     NgImageSliderModule,
     ReactiveFormsModule,
     NgxPrintModule,
-    TooltipModule
+    TooltipModule,
+    FullCalendarModule
+    
+    
   ],
   providers: [
     UploadImagesService,

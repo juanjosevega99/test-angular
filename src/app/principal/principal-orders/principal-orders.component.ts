@@ -8,7 +8,10 @@ import { DishesService } from 'src/app/services/dishes.service';
 import { Dishes } from 'src/app/models/Dishes';
 import { async } from '@angular/core/testing';
 
-import { NgxSpinnerService } from 'ngx-spinner';
+// fullcalendar
+import { Calendar } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction'; // for selectable
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 @Component({
   selector: 'app-principal-orders',
@@ -17,30 +20,18 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class PrincipalOrdersComponent implements OnInit {
 
+  // full calendar
+  calendarPlugins = [dayGridPlugin, interactionPlugin, dayGridPlugin];
+
+  calendarEvents = [
+    { title: 'event 1', date: '2020-04-04' },
+    { title: 'event 1', date: '2020-04-04' },
+    { title: 'event 2', date: '2020-04-05' }
+  ];
+
   Hours = []
   Tables = []
 
-  testlist = [
-    {
-      id: 3,
-      DateDelivery: "2020-03-31T23:45:04.671Z"
-    },
-    {
-      id: 4,
-      DateDelivery: "2020-03-27T14:20:04.671Z"
-    },
-    {
-      id: 5,
-      DateDelivery: "2020-03-27T14:20:04.671Z"
-    },
-    {
-      id: 1,
-      DateDelivery: "2020-03-27T14:20:04.671Z"
-    }
-
-  ];
-
-  testlist2 = [];
 
   orders = []
   orders2 = []
@@ -164,20 +155,6 @@ export class PrincipalOrdersComponent implements OnInit {
     return n;
   }
 
-  orderList() {
-
-    this.testlist2 = this.testlist.sort(function (a, b) {
-      return new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime();
-    }
-    );
-    console.log("on funtion", this.orders2);
-    console.log("on funtion", this.testlist2);
-
-    this.orders2 = this.orders.sort(function (a, b) {
-      return new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime();
-    }
-    );
-  }
 
   tolast( index:number ){
 
@@ -188,6 +165,14 @@ export class PrincipalOrdersComponent implements OnInit {
 
     console.log(index);
     
+  }
+
+  // ============================
+  // ======= Calendar ===========
+  handleDateClick(arg) {
+
+    console.log(arg.dateStr);
+
   }
 
 
