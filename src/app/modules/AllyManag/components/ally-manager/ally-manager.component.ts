@@ -18,7 +18,7 @@ export class AllyManagerComponent implements OnInit {
   table: FormGroup;
 
   //varibales to obtain data
-  attentionSchedule: string;
+  // attentionSchedule: string;
   arrayAllyManager: any[] = []
   newdateArray = this.arrayAllyManager;
   filteredArray = [];
@@ -41,7 +41,7 @@ export class AllyManagerComponent implements OnInit {
     // inicialization date
     this.today = new Date()
     this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
-    // const primeraLetraMayuscula = (cadena) => cadena.charAt(0).toUpperCase().concat(cadena.substring(1, cadena.length));
+    // convert the first letter to capital  
     let day = this.date.charAt(0).toUpperCase().concat(this.date.substring(1, this.date.length));
     
     //inicialization of the table
@@ -54,27 +54,23 @@ export class AllyManagerComponent implements OnInit {
     this._alliesService.getAllies().subscribe(allies => {
 
       allies.forEach((ally: Allies) => {
-
+        let attentionSchedule: any = "";
         this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
           .subscribe((schedule) => {
             
             console.log('fecha',day);
-            // console.log(schedule)
-            // let nothing:String = 'No hay servicio';
+            let dayDb = schedule.attentionSchedule.find(e => e.day == day)
+            let msgSchedule = `${dayDb.from} - ${dayDb.to} `
+            attentionSchedule = msgSchedule
 
-            // this.dateDay = schedule['attentionSchedule'].filter(days => {
-            //   // console.log(days.day);
-            //   if (days.day == day){
-            //     return days
-            //   }
-            // })
-            // console.log(this.dateDay);
-            // this.attentionSchedule = this.dateDay[0].from + " - " + this.dateDay[0].to;
           })
 
         this._headquartService.getHeadquarterByIdAlly(ally.id).subscribe((services: any[]) => {
 
           let obj: any = {}
+          
+            
+
 
           obj = {
             idAlly : ally.id,
@@ -84,7 +80,7 @@ export class AllyManagerComponent implements OnInit {
             numberHeadquarters: ally.NumberOfLocations,
             allyType: ally.typeAlly,
             mealType: ally.nameMealsCategories,
-            schedules: this.attentionSchedule
+            schedules : attentionSchedule
 
           }
           if (services) {
@@ -264,6 +260,12 @@ export class AllyManagerComponent implements OnInit {
       }
     }
   }
+  //method Get in Option Ally
+  getInHeadquarts(idAlly:string, i){
+    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+    this._router.navigate( ['/main','headquarts',i] )
+  }
+
   //method edit ally
   editAlly(idAlly:string, i){
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SectionsService } from "src/app/services/sections.service";
 import Swal from 'sweetalert2';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray, NgForm } from '@angular/forms'
+import { Router,ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -56,8 +57,17 @@ export class AccompanimentsComponent implements OnInit {
   date: string;
   times: string;
   today: Date;
+   //variables of idAlly
+   idAlly: number;
 
-  constructor(private sectionService: SectionsService, private fb: FormBuilder) {
+  constructor(private sectionService: SectionsService, 
+    private fb: FormBuilder,private _router: Router,
+    private _activateRoute: ActivatedRoute) {
+      //get Ally's parameter
+    this._activateRoute.params.subscribe(params => {
+      console.log('Parametro', params['id']);
+      this.idAlly = params['id']
+    });
     //inicialization for the table
     this.addForm = this.fb.group({
       items: [null, Validators.required],
@@ -91,6 +101,10 @@ export class AccompanimentsComponent implements OnInit {
         this.addForm.removeControl('rows');
       }
     });
+  }
+
+  goBackCreateDish(){
+    this._router.navigate(['/main', 'createDish', this.idAlly])
   }
 
   //Method to set the section selected

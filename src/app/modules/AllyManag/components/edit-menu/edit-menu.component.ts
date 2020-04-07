@@ -4,6 +4,8 @@ import { DishesService } from 'src/app/services/dishes.service';
 import { Dishes } from 'src/app/models/Dishes';
 import { DishList } from 'src/app/models/DishList';
 import Swal from 'sweetalert2';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-edit-menu',
@@ -19,8 +21,8 @@ export class EditMenuComponent implements OnInit {
   generalsearch: string;
   terminoaux = '';
   //variables for the state
-  selectedA: [] =[]
-  selectedD: []=[]
+  selectedA: [] = []
+  selectedD: [] = []
 
   /*  menu = [
      {
@@ -61,9 +63,19 @@ export class EditMenuComponent implements OnInit {
     modificationDate: string, modificationTime: string, modificationNumber: string, state: string, selected: boolean
   }[] = []; */
   state: any[] = [];
+  //variables of idAlly
+  idAlly: number;
 
+  constructor(private dishesService: DishesService,
+    private _router: Router,
+    private _activateRoute: ActivatedRoute, ) {
+    
+    //get Ally's parameter
+    this._activateRoute.params.subscribe(params => {
+      console.log('Parametro', params['id']);
+      this.idAlly = params['id']
+    });
 
-  constructor(private dishesService: DishesService) {
     //inicialization of the table
     this.table = new FormGroup({
       "reference": new FormControl(),
@@ -91,12 +103,15 @@ export class EditMenuComponent implements OnInit {
       })
     })
 
-    this.state = [{ name: 'active', selected: false}, { name: 'inactive', selected: false}]
+    this.state = [{ name: 'active', selected: false }, { name: 'inactive', selected: false }]
 
   }
 
 
   ngOnInit() {
+  }
+  goBackHeadquarterOptions() {
+    this._router.navigate(['/main', 'headquarts', this.idAlly])
   }
 
   //methods to convert the modification date
@@ -114,22 +129,22 @@ export class EditMenuComponent implements OnInit {
 
   //method for updating the state to active
   changeStateA(idDish) {
-    let newstate: object ={
-      state : [{
+    let newstate: object = {
+      state: [{
         state: "active",
         check: true
       }, {
         state: "inactive",
         check: false
       }]
-    } 
+    }
     this.swallUpdateState(idDish, newstate)
   }
 
   //method for updating the state to inactive
   changeStateI(idDish) {
-    let newstate: object ={
-      state : [{
+    let newstate: object = {
+      state: [{
         state: "active",
         check: false
       }, {
@@ -137,7 +152,7 @@ export class EditMenuComponent implements OnInit {
         check: true
       }]
     }
-    this.swallUpdateState(idDish, newstate) 
+    this.swallUpdateState(idDish, newstate)
   }
 
   //method for seaching specific values by name and code
@@ -157,8 +172,8 @@ export class EditMenuComponent implements OnInit {
     }
 
     console.log("campos llenos: ", count);
-  console.log('valueGenerate',this.generalsearch);
-  
+    console.log('valueGenerate', this.generalsearch);
+
     if (count > 0 && count < 2 && !this.generalsearch) {
 
       //  un campo lleno
@@ -262,7 +277,7 @@ export class EditMenuComponent implements OnInit {
         return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
           myRegex.test(item.numberOfModifications.toString()))
       });
-    }    
+    }
   }
 
 
@@ -279,7 +294,7 @@ export class EditMenuComponent implements OnInit {
     console.log(value, check);
     this.dishesService.getDishes().subscribe(res => {
       res.forEach((dish: Dishes) => {
-        let state: any=[]
+        let state: any = []
         state = dish.state
         console.log(state);
       })
@@ -309,9 +324,9 @@ export class EditMenuComponent implements OnInit {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
-        this.dishesService.putDishe(idDish,newState).subscribe(res=>{
-          this.dishesService.getDishes().subscribe(dish=>{
-            this.dishesgetting= dish
+        this.dishesService.putDishe(idDish, newState).subscribe(res => {
+          this.dishesService.getDishes().subscribe(dish => {
+            this.dishesgetting = dish
           })
         })
         Swal.fire(

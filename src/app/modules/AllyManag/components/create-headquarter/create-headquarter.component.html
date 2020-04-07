@@ -3,7 +3,8 @@
     <form novalidate="" class="row" (ngSubmit)="saveHq(shape)" #shape="ngForm">
 
 
-        <a [routerLink]="['/main','headquarts']" class="d-flex mr-2">
+        <a  (click)="goBackHeadquarterOptions()" class="d-flex mr-2">
+            <!-- [routerLink]="['/main','headquarts']" -->
             <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 

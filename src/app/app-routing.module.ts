@@ -20,6 +20,7 @@ import { AllyManagerComponent } from './modules/AllyManag/components/ally-manage
 import { UserManagerComponent } from './modules/UserManag/components/user-manager/user-manager.component';
 import { PromoManagerComponent } from './modules/PromManag/components/promo-manager/promo-manager.component';
 import { CuponManagerComponent } from './modules/CupManag/components/cupon-manager/cupon-manager.component';
+import { CreateCouponComponent } from './modules/CupManag/create-coupon/create-coupon.component';
 import { ReportGeneratorComponent } from './modules/ReportGen/components/report-generator/report-generator.component';
 import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/pqr-manager.component';
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
@@ -68,20 +69,21 @@ const routes: Routes = [
       { path: "createAlly/:id", component: CreateAllyComponent },
       { path: "editAlly/:id", component: CreateAllyComponent },
       { path: "promoManager", component: PromoManagerComponent },
-      { path: "cuponManager", component: CuponManagerComponent },
+      { path: "couponManager", component: CuponManagerComponent },
+      { path: "createCoupon/:id", component: CreateCouponComponent },
       { path: "reportGenerator", component: ReportGeneratorComponent },
       { path: "pqrList", component: PqrListComponent },
       { path: "pqrManager/:id", component: PqrManagerComponent },
       { path: "bannerManager", component: BannerManagerComponent },
       { path: "tycManager", component: TycManagerComponent },
       { path: "add-sede", component: AddSedeComponent },
-      { path: "createHeadquarter", component: CreateHeadquarterComponent },
-      { path: "editmenu", component: EditMenuComponent },
+      { path: "createHeadquarter/:id", component: CreateHeadquarterComponent },
+      { path: "editmenu/:id", component: EditMenuComponent },
       { path: "createDish/:id", component: CreateDishComponent },
-      { path : "accompaniments", component: AccompanimentsComponent},
-      { path : "profiles", component: ProfileComponent},
+      { path : "accompaniments/:id", component: AccompanimentsComponent},
+      { path : "profiles/:id", component: ProfileComponent},
       { path : "createProfile/:id", component: CreateProfileComponent},
-      { path: "headquarts", component: HeadquartersOptionsComponent },
+      { path: "headquarts/:id", component: HeadquartersOptionsComponent },
       
       { path: "**", redirectTo: "options", pathMatch: 'full' },
 

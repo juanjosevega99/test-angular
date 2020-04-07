@@ -64,6 +64,7 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { OrderComponent } from './principal/order/order.component';
 import { TypeServiceImgDirective } from './directives/type-service-img.directive';
 import { CronometerStateDirective } from './directives/cronometer-state.directive';
+import { CreateCouponComponent } from './modules/CupManag/create-coupon/create-coupon.component';
 
 // full calendar
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -113,7 +114,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     LoadingComponent,
     OrderComponent,
     TypeServiceImgDirective,
-    CronometerStateDirective
+    CronometerStateDirective,
+    CreateCouponComponent
 
   ],
   imports: [

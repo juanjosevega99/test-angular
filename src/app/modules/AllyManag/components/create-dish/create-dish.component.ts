@@ -88,7 +88,6 @@ export class CreateDishComponent implements OnInit {
   //variable for the loading
   loading: boolean;
 
-
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService) {
 
     //flags
@@ -126,6 +125,12 @@ export class CreateDishComponent implements OnInit {
 
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
+  }
+  goBackEditMenu() {
+    this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot])
+  }
+  routeAccompaniments(){
+    this._router.navigate(['/main', 'accompaniments', this.identificatorbyRoot])
   }
 
   //Method to see the id of the category selected
@@ -390,7 +395,7 @@ export class CreateDishComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'editmenu']);
+            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
           }
         })
       }
@@ -413,7 +418,7 @@ export class CreateDishComponent implements OnInit {
           'Eliminado!',
           'success',
         )
-        this._router.navigate(['/main', 'editmenu']);
+        this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
       }
     })
   }
@@ -465,7 +470,7 @@ export class CreateDishComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'editmenu']);
+            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
           }
         })
       }

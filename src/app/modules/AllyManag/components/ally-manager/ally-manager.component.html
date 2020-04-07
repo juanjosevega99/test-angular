@@ -68,7 +68,7 @@
                 <tr *ngFor="let ally of newdateArray; let i = index " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
-                    <td> <a [routerLink]="['/main', 'headquarts']"> {{ally.nameEstablishment}} </a></td>
+                    <td> <a  type="button" class="btn btn-link" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </a></td>
                     <td> {{ally.numberHeadquarters}} </td>
                     <td>
                         <img *ngIf="ally.services ? ally.services[0]? true :false  : ''" [src]="ally.url1" alt=""
@@ -79,7 +79,6 @@
                             class="iconService mx-2">
                     </td>
                     <td> {{ally.allyType}} </td>
-                    <!-- todo -->
                     <td> {{ally.mealType}} </td>
                     <td> {{ally.schedules}} </td>
 
