@@ -4,4 +4,5 @@ export interface reservation{
     hour:Object,
     tables:Object,
     people:Object,
+    idHeadquart:String
 }

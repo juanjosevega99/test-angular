@@ -18,6 +18,13 @@ export class ReservationService {
 
   }
 
+  getReservationsByHeadquart( id ):Observable<reservation []>{
+
+    return this.httpclient.get<reservation[]>( environment.UrlBase + "reservation/head/" + id );
+
+  }
+
+
   postReservation(reservation):Observable<String>{
     return this.httpclient.post<String>(environment.UrlBase + "reservation", reservation);
   }

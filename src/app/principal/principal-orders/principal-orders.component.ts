@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 import { OrdersService } from 'src/app/services/orders.service';
 import { Orders } from 'src/app/models/Orders';
 import { UsersService } from 'src/app/services/users.service';
@@ -47,6 +49,26 @@ export class PrincipalOrdersComponent implements OnInit {
   ];
 
   Reservations = [];
+  // =========================
+  // ====== profile ==========
+
+  profile = {
+    id: '123',
+    name: 'pepito',
+    idAllies: "5e7b744640e2af2d2f5a6610",
+    idHedquart: "5e7b7cf227d3a60b0fb06494"
+  }
+
+  // ============================================
+  // ====== to save dishes to reservation =======
+  preOrder: FormGroup;
+  listOfDishes: Dishes[];
+  selectDishes = [];
+  totalCash = 0;
+  totalTime = 0;
+  copilist = [];
+  showmodal = false;
+
 
   Hours = []
   Tables = []
@@ -56,68 +78,38 @@ export class PrincipalOrdersComponent implements OnInit {
   orders2 = []
   constructor(private serviceOrders: OrdersService, private userservice: UsersService, private dishService: DishesService,
     private reservationService: ReservationService) {
+
+    this.preOrder = new FormGroup({
+
+      'name': new FormControl(),
+      'quantity': new FormControl(1),
+      'dish': new FormControl()
+
+    })
+
     // init hours
     this.createHours();
 
     // init Tables
     this.createTables();
-    let or = []
-    this.serviceOrders.getOrders().subscribe((orders: Orders[]) => {
 
-      orders.forEach(order => {
-        let ordertosave: OrderByUser = {};
-        this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
-          ordertosave.code = order.code;
-          ordertosave.id = order.id;
-          ordertosave.name = user.name + " " + user.lastname;
-          ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables'] + " mesas" : order.typeOfService['type'];
-          ordertosave.purchaseAmount = order.orderValue;
-          ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
-          ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
-          ordertosave.DateDelivery = order.dateAndHourDelivey;
-          ordertosave.orderStatus = order.orderStatus;
-        });
-        let objdishes = [];
-        let timeTotal = 0;
-        order.idDishe.forEach((iddish: any) => {
-          let objDish: any = {};
-          this.dishService.getDisheById(iddish.id).subscribe((dish: Dishes) => {
-            objDish.quantity = iddish.quantity;
-            objDish.name = dish.name;
-            objDish.description = dish.description;
-            objDish.timedish = dish.preparationTime[0] + " " + dish.preparationTime[1];
-            objDish.valueDish = dish.price * iddish.quantity;
-            switch (dish.preparationTime[1]) {
-              case 'segundos':
-                timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) / 60);
-                break;
-              case "minutos":
-                timeTotal = (timeTotal + parseInt(dish.preparationTime[0]));
-                break;
-              case 'horas':
-                timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) * 60);
-                break;
-            }
-            if (timeTotal >= 60) {
-              ordertosave.timeTotal = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
-                (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
-              ordertosave.timeTotalCronometer = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
-                (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
-            }
-            else {
-              ordertosave.timeTotal = timeTotal + " " + "minutos";
-              ordertosave.timeTotalCronometer = timeTotal + " " + "minutos";
-            }
-          });
-          objdishes.push(objDish);
-        });
-        ordertosave.nameDishe = objdishes;
-        this.orders.push(ordertosave);
+    this.serviceOrders.getOrdersByAllyHead(this.profile.idHedquart).subscribe((orders: Orders[]) => {
+      this.formaterOrders(orders);
+    })
+
+    // load reservations
+    this.loadReservations();
+
+    this.dishService.getDishes().subscribe((dishes: Dishes[]) => {
+      let diss = [];
+      dishes.forEach(dis => {
+
+        diss.push(dis);
+
       })
 
+      this.listOfDishes = diss;
     })
-    // load reservations
-      this.loadReservations();
 
   }
 
@@ -128,6 +120,178 @@ export class PrincipalOrdersComponent implements OnInit {
 
   }
 
+
+  showToReservation() {
+    if (this.datereservation && this.hourreservation.value && this.Peoplereservation.value && this.Tablereservation.value) {
+
+      // comprobation if date is corect
+      let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
+      let today = new Date();
+
+      if (dateres >= today) {
+
+        this.copilist = this.listOfDishes.slice();
+        this.showmodal = true;
+        // this.setReservation();
+
+      } else {
+
+        Swal.fire({
+
+          title: 'Fecha incorrecta',
+          // text: "la Fecha es incorrecta",
+          icon: 'warning',
+          // showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          // cancelButtonColor: '#542b81',
+          confirmButtonText: 'Aceptar',
+          // cancelButtonText: 'No'
+
+        })
+      }
+
+    } else {
+      Swal.fire({
+
+        title: 'Por favor selecciona todos los campos',
+        text: "Fecha, Hora, Personas, Mesas",
+        icon: 'warning',
+        // showCancelButton: true,
+        confirmButtonColor: '#542b81',
+        // cancelButtonColor: '#542b81',
+        confirmButtonText: 'Aceptar',
+        // cancelButtonText: 'No'
+
+      })
+    }
+
+
+  }
+
+  createOrder(reservation) {
+
+    let idDishesa = [];
+
+    this.selectDishes.forEach(diss => {
+      console.log(diss);
+      
+      let obj = {
+        id: diss.id,
+        quantity: diss.quantity
+      }
+
+      idDishesa.push(obj)
+    });
+
+    let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
+
+    let order = {
+      code: "R-05",
+      idUser: "5e1f18008f7efe00172e5037",
+      idAllies: this.profile.idAllies,
+      idHeadquartes: this.profile.idHedquart,
+      idDishe: idDishesa,
+      typeOfService: reservation,
+      orderValue: this.totalCash,
+      dateAndHourDelivey: dateres,
+      chronometer: this.totalTime,
+      orderStatus: "Relajate",
+      deliveryStatus: false,
+      costReservation: 2010,
+
+    }
+
+    // order.code = "R-05";
+    // order.idUser = "5e1f18008f7efe00172e5037";
+    // order.idAllies = this.profile.idAllies;
+    // // order.nameAllies = "";
+    // order.idHeadquartes = this.profile.idHedquart;
+    // // order.nameHeadquartes = "";
+    // order.idDishe = idDishesa;
+    // // order.nameDishe=""
+    // order.typeOfService = reservation;
+    // order.orderValue = this.totalCash;
+    // order.dateAndHourDelivey = dateres;
+    // order.chronometer = this.totalTime;
+    // order.orderStatus = "Relajate";
+    // order.deliveryStatus = false;
+    // order.costReservation = 2010;
+    // {
+    //   "code": "R-01",
+    //     "idUser": "5e1f18008f7efe00172e5037",
+    //       "idAllies": "5e84ab6afe9b711716853bac",
+    //         "nameAllies": "frisby",
+    //           "idHeadquartes": "5e7a40f5d57eae2b7e5868a7",
+    //             "nameHeadquartes": "Galerias",
+    //               "idDishe": [{
+    //                 "id": "5e7eec51a965820ca366bd3d",
+    //                 "quantity": 8
+    //               }],
+    //                 "nameDishe": "camaron",
+    //                   "typeOfService": { "type": "reservalo", "tables": "2" },
+    //   "orderValue": 30000,
+    //     "dateAndHourDelivey": "2020-03-27T14:20:04.671Z",
+    //       "chronometer": 2,
+    //         "orderStatus": "pending",
+    //           "deliveryStatus": false,
+    //             "costReservation": 2010
+    // }
+
+
+    // this.serviceOrders.postCharge(order).subscribe(res => console.log(res));
+    this.loadReservations();
+    // console.log(order);
+    this.resetIds();
+
+  }
+
+  adddish() {
+
+    const indexO = this.preOrder.value.dish;
+    let dish = this.copilist.slice(indexO, indexO + 1);
+    dish[0]['location'] = indexO;
+    this.selectDishes.push(dish[0]);
+    this.totalTime = this.totalTime + parseFloat(dish[0]['preparationTime'][0]);
+    this.totalCash = this.totalCash + dish[0]['price'];
+  }
+
+  removeDish(index) {
+
+    this.totalCash = this.totalCash - this.selectDishes[index].price;
+    this.totalTime = this.totalTime - parseFloat(this.selectDishes[index].preparationTime[0]);
+    this.selectDishes.splice(index, 1);
+
+  }
+
+  updatePrice(index) {
+
+    const idDish: string = index + "q";
+    const quantityInput = parseInt(document.getElementById(idDish)['value']);
+
+    const dish = this.selectDishes[index];
+
+    const location = dish.location;
+    const result = quantityInput * this.listOfDishes[location]['price'];
+
+    dish['price'] = result;
+    dish['quantity'] = quantityInput;
+    this.selectDishes[index]['price'] = result;
+
+    // update time and price total
+    this.totalCash = 0;
+    this.totalTime = 0;
+
+    this.selectDishes.forEach(dis => {
+      this.totalCash = this.totalCash + dis.price;
+      this.totalTime = this.totalTime + parseInt(dis.preparationTime[0]);
+    })
+
+    this.dishService.getDishes().subscribe(platos => {
+      this.listOfDishes = [];
+      this.listOfDishes = platos;
+    })
+
+  }
 
   createHours() {
     for (let hour = 0; hour < 24; hour++) {
@@ -177,10 +341,11 @@ export class PrincipalOrdersComponent implements OnInit {
   // ============================
   // === charge reservation =====
   loadReservations() {
-
+    console.log("loading reservations");
+    
     this.calendarEvents = [];
 
-    this.reservationService.getReservations().subscribe((reservations: reservation[]) => {
+    this.reservationService.getReservationsByHeadquart(this.profile.idHedquart).subscribe((reservations: reservation[]) => {
 
       this.Reservations = reservations;
       this.Reservations.forEach((res: any) => {
@@ -239,6 +404,7 @@ export class PrincipalOrdersComponent implements OnInit {
     this.handleDateClick(event.event._def.extendedProps.target);
 
   }
+
   handleDateClick(date) {
 
     let resToCompare = {};
@@ -324,7 +490,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
     if (this.datereservation && this.Reservations) {
 
-      this.Reservations.forEach((res:reservation) => {
+      this.Reservations.forEach((res: reservation) => {
 
         if (this.datereservation == res['date']) {
           let dateres = new Date(res.date + "T" + res.hour['value']);
@@ -340,10 +506,10 @@ export class PrincipalOrdersComponent implements OnInit {
             cancelButtonColor: '#542b81',
             confirmButtonText: 'Sí',
             cancelButtonText: 'No'
-  
+
           }).then(response => {
-            
-            if(response.value){
+
+            if (response.value) {
 
               this.reservationService.deleteReservation(res['_id']).subscribe(res => {
                 Swal.fire(
@@ -354,7 +520,7 @@ export class PrincipalOrdersComponent implements OnInit {
               return;
             }
           })
-          
+
         }
 
       })
@@ -379,88 +545,118 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
   setReservation() {
-    // comprobation if date is corect
+
+    let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
     let reservation = {
+
       date: '',
       hour: {},
       tables: {},
-      people: {}
+      people: {},
+      idHeadquart: "",
+      type: "reservalo"
+
     }
 
-    if (this.datereservation && this.hourreservation.value && this.Peoplereservation && this.Tablereservation) {
+    reservation.date = this.datereservation;
+    reservation.hour = this.hourreservation;
+    reservation.tables = this.Tablereservation;
+    reservation.people = this.Peoplereservation;
+    reservation.idHeadquart = this.profile.idHedquart;
+    // this.resetIds();
 
-      let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
-      let today = new Date();
+    Swal.fire({
 
-      if (dateres >= today) {
-        reservation.date = this.datereservation;
-        reservation.hour = this.hourreservation;
-        reservation.tables = this.Tablereservation;
-        reservation.people = this.Peoplereservation;
-        this.resetIds();
-
-        Swal.fire({
-
-          title: `¿Ocupar mesa ${this.Tablereservation.value} ?`,
-          text: `Para el ${dateres.toLocaleString('es-ES', { weekday: "long", day: "2-digit", month: "short", year: "numeric" })} 
+      title: `¿Ocupar mesa ${this.Tablereservation.value} ?`,
+      text: `Para el ${dateres.toLocaleString('es-ES', { weekday: "long", day: "2-digit", month: "short", year: "numeric" })} 
         a las ${ this.hourreservation.valueToShow} disponible para ${this.Peoplereservation.value} personas`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#542b81',
-          cancelButtonColor: '#542b81',
-          confirmButtonText: 'Sí',
-          cancelButtonText: 'No'
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
 
-        })
-          .then((result) => {
+    })
+      .then((result) => {
 
-            if (result.value) {
-              console.log(reservation);
+        if (result.value) {
+          console.log( "tis is reservation", reservation);
 
-              this.reservationService.postReservation(reservation).subscribe(res => {
 
-                this.Reservations.push(reservation);
-                this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-                this.loadReservations();
-                Swal.fire(
-                  'Reservación Guardada',
-                )
-              })
-            }
+          this.reservationService.postReservation(reservation).subscribe(res => {
 
+            this.Reservations.push(reservation);
+            this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+            this.createOrder(reservation);
+            this.showmodal = false;
+            // this.loadReservations();
+            Swal.fire(
+              'Reservación Guardada',
+            )
           })
-
-      } else {
-        Swal.fire({
-
-          title: 'Fecha incorrecta',
-          // text: "la Fecha es incorrecta",
-          icon: 'warning',
-          // showCancelButton: true,
-          confirmButtonColor: '#542b81',
-          // cancelButtonColor: '#542b81',
-          confirmButtonText: 'Aceptar',
-          // cancelButtonText: 'No'
-
-        })
-      }
-
-    } else {
-      Swal.fire({
-
-        title: 'Por favor selecciona todos los campos',
-        text: "Fecha, Hora, Personas, Mesas",
-        icon: 'warning',
-        // showCancelButton: true,
-        confirmButtonColor: '#542b81',
-        // cancelButtonColor: '#542b81',
-        confirmButtonText: 'Aceptar',
-        // cancelButtonText: 'No'
+        }
 
       })
 
-    }
 
+  }
+
+  // ========================================================
+  // ========= funtion to formater all prders by ally =======
+  // ========================================================
+  formaterOrders(orders: Orders[]) {
+
+    orders.forEach(order => {
+      let ordertosave: OrderByUser = {};
+      this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
+        ordertosave.code = order.code;
+        ordertosave.id = order.id;
+        ordertosave.name = user.name + " " + user.lastname;
+        ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables'] + " mesas" : order.typeOfService['type'];
+        ordertosave.purchaseAmount = order.orderValue;
+        ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
+        ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
+        ordertosave.DateDelivery = order.dateAndHourDelivey;
+        ordertosave.orderStatus = order.orderStatus;
+      });
+      let objdishes = [];
+      let timeTotal = 0;
+      order.idDishe.forEach((iddish: any) => {
+        let objDish: any = {};
+        this.dishService.getDisheById(iddish.id).subscribe((dish: Dishes) => {
+          objDish.quantity = iddish.quantity;
+          objDish.name = dish.name;
+          objDish.description = dish.description;
+          objDish.timedish = dish.preparationTime[0] + " " + dish.preparationTime[1];
+          objDish.valueDish = dish.price * iddish.quantity;
+          switch (dish.preparationTime[1]) {
+            case 'segundos':
+              timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) / 60);
+              break;
+            case "minutos":
+              timeTotal = (timeTotal + parseInt(dish.preparationTime[0]));
+              break;
+            case 'horas':
+              timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) * 60);
+              break;
+          }
+          if (timeTotal >= 60) {
+            ordertosave.timeTotal = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
+              (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
+            ordertosave.timeTotalCronometer = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
+              (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
+          }
+          else {
+            ordertosave.timeTotal = timeTotal + " " + "minutos";
+            ordertosave.timeTotalCronometer = timeTotal + " " + "minutos";
+          }
+        });
+        objdishes.push(objDish);
+      });
+      ordertosave.nameDishe = objdishes;
+      this.orders.push(ordertosave);
+    })
   }
 
 }
