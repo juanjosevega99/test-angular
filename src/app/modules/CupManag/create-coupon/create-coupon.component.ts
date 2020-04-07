@@ -16,14 +16,49 @@ import { Profiles } from 'src/app/models/Profiles';
   styleUrls: ['./create-coupon.component.scss']
 })
 export class CreateCouponComponent implements OnInit {
+  preCoupon: Object = {
+    state: [],
+    numberOfModifications: 0,
+    idAllies: null,
+    nameAllie: "kfc",
+    idHeadquarter: null,
+    nameHeadquarter: null,
+    idCharge: null,
+    nameCharge: null,
+    userCode: null,
+    permis: null,
+    identification: null,
+    name: null,
+    email: null,
+    photo: null
+  }
 
-
+  // editCoupon: Profiles = {
+  //   state: [],
+  //   entryDate: null,
+  //   modificationDate: null,
+  //   numberOfModifications: 0,
+  //   idAllies: null,
+  //   nameAllie: "kfc",
+  //   idHeadquarter: null,
+  //   nameHeadquarter: null,
+  //   idCharge: null,
+  //   nameCharge: null,
+  //   userCode: null,
+  //   permis: null,
+  //   identification: null,
+  //   name: null,
+  //   email: null,
+  //   photo: null
+  // }
+  //variable for the state
+  State: any[] = [];
   //variables for receiving the profile that will be edited
   identificatorbyRoot: any;
   // buttonPut: boolean;
   // seeNewPhoto: boolean;
   //variable for the loading
-  // loading: boolean;
+  loading: boolean;
 
   constructor(
     private _router: Router,

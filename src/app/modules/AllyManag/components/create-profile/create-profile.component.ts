@@ -337,7 +337,6 @@ export class CreateProfileComponent implements OnInit {
           'Tu nuevo perfil ha sido creada',
           'success',
         )
-        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
       }
     })
   }
