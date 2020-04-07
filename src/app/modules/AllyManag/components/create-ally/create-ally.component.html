@@ -1,5 +1,6 @@
 <div class="margin-container">
-        <form [formGroup]="forma" (ngSubmit)="saveChanges()" novalidate="">
+    <app-loading *ngIf="loading"></app-loading>
+        <form [formGroup]="forma" (ngSubmit)="saveChanges()" novalidate="" *ngIf="!loading">
                 <div class="row">
                         <div class="col-1 col-sm-1 col-md-1 col-log-1">
                                 <div class="row justify-content-center">
@@ -98,6 +99,11 @@
                                                                                 con las siguientes dimensiones: 300 px
                                                                                 Anchura y 168 px Altura</p>
                                                                 </ng-template>
+                                                                <div *ngIf="alertBadExtensionLogo"
+                                                                        class="alert alert-danger" role="alert">
+                                                                        Por favor solo subir archivos que tengan como
+                                                                        extensión .jpeg/.jpg/.png/.gif
+                                                                </div>
                                                                 <button class="btn1 btn btn-outline-primary mt-2">
                                                                         Cambiar archivo
                                                                 </button>
@@ -323,9 +329,12 @@
                                                                         <div
                                                                                 class=" mr-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                                                                 <select class=" browser-default custom-select form-control "
-                                                                                        style="width: 140%;"  [(ngModel)]="day.from"
-                                                                                        [ngModelOptions]="{standalone: true}" >
-
+                                                                                        style="width: 140%;"
+                                                                                        [(ngModel)]="day.from"
+                                                                                        [ngModelOptions]="{standalone: true}"
+                                                                                        name="dayFrom"
+                                                                                        #dayFrom="ngModel" required
+                                                                                        [ngClass]="{'is-invalid': (!dayFrom.valid && dayFrom.touched) ,'is-valid':(dayFrom.valid) }">
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
@@ -333,14 +342,17 @@
                                                                                                 [value]="time">
                                                                                                 {{time}}
                                                                                         </option>
-
-
                                                                                 </select>
+                                                                                <div class="invalid-feedback">*Este  campo es requerido </div>
                                                                         </div>
                                                                         <div class=" col-sm-3 col-md-3 col-lg-3">
                                                                                 <select class=" browser-default custom-select form-control"
-                                                                                        style="width: 140%;" [(ngModel)]="day.to"
-                                                                                        [ngModelOptions]="{standalone: true}">
+                                                                                        style="width: 140%;"
+                                                                                        [(ngModel)]="day.to"
+                                                                                        [ngModelOptions]="{standalone: true}"
+                                                                                        name="dayTo"
+                                                                                        #dayTo="ngModel" required
+                                                                                        [ngClass]="{'is-invalid': (!dayTo.valid && dayTo.touched) ,'is-valid':(dayTo.valid) }">>
                                                                                         <option selected>
                                                                                                 ---------------------
                                                                                         </option>
@@ -349,6 +361,8 @@
                                                                                                 {{time}}
                                                                                         </option>
                                                                                 </select>
+                                                                                <div class="invalid-feedback">*Este  campo es requerido </div>
+
                                                                         </div>
 
                                                                 </div>
@@ -380,6 +394,11 @@
                                                                         style="color: crimson; ">
                                                                         No hay imagenes subidas
                                                                 </P>
+                                                                <div *ngIf="alertBadExtensionPhotosAlly"
+                                                                        class="alert alert-danger" role="alert">
+                                                                        Por favor solo subir archivos que tengan como
+                                                                        extensión .jpeg/.jpg/.png/.gif
+                                                                </div>
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
                                                                         <button

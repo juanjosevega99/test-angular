@@ -2,8 +2,8 @@
     <app-loading *ngIf="loading"></app-loading>
     <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveDish(shape)" #shape="ngForm" *ngIf="!loading">
 
-        <a [routerLink]="['/main','editmenu']" class="d-flex mr-2">
-            <img src="assets/icons/Back.png" class="tifi-icon-back">
+        <a (click)="goBackEditMenu()" class="d-flex mr-2">
+             <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 
 
@@ -227,7 +227,7 @@
         <section class="col-12 d-flex" style="justify-content: center;">
 
             <div style="padding: 1rem;">
-                <a [routerLink]="['/main','accompaniments']" class="btn btn-outline-primary btn-lg">Acompañamiento
+                <a  (click)="routeAccompaniments()"  class="btn btn-outline-primary btn-lg">Acompañamiento
                     adicional</a>
             </div>
 

@@ -64,7 +64,10 @@ export class CreateAllyComponent implements OnInit {
   buttonPut: boolean;
   seeNewPhoto: boolean;
   seeNewImagesAlly: boolean;
-
+  //
+  // Variables of alerts
+  alertBadExtensionLogo = false;
+  alertBadExtensionPhotosAlly = false
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -74,8 +77,6 @@ export class CreateAllyComponent implements OnInit {
     private _router: Router,
     private _activateRoute: ActivatedRoute,
     private _saveLocalStorageService: SaveLocalStorageService) {
-
-    // this.loading = true;
 
     //flags
     this.loading = true;
@@ -90,7 +91,7 @@ export class CreateAllyComponent implements OnInit {
       if (identificator != -1) {
         this.getAlly(idAlly)
       } else {
-        // this.loading = false
+        this.loading = false
         this.buttonPut = false
       }
       this.idParams = identificator;
@@ -173,16 +174,17 @@ export class CreateAllyComponent implements OnInit {
   }
   //charge a ally with the id
   getAlly(id: string) {
-    // this.loading;
+    this.loading;
     this.allieService.getAlliesById(id).subscribe(ally => {
       this.forma.setValue(ally)
       let idSchedule = this.forma.controls['idAttentionSchedule'].value
       this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe(schedule => {
         this.days.forEach(element => {
-          var scheDb = schedule.attentionSchedule.find(e => e.day == element.name)
+          let scheDb = schedule.attentionSchedule.find(e => e.day == element.name)
           element.from = scheDb.from
           element.to = scheDb.to
         });
+        this.loading = false;
       })
     })
   }
@@ -238,12 +240,15 @@ export class CreateAllyComponent implements OnInit {
     let filePath = input.value;
     let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
     if (!allowedExtensions.exec(filePath)) {
-      alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
+      // alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
+      this.alertBadExtensionLogo= true;
       input.value = '';
       return false;
     } else {
       if (input.files && input.files[0]) {
-        this.seeNewPhoto = true;
+        this.seeNewPhoto = true;      
+        this.alertBadExtensionLogo= false;
+
         var reader = new FileReader();
         reader.onload = function (e: any) {
           $('#photo')
@@ -262,13 +267,15 @@ export class CreateAllyComponent implements OnInit {
     let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
     let image = "";
     if (!allowedExtensions.exec(filePath)) {
-      alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
+      // alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
       input.value = '';
+      this.alertBadExtensionPhotosAlly= true;
       return false;
     } else {
       if (input.files && input.files[0]) {
         this.seeNewImagesAlly = true;
-
+        this.alertBadExtensionPhotosAlly= false;
+        
         var reader = new FileReader();
         reader.onload = (e: any) => {
           image = e.target.result;
@@ -502,10 +509,10 @@ export class CreateAllyComponent implements OnInit {
       attentionSchedule: this.Schedules
     }
     addSchedule._id = this.forma.controls['idAttentionSchedule'].value;
-    this.scheduleServices.putAttentionSchedule(addSchedule).subscribe(() => alert('shedule updated'))
+    this.scheduleServices.putAttentionSchedule(addSchedule).subscribe()
     let objAllie = this.forma.value
     objAllie._id = this.identificatorbyRoot
-    this.allieService.putAllie(objAllie).subscribe(() => alert('ally update'))
+    this.allieService.putAllie(objAllie).subscribe()
     this._router.navigate(['/main', 'allyManager'])
   }
   swallPutAllie() {

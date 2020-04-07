@@ -132,6 +132,9 @@ export class CreateProfileComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
   }
+  goBackProfiles(){
+    this._router.navigate(['/main', 'profiles', this.identificatorbyRoot])
+  }
 
   //Method to see the id of the category of profile selected
   seeId(selected: any) {
@@ -328,7 +331,7 @@ export class CreateProfileComponent implements OnInit {
           'Tu nuevo perfil ha sido creada',
           'success',
         )
-        this._router.navigate(['/main', 'profiles']);
+        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
       }
     })
   }
@@ -405,7 +408,7 @@ export class CreateProfileComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'profiles']);
+            this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
           }
         })
       }
@@ -429,7 +432,7 @@ export class CreateProfileComponent implements OnInit {
           'Eliminado!',
           'success',
         )
-        this._router.navigate(['/main', 'profiles']);
+        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
       }
     })
   }
@@ -482,7 +485,7 @@ export class CreateProfileComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'profiles']);
+            this._router.navigate(['/main', 'profiles',this.identificatorbyRoot]);
           }
         })
       }

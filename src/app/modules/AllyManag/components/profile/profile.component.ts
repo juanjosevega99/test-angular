@@ -3,6 +3,7 @@ import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { Profiles } from 'src/app/models/Profiles';
 import { ProfileList } from 'src/app/models/ProfileList';
 import { ProfilesService } from 'src/app/services/profiles.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,10 +12,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  
+
   //object that saves the values of the table
   table: FormGroup;
-  
+
   //variables for general search
   generalsearch: string = "";
 
@@ -24,21 +25,29 @@ export class ProfileComponent implements OnInit {
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
 
-  
+  //variables of idAlly
+  idAlly: number;
 
 
-  constructor(private profilesService: ProfilesService) {
+  constructor(private profilesService: ProfilesService,
+    private _router: Router,
+    private _activateRoute: ActivatedRoute, ) {
     this.table = new FormGroup({
       "identification": new FormControl(),
       "name": new FormControl(),
-      "general":new FormControl()
+      "general": new FormControl()
     })
+    //get Ally's parameter
+    this._activateRoute.params.subscribe(params => {
+      console.log('Parametro', params['id']);
+      this.idAlly = params['id']
+    });
 
     //inicialization of profiles
     this.profilesService.getProfiles().subscribe(res => {
       res.forEach((profile: Profiles) => {
         if (res.length > 0) {
-          
+
           const obj: ProfileList = {};
           obj.id = profile.id;
           obj.nameCharge = profile.nameCharge;
@@ -59,7 +68,9 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  goBackHeadquarterOptions() {
+    this._router.navigate(['/main', 'headquarts', this.idAlly])
+  }
   //method to convert the modification date
   convertDate(date: Date): string {
     const d = new Date(date);
