@@ -28,6 +28,8 @@ export class AllyManagerComponent implements OnInit {
   dateDay : any[]= [];
   //variable of don't results
   noResults = false
+  //variable for the loading
+  // loading: boolean;
 
   constructor(
     private _alliesService: AlliesService,
@@ -35,6 +37,9 @@ export class AllyManagerComponent implements OnInit {
     private _headquartService: HeadquartersService,
     private _router:Router,
     private _saveLocalStorageService : SaveLocalStorageService){
+
+      //flags
+      // this.loading = true;
     
     //inicialization local storage IdAlly
       this._saveLocalStorageService.saveLocalStorageIdAlly;
