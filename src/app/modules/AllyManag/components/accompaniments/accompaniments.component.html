@@ -2,7 +2,7 @@
 
     <form novalidate="" class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
-            <a [routerLink]="['/main','createDish']" class="d-flex">
+            <a (click)="goBackCreateDish()"  class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -208,7 +208,7 @@
             <button class="btn btn-outline-primary btn-lg">Guardar</button>
         </div>
     </section>
-    <pre>{{rows.value | json}}</pre>
+    <!-- <pre>{{rows.value | json}}</pre> -->
 </div>
 
  

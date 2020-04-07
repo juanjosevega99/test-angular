@@ -267,7 +267,7 @@ export class CreateHeadquarterComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/headquarts']);
+            this._router.navigate(['/main','headquarts',this.idAlly]);
           }
         })
       }
@@ -286,7 +286,7 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
-        this._router.navigate(['/headquarts']);
+        this._router.navigate(['/main','headquarts',this.idAlly]);
       }
     })
   }

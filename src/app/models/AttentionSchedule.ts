@@ -1,4 +1,4 @@
 export class AttentionSchedule {
     id?:string;
-    attentionSchedule?:string[];
+    attentionSchedule?:any[];
 }

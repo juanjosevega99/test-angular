@@ -161,6 +161,12 @@ export class CreateDishComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
   }
+  goBackEditMenu() {
+    this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot])
+  }
+  routeAccompaniments(){
+    this._router.navigate(['/main', 'accompaniments', this.identificatorbyRoot])
+  }
 
   //Metod to see the id of promotion cateogy selected
   seeIdPromCat(selected) {
@@ -550,7 +556,7 @@ export class CreateDishComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'editmenu']);
+            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
           }
         })
       }
@@ -573,7 +579,7 @@ export class CreateDishComponent implements OnInit {
           'Eliminado!',
           'success',
         )
-        this._router.navigate(['/main', 'editmenu']);
+        this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
       }
     })
   }
@@ -625,7 +631,7 @@ export class CreateDishComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'editmenu']);
+            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
           }
         })
       }

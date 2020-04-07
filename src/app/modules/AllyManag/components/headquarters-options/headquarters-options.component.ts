@@ -56,5 +56,8 @@ export class HeadquartersOptionsComponent implements OnInit {
     this._router.navigate( ['/main','editmenu',this.idAlly] )
 
   }
+  profiles(){
+    this._router.navigate( ['/main','profiles',this.idAlly] )
+  }
 
 }

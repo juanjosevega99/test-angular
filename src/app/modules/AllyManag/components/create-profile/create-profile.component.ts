@@ -87,13 +87,19 @@ export class CreateProfileComponent implements OnInit {
   //variable for upload images
   fileImagedish: any;
   urlPorfile: Observable<string>;
-  
+
 
   //variable for the loading
   loading: boolean;
 
 
-  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeProfiles: ProfilesService, private profiles: ProfilesService, private storage: AngularFireStorage, private profileCategory: ProfilesCategoriesService) {
+  constructor(
+    private _router: Router,
+    private activatedRoute: ActivatedRoute,
+    private chargeProfiles: ProfilesService,
+    private profiles: ProfilesService,
+    private storage: AngularFireStorage,
+    private profileCategory: ProfilesCategoriesService) {
     //flags
     this.loading = true;
     this.buttonPut = true;
@@ -131,6 +137,9 @@ export class CreateProfileComponent implements OnInit {
 
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
+  }
+  goBackProfiles() {
+    this._router.navigate(['/main', 'profiles', this.identificatorbyRoot])
   }
 
   //Method to see the id of the category of profile selected
@@ -328,7 +337,7 @@ export class CreateProfileComponent implements OnInit {
           'Tu nuevo perfil ha sido creada',
           'success',
         )
-        this._router.navigate(['/main', 'profiles']);
+        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
       }
     })
   }
@@ -405,7 +414,7 @@ export class CreateProfileComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'profiles']);
+            this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
           }
         })
       }
@@ -429,12 +438,12 @@ export class CreateProfileComponent implements OnInit {
           'Eliminado!',
           'success',
         )
-        this._router.navigate(['/main', 'profiles']);
+        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
       }
     })
   }
 
- async swallUpdate(realId) {
+  async swallUpdate(realId) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -444,9 +453,9 @@ export class CreateProfileComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
-    if (result.value) {
-      console.log("Array FINAL: ", this.editProfile);
-      await  this.chargeProfiles.getProfiles().subscribe(profiles => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.editProfile);
+        await this.chargeProfiles.getProfiles().subscribe(profiles => {
           let profile: Profiles = {};
           profile = profiles[this.identificatorbyRoot];
           this.editProfile.numberOfModifications = this.preProfile['numberOfModifications'] + 1;
@@ -459,7 +468,7 @@ export class CreateProfileComponent implements OnInit {
             const ref = this.storage.ref(filePath);
             const task = this.storage.upload(filePath, file);
             task.snapshotChanges()
-              .pipe( 
+              .pipe(
                 finalize(() => {
                   ref.getDownloadURL().subscribe(urlImage => {
                     this.urlPorfile = urlImage;
@@ -472,7 +481,7 @@ export class CreateProfileComponent implements OnInit {
               ).subscribe()
           }
           this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
-         
+
         })
         Swal.fire({
           title: 'Guardado',
@@ -482,7 +491,7 @@ export class CreateProfileComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'profiles']);
+            this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
           }
         })
       }
