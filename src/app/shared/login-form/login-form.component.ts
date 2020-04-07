@@ -4,6 +4,7 @@ import { AuthFireServiceService } from '../../services/providers/auth-fire-servi
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -20,7 +21,7 @@ export class LoginFormComponent implements OnInit {
 
   loading:boolean = false;
 
-  constructor( public authentication: AuthFireServiceService, public route: Router ) { }
+  constructor( public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService ) { }
 
   ngOnInit() {
     this.signError = true;
@@ -31,10 +32,11 @@ export class LoginFormComponent implements OnInit {
   }
 
   login(){
-    
+    this.spinner.show();
     this.authentication.login(this.email, this.pass)
     .then(res => {
-
+      console.log(res);
+      this.spinner.hide();
       this.route.navigate(['main']);
 
     }).catch(err => {

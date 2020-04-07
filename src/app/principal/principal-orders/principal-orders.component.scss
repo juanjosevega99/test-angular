@@ -1,4 +1,5 @@
 @import '../../modules/PqrManag/components/pqr-manager/pqr-manager.component.scss';
+
 .menu{
     border: 1px solid #9f9f9f36;
     width: 100%;
@@ -113,8 +114,21 @@
     margin-top: .4rem;
 }
 
+::ng-deep .fc-content{
+    background-color: gray;
+}
+
+::ng-deep .fc-event{
+    background-color: gray;
+    border: none;
+}
+
+::ng-deep .fc table {
+    cursor: pointer;
+}
+
 // ================================
-// =========medias querys=========
+// =========medias querys =========
 
 @media ( min-width: 1520px ){
     .menu li {

@@ -65,13 +65,15 @@
                     <th class="text-center"> </th>
                 </tr>
             </thead>
-            <!-- <app-loading *ngIf="loading"></app-loading> -->
-            <tbody class="mt-5" >
+            <tbody class="mt-5">
                 <tr *ngFor="let ally of newdateArray; let i = index " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
-                    <td> <a type="button" class="btn btn-link" (click)="getInHeadquarts(ally.idAlly, i)">
-                            {{ally.nameEstablishment}} </a></td>
+                    <td> <a *ngIf="manageHq" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </a>
+                        <a *ngIf="manageProm" [routerLink]="['/main', 'promoManager']"> {{ally.nameEstablishment}} </a>
+                    </td>
+                    <!-- <td> <a (click)="getInHeadquarts(ally.idAlly, i)"> {{ally.nameEstablishment}} </a></td> -->
+                    <!-- [routerLink]="['/main', 'headquarts']" -->
                     <td> {{ally.numberHeadquarters}} </td>
                     <td>
                         <img *ngIf="ally.services ? ally.services[0]? true :false  : ''" [src]="ally.url1" alt=""

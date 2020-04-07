@@ -43,6 +43,15 @@ export class ProfileComponent implements OnInit {
       this.idAlly = params['id']
     });
 
+    
+  }
+
+  ngOnInit() {
+    this.loadProfiles();
+
+  }
+
+  loadProfiles(){
     //inicialization of profiles
     this.profilesService.getProfiles().subscribe(res => {
       res.forEach((profile: Profiles) => {
@@ -64,9 +73,7 @@ export class ProfileComponent implements OnInit {
         }
       })
     })
-  }
 
-  ngOnInit() {
   }
   goBackHeadquarterOptions() {
     this._router.navigate(['/main', 'headquarts', this.idAlly])

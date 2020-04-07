@@ -39,7 +39,7 @@ export class SideBarComponent implements OnInit {
   }   
 
   signOut() {
-    console.log("cerrar sesion")
+    console.log("cerrar sesion");
     this.firebaseservise.signOut();
   }
 

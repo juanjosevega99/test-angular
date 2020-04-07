@@ -36,7 +36,7 @@ export class PromotionsService {
         map((promotions: any[]) =>
           promotions.map(promotions => {
             let obj = {
-              id: promotions.id,
+              id: promotions._id,
               state: promotions.state,
               promotionStartDate: promotions.promotionStartDate,
               endDatePromotion: promotions.endDatePromotion,
