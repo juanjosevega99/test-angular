@@ -151,7 +151,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let dishselect of selectDishes; let s = index">
-                                    <td><input type="number" class="form-control" placeholder="1" (change)="updatePrice(s)" [id] = "s+'q'"></td>
+                                    <td><input type="number" class="form-control" placeholder="..." [value]="1" (change)="updatePrice(s)" [id] = "s+'q'"></td>
                                     <td>{{ dishselect.name }}</td>
                                     <td>$ {{ dishselect.price }}</td>
                                     <td>{{ dishselect.preparationTime }}</td>

@@ -238,10 +238,12 @@ export class PrincipalOrdersComponent implements OnInit {
     // }
 
 
-    // this.serviceOrders.postCharge(order).subscribe(res => console.log(res));
-    this.loadReservations();
+    this.serviceOrders.postCharge(order).subscribe(res => {
+      console.log("respuesta de la orden", res)
+      this.loadReservations();
+      this.resetIds();
+    });
     // console.log(order);
-    this.resetIds();
 
   }
 
@@ -589,7 +591,6 @@ export class PrincipalOrdersComponent implements OnInit {
             this.Reservations.push(reservation);
             this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
             this.createOrder(reservation);
-            this.showmodal = false;
             // this.loadReservations();
             Swal.fire(
               'Reservación Guardada',
@@ -613,7 +614,7 @@ export class PrincipalOrdersComponent implements OnInit {
         ordertosave.code = order.code;
         ordertosave.id = order.id;
         ordertosave.name = user.name + " " + user.lastname;
-        ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables'] + " mesas" : order.typeOfService['type'];
+        ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables']["value"] + " mesas" : order.typeOfService['type'];
         ordertosave.purchaseAmount = order.orderValue;
         ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
         ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
@@ -630,6 +631,7 @@ export class PrincipalOrdersComponent implements OnInit {
           objDish.description = dish.description;
           objDish.timedish = dish.preparationTime[0] + " " + dish.preparationTime[1];
           objDish.valueDish = dish.price * iddish.quantity;
+
           switch (dish.preparationTime[1]) {
             case 'segundos':
               timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) / 60);
