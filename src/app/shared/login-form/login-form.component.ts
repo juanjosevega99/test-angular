@@ -12,50 +12,50 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class LoginFormComponent implements OnInit {
 
-  email:string;
-  pass:string;
-  signError:boolean;
+  email: string;
+  pass: string;
+  signError: boolean;
 
-  seepass:boolean = false;  
+  seepass: boolean = false;
   Typetext = 'password';
 
-  loading:boolean = false;
+  loading: boolean = false;
 
-  constructor( public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService ) { }
+  constructor(public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.signError = true;
-    
+
     // if( this.authentication.user ){
     //   this.route.navigate(['options']);
     // }
   }
 
-  login(){
+  login() {
     this.spinner.show();
     this.authentication.login(this.email, this.pass)
-    .then(res => {
-      console.log(res);
-      this.spinner.hide();
-      this.route.navigate(['main']);
+      .then(res => {
+        console.log(res);
+        this.spinner.hide();
+        this.route.navigate(['main']);
 
-    }).catch(err => {
-      this.signError = false;
-        
+      }).catch(err => {
+        this.signError = false;
+        this.spinner.hide();
       }
-    );
-    this.email = ''; 
+      );
+    this.email = '';
     this.pass = '';
 
   }
 
-  seepassword(){
+  seepassword() {
     this.seepass = !this.seepass;
 
-    if(!this.seepass){
+    if (!this.seepass) {
       this.Typetext = 'password'
-    }else{
-      this.Typetext='text'
+    } else {
+      this.Typetext = 'text'
     }
   }
 
