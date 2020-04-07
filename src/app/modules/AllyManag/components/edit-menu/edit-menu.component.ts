@@ -20,31 +20,10 @@ export class EditMenuComponent implements OnInit {
   //variables for general search
   generalsearch: string;
   terminoaux = '';
+
   //variables for the state
   selectedA: [] = []
   selectedD: [] = []
-
-  /*  menu = [
-     {
-       reference: '10011235', category: 'Boxes', dishName: 'Big Box Twister', dishPhoto: '../../../../../assets/img/kfc-logo.png', price: '$19.000',
-       modificationDate: '15/04/2019', modificationTime: '11:00 am', modificationNumber: '2', state: '', selected: false
-     },
- 
-     {
-       reference: '1001541', category: 'Combos', dishName: 'Combo personal', dishPhoto: '../../../../../assets/img/kfc-logo.png', price: '$15.000',
-       modificationDate: '25/03/2019', modificationTime: '11:00 am', modificationNumber: '1', state: '', selected: false
-     },
- 
-     {
-       reference: '1001542', category: 'Postres', dishName: 'Fresas con crema', dishPhoto: '../../../../../assets/img/kfc-logo.png', price: '$9.000',
-       modificationDate: '15/03/2019', modificationTime: '11:00 am', modificationNumber: '0', state: '', selected: false
-     },
-   ] */
-
-  /*  newdateArray: {
-     reference: string, category: string, dishName: string, dishPhoto: string, price: string,
-     modificationDate: string, modificationTime: string, modificationNumber: string, state: string, selected: boolean
-   }[] = this.menu; */
 
   //varibales to obtain data
   dishesgetting: DishList[] = [];
@@ -58,11 +37,8 @@ export class EditMenuComponent implements OnInit {
   modificationDate: Date;
   modification: Date;
 
-  /* filteredArray: {
-    reference: string, category: string, dishName: string, dishPhoto: string, price: string,
-    modificationDate: string, modificationTime: string, modificationNumber: string, state: string, selected: boolean
-  }[] = []; */
   state: any[] = [];
+  
   //variables of idAlly
   idAlly: number;
 
