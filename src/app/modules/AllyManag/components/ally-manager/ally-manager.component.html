@@ -19,29 +19,29 @@
                         <ul class=" navbar-nav mr-auto mt-2 mt-lg-0 ">
                             <li class="nav-item mx-5">
                                 <input class="form-control " type="text" placeholder="Buscar por código ..."
-                                    (keyup)="search(code.value, code.id)" #code id="code"
-                                    formControlName="code" style="width: 100%;">
+                                    (keyup)="search(code.value, code.id)" #code id="code" formControlName="code"
+                                    style="width: 100%;">
                             </li>
                             <li class="nav-item mx-5">
-                                <input class="form-control container-fluid" type="text" placeholder="Buscar por tipo de comida ..."
+                                <input class="form-control container-fluid" type="text"
+                                    placeholder="Buscar por tipo de comida ..."
                                     (keyup)="search( mealType.value, mealType.id)" #mealType id="nameMealsCategories"
-                                    formControlName="mealType"  style="width: 100%;">
+                                    formControlName="mealType" style="width: 100%;">
                             </li>
 
                             <li class="nav-item mx-5  ">
                                 <div class="input-group-append">
-                                    <input class="form-control text-center" type="text" 
-                                        placeholder="Buscar establecimiento ..."
-                                        (keyup)="searchbyterm( general.value)" #general 
-                                        id="general" formControlName="generalsearch">
+                                    <input class="form-control text-center" type="text"
+                                        placeholder="Buscar establecimiento ..." (keyup)="searchbyterm( general.value)"
+                                        #general id="general" formControlName="generalsearch">
                                     <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
                                 </div>
                             </li>
-                            
+
                             <li class="nav-item mx-5">
-                                    <button [routerLink]="['/main','createAlly', -1]"
+                                <button [routerLink]="['/main','createAlly', -1]"
                                     class="btn btn-outline-primary ml-2">Crear aliado</button>
-                                </li>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -51,6 +51,7 @@
 
     <div class="tableFixHead mt-5">
         <table>
+            
             <thead>
                 <tr>
                     <th class="text-center">Codigo</th>
@@ -64,11 +65,15 @@
                     <th class="text-center"> </th>
                 </tr>
             </thead>
-            <tbody class="mt-5" >
+            <tbody class="mt-5">
                 <tr *ngFor="let ally of newdateArray; let i = index " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
-                    <td> <a  type="button" class="btn btn-link" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </a></td>
+                    <td> <a *ngIf="manageHq" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </a>
+                        <a *ngIf="manageProm" [routerLink]="['/main', 'promoManager']"> {{ally.nameEstablishment}} </a>
+                    </td>
+                    <!-- <td> <a (click)="getInHeadquarts(ally.idAlly, i)"> {{ally.nameEstablishment}} </a></td> -->
+                    <!-- [routerLink]="['/main', 'headquarts']" -->
                     <td> {{ally.numberHeadquarters}} </td>
                     <td>
                         <img *ngIf="ally.services ? ally.services[0]? true :false  : ''" [src]="ally.url1" alt=""
@@ -83,9 +88,9 @@
                     <td> {{ally.schedules}} </td>
 
                     <td>
-                        <a  class="btn" (click)="editAlly(ally.idAlly, i)"> <i class="far fa-edit"></i> </a>
+                        <a class="btn" (click)="editAlly(ally.idAlly, i)"> <i class="far fa-edit"></i> </a>
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td></td>

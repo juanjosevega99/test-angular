@@ -1,1 +1,243 @@
-<p>create-coupon works!</p>
+<div class="compenetsstyle"  >
+    <p>Trabajando en la interfaz</p>
+</div>
+
+<!-- 
+<div class="compenetsstyle"  >
+    <app-loading *ngIf="loading"></app-loading>
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveProfile(shape)" #shape="ngForm" *ngIf="!loading" >
+
+        <a  (click)="goBackProfiles()" class="d-flex mr-2">
+            <img src="assets/icons/Back.png " class="tifi-icon-back">
+        </a>
+
+        <section class="col-6">
+
+            <div class="form-group row" style="align-items: center;">
+                <label class="col-md-5 col-form-label">Estado</label>
+                <div class="col-md-7">
+
+                    <div class="radio radio-success m-2 form-check form-check-inline">
+                        <input class="form-check-input " type="radio" name="radio2" id="radio3" [checked]="State[0].check" #active
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" 
+                            [value]="State[0].state" [checked]="preProfile.state[0].check"  >
+                        <label for="radio3">
+                            Activo
+                        </label>
+                    </div>
+
+                    <div class="radio radio-danger m-2 form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="radio2" id="radio4" [checked]="State[1].check" #inactive
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" 
+                            [value]="State[1].state" [checked]="preProfile.state[1].check" >
+                        <label for="radio4">
+                            Inactivo
+                        </label>
+                    </div>
+
+                    <div class="radio m-2 form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="radio2" id="radio5" (click)="deleteProfile()" >
+                        <label for="radio5">
+                            Eliminar
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Fecha de ingreso</label>
+                <div class="col-md-7">
+                    <label class="dt">
+                        <p class="text-center">
+                            {{dateEntry}}
+                        </p>
+                    </label>
+
+                    <label class="dt" style="margin-right: 10px;">
+                        <p class="text-center">
+                            {{timesEntry}}
+                        </p>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Fecha de modificación</label>
+                <div class="col-md-7">
+                    <label class="dt">
+                        <p class="text-center">
+                            {{dateModication}}
+                        </p>
+                    </label>
+
+                    <label class="dt" style="margin-right: 10px;">
+                        <p class="text-center">
+                            {{timesModification}}
+                        </p>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Número de modificaciones</label>
+                <div class="col-md-7">
+                    <label class="form-control">{{preProfile.numberOfModifications}}</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Entidad</label>
+                <div class="col-md-7">
+                    <label  class="form-control">{{preProfile.nameAllie}}</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Sede</label>
+                <div class="col-md-7">
+                    <label class="form-control">{{preProfile.nameHeadquarter}}</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Perfil</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+
+                        <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="nameCharge" #nameCharge="ngModel"
+                            required [ngClass]="{'is-invalid': (!nameCharge.valid ),'is-valid':(nameCharge.valid) }"
+                            [(ngModel)]="preProfile.nameCharge" #select (change)="seeId(select.value)" >
+                            <option selected>{{preProfile.nameCharge}}</option>
+                            <option *ngFor="let profile of Categories">
+                                {{profile.name}}
+                            </option>
+                        </select>
+
+                        <input *ngIf="otherCategoryInput" placeholder="Otro perfil" required #category="ngModel"
+                            [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCategory" type="text"
+                            name="otherCategory">
+
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="handleBoxCategories()"> Cancelar</button>
+
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="addCategory(otherCategory)"> Guardar</button>
+
+                        <button *ngIf="addcategoryButton" (click)="handleBoxCategories()"
+                            class="btn1 btn btn-outline-primary">
+                            Otro
+                        </button>
+
+                        <button *ngIf="addcategoryButton" (click)=" deleteCategory()" type="button"
+                            class="btn1 btn btn-outline-primary">
+                            Borrar
+                        </button>
+
+                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Usuario</label>
+                <div class="col-md-7">
+                    <label class="form-control" >{{preProfile.nameAllie}}{{preProfile.identification}}</label>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="col-5">
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Permisos de informes</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <select class="form-control" name="permis"
+                            #permis="ngModel" required
+                            [ngClass]="{'is-invalid': (!permis.valid),'is-valid':(permis.valid) }"
+                            [(ngModel)]="preProfile.permis">
+                            <option *ngFor="let type of permiss">
+                                {{type}}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Identificación</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" placeholder="Identificación" name="id"
+                        pattern="[0-9.]{8,10}$" #id="ngModel" id="id" (change)="generateCode($event)"
+                        [ngClass]="{'is-invalid': (!id.valid && id.touched) || id.errors?.pattern ,'is-valid':(id.valid) }"
+                        [(ngModel)]="preProfile.identification" required>
+                    <div *ngIf="id.errors?.required" class="invalid-feedback">*Este campo es requerido
+                    </div>
+                    <div *ngIf="id.errors?.pattern" class="invalid-feedback">*Ingrese una identificación válida</div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Nombre</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="name" #name="ngModel" minlength="3"
+                        [ngClass]="{'is-invalid': (!name.valid && name.touched ),'is-valid':(name.valid) }"
+                        [(ngModel)]="preProfile.name" required placeholder="Nombre">
+                    <div class="invalid-feedback">*Este campo es requerido </div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Correo</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="email" placeholder="Correo" name="email"
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #email="ngModel"
+                        [ngClass]="{'is-invalid': (!email.valid && email.touched) || email.errors?.pattern ,'is-valid':(email.valid) }"
+                        [(ngModel)]="preProfile.email" required>
+                    <div *ngIf="email.errors?.required" class="invalid-feedback">*Este campo es requerido
+                    </div>
+                    <div *ngIf="email.errors?.pattern" class="invalid-feedback">*El campo no tiene formato de
+                        correo</div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Foto del perfil</label>
+                <div class="col-md-7">
+
+                    <div class="row align-items-center ">
+                        <div class="photo"> 
+                            <img [src]="preProfile.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
+                        </div>
+                        <div class="upload-btn-wrapper">
+                            <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
+                            <input type="file" name="photo" (change)="onPhotoSelected($event)" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <section class="col-12 d-flex" style="justify-content: center;">
+
+            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
+            <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button>
+        </section>
+
+    </form>
+
+     <pre>
+        {{ preProfile | json }}
+    </pre> 
+
+</div> -->
