@@ -460,18 +460,21 @@ export class CreateDishComponent implements OnInit {
                 )
               ).subscribe()
           }
-          this.chargeDishes.putDishe(realId, this.editDish).subscribe()
-        })
-        Swal.fire({
-          title: 'Guardado',
-          text: "Tu plato ha sido actualizado!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
-          }
+          this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
+
+            Swal.fire({
+              title: 'Guardado',
+              text: "Tu plato ha sido actualizado!",
+              icon: 'warning',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }).then((result) => {
+              if (result.value) {
+                this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
+              }
+            })
+            
+          })
         })
       }
     })

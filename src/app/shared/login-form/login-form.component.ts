@@ -34,7 +34,8 @@ export class LoginFormComponent implements OnInit {
     
     this.authentication.login(this.email, this.pass)
     .then(res => {
-
+      console.log(res);
+      
       this.route.navigate(['main']);
 
     }).catch(err => {

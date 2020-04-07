@@ -327,12 +327,12 @@ export class EditMenuComponent implements OnInit {
         this.dishesService.putDishe(idDish, newState).subscribe(res => {
           this.dishesService.getDishes().subscribe(dish => {
             this.dishesgetting = dish
+            Swal.fire(
+              'Actualizado!',
+              'success',
+            )
           })
         })
-        Swal.fire(
-          'Actualizado!',
-          'success',
-        )
       }
     })
   }
