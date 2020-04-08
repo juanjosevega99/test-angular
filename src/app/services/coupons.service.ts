@@ -39,6 +39,7 @@ export class CouponsService {
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
             typeOfCoupon: coupons.typeOfCoupon,
+            nameTypeOfCoupon: coupons.nameTypeOfCoupon,
             state: coupons.state,
             createDate: coupons.createDate,
             expirationDate: coupons.expirationDate,

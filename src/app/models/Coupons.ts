@@ -4,6 +4,7 @@ export class Coupons {
     description?:string;
     imageCoupon?:string;
     typeOfCoupon?:string;
+    nameTypeOfCoupon?:string;
     state?:boolean;
     createDate?:Date;
     expirationDate?:Date;

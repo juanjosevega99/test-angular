@@ -87,18 +87,17 @@ export class CreateProfileComponent implements OnInit {
   //variable for upload images
   fileImagedish: any;
   urlPorfile: Observable<string>;
-
+  
 
   //variable for the loading
   loading: boolean;
 
 
-  constructor(
-    private _router: Router,
-    private activatedRoute: ActivatedRoute,
+  constructor(private _router: Router, 
+    private activatedRoute: ActivatedRoute, 
     private chargeProfiles: ProfilesService,
-    private profiles: ProfilesService,
-    private storage: AngularFireStorage,
+     private profiles: ProfilesService, 
+    private storage: AngularFireStorage, 
     private profileCategory: ProfilesCategoriesService) {
     //flags
     this.loading = true;
@@ -138,7 +137,7 @@ export class CreateProfileComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
   }
-  goBackProfiles() {
+  goBackProfiles(){
     this._router.navigate(['/main', 'profiles', this.identificatorbyRoot])
   }
 
@@ -337,6 +336,7 @@ export class CreateProfileComponent implements OnInit {
           'Tu nuevo perfil ha sido creada',
           'success',
         )
+        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
       }
     })
   }
@@ -442,7 +442,7 @@ export class CreateProfileComponent implements OnInit {
     })
   }
 
-  async swallUpdate(realId) {
+ async swallUpdate(realId) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -452,9 +452,9 @@ export class CreateProfileComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
-      if (result.value) {
-        console.log("Array FINAL: ", this.editProfile);
-        await this.chargeProfiles.getProfiles().subscribe(profiles => {
+    if (result.value) {
+      console.log("Array FINAL: ", this.editProfile);
+      await  this.chargeProfiles.getProfiles().subscribe(profiles => {
           let profile: Profiles = {};
           profile = profiles[this.identificatorbyRoot];
           this.editProfile.numberOfModifications = this.preProfile['numberOfModifications'] + 1;
@@ -467,7 +467,7 @@ export class CreateProfileComponent implements OnInit {
             const ref = this.storage.ref(filePath);
             const task = this.storage.upload(filePath, file);
             task.snapshotChanges()
-              .pipe(
+              .pipe( 
                 finalize(() => {
                   ref.getDownloadURL().subscribe(urlImage => {
                     this.urlPorfile = urlImage;
@@ -479,22 +479,19 @@ export class CreateProfileComponent implements OnInit {
                 )
               ).subscribe()
           }
-          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe( res =>{
-
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu perfil ha sido actualizado!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'profiles',this.identificatorbyRoot]);
-              }
-            })
-            
-          } )
+          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
          
+        })
+        Swal.fire({
+          title: 'Guardado',
+          text: "Tu perfil ha sido actualizado!",
+          icon: 'warning',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'profiles',this.identificatorbyRoot]);
+          }
         })
       }
     })
