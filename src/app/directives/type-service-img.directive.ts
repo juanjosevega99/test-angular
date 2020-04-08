@@ -21,6 +21,7 @@ export class TypeServiceImgDirective {
   selectImg() {
 
     if (this.typeservice){
+      console.log("in directive type of service", this.typeservice);
       
     let pretype = this.typeservice.split(" ");
     let type = '';

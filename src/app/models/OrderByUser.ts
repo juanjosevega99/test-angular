@@ -7,6 +7,7 @@ export class OrderByUser{
     nameHeadquarter?:string;
     name?:string;
     typeOfService?:string;
+    typeOfServiceobj?:object;
     purchaseAmount?:number;
     registerDate?:string;
     dateAndHourDelivery?:string;

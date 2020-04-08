@@ -107,186 +107,106 @@ export class OrderComponent implements OnInit {
     this.showdetail = !this.showdetail;
   }
 
-  // cronometer() {
-
-  //   // datedelivery = 31/3/2020
-  //   let datedelivery = new Date(this.order.DateDelivery).toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-  //   // today = 31/3/2020
-  //   let today = new Date().toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-
-  //   // hours
-  //   // time today = 4:21 PM
-  //   let timeToday = new Date().toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  //   let timeDelivery = new Date(this.order.DateDelivery).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-  //   // timecronometer = 30 minutos || 1:15 min
-  //   let timeCronometer = this.order.timeTotal;
-
-  //   // console.log( "comparando", datedelivery, today);
-
-  //   // console.log("time cronometer", timeCronometer);
-
-  //   let hourtoday = parseInt(timeToday.split(" ")[0].split(":")[0]);
-  //   let minutstoday = parseInt(timeToday.split(" ")[0].split(":")[1]);
-
-  //   let hoursCronometer = 0;
-  //   let minutsCronometer = 0;
-
-  //   if (datedelivery == today) {
-
-  //     switch (timeCronometer.split(" ")[1]) {
-
-  //       case 'min':
-  //         hoursCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[0]);
-  //         minutsCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[1]);
-  //         break;
-
-  //       case 'minutos':
-  //         minutsCronometer = parseInt(timeCronometer.split(" ")[0]);
-  //         break
-  //     }
-
-  //     if ((minutstoday + minutsCronometer) > 59) {
-  //       hoursCronometer += 1;
-  //       minutsCronometer = 0;
-  //     }
-  //     // hour to compare with hour delivery 
-  //     let hourCompare = (hourtoday + hoursCronometer) + ":" + (minutstoday + minutsCronometer) + " " + timeDelivery.split(" ")[1];
-  //     console.log("comparando", hourCompare, timeDelivery);
-
-  //     if (hourCompare === timeDelivery) {
-  //       console.log("son iguales");
-
-  //       this.startCronometer = true;
-  //     }
-
-  //   }
-  // }
-
-
-  // InitCronometer() {
-
-  //   if (this.startCronometer) {
-
-  //     // timecronometer = 30 minutos || 1:15 min
-  //     let timeCronometer = this.order.timeTotalCronometer;
-
-  //     let hoursCronometer = 0;
-  //     let minutsCronometer = 0;
-
-  //     let seconds = new Date().getSeconds();
-
-  //     if (seconds >= 59) {
-
-  //       switch (timeCronometer.split(" ")[1]) {
-
-  //         case 'min':
-  //           minutsCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[1]);
-  //           minutsCronometer -= 1;
-  //           hoursCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[0]);
-  //           hoursCronometer = minutsCronometer == 0 ? hoursCronometer -= 1 : hoursCronometer;
-  //           this.timeToralOut = hoursCronometer + ':' + minutsCronometer + " " + 'min';
-  //           this.timeInMinutos = (hoursCronometer * 60) + minutsCronometer;
-  //           break;
-
-  //         case 'minutos':
-  //           minutsCronometer = parseInt(timeCronometer.split(" ")[0]);
-  //           minutsCronometer -= 1;
-  //           this.timeToralOut = minutsCronometer + " " + 'minutos';
-  //           this.timeInMinutos = minutsCronometer;
-  //           break
-  //       }
-
-  //       if (hoursCronometer < 0 && minutsCronometer < 0) {
-  //         this.stopOrder = true;
-  //       }
-  //       // this.changeStatusOrder(this.timeInMinutos);
-
-  //       // asign new cronometer
-  //       this.order.timeTotalCronometer = this.timeToralOut;
-  //     }
-  //   }
-  // }
-
   changeStatusOrder(minuts: number) {
 
-    if (minuts <= 0) {
+    if (this.order.orderStatus != "Cancelada") {
 
-      this.expresionColor.colorFont = "#dfb308";
-      this.expresionColor.colorProgress = "success";
-      this.expresionColor.backgroundTimer = '#bfd5b2'
-      this.order.timeTotalCronometer = 0 + " " + 'minutos';
+      if (minuts <= 0) {
 
-      if (this.order.orderStatus != "Entregado") {
-        this.order.orderStatus = 'El pedido esta listo'
-        this.expresionColor.fontSmall = "Confirmar";
-        this.buttonDisable.disable = false;
-        this.buttonDisable.color = "#bfd5b2";
+        this.expresionColor.colorFont = "#dfb308";
+        this.expresionColor.colorProgress = "success";
+        this.expresionColor.backgroundTimer = '#bfd5b2'
+        this.order.timeTotalCronometer = 0 + " " + 'minutos';
 
-      } else {
-        this.expresionColor.fontSmall = "Entregado";
-        document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
-        this.indexOrder.emit(this.index);
+        if (this.order.orderStatus != "Entregado") {
+          this.order.orderStatus = 'El pedido esta listo'
+          this.expresionColor.fontSmall = "Confirmar";
+          this.buttonDisable.disable = false;
+          this.buttonDisable.color = "#bfd5b2";
+
+        } else {
+          this.expresionColor.fontSmall = "Entregado";
+          document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+          this.indexOrder.emit(this.index);
+          this.percent = 100;
+
+        }
+
+
+      } else if (minuts <= 10) {
+
+        this.order.orderStatus = `nuestro cliente llega en ${minuts} min`;
+        this.expresionColor.colorFont = "#ac0f17";
+        this.expresionColor.colorProgress = "danger";
+        this.expresionColor.fontSmall = 'Falta poco';
+        this.expresionColor.backgroundTimer = '#ffb6b9';
+        // this.startCronometer = true;
+        this.order.timeTotalCronometer = minuts + " " + 'minutos';
+        this.buttonDisable.color = '#ffb6b9';
+
+      } else if (minuts <= this.timeLimit) {
+        this.order.orderStatus = 'empieza a preparar el pedido';
+        this.expresionColor.colorFont = "#ac0f17";
+        this.expresionColor.colorProgress = "danger";
+        this.expresionColor.fontSmall = 'Prepara';
+        this.expresionColor.backgroundTimer = '#ffb6b9';
+        this.order.timeTotalCronometer = minuts > 60 ? this.convertToHours(minuts) : minuts + " " + 'minutos';
 
       }
+      else {
 
+        this.order.orderStatus = 'Relajate';
+        this.expresionColor.colorFont = '#dfb308';
+        this.expresionColor.colorProgress = 'warning';
+        this.expresionColor.fontSmall = 'Relajate';
 
-    } else if (minuts <= 10) {
+      }
+    } else {
 
-      this.order.orderStatus = `nuestro cliente llega en ${minuts} min`;
-      this.expresionColor.colorFont = "#ac0f17";
-      this.expresionColor.colorProgress = "danger";
-      this.expresionColor.fontSmall = 'Falta poco';
-      this.expresionColor.backgroundTimer = '#ffb6b9';
-      // this.startCronometer = true;
-      this.order.timeTotalCronometer = minuts + " " + 'minutos';
-      this.buttonDisable.color = '#ffb6b9';
-
-    } else if (minuts <= this.timeLimit) {
-      this.order.orderStatus = 'empieza a preparar el pedido';
-      this.expresionColor.colorFont = "#ac0f17";
-      this.expresionColor.colorProgress = "danger";
-      this.expresionColor.fontSmall = 'Prepara';
-      this.expresionColor.backgroundTimer = '#ffb6b9';
-      this.order.timeTotalCronometer = minuts > 60 ? this.convertToHours(minuts) : minuts + " " + 'minutos';
-
+      this.buttonDisable.disable = false;
+      this.buttonDisable.color = "#bfd5b2";
+      this.percent = 100;
+      this.expresionColor.fontSmall = 'Candelado';
+      
     }
-    else {
 
-      this.order.orderStatus = 'Relajate';
-      this.expresionColor.colorFont = '#dfb308';
-      this.expresionColor.colorProgress = 'warning';
-      this.expresionColor.fontSmall = 'Relajate';
-
-    }
   }
 
   changeStatusProgressBar() {
 
-    let today = new Date().getTime() / (1000 * 60);
-    let goal = new Date(this.order.DateDelivery).getTime() / (1000 * 60);
-    let percent = 100;
-    let minuts = 0;
+    let delivery = new Date(this.order.DateDelivery);
+    let now = new Date();
 
-    minuts = Math.floor(goal - today);
-
+    let today = now.getTime() / (1000 * 60);
+    let goal = delivery.getTime() / (1000 * 60);
+    let minuts = Math.floor(goal - today);
     this.changeStatusOrder(Math.floor(minuts));
 
-    if (minuts > 0) {
+    // if the same day
+    if (now.getDate() == delivery.getDate()) {
 
-      percent = Math.abs(Math.floor((100 - minuts - 1) - (minuts / (minuts + 1))));
-      console.log(percent);
-      console.log("minutres", minuts);
+      let percent = 100;
 
+      if (minuts > 0) {
 
-      this.percent = percent;
+        percent = Math.abs(Math.floor((100 - minuts - 1) - (minuts / (minuts + 1))));
+        console.log("minutres", minuts);
 
+        if (minuts > 100) {
+          this.percent = 5;
+        } else {
+
+          this.percent = percent;
+        }
+
+      }
+      else {
+        this.percent = 100;
+        // stop count
+        clearTimeout(this.progressbar);
+      }
     }
-    else {
-      this.percent = 100;
-      // stop count
-      clearTimeout(this.progressbar);
-    }
+
     this.spinner.hide();
 
   }
@@ -350,7 +270,7 @@ export class OrderComponent implements OnInit {
   convertToHours(minuts: number): string {
 
     let hours = minuts / 60;
-    let minut = minuts % 60;
+    let minut = Math.floor(minuts % 60);
     return hours + ":" + minut + " " + "min"
 
   }

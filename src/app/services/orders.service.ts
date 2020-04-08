@@ -69,6 +69,7 @@ export class OrdersService {
             idDishe: orders.idDishe,
             nameDishe: orders.nameDishe,
             typeOfService: orders.typeOfService,
+            typeOfServiceobj: orders.typeOfServiceobj,
             orderValue: orders.orderValue,
             dateAndHourReservation: orders.dateAndHourReservation,
             dateAndHourDelivey: orders.dateAndHourDelivey,
