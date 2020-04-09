@@ -1,0 +1,20 @@
+export class DishPromotion {
+    id?:string;
+    idDishesCategories?:string;
+    nameDishesCategories?:string;
+    reference?:string;
+    name?:string;
+    numberOfModifications?:number;
+    state?:string[];
+    price?:number;
+    description?:string;
+    preparationTime?:string[];
+    idAccompaniments?:string[];
+    idPromotion?:string;
+    promotionStartDate?:string[];
+    endDatePromotion?:string[];
+    namepromo?:string;
+    idnamepromo?:string;
+    pricepromo?:number;
+    photo?:string;
+}
