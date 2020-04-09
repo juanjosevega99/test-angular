@@ -528,6 +528,18 @@ export class PrincipalOrdersComponent implements OnInit {
             }
           })
 
+        }else{
+          Swal.fire({
+
+            title: 'No existen reservas para la fecha',
+            icon: 'warning',
+            // showCancelButton: true,
+            confirmButtonColor: '#542b81',
+            // cancelButtonColor: '#542b81',
+            confirmButtonText: 'Aceptar',
+            // cancelButtonText: 'No'
+    
+          }) 
         }
 
       })
