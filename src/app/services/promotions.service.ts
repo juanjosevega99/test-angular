@@ -18,7 +18,7 @@ export class PromotionsService {
     );
   }
   
-  putPromotion(id,promotion) {
+  putPromotion(id , promotion) {
     return this.httpclient.put(
       environment.UrlBase + "promotions/" + id,
       promotion
