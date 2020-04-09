@@ -104,7 +104,82 @@ export class PromoManagerComponent implements OnInit {
 
   //method for seaching specific values by name and code
   search(termino?: string, id?: string) {
+    let count = 0;
+    let termsearch = '';
+    let idsearch = '';
 
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
+        count += 1;
+        termsearch = this.table.value[i];
+        idsearch = i;
+      }
+    }
+
+    console.log("campos llenos: ", count);
+    console.log('valueGenerate', this.generalsearch);
+
+    if (count > 0 && count < 2 && !this.generalsearch) {
+
+      //  un campo lleno
+      this.dishPromoArray = this.dishgetting.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
+        }
+      });
+
+      this.filteredArray = this.dishPromoArray;
+
+    } else if (count == 2 && this.generalsearch) {
+
+      let aux = this.dishPromoArray;
+
+      this.dishPromoArray = aux.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
+        }
+      });
+
+    }
+    else {
+
+      if (this.generalsearch) {
+
+      }
+
+      if (count == 0) {
+        // campos vacios
+        // existe general search?
+        this.dishPromoArray = this.dishgetting;
+
+        if (this.generalsearch) {
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
+        }
+      } else {
+
+        // campos llenos
+        // existe general search?
+
+        this.dishPromoArray = this.filteredArray.filter(function (dish: Dishes) {
+          //We test each element of the object to see if one string matches the regexp.
+          if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+            return dish;
+          }
+        });
+
+        if (this.generalsearch) {
+
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
+        }
+      }
+    }
   }
 
   //method for general searching 
