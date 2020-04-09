@@ -591,7 +591,6 @@ export class PrincipalOrdersComponent implements OnInit {
             this.Reservations.push(reservation);
             this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
             this.createOrder(reservation);
-            // this.loadReservations();
             Swal.fire(
               'Reservación Guardada',
             )
