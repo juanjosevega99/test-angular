@@ -66,6 +66,9 @@ import { TypeServiceImgDirective } from './directives/type-service-img.directive
 import { CronometerStateDirective } from './directives/cronometer-state.directive';
 import { CreateCouponComponent } from './modules/CupManag/create-coupon/create-coupon.component';
 
+// full calendar
+import { FullCalendarModule } from '@fullcalendar/angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -135,7 +138,10 @@ import { CreateCouponComponent } from './modules/CupManag/create-coupon/create-c
     NgImageSliderModule,
     ReactiveFormsModule,
     NgxPrintModule,
-    TooltipModule
+    TooltipModule,
+    FullCalendarModule
+    
+    
   ],
   providers: [
     UploadImagesService,

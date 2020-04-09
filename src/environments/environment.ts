@@ -14,7 +14,7 @@ export const environment = {
     appId: "1:882165751714:web:e8939fcbe5ede7ad405cfb"
   },
 
-  UrlBase:"http://localhost:5000/",
+  UrlBase:"https://tifi.herokuapp.com/",
   //https://tifi.herokuapp.com/
 
   IVA: 0.19

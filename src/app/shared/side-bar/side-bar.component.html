@@ -17,7 +17,7 @@
         </div>
         <ul class="list-unstyled components" style="text-align: center; width: 100%; ">
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
-                <a href="#" class="notification" style="margin-right: 40px;">
+                <a [routerLink]="[ '/main', 'pqrList' ]" class="notification" style="margin-right: 40px;">
                     <i class="fas fa-envelope icon-style icon"></i>
                     <span class="badge">3</span>
                 </a>
@@ -29,7 +29,7 @@
             <li class="active">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
                     <div class="col-11 ">
-                        Home
+                        Menú
                     </div>
                     <div class="col-1 iconArrow">
                         <i class="fas fa-chevron-right"></i>
@@ -37,35 +37,46 @@
                 </a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a href="#">Home 1</a>
+                        <a [routerLink]="['/main','allyManager']">Admin Aliados</a>
                     </li>
                     <li>
-                        <a href="#">Home 2</a>
+                        <a [routerLink]="[ '/main', 'userManager' ]">Admin Usuarios</a>
                     </li>
                     <li>
-                        <a href="#">Home 3</a>
+                        <a [routerLink]="[ '/main', 'promoManager' ]">Admin Promos</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="[ '/main', 'couponManager' ]">Admin de cupones</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="[ '/main', 'reportGenerator' ]">Generar Informes</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="[ '/main', 'pqrList' ]">Admin de Pqrs</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="[ '/main', 'bannerManager' ]">Admin de Banners</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="[ '/main', 'tycManager' ]">Admin de T y C</a>
                     </li>
                 </ul>
             </li>
             <li>
                 <a href="#about" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
                     <div class="col-11 ">
-                        About
+                        Vista Principal
                     </div>
                     <div class="col-1 iconArrow">
                         <i class="fas fa-chevron-right"></i>
                     </div>
                 </a>
                 <ul class="collapse list-unstyled" id="about">
+
                     <li>
-                        <a href="#">Page 1</a>
+                        <a [routerLink]="[ '/main', 'principal-orders' ]">Principal</a>
                     </li>
-                    <li>
-                        <a href="#">Page 2</a>
-                    </li>
-                    <li>
-                        <a href="#">Page 3</a>
-                    </li>
+                    
                 </ul>
             </li>
             <li>

@@ -1,5 +1,6 @@
 export class OrderByUser{
     id?:string;
+    code?:string;
     idUser?:String;
     idHeadquartes?:string;
     nameAllie?:string;
