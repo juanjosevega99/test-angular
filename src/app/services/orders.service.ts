@@ -17,7 +17,7 @@ export class OrdersService {
 
   putCharge(order): Observable<Orders> {
     return this.httpclient.put<Orders>(
-      environment.UrlBase + "orders" + order.id,
+      environment.UrlBase + "orders/" + order.id,
       order
     );
   }
@@ -54,12 +54,40 @@ export class OrdersService {
     );
   }
 
+  getOrdersByAllyHead(id): Observable<any[]> {
+    return this.httpclient.get<Orders[]>(environment.UrlBase + "orders/head/" + id ).pipe(
+      map((orders: any[]) =>
+        orders.map(orders => {
+          let obj = {
+            id: orders._id,
+            code: orders.code,
+            idUser: orders.idUser,
+            idAllies: orders.idAllies,
+            nameAllies: orders.nameAllies,
+            idHeadquartes: orders.idHeadquartes,
+            nameHeadquartes: orders.nameHeadquartes,
+            idDishe: orders.idDishe,
+            nameDishe: orders.nameDishe,
+            typeOfService: orders.typeOfService,
+            orderValue: orders.orderValue,
+            dateAndHourReservation: orders.dateAndHourReservation,
+            dateAndHourDelivey: orders.dateAndHourDelivey,
+            chronometer: orders.chronometer,
+            orderStatus: orders.orderStatus,
+            deliveryStatus: orders.deliveryStatus
+          };
+          return obj;
+        })
+      )
+    );
+  }
+
 
   getChargeById(id): Observable<Orders> {
     return this.httpclient.get<Orders>(environment.UrlBase + "orders/" + id).pipe(map(
       (order: Orders) => {
         let obj = {
-          id: order._id,
+          id: order.id,
           code: order.code,
           idUser: order.idUser,
           idAllies: order.idAllies,
@@ -84,33 +112,33 @@ export class OrdersService {
     )
     )
   }
-  getChargeByUserId(id:string): Observable<Orders[]> {
+  getChargeByUserId(id: string): Observable<Orders[]> {
     return this.httpclient.get<Orders[]>(environment.UrlBase + "orders/user/" + id).pipe(
-        map((orders: any[]) =>
-          orders.map(orders => {
-            let obj = {
-              id: orders._id,
-              code: orders.code,
-              idUser: orders.idUser,
-              idAllies: orders.idAllies,
-              nameAllies: orders.nameAllies,
-              idHeadquartes: orders.idHeadquartes,
-              nameHeadquartes: orders.nameHeadquartes,
-              idDishe: orders.idDishe,
-              nameDishe: orders.nameDishe,
-              typeOfService: orders.typeOfService,
-              orderValue: orders.orderValue,
-              dateAndHourReservation: orders.dateAndHourReservation,
-              dateAndHourDelivey: orders.dateAndHourDelivey,
-              chronometer: orders.chronometer,
-              orderStatus: orders.orderStatus,
-              deliveryStatus: orders.deliveryStatus,
-              costReservation: orders.costReservation,
-              costReservationIva: orders.costReservation + (orders.costReservation* environment.IVA )
-            };
-            return obj;
-          })
-        )
-      );
+      map((orders: any[]) =>
+        orders.map(orders => {
+          let obj = {
+            id: orders._id,
+            code: orders.code,
+            idUser: orders.idUser,
+            idAllies: orders.idAllies,
+            nameAllies: orders.nameAllies,
+            idHeadquartes: orders.idHeadquartes,
+            nameHeadquartes: orders.nameHeadquartes,
+            idDishe: orders.idDishe,
+            nameDishe: orders.nameDishe,
+            typeOfService: orders.typeOfService,
+            orderValue: orders.orderValue,
+            dateAndHourReservation: orders.dateAndHourReservation,
+            dateAndHourDelivey: orders.dateAndHourDelivey,
+            chronometer: orders.chronometer,
+            orderStatus: orders.orderStatus,
+            deliveryStatus: orders.deliveryStatus,
+            costReservation: orders.costReservation,
+            costReservationIva: orders.costReservation + (orders.costReservation * environment.IVA)
+          };
+          return obj;
+        })
+      )
+    );
   }
 }
