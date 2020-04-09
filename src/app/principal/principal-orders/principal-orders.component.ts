@@ -141,8 +141,8 @@ export class PrincipalOrdersComponent implements OnInit {
       if (dateres >= today) {
 
         this.copilist = this.listOfDishes.slice();
-        this.showmodal = true;
-        // this.setReservation();
+        // this.showmodal = true;
+        this.setReservation();
 
       } else {
 
@@ -210,11 +210,11 @@ export class PrincipalOrdersComponent implements OnInit {
     }
 
     this.serviceOrders.postCharge(order).subscribe(res => {
-      this.loadReservations();
-      this.resetIds();
-      Swal.fire(
-        'Reservación Guardada',
-      )
+      // this.loadReservations();
+      // this.resetIds();
+      // Swal.fire(
+      //   'Reservación Guardada',
+      // )
     });
   }
 
@@ -411,7 +411,7 @@ export class PrincipalOrdersComponent implements OnInit {
       });
 
       if (resToCompare['date']) {
-        this.setColor("red", resToCompare);
+        this.setColor("#ffb6b9", resToCompare);
         resToCompare = {};
       }
     }
@@ -425,7 +425,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
     }
 
-    document.getElementById(id).style.backgroundColor = "green";
+    document.getElementById(id).style.backgroundColor = "#54a735";
     this.idButton = id;
     this.hourreservation = this.Hours[id];
     this.hourreservation.id = this.idButton;
@@ -509,6 +509,18 @@ export class PrincipalOrdersComponent implements OnInit {
 
                   })
 
+                }else{
+
+                this.reservationService.deleteReservation(res['_id']).subscribe(response => {
+                      this.loadReservations();
+                      this.formaterOrders();
+
+                      Swal.fire(
+                        'mesa Liberada',
+                      )
+                      return;
+                    })
+
                 }
 
               })
@@ -579,16 +591,19 @@ export class PrincipalOrdersComponent implements OnInit {
 
           this.reservationService.postReservation(reservation).subscribe(res => {
 
-            this.Reservations.push(reservation);
+            
             this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-            this.createOrder(reservation);
+            this.calendarEvents.push({ title: 'Reservado', date: res['date'], target: res['date'] });
+            // this.createOrder(reservation);
+            // this.loadReservations();
+            this.resetIds();
+            Swal.fire(
+              'Reservación Guardada',
+            )
 
           })
         }
-
       })
-
-
   }
 
   // ========================================================
@@ -602,6 +617,7 @@ export class PrincipalOrdersComponent implements OnInit {
       orders.forEach(order => {
         this.formatOrderUnit(order);
       })
+
     })
 
   }
