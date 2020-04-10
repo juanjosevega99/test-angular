@@ -1,6 +1,7 @@
 export class Coupons {
     id?:string;
     name?:string;
+    numberOfModifications?:number;
     description?:string;
     imageCoupon?:string;
     typeOfCoupon?:string;

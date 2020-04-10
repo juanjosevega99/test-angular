@@ -19,20 +19,21 @@ export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
     name: null,
     createDate: null,
-    description: null,
-    imageCoupon: null,
+    expirationDate: null,
+    numberOfModifications: 0,
+    nameAllies: null,
+    nameHeadquarters: null,
     typeOfCoupon: null,
     nameTypeOfCoupon: null,
+    description: null,
+    imageCoupon: null,
     state: [],
-    expirationDate: null,
     codeToRedeem: null,
     termsAndConditions: null,
     transferable: null,
     cumulative: null,
     idAllies: null,
-    nameAllies: null,
     idHeadquarters: null,
-    nameHeadquarters: null,
     idDishes: null,
     nameDishes: null,
     numberOfUnits: null,
@@ -70,6 +71,16 @@ export class CreateCouponComponent implements OnInit {
   //   email: null,
   //   photo: null
   // }
+
+  //variables for categories
+  arrayCategorySelect: boolean = true;
+  otherCategoryInput: boolean = false;
+  addcategoryButton: boolean = true;
+  selectAgainarray: boolean = false;
+  newCategory: String;
+  Categories: String[] = [];
+
+
   //variable for the state
   State: any[] = [];
 
@@ -124,6 +135,14 @@ export class CreateCouponComponent implements OnInit {
   goBackProfiles() {
     this._router.navigate(['/main', 'couponManager'])
   }
+  seeId(selected: any) {
+    // this.Categories.forEach((element: any) => {
+    //   if (selected == element.name) {
+    //     this.preProfile['idCharge'] = element.id
+    //   }
+    // })
+  }
+
   //Method for selecting the state
   selectedState(valueA, checkedA, valueB, checkedB) {
     let fullstate: any = [{
@@ -164,6 +183,22 @@ export class CreateCouponComponent implements OnInit {
       // })
     }
   }
+  //Method for showing new view in the categories field
+  handleBoxCategories(): boolean {
+
+    if (this.addcategoryButton) {
+      return this.addcategoryButton = false,
+        this.otherCategoryInput = true,
+        this.selectAgainarray = true,
+        this.arrayCategorySelect = false
+    } else {
+      return this.addcategoryButton = true,
+        this.otherCategoryInput = false,
+        this.selectAgainarray = false,
+        this.arrayCategorySelect = true
+    }
+  }
+
   //Metod for the admission and modification date
   tick(): void {
     if (this.identificatorbyRoot == -1) {

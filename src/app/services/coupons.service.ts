@@ -36,6 +36,7 @@ export class CouponsService {
           let obj = {
             id: coupons.id,
             name: coupons.name,
+            numberOfModifications: coupons.numberOfModifications, 
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
             typeOfCoupon: coupons.typeOfCoupon,
@@ -74,6 +75,7 @@ export class CouponsService {
             let obj = {
               id: coupons.id,
               name: coupons.name,
+              numberOfModifications: coupons.numberOfModifications,
               description: coupons.description,
               imageCoupon: coupons.imageCoupon,
               typeOfCoupon: coupons.typeOfCoupon,
