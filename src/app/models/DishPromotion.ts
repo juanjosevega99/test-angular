@@ -17,4 +17,7 @@ export class DishPromotion {
     idnamepromo?:string;
     pricepromo?:number;
     photo?:string;
+    daysPromo?:number;
+    timestart?:string;
+    timeend?:string;
 }
