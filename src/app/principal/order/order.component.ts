@@ -124,10 +124,16 @@ export class OrderComponent implements OnInit {
           this.buttonDisable.disable = false;
           this.buttonDisable.color = "#bfd5b2";
 
-        } else {
+        } else if( this.order.orderStatus == "Entregado" ){
           this.expresionColor.fontSmall = "Entregado";
           document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
           this.indexOrder.emit(this.index);
+          this.percent = 100;
+          
+        }else {
+          this.expresionColor.fontSmall = this.order.orderStatus;
+          document.getElementById(this.order.code).style.backgroundColor = "#fff";
+          // this.indexOrder.emit(this.index);
           this.percent = 100;
 
         }
@@ -161,12 +167,17 @@ export class OrderComponent implements OnInit {
         this.expresionColor.fontSmall = 'Relajate';
 
       }
-    } else {
+    } else if(this.order.orderStatus == "Cancelada"){
 
-      this.buttonDisable.disable = false;
+      this.buttonDisable.disable = true;
       this.buttonDisable.color = "#bfd5b2";
       this.percent = 100;
-      this.expresionColor.fontSmall = 'Candelado';
+      this.expresionColor.fontSmall = 'Cancelado';
+      document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
+      
+    }else{
+      this.expresionColor.fontSmall = this.order.orderStatus;
+      console.log(this.order.orderStatus);
       
     }
 
@@ -252,15 +263,17 @@ export class OrderComponent implements OnInit {
       id: this.order.id
     };
     this.spinner.show();
+    console.log(status);
+    
     this.orderservice.putCharge(status).subscribe(res => {
       this.expresionColor.fontSmall = "Entregado";
       this.showdetail = false;
 
       this.indexOrder.emit(this.index);
       this.spinner.hide();
+      document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
     })
 
-    document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
 
   }
 
