@@ -1,8 +1,8 @@
 export interface reservation{
-    id: String,
-    date:String,
+    _id: string,
+    date:string,
     hour:Object,
     tables:Object,
     people:Object,
-    idHeadquart:String
+    idHeadquart:string
 }

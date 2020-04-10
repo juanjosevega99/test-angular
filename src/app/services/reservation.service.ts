@@ -25,8 +25,8 @@ export class ReservationService {
   }
 
 
-  postReservation(reservation):Observable<String>{
-    return this.httpclient.post<String>(environment.UrlBase + "reservation", reservation);
+  postReservation(reservation):Observable<reservation>{
+    return this.httpclient.post<reservation>(environment.UrlBase + "reservation", reservation);
   }
 
   putReservation(reservation): Observable<reservation>{

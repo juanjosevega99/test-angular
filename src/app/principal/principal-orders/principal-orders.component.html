@@ -66,7 +66,7 @@
                     <!-- <ngb-datepicker [dayTemplate]="t" #dp [(ngModel)]="model" (select)="onDateSelect($event)"
                     (navigate)="date = $event.next"></ngb-datepicker> -->
                     <full-calendar deepChangeDetection="true" [plugins]="calendarPlugins" [events]="calendarEvents"
-                        (dateClick)="handleDateClick($event.dateStr)" (eventClick)="eventClick($event)">
+                        (dateClick)="handleDateClick($event)" (eventClick)="eventClick($event)">
 
                     </full-calendar>
                 </div>

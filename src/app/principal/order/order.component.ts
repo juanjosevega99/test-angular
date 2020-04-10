@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { OrderByUser } from 'src/app/models/OrderByUser';
 import { OrdersService } from 'src/app/services/orders.service';
 // swall pop up
@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
 
   // variable to manage colors and fonts on statte
   expresionColor = {
@@ -56,50 +56,18 @@ export class OrderComponent implements OnInit {
 
   ngOnInit() {
 
-    this.spinner.show();
     this.progressbar = setInterval(() => {
 
       this.changeStatusProgressBar();
 
-    }, 3000)
+    }, 30000)
 
+    setTimeout( ()=>{this.changeStatusProgressBar( )}, 2000 )
 
-    // let initprogress = setInterval(() => {
+  }
 
-    //   this.changeStatusProgressBar();
-
-    //   if (this.stopOrder) {
-
-    //     clearInterval(initprogress);
-
-    //   }
-
-    // }, 3000);
-
-    // let postcronometer = setInterval(() => {
-
-    //   this.InitCronometer();
-
-    //   if (this.stopOrder) {
-    //     clearInterval(postcronometer);
-    //   }
-
-    // }, 1000);
-
-
-    // let precronometer = setInterval(() => {
-
-    //   this.cronometer();
-
-    //   if (this.startCronometer) {
-    //     console.log("limpando");
-
-    //     clearInterval(precronometer);
-    //   }
-
-    // }, 1000);
-
-
+  ngOnDestroy(){
+    clearTimeout(this.progressbar);
   }
 
   showDetail() {
@@ -123,14 +91,16 @@ export class OrderComponent implements OnInit {
           this.expresionColor.fontSmall = "Confirmar";
           this.buttonDisable.disable = false;
           this.buttonDisable.color = "#bfd5b2";
+          document.getElementById(this.order.code).style.backgroundColor = "#fff";
 
-        } else if( this.order.orderStatus == "Entregado" ){
+        } else if (this.order.orderStatus == "Entregado") {
           this.expresionColor.fontSmall = "Entregado";
           document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
           this.indexOrder.emit(this.index);
           this.percent = 100;
-          
-        }else {
+          clearTimeout(this.progressbar);
+
+        } else {
           this.expresionColor.fontSmall = this.order.orderStatus;
           document.getElementById(this.order.code).style.backgroundColor = "#fff";
           // this.indexOrder.emit(this.index);
@@ -167,18 +137,19 @@ export class OrderComponent implements OnInit {
         this.expresionColor.fontSmall = 'Relajate';
 
       }
-    } else if(this.order.orderStatus == "Cancelada"){
+    } else if (this.order.orderStatus == "Cancelada") {
 
       this.buttonDisable.disable = true;
       this.buttonDisable.color = "#bfd5b2";
       this.percent = 100;
       this.expresionColor.fontSmall = 'Cancelado';
       document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
-      
-    }else{
+      clearTimeout(this.progressbar);
+
+    } else {
       this.expresionColor.fontSmall = this.order.orderStatus;
       console.log(this.order.orderStatus);
-      
+
     }
 
   }
@@ -195,12 +166,13 @@ export class OrderComponent implements OnInit {
 
     // if the same day
     if (now.getDate() == delivery.getDate()) {
+      this.timeLimit = this.getTimeLimit();
 
       let percent = 100;
 
-      if (minuts > 0) {
+      if (minuts >= 0) {
 
-        percent = Math.abs(Math.floor((100 - minuts - 1) - (minuts / (minuts + 1))));
+        percent = Math.abs(Math.floor((100 - minuts) - (minuts / (minuts + 1))));
         console.log("minutres", minuts);
 
         if (minuts > 100) {
@@ -217,8 +189,6 @@ export class OrderComponent implements OnInit {
         clearTimeout(this.progressbar);
       }
     }
-
-    this.spinner.hide();
 
   }
 
@@ -263,15 +233,14 @@ export class OrderComponent implements OnInit {
       id: this.order.id
     };
     this.spinner.show();
-    console.log(status);
-    
+
     this.orderservice.putCharge(status).subscribe(res => {
       this.expresionColor.fontSmall = "Entregado";
       this.showdetail = false;
 
       this.indexOrder.emit(this.index);
-      this.spinner.hide();
       document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+      this.spinner.hide();
     })
 
 
