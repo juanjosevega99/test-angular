@@ -12,6 +12,7 @@ import { Dishes } from 'src/app/models/Dishes';
 import { DishList } from 'src/app/models/DishList';
 import { Promotions } from 'src/app/models/Promotions';
 import { PromotionsCategoriesService } from 'src/app/services/promotions-categories.service';
+import { PromotionsService } from 'src/app/services/promotions.service';
 
 
 @Component({
@@ -56,16 +57,16 @@ export class CreateDishComponent implements OnInit {
     idPromotion: null
   }
 
-  promotionArray: Promotions ={
-    state:[],
-    idname:null,
-    name:null,
-    promotionStartDate:null,
-    endDatePromotion:null,
-    price:null,
-    photo:null,
-    description:null,
-    preparationTime:[]
+  promotionArray: Object = {
+    state: [],
+    idname: null,
+    name: null,
+    promotionStartDate: [],
+    endDatePromotion: [],
+    price: null,
+    photo: null,
+    description: null,
+    preparationTime: []
   }
 
   //variables for receiving the profile that will be edited
@@ -104,15 +105,13 @@ export class CreateDishComponent implements OnInit {
 
   //varibles for dishes with promotion
   promotion: boolean;
-  dateEntryProm:Date;
-  timeEntryProm = {};
-  dateFinishProm:Date;
-  timeFinishProm = {};
   meridian = true;
   promotionsCategories: any[] = [];
+  idPromotion: string;
+  /* proof : any[] = [] */
 
 
-  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService) {
+  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService, private promotionService: PromotionsService) {
 
     //flags
     this.loading = true;
@@ -127,6 +126,10 @@ export class CreateDishComponent implements OnInit {
       state: "inactive",
       check: false
     }]
+
+    /* this.proof = [{"year":2020,"month":4,"day":13}]
+    this.promotionArray['promotionStartDate']=this.proof */
+
     this.preDish['state'] = this.State;
     this.promotionArray['state'] = this.State;
     this.time = ['segundos', 'minutos', 'horas']
@@ -134,12 +137,12 @@ export class CreateDishComponent implements OnInit {
     //inicialization for charging the data of a dish to edit
     this.activatedRoute.params.subscribe(params => {
       let identificator = params['id']
-      if (identificator >= 0 ) {
+      if (identificator >= 0) {
         this.getDish(identificator)
       } else if (identificator == -1) {
         this.loading = false
         this.buttonPut = false
-      } else if (identificator == -2){
+      } else if (identificator == -2) {
         this.loading = false
         this.buttonPut = false
         this.promotion = true
@@ -161,10 +164,11 @@ export class CreateDishComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
   }
+
   goBackEditMenu() {
     this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot])
   }
-  routeAccompaniments(){
+  routeAccompaniments() {
     this._router.navigate(['/main', 'accompaniments', this.identificatorbyRoot])
   }
 
@@ -206,12 +210,11 @@ export class CreateDishComponent implements OnInit {
     }
   }
 
-  //charge a profile with the id
+  //charge a dish with the id
   getDish(id: string) {
     this.loading;
     this.chargeDishes.getDishes().subscribe(dishes => {
       let dish: Dishes = {}
-      let obj: Dishes = {}
       dish = dishes[id]
       this.editDish = dish;
       this.preDish = this.editDish;
@@ -268,12 +271,10 @@ export class CreateDishComponent implements OnInit {
     }
     console.log(this.fileImagedish);
     return this.fileImagedish = input.files[0]
-    
-    
   }
 
   //Method for selecting the state of a promotion
-  selectedStateProm(valueA, checkedA, valueB, checkedB){
+  selectedStateProm(valueA, checkedA, valueB, checkedB) {
     let fullstate: any = [{
       state: "active",
       check: false
@@ -349,10 +350,13 @@ export class CreateDishComponent implements OnInit {
   }
 
   //CRUD PROMOTION
-  //save a promotion
 
+  //save a promotion
+  savePromotion() {
+    this.swallSavePromotion(this.promotionArray)
+  }
   //delete a promotion
-  deletePromo(){
+  deletePromo() {
 
   }
 
@@ -399,7 +403,7 @@ export class CreateDishComponent implements OnInit {
   }
 
   //sweet alerts
-  swallSaveOtherPromo(newCategory:any){
+  swallSaveOtherPromo(newCategory: any) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar esta nueva categoría!",
@@ -424,7 +428,7 @@ export class CreateDishComponent implements OnInit {
     })
   }
 
-  swallDeleteCatPromo(categorySelected: string){
+  swallDeleteCatPromo(categorySelected: string) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar esta categoría!",
@@ -556,7 +560,7 @@ export class CreateDishComponent implements OnInit {
           confirmButtonText: 'Ok!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
+            this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
           }
         })
       }
@@ -579,7 +583,7 @@ export class CreateDishComponent implements OnInit {
           'Eliminado!',
           'success',
         )
-        this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
+        this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
       }
     })
   }
@@ -637,6 +641,54 @@ export class CreateDishComponent implements OnInit {
             
           })
         })
+      }
+    })
+  }
+
+  swallSavePromotion(promotionArray) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.promotionArray);
+        const id: Guid = Guid.create();
+        const file = this.fileImagedish;
+        const filePath = `assets/allies/promotions/${id}`;
+        const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file)
+        task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                this.urlDish = urlImage;
+                console.log(this.urlDish);
+                this.promotionArray['photo'] = this.urlDish
+                this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
+                  this.editDish.idPromotion = message._id;
+                  this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {
+                    Swal.fire({
+                      title: 'Guardado',
+                      text: "Tu nuevo plato con promoción ha sido creado!",
+                      icon: 'warning',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    }).then((result) => {
+                      if (result.value) {
+                        this._router.navigate(['/main', 'promoManager']);
+                      }
+                    })
+                  })
+                })
+              })
+            }
+            )
+          ).subscribe()
       }
     })
   }

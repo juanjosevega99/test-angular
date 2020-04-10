@@ -1,8 +1,8 @@
 export class Promotions {
     id?:string;
     state?:string[];
-    promotionStartDate?:Date;
-    endDatePromotion?:Date;
+    promotionStartDate?:string[];
+    endDatePromotion?:string[];
     name?:string;
     idname?:string;
     price?:number;

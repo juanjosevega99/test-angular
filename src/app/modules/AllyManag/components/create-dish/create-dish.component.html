@@ -99,16 +99,21 @@
                 <label class="col-md-5 col-form-label">Fecha de inicio de promoción</label>
                 <div class="col-md-7">
                     <div class="input-group align-items-center">
-                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp"
-                            [(ngModel)]="dateEntryProm" ngbDatepicker #d="ngbDatepicker">
+                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp1" #i="ngModel"
+                            [(ngModel)]="promotionArray.promotionStartDate[0]" ngbDatepicker #d="ngbDatepicker" required
+                            [ngClass]="{'is-invalid': (!i.valid && i.touched),'is-valid':(i.valid)}">
                         <div class="input-group-append mr-3">
                             <a (click)="d.toggle()" class="btn btn-outline-primary">
                                 <i class="far fa-calendar-alt"></i>
                             </a>
                         </div>
-                        <ngb-timepicker name="den" [(ngModel)]="timeEntryProm" [meridian]="meridian"></ngb-timepicker>
-                    </div>
 
+                        <ngb-timepicker name="den" [(ngModel)]="promotionArray.promotionStartDate[1]" #it="ngModel"
+                            required [ngClass]="{'is-invalid': (!it.valid && it.touched),'is-valid':(it.valid)}"
+                            [meridian]="meridian"></ngb-timepicker>
+                        <div class="col-md-4" *ngIf="i.errors?.required" class="invalid-feedback">*Campo fecha y hora es
+                            requerido</div>
+                    </div>
                 </div>
             </div>
 
@@ -116,14 +121,19 @@
                 <label class="col-md-5 col-form-label">Fecha de finalización de promoción</label>
                 <div class="col-md-7">
                     <div class="input-group align-items-center">
-                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp"
-                            [(ngModel)]="dateFinishProm" ngbDatepicker #d="ngbDatepicker">
+                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp2" #f="ngModel"
+                            [(ngModel)]="promotionArray.endDatePromotion[0]" ngbDatepicker #d="ngbDatepicker" required
+                            [ngClass]="{'is-invalid': (!f.valid && f.touched),'is-valid':(f.valid)}">
                         <div class="input-group-append mr-3">
                             <a (click)="d.toggle()" class="btn btn-outline-primary">
                                 <i class="far fa-calendar-alt"></i>
                             </a>
                         </div>
-                        <ngb-timepicker name="dfn" [(ngModel)]="timeFinishProm" [meridian]="meridian"></ngb-timepicker>
+                        <ngb-timepicker name="dfn" [(ngModel)]="promotionArray.endDatePromotion[1]" #ft="ngModel"
+                            required [ngClass]="{'is-invalid': (!ft.valid && ft.touched),'is-valid':(ft.valid)}"
+                            [meridian]="meridian"></ngb-timepicker>
+                        <div class="col-md-4" *ngIf="f.errors?.required" class="invalid-feedback">*Campo fecha y hora es
+                            requerido</div>
                     </div>
                 </div>
             </div>
@@ -166,7 +176,7 @@
 
                         <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="dishCategory"
                             #nameMealsCategories="ngModel" required
-                            [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid) }"
+                            [ngClass]="{'is-invalid': (!nameMealsCategories.valid ),'is-valid':(nameMealsCategories.valid)}"
                             [(ngModel)]="preDish.nameDishesCategories" #select (change)="seeId(select.value)">
                             <option selected>{{preDish.nameDishesCategories}}</option>
                             <option *ngFor="let category of dishesCategories">
@@ -311,8 +321,8 @@
             <div *ngIf="promotion" class="form-group row">
                 <label class="col-md-5 col-form-label">Precio con promoción</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Precio con promoción" name="priceprom" pattern="[0-9]{0,20}"
-                        #priceprom="ngModel" required
+                    <input class="form-control" type="text" placeholder="Precio con promoción" name="priceprom"
+                        pattern="[0-9]{0,20}" #priceprom="ngModel" required
                         [ngClass]="{'is-invalid': (!priceprom.valid && priceprom.touched) || priceprom.errors?.pattern ,'is-valid':(priceprom.valid)}"
                         [(ngModel)]="promotionArray.price">
                     <div *ngIf=" priceprom.errors?.required" class="invalid-feedback">*Este campo es requerido</div>
@@ -405,14 +415,15 @@
                 <div class="col-md-7">
                     <div class="input-group">
                         <input type="text" min="0" placeholder="Tiempo de preparación" value="0" class="form-control"
-                            #preparationTimeProm="ngModel" [(ngModel)]="promotionArray.preparationTime[0]" name="preparationTimeProm"
-                            pattern="[0-9]{1,3}" required
+                            #preparationTimeProm="ngModel" [(ngModel)]="promotionArray.preparationTime[0]"
+                            name="preparationTimeProm" pattern="[0-9]{1,3}" required
                             [ngClass]="{'is-invalid': (!preparationTimeProm.valid && preparationTimeProm.touched ),'is-valid':(preparationTimeProm.valid)}"
                             class="form-control">
                         <div class="input-group-append">
                             <select class="input-group-text" class="form-control"
                                 [ngClass]="{'is-invalid': (!timeUnityP.valid),'is-valid':(timeUnityP.valid) }"
-                                #timeUnityP="ngModel" [(ngModel)]="promotionArray.preparationTime[1]" name="timesP" required>
+                                #timeUnityP="ngModel" [(ngModel)]="promotionArray.preparationTime[1]" name="timesP"
+                                required>
                                 <option *ngFor="let time of time">
                                     {{time}}
                                 </option>
@@ -431,7 +442,7 @@
 
         <section *ngIf="!buttonPut" class="col-12 d-flex" style="justify-content: center;">
             <div style="padding: 1rem;">
-                <a  (click)="routeAccompaniments()"  class="btn btn-outline-primary btn-lg">Acompañamiento
+                <a (click)="routeAccompaniments()" class="btn btn-outline-primary btn-lg">Acompañamiento
                     adicional</a>
             </div>
         </section>
@@ -451,18 +462,22 @@
             </section>
         </section>
 
-        <section class="col-12 d-flex" style="justify-content: center;">
-
+        <section *ngIf="!promotion" class="col-12 d-flex" style="justify-content: center;">
             <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit"
                 class="btn btn-outline-primary btn-lg">Guardar</button>
             <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="putDish()"
                 class="btn btn-outline-primary btn-lg">Actualizar</button>
         </section>
+        <section *ngIf="promotion" class="col-12 d-flex" style="justify-content: center;">
+            <button  type="button" (click)="savePromotion()" [disabled]="!shape.valid"
+                class="btn btn-outline-primary btn-lg">Guardar promoción</button> 
+        </section>
+
     </form>
-<!-- preDish -->
     <!-- <pre>
+        {{ preDish | json }}
+    </pre>
+    <pre>
         {{ promotionArray | json }}
     </pre> -->
-    
-
 </div>

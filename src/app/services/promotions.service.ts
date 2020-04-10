@@ -17,10 +17,10 @@ export class PromotionsService {
       promotion
     );
   }
-
-  putPromotion(promotion): Observable<Promotions> {
-    return this.httpclient.put<Promotions>(
-      environment.UrlBase + "promotions" + promotion.id,
+  
+  putPromotion(id,promotion) {
+    return this.httpclient.put(
+      environment.UrlBase + "promotions/" + id,
       promotion
     );
   }
@@ -41,7 +41,11 @@ export class PromotionsService {
               promotionStartDate: promotions.promotionStartDate,
               endDatePromotion: promotions.endDatePromotion,
               name: promotions.name,
-              price: promotions.price
+              idname: promotions.idname,
+              price: promotions.price,
+              photo: promotions.photo,
+              description: promotions.description,
+              preparationTime: promotions.preparationTime
             };
             return obj;
           })
@@ -56,12 +60,16 @@ export class PromotionsService {
         map((promotions: any[]) =>
           promotions.map(promotions => {
             let obj = {
-              id: promotions.id,
+              id: promotions._id,
               state: promotions.state,
               promotionStartDate: promotions.promotionStartDate,
               endDatePromotion: promotions.endDatePromotion,
               name: promotions.name,
-              price: promotions.price
+              idname: promotions.idname,
+              price: promotions.price,
+              photo: promotions.photo,
+              description: promotions.description,
+              preparationTime: promotions.preparationTime
             };
             return obj;
           })
