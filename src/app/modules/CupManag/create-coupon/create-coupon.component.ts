@@ -18,12 +18,12 @@ import { Profiles } from 'src/app/models/Profiles';
 export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
     name: null,
+    createDate: null,
     description: null,
     imageCoupon: null,
     typeOfCoupon: null,
     nameTypeOfCoupon: null,
     state: [],
-    createDate: null,
     expirationDate: null,
     codeToRedeem: null,
     termsAndConditions: null,
@@ -119,6 +119,7 @@ export class CreateCouponComponent implements OnInit {
   }
 
   ngOnInit() {
+    setInterval(() => this.tick(), 1000);
   }
   goBackProfiles() {
     this._router.navigate(['/main', 'couponManager'])
