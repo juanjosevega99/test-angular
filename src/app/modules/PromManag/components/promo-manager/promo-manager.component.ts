@@ -71,6 +71,7 @@ export class PromoManagerComponent implements OnInit {
 
                     let diff = dateF - dateS;
                     const obj: DishPromotion = {};
+                    
 
                     obj.id = promo.id;
                     obj.reference = `${dish.reference}-${item+1}`;
@@ -88,7 +89,10 @@ export class PromoManagerComponent implements OnInit {
                     obj.state = promo.state;
                     this.dishPromoArray.push(obj)
 
-                    this.promoService.putPromotion(iditem,obj).subscribe(res=>{})
+                    
+                    const promee: Promotions = {reference: `${dish.reference}-${item+1}`};
+                    this.promoService.putPromotion(iditem,promee).subscribe(res=>{})
+                    
                   }
                 })
               })
