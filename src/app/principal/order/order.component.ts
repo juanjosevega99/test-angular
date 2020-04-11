@@ -62,11 +62,11 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     }, 30000)
 
-    setTimeout( ()=>{this.changeStatusProgressBar( )}, 2000 )
+    setTimeout(() => { this.changeStatusProgressBar() }, 2000)
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     clearTimeout(this.progressbar);
   }
 
@@ -77,8 +77,6 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   changeStatusOrder(minuts: number) {
 
-    if (this.order.orderStatus != "Cancelada") {
-
       if (minuts <= 0) {
 
         this.expresionColor.colorFont = "#dfb308";
@@ -86,25 +84,33 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.expresionColor.backgroundTimer = '#bfd5b2'
         this.order.timeTotalCronometer = 0 + " " + 'minutos';
 
-        if (this.order.orderStatus != "Entregado") {
-          this.order.orderStatus = 'El pedido esta listo'
-          this.expresionColor.fontSmall = "Confirmar";
-          this.buttonDisable.disable = false;
-          this.buttonDisable.color = "#bfd5b2";
-          document.getElementById(this.order.code).style.backgroundColor = "#fff";
-
-        } else if (this.order.orderStatus == "Entregado") {
+        if (this.order.orderStatus == "Entregado") {
           this.expresionColor.fontSmall = "Entregado";
           document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
           this.indexOrder.emit(this.index);
           this.percent = 100;
           clearTimeout(this.progressbar);
 
-        } else {
-          this.expresionColor.fontSmall = this.order.orderStatus;
-          document.getElementById(this.order.code).style.backgroundColor = "#fff";
-          // this.indexOrder.emit(this.index);
+        } else if (this.order.orderStatus == "Cancelada") {
+
+          this.buttonDisable.disable = true;
+          this.buttonDisable.color = "#bfd5b2";
           this.percent = 100;
+          this.expresionColor.fontSmall = 'Cancelado';
+          document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
+          clearTimeout(this.progressbar);
+          this.indexOrder.emit(this.index);
+
+        }else {
+
+          this.order.orderStatus = 'El pedido esta listo'
+          this.expresionColor.fontSmall = "Confirmar";
+          this.buttonDisable.disable = false;
+          this.buttonDisable.color = "#bfd5b2";
+          document.getElementById(this.order.code).style.backgroundColor = "#fff";
+          clearTimeout(this.progressbar);
+          this.percent = 100;
+          // this.indexOrder.emit(this.index);
 
         }
 
@@ -135,22 +141,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.expresionColor.colorFont = '#dfb308';
         this.expresionColor.colorProgress = 'warning';
         this.expresionColor.fontSmall = 'Relajate';
-
       }
-    } else if (this.order.orderStatus == "Cancelada") {
-
-      this.buttonDisable.disable = true;
-      this.buttonDisable.color = "#bfd5b2";
-      this.percent = 100;
-      this.expresionColor.fontSmall = 'Cancelado';
-      document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
-      clearTimeout(this.progressbar);
-
-    } else {
-      this.expresionColor.fontSmall = this.order.orderStatus;
-      console.log(this.order.orderStatus);
-
-    }
 
   }
 
@@ -161,19 +152,29 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     let today = now.getTime() / (1000 * 60);
     let goal = delivery.getTime() / (1000 * 60);
-    let minuts = Math.floor(goal - today);
-    this.changeStatusOrder(Math.floor(minuts));
+    let minuts = Math.floor((goal + 0.2 - today));
+    this.timeLimit = this.getTimeLimit();
+
+    if (this.order.orderStatus == "Engregado" || this.order.orderStatus == "Cancelada") {
+
+      clearTimeout(this.progressbar);
+      this.changeStatusOrder(0);
+
+    }else{
+      this.changeStatusOrder(100);
+
+    }
 
     // if the same day
     if (now.getDate() == delivery.getDate()) {
-      this.timeLimit = this.getTimeLimit();
 
       let percent = 100;
+      this.changeStatusOrder(minuts);
 
       if (minuts >= 0) {
 
         percent = Math.abs(Math.floor((100 - minuts) - (minuts / (minuts + 1))));
-        console.log("minutres", minuts);
+        console.log("minutes", minuts);
 
         if (minuts > 100) {
           this.percent = 5;

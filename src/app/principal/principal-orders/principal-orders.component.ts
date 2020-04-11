@@ -130,9 +130,24 @@ export class PrincipalOrdersComponent implements OnInit {
 
     this.wesocket.listen('newOrder').subscribe((res: Orders) => {
 
-      console.log("desde server", res);
+      // console.log("desde server", res);
       if (res.idHeadquartes == this.profile.idHedquart) {
         this.formatOrderUnit(res);
+
+      }
+    });
+
+    this.wesocket.listen("newReservation").subscribe((reservation: reservation) => {
+
+      if (this.profile.idHedquart == reservation.idHeadquart) {
+        
+        if(this.idEvent == ""){
+          this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+          this.datereservation = "";
+        }
+        this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
+        this.Reservations.push(reservation);
+
       }
     })
 
@@ -322,6 +337,20 @@ export class PrincipalOrdersComponent implements OnInit {
 
   }
 
+  orderList(ordersArray) {
+
+    console.log(ordersArray.sort((a, b) => new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime()));
+
+    ordersArray.forEach((order: Orders, i) => {
+      console.log(order.orderStatus);
+
+      if (order.orderStatus == "Cancelada" || order.orderStatus == "Entregado") {
+        this.tolast(i);
+      }
+    })
+
+  }
+
   // ============================
   // === charge reservation =====
   loadReservations() {
@@ -397,6 +426,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
   handleDateClick(event) {
 
+    this.orderList(this.orders);
     // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
     if (this.datereservation) {
 
@@ -482,12 +512,12 @@ export class PrincipalOrdersComponent implements OnInit {
     // if exists date pickle and exist reservations
     if (this.idEvent && this.Reservations.length) {
 
-      let countres=0;
+      let countres = 0;
       this.Reservations.forEach((res: reservation) => {
 
-        countres ++;
+        countres++;
         if (this.idEvent == res._id) {
-          countres --;
+          countres--;
           let dateres = new Date(res.date + "T" + res.hour['value']);
 
           Swal.fire({
@@ -513,7 +543,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
                   if (res._id == order.typeOfServiceobj['idReservation']) {
 
-                    count -- ;
+                    count--;
                     order.orderStatus = "Cancelada";
                     // is necesary formater the typeOfService because the origin forma is alterate in formaterOrder
                     order.typeOfService = { type: "reservalo", tables: res['tables']['value'] }
@@ -533,12 +563,12 @@ export class PrincipalOrdersComponent implements OnInit {
                     })
 
                   } else {
-                    
+
                     if (count == this.orders2.length) {
+                      this.setColor();
                       this.reservationService.deleteReservation(res['_id']).subscribe(response => {
                         this.loadReservations();
-                        this.formaterOrders();
-
+                        // this.formaterOrders();
                         Swal.fire(
                           'mesa Liberada',
                         )
@@ -557,17 +587,16 @@ export class PrincipalOrdersComponent implements OnInit {
                   Swal.fire(
                     'mesa Liberada',
                   )
-                  return;
                 })
               }
             }
           })
 
         } else {
-          if(countres == this.Reservations.length){
+          if (countres == this.Reservations.length) {
 
             Swal.fire({
-  
+
               title: 'No existen reservas para la fecha',
               icon: 'warning',
               // showCancelButton: true,
@@ -575,7 +604,7 @@ export class PrincipalOrdersComponent implements OnInit {
               // cancelButtonColor: '#542b81',
               confirmButtonText: 'Aceptar',
               // cancelButtonText: 'No'
-  
+
             })
 
           }
@@ -642,12 +671,17 @@ export class PrincipalOrdersComponent implements OnInit {
 
           this.reservationService.postReservation(reservation).subscribe((res: reservation) => {
 
-            this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-            // this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
-            // this.Reservations.push(res);
+            if(this.idEvent = ""){
+
+              this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+              this.datereservation = "";
+            }
+            this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+            this.Reservations.push(res);
             // this.createOrder(reservation);
-            this.loadReservations();
+            // this.loadReservations();
             this.resetIds();
+            this.setColor();
             Swal.fire(
               'Reservación Guardada',
             )
