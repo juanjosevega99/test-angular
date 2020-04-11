@@ -45,7 +45,30 @@ export class PromoManagerComponent implements OnInit {
             this.promoService.getPromotions().subscribe(res => {
               res.forEach((promo: Promotions) => {
                 if (dish.idPromotion == promo.id) {
+                  let yf = promo.endDatePromotion[0]['year'];
+                  let mf = promo.endDatePromotion[0]['month'];
+                  let df = promo.endDatePromotion[0]['day'];
+                  let hf = promo.endDatePromotion[1]['hour'];
+                  let minf = promo.endDatePromotion[1]['minute'];
+
+                  let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
+                  let datee = new Date(yf, mf, df, hf, minf)
+                  let timee = datee.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+
+                  let ys = promo.promotionStartDate[0]['year'];
+                  let ms = promo.promotionStartDate[0]['month'];
+                  let ds = promo.promotionStartDate[0]['day'];
+                  let hs = promo.promotionStartDate[1]['hour'];
+                  let mins = promo.promotionStartDate[1]['minute'];
+
+                  let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
+                  let datei = new Date(ys, ms, ds, hs, mins)
+                  let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+                  let diff = dateF - dateS;
                   const obj: DishPromotion = {};
+
                   obj.id = promo.id;
                   obj.reference = dish.reference;
                   obj.nameDishesCategories = dish.nameDishesCategories;
@@ -53,9 +76,12 @@ export class PromoManagerComponent implements OnInit {
                   obj.photo = promo.photo;
                   obj.price = dish.price;
                   obj.namepromo = promo.name;
-                  obj.pricepromo = promo.price
-                  obj.promotionStartDate = promo.promotionStartDate
-                  obj.endDatePromotion = promo.endDatePromotion
+                  obj.pricepromo = promo.price;
+                  obj.daysPromo = diff / (1000 * 60 * 60 * 24);
+                  obj.promotionStartDate = promo.promotionStartDate;
+                  obj.timestart = timei;
+                  obj.endDatePromotion = promo.endDatePromotion;
+                  obj.timeend = timee;
                   obj.state = promo.state
                   this.dishPromoArray.push(obj)
                 }
@@ -70,6 +96,31 @@ export class PromoManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.dishesService.getDishes().subscribe(res => {
+      res.forEach((dish: Dishes) => {
+        if (res.length > 0) {
+          if (dish.idPromotion != null) {
+            this.promoService.getPromotions().subscribe(res => {
+              res.forEach((promo: Promotions) => {
+                const obj: DishPromotion = {};
+
+                let ys = promo.promotionStartDate[0]['year'];
+                let ms = promo.promotionStartDate[0]['month'];
+                let ds = promo.promotionStartDate[0]['day'];
+                let hs = promo.promotionStartDate[1]['hour'];
+                let mins = promo.promotionStartDate[1]['minute'];
+
+                let datei = new Date(ys, ms, ds, hs, mins)
+                let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+
+              })
+            })
+          }
+        }
+      })
+    })
   }
 
   //method for updating the state to active
@@ -102,9 +153,84 @@ export class PromoManagerComponent implements OnInit {
     this.swallUpdateState(idDish, newstate)
   }
 
-  //method for seaching specific values by name and code
+  //method for seaching a specific values by name and code
   search(termino?: string, id?: string) {
+    let count = 0;
+    let termsearch = '';
+    let idsearch = '';
 
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
+        count += 1;
+        termsearch = this.table.value[i];
+        idsearch = i;
+      }
+    }
+
+    console.log("campos llenos: ", count);
+    console.log('valueGenerate', this.generalsearch);
+
+    if (count > 0 && count < 2 && !this.generalsearch) {
+
+      //  un campo lleno
+      this.dishPromoArray = this.dishgetting.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
+        }
+      });
+
+      this.filteredArray = this.dishPromoArray;
+
+    } else if (count == 2 && this.generalsearch) {
+
+      let aux = this.dishPromoArray;
+
+      this.dishPromoArray = aux.filter(function (dish: Dishes) {
+        //We test each element of the object to see if one string matches the regexp.
+        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+          return dish;
+        }
+      });
+
+    }
+    else {
+
+      if (this.generalsearch) {
+
+      }
+
+      if (count == 0) {
+        // campos vacios
+        // existe general search?
+        this.dishPromoArray = this.dishgetting;
+
+        if (this.generalsearch) {
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
+        }
+      } else {
+
+        // campos llenos
+        // existe general search?
+
+        this.dishPromoArray = this.filteredArray.filter(function (dish: Dishes) {
+          //We test each element of the object to see if one string matches the regexp.
+          if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+            return dish;
+          }
+        });
+
+        if (this.generalsearch) {
+
+          console.log("buscando general searhc");
+          this.searchbyterm(this.generalsearch);
+
+        }
+      }
+    }
   }
 
   //method for general searching 

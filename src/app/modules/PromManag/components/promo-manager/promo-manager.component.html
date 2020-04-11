@@ -82,11 +82,11 @@
                     <td>{{menuPromo.price}}</td>
                     <td>{{menuPromo.namepromo}}</td>
                     <td>{{menuPromo.pricepromo}}</td>
-                    <td>10 dias</td>
+                    <td>{{menuPromo.daysPromo}} días</td>
                     <td>{{menuPromo.promotionStartDate[0].day}}/{{menuPromo.promotionStartDate[0].month}}/{{menuPromo.promotionStartDate[0].year}}</td>
-                    <td>x</td>
+                    <td>{{menuPromo.timestart}}</td>
                     <td>{{menuPromo.endDatePromotion[0].day}}/{{menuPromo.endDatePromotion[0].month}}/{{menuPromo.endDatePromotion[0].year}}</td>
-                    <td>10</td>
+                    <td>{{menuPromo.timeend}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
                             <input [checked]="menuPromo.state[0].check" value="{{menuPromo.id}}" type="radio" name={{i}}
