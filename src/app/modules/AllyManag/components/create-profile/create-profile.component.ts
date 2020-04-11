@@ -433,15 +433,21 @@ export class CreateProfileComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.chargeProfiles.deleteProfile(realId).subscribe()
-
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
-        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+        Swal.fire({
+          title: 'Eliminado',
+          text: "Tu perfil ha sido eliminado!",
+          icon: 'warning',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+          }
+        })
       }
     })
   }
+    
 
   async swallUpdate(realId) {
     Swal.fire({
@@ -480,7 +486,7 @@ export class CreateProfileComponent implements OnInit {
                 )
               ).subscribe()
           }
-          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe( res =>{
+          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
 
             Swal.fire({
               title: 'Guardado',
@@ -490,12 +496,12 @@ export class CreateProfileComponent implements OnInit {
               confirmButtonText: 'Ok!'
             }).then((result) => {
               if (result.value) {
-                this._router.navigate(['/main', 'profiles',this.identificatorbyRoot]);
+                this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
               }
             })
-            
-          } )
-         
+
+          })
+
         })
       }
     })

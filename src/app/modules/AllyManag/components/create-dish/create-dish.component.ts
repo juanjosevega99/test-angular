@@ -37,7 +37,7 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: [],
     idAccompaniments: [],
-    idPromotion: null
+    idPromotion: []
   }
 
   editDish: Dishes = {
@@ -54,7 +54,7 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: null,
     idAccompaniments: [],
-    idPromotion: null
+    idPromotion: []
   }
 
   promotionArray: Object = {
@@ -66,7 +66,8 @@ export class CreateDishComponent implements OnInit {
     price: null,
     photo: null,
     description: null,
-    preparationTime: []
+    preparationTime: [],
+    reference: null
   }
 
   //variables for receiving the profile that will be edited
@@ -547,22 +548,23 @@ export class CreateDishComponent implements OnInit {
                 this.urlDish = urlImage;
                 console.log(this.urlDish);
                 this.preDish['imageDishe'] = this.urlDish
-                this.dishes.postDishe(this.preDish).subscribe(message => { })
+                this.dishes.postDishe(this.preDish).subscribe(message => {
+                  Swal.fire({
+                    title: 'Guardado',
+                    text: "Tu nuevo plato ha sido creado!",
+                    icon: 'warning',
+                    confirmButtonColor: '#542b81',
+                    confirmButtonText: 'Ok!'
+                  }).then((result) => {
+                    if (result.value) {
+                      this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                    }
+                  })
+                })
               })
             }
             )
           ).subscribe()
-        Swal.fire({
-          title: 'Guardado',
-          text: "Tu nuevo plato ha sido creado!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
-          }
-        })
       }
     })
   }
@@ -578,17 +580,24 @@ export class CreateDishComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-        this.chargeDishes.deleteDishe(realId).subscribe()
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
-        this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+        this.chargeDishes.deleteDishe(realId).subscribe(message => {
+          Swal.fire({
+            title: 'Eliminado',
+            text: "Tu plato ha sido eliminado!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+            }
+          })
+        })
       }
     })
   }
 
-  swallUpdate(realId) {
+  async swallUpdate(realId) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -600,12 +609,28 @@ export class CreateDishComponent implements OnInit {
     }).then(async (result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.editDish);
-        this.chargeDishes.getDishes().subscribe(dishes => {
+        await this.chargeDishes.getDishes().subscribe(dishes => {
           let dish: Dishes = {};
           dish = dishes[this.identificatorbyRoot];
           this.editDish.numberOfModifications = this.editDish['numberOfModifications'] + 1;
           if (this.seeNewPhoto == false) {
             this.editDish.imageDishe = dish.imageDishe;
+
+            this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
+
+              Swal.fire({
+                title: 'Guardado',
+                text: "Tu plato ha sido actualizado!",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                }
+              })
+
+            })
           } else if (this.seeNewPhoto == true) {
             const id: Guid = Guid.create();
             const file = this.fileImagedish;
@@ -619,27 +644,24 @@ export class CreateDishComponent implements OnInit {
                     this.urlDish = urlImage;
                     console.log(this.urlDish);
                     this.preDish['imageDishe'] = this.urlDish
-                    this.chargeDishes.putDishe(realId, this.editDish).subscribe()
+                    this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
+                      Swal.fire({
+                        title: 'Guardado',
+                        text: "Tu plato ha sido actualizado!",
+                        icon: 'warning',
+                        confirmButtonColor: '#542b81',
+                        confirmButtonText: 'Ok!'
+                      }).then((result) => {
+                        if (result.value) {
+                          this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                        }
+                      })
+                    })
                   })
                 }
                 )
               ).subscribe()
           }
-          this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
-
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu plato ha sido actualizado!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
-              }
-            })
-            
-          })
         })
       }
     })
@@ -669,8 +691,9 @@ export class CreateDishComponent implements OnInit {
                 this.urlDish = urlImage;
                 console.log(this.urlDish);
                 this.promotionArray['photo'] = this.urlDish
+                /* this.promotionArray['reference'] = this.editDish.reference */
                 this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
-                  this.editDish.idPromotion = message._id;
+                  this.editDish.idPromotion.push(message._id)
                   this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {
                     Swal.fire({
                       title: 'Guardado',
