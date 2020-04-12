@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProfilesService } from 'src/app/services/profiles.service';
-import { ProfilesCategoriesService } from "src/app/services/profiles-categories.service";
-import { AngularFireStorage } from "@angular/fire/storage";
+//services
+import Swal from 'sweetalert2';
+import { CouponsService } from "src/app/services/coupons.service";
+import { TypeCouponService } from "src/app/services/typeCoupons.service";
+//models
+import { Coupons } from 'src/app/models/Coupons';
+import { TypeCoupon } from "src/app/models/typeCoupons";
+import { CouponList } from 'src/app/models/CouponList';
+//import for images 
+import { Guid } from "guid-typescript";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
-import { Guid } from "guid-typescript";
-import { ProfileList } from 'src/app/models/ProfileList';
-import { Profiles } from 'src/app/models/Profiles';
+import { AngularFireStorage } from "@angular/fire/storage";
 
 @Component({
   selector: 'app-create-coupon',
@@ -23,7 +27,7 @@ export class CreateCouponComponent implements OnInit {
     numberOfModifications: 0,
     nameAllies: null,
     nameHeadquarters: null,
-    typeOfCoupon: null,
+    idtypeOfCoupon: null,
     nameTypeOfCoupon: null,
     description: null,
     imageCoupon: null,
@@ -72,13 +76,13 @@ export class CreateCouponComponent implements OnInit {
   //   photo: null
   // }
 
-  //variables for categories
-  arrayCategorySelect: boolean = true;
-  otherCategoryInput: boolean = false;
-  addcategoryButton: boolean = true;
+  //variables for typeCoupon
+  arrayTypeCouponSelect: boolean = true;
+  otherTypeCouponInput: boolean = false;
+  addTypeCouponButton: boolean = true;
   selectAgainarray: boolean = false;
-  newCategory: String;
-  Categories: String[] = [];
+  newTypeCoupon: String;
+  typeCoupon: String[] = [];
 
 
   //variable for the state
@@ -93,20 +97,25 @@ export class CreateCouponComponent implements OnInit {
   dateModication: String;
   timesModification: String;
 
+  //variable for upload images
+  fileImagedish: any;
+
   //variables for receiving the profile that will be edited
   identificatorbyRoot: any;
   // buttonPut: boolean;
-  // seeNewPhoto: boolean;
+  seeNewPhoto: boolean;
   //variable for the loading
   loading: boolean;
 
   constructor(
     private _router: Router,
-    private activatedRoute: ActivatedRoute, ) {
+    private activatedRoute: ActivatedRoute, 
+    private typeCouponService: TypeCouponService,
+    private couponsServices: CouponsService) {
     //flags
     // this.loading = true;
     // this.buttonPut = true;
-    // this.seeNewPhoto = false;
+    this.seeNewPhoto = false;
     this.State = [{
       state: "active",
       check: false
@@ -127,6 +136,11 @@ export class CreateCouponComponent implements OnInit {
       }
       this.identificatorbyRoot = identificator
     })
+    //inicialization service with collections typeCoupons
+    this.typeCouponService.getTypeCoupon().subscribe( typeCoupon => {
+      this.typeCoupon = typeCoupon;
+      console.log(this.typeCoupon)
+    })
   }
 
   ngOnInit() {
@@ -135,12 +149,14 @@ export class CreateCouponComponent implements OnInit {
   goBackProfiles() {
     this._router.navigate(['/main', 'couponManager'])
   }
-  seeId(selected: any) {
-    // this.Categories.forEach((element: any) => {
-    //   if (selected == element.name) {
-    //     this.preProfile['idCharge'] = element.id
-    //   }
-    // })
+  
+  seeIdTypeCoupon(selected: any) {
+    
+    this.typeCoupon.forEach((element: any) => {
+      if (selected == element.name) {
+        this.preCoupon['idtypeOfCoupon'] = element.id
+      }
+    })
   }
 
   //Method for selecting the state
@@ -183,21 +199,40 @@ export class CreateCouponComponent implements OnInit {
       // })
     }
   }
-  //Method for showing new view in the categories field
-  handleBoxCategories(): boolean {
+  //Method for showing new view in the typeCoupon field
+  handleBoxTypeCoupons(): boolean {
 
-    if (this.addcategoryButton) {
-      return this.addcategoryButton = false,
-        this.otherCategoryInput = true,
+    if (this.addTypeCouponButton) {
+      return this.addTypeCouponButton = false,
+        this.otherTypeCouponInput = true,
         this.selectAgainarray = true,
-        this.arrayCategorySelect = false
+        this.arrayTypeCouponSelect = false
     } else {
-      return this.addcategoryButton = true,
-        this.otherCategoryInput = false,
+      return this.addTypeCouponButton = true,
+        this.otherTypeCouponInput = false,
         this.selectAgainarray = false,
-        this.arrayCategorySelect = true
+        this.arrayTypeCouponSelect = true
     }
   }
+  //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
+  addTypeCoupon(name: String) {
+    if (name != null) {
+      let newitem = name;
+      let newTypeCoupon: object = {
+        name: newitem
+      }
+      this.swallSaveTypeCoupon(newTypeCoupon)
+
+      this.handleBoxTypeCoupons()
+    } else { alert("Ingrese el nuevo cupon") }
+
+  }
+
+  deleteTypeCoupon() {
+    let typeCouponSelected = this.preCoupon['idtypeOfCoupon']
+    this.swallDeleteTypeCoupon(typeCouponSelected)
+  }
+
 
   //Metod for the admission and modification date
   tick(): void {
@@ -219,9 +254,90 @@ export class CreateCouponComponent implements OnInit {
 
     }
   }
-  //save new profile
-  saveProfile() {
-    // this.swallSave()
+  //Method for photo of the dish
+  onPhotoSelected($event) {
+    let input = $event.target;
+    if (input.files && input.files[0]) {
+      this.seeNewPhoto = true;
+      console.log(this.seeNewPhoto);
+
+      var reader = new FileReader();
+      reader.onload = function (e: any) {
+        $('#photo')
+          .attr('src', e.target.result)
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+    return this.fileImagedish = input.files[0]
+  }
+  // //save new profile
+  // saveProfile() {
+  //   // this.swallSave()
+  // }
+  //sweet alerts
+  swallSaveTypeCoupon(newTypeCoupon: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar este nuevo cupon!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.typeCouponService.postTypeCoupon(newTypeCoupon).subscribe(() => {
+          this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
+            this.typeCoupon = typeCoupon;
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo cupon ha sido creado',
+          'success',
+        )
+      }
+    })
+  }
+  swallDeleteTypeCoupon(typeCouponSelected: string) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar este cupon!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+      this.typeCouponService.deleteTypeCoupon(typeCouponSelected).subscribe(()=>{
+        this.typeCouponService.getTypeCoupon().subscribe( typeCoupon => {
+          this.typeCoupon = typeCoupon;
+          console.log(this.typeCoupon)
+        })
+      })
+        // this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
+        //   this.typeCoupon = typeCoupon;
+        //   this.typeCoupon.forEach((element: any) => {
+        //     let coupon: any = {
+        //       id: element.id,
+        //       name: element.name
+        //     }
+        //     if (coupon.name == typeCouponSelected) {
+        //       this.typeCouponService.deleteTypeCoupon(coupon.id).subscribe(() => {
+        //         this.typeCouponService.getTypeCoupon().subscribe(coupons => {
+        //           this.typeCoupon = coupons;
+        //         })
+        //       })
+        //     }
+        //   });
+        // })
+        Swal.fire(
+          'Eliminado!',
+          'success',
+        )
+      }
+    })
   }
 
 }

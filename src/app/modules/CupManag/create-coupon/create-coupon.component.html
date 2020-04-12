@@ -62,14 +62,14 @@
                 <div class="col-md-7">
                     <div class="input-group align-items-center">
                         <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp2" #f="ngModel"
-                            [(ngModel)]="preCoupon.expirationDate[0]" ngbDatepicker #d="ngbDatepicker" required
+                            [(ngModel)]="preCoupon.expirationDate" ngbDatepicker #d="ngbDatepicker" required
                             [ngClass]="{'is-invalid': (!f.valid && f.touched),'is-valid':(f.valid)}">
                         <div class="input-group-append mr-3">
                             <a (click)="d.toggle()" class="btn btn-outline-primary">
                                 <i class="far fa-calendar-alt"></i>
                             </a>
                         </div>
-                        <ngb-timepicker name="dfn" [(ngModel)]="promotionArray.endDatePromotion[1]" #ft="ngModel"
+                        <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime" #ft="ngModel"
                             required [ngClass]="{'is-invalid': (!ft.valid && ft.touched),'is-valid':(ft.valid)}"
                             [meridian]="meridian"></ngb-timepicker>
                         <div class="col-md-4" *ngIf="f.errors?.required" class="invalid-feedback">*Campo fecha y hora es
@@ -100,36 +100,36 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Perfil</label>
+                <label class="col-md-5 col-form-label">Tipo de cupón</label>
                 <div class="col-md-7">
                     <div class="input-group">
 
-                        <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="nameTypeOfCoupon" #nameTypeOfCoupon="ngModel"
+                        <select *ngIf="arrayTypeCouponSelect" class="form-control mr-2" name="nameTypeOfCoupon" #nameTypeOfCoupon="ngModel"
                             required [ngClass]="{'is-invalid': (!nameTypeOfCoupon.valid ),'is-valid':(nameTypeOfCoupon.valid) }"
-                            [(ngModel)]="preCoupon.nameTypeOfCoupon" #select (change)="seeId(select.value)" >
-                            <option selected>{{preCoupon.nameTypeOfCoupon}}</option>
-                            <option *ngFor="let profile of Categories">
-                                {{profile.name}}
+                            [(ngModel)]="preCoupon.nameTypeOfCoupon" #select (change)="seeIdTypeCoupon(select.value)" >
+                            <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                            <option *ngFor="let coupon of typeCoupon">
+                                {{coupon.name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otro perfil" required #category="ngModel"
-                            [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}"
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCategory" type="text"
-                            name="otherCategory">
+                        <input *ngIf="otherTypeCouponInput" placeholder="Otro cupon" required #typeCoupon="ngModel"
+                            [ngClass]="{'is-invalid': (!typeCoupon.valid && typeCoupon.touched ),'is-valid':(typeCoupon.valid)}"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherTypeCoupon" type="text"
+                            name="otherTypeCoupon">
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                            (click)="handleBoxCategories()"> Cancelar</button>
+                            (click)="handleBoxTypeCoupons()"> Cancelar</button>
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                            (click)="addCategory(otherCategory)"> Guardar</button>
+                            (click)="addTypeCoupon(otherTypeCoupon)"> Guardar</button>
 
-                        <button *ngIf="addcategoryButton" (click)="handleBoxCategories()"
+                        <button *ngIf="addTypeCouponButton" (click)="handleBoxTypeCoupons()"
                             class="btn1 btn btn-outline-primary">
                             Otro
                         </button>
 
-                        <button *ngIf="addcategoryButton" (click)=" deleteCategory()" type="button"
+                        <button *ngIf="addTypeCouponButton" (click)=" deleteTypeCoupon()" type="button"
                             class="btn1 btn btn-outline-primary">
                             Borrar
                         </button>
@@ -141,17 +141,23 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Usuario</label>
+                <label class="col-md-5 col-form-label">Nombre cupón</label>
                 <div class="col-md-7">
-                    <label class="form-control" >{{preProfile.nameAllie}}{{preProfile.identification}}</label>
+                    <input class="form-control" type="text"  name="nameCoupon"
+                        #nameCoupon="ngModel" id="id" (change)="generateCode($event)"
+                        [ngClass]="{'is-invalid': (!nameCoupon.valid && nameCoupon.touched),'is-valid':(nameCoupon.valid) }"
+                        [(ngModel)]="preCoupon.name" required>
+                    <div *ngIf="nameCoupon.errors?.required" class="invalid-feedback">*Este campo es requerido
+                    </div>
+                    <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
 
         </section>
 
-        <section class="col-5">
+         <section class="col-5">
 
-            <div class="form-group row">
+         <!--   <div class="form-group row">
                 <label class="col-md-5 col-form-label">Permisos de informes</label>
                 <div class="col-md-7">
                     <div class="input-group">
@@ -207,19 +213,19 @@
                         correo</div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Foto del perfil</label>
+                <label class="col-md-5 col-form-label">Foto del cupón</label>
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
                         <div class="photo"> 
-                            <img [src]="preProfile.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
+                            <img [src]="preCoupon.imageCoupon" id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
-                            <input type="file" name="photo" (change)="onPhotoSelected($event)" />
+                            <input type="file" name="photo" (change)="onPhotoSelected($event)" /> 
                         </div>
                     </div>
 
@@ -232,7 +238,7 @@
 
             <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
             <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button>
-        </section>
+        </section> 
 
     </form>
 

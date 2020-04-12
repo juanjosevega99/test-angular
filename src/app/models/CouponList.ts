@@ -1,4 +1,4 @@
-export class Coupons {
+export class CouponList {
     id?:string;
     name?:string;
     numberOfModifications?:number;
@@ -7,8 +7,8 @@ export class Coupons {
     idtypeOfCoupon?:string;
     nameTypeOfCoupon?:string;
     state?:boolean;
-    createDate?:Date;
-    expirationDate?:Date;
+    createDate?:string;
+    expirationDate?:string;
     codeToRedeem?:string;
     termsAndConditions?:string;
     transferable?:boolean;
@@ -21,7 +21,7 @@ export class Coupons {
     nameDishes?:string;
     numberOfUnits?:number;
     discountRate?:number;
-    creationTime?:Date;
-    expirationTime?:Date;
+    creationTime?:string;
+    expirationTime?:string;
     code?:string;
 }
