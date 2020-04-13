@@ -19,5 +19,5 @@ export class DishPromotion {
     photo?:string;
     daysPromo?:number;
     timestart?:string;
-    timeend?:string;
+    timeend?:string
 }

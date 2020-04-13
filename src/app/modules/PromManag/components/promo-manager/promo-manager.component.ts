@@ -7,6 +7,7 @@ import { Promotions } from 'src/app/models/Promotions';
 import { DishPromotion } from "src/app/models/DishPromotion";
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Guid } from "guid-typescript";
 
 @Component({
   selector: 'app-promo-manager',
@@ -71,7 +72,6 @@ export class PromoManagerComponent implements OnInit {
 
                     let diff = dateF - dateS;
                     const obj: DishPromotion = {};
-                    
 
                     obj.id = promo.id;
                     obj.reference = `${dish.reference}-${item+1}`;
@@ -89,20 +89,16 @@ export class PromoManagerComponent implements OnInit {
                     obj.state = promo.state;
                     this.dishPromoArray.push(obj)
 
-                    
                     const promee: Promotions = {reference: `${dish.reference}-${item+1}`};
                     this.promoService.putPromotion(iditem,promee).subscribe(res=>{})
-                    
                   }
                 })
               })
-
             }
           }
         }
       })
     })
-
   }
 
   ngOnInit() {

@@ -355,7 +355,7 @@
 
                     <div class="row align-items-center ">
                         <div class="photo">
-                            <img id="photo" width="100px" height="100px" title="No hay foto subida">
+                            <img [src]="promotionArray.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -454,10 +454,15 @@
                         adicional</a>
                 </div>
             </section>
-            <section class="col-6 d-flex" style="justify-content: center;">
+            <section *ngIf="!selectuser" class="col-6 d-flex" style="justify-content: center;">
                 <div class="col-6 d-flex" style="padding: 1rem;">
                     <a [routerLink]="['/main/createDish',-2]" class="btn btn-outline-primary btn-lg">Ingresar
                         promoción</a>
+                </div>
+            </section>
+            <section *ngIf="selectuser" class="col-6 d-flex" style="justify-content: center;">
+                <div class="col-6 d-flex" style="padding: 1rem;">
+                    <a [routerLink]="['/main','userManager']" class="btn btn-outline-primary btn-lg">Seleccionar usuarios</a>
                 </div>
             </section>
         </section>
@@ -469,8 +474,10 @@
                 class="btn btn-outline-primary btn-lg">Actualizar</button>
         </section>
         <section *ngIf="promotion" class="col-12 d-flex" style="justify-content: center;">
-            <button  type="button" (click)="savePromotion()" [disabled]="!shape.valid"
-                class="btn btn-outline-primary btn-lg">Guardar promoción</button> 
+            <button *ngIf="!selectuser" type="button" (click)="savePromotion()" [disabled]="!shape.valid"
+                class="btn btn-outline-primary btn-lg">Guardar promoción</button>
+                <button *ngIf="selectuser" type="button" (click)="putPromotion()" [disabled]="!shape.valid"
+                class="btn btn-outline-primary btn-lg">Guardar promoción</button>  
         </section>
 
     </form>
