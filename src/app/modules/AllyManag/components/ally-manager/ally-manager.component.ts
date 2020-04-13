@@ -21,6 +21,8 @@ export class AllyManagerComponent implements OnInit {
   manageHq: boolean;
   manageProm: boolean;
 
+  //variable to obtain headquaerters
+
   //varibales to obtain data
   // attentionSchedule: string;
   arrayAllyManager: any[] = []

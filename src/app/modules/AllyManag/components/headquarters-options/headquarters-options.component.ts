@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HeadquartersService } from 'src/app/services/headquarters.service';
 import { Headquarters } from 'src/app/models/Headquarters';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AlliesService } from 'src/app/services/allies.service';
+import { Allies } from 'src/app/models/Allies';
 
 
 @Component({
@@ -11,53 +13,56 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class HeadquartersOptionsComponent implements OnInit {
 
-  headquartersgetting: Headquarters[] = [];
-  headquarters = this.headquartersgetting;
-
   //variables of idAlly
-  idAlly:number;
+  idAlly: number;
+  headquarterByAlly: Headquarters[] = [];
 
-  constructor(private headquarterService: HeadquartersService,
+  constructor(private headquarterService: HeadquartersService, private alliesService: AlliesService,
     private _router: Router,
     private _activateRoute: ActivatedRoute, ) {
 
-      this._activateRoute.params.subscribe(params => {
-        console.log('Parametro', params['id']);
-        this.idAlly =  params['id']
-      });
-      
-      this.headquarterService.getHeadquarters().subscribe(res => {
-    
-      res.forEach((headquarters: Headquarters) => {
-        const dates: Headquarters = {};
-        dates.id = headquarters.id;
-        dates.name = headquarters.name
-        this.headquartersgetting.push(dates)
-        console.log(this.headquartersgetting);
-
-      })
-
-    })
-    /*  //inicialization service with collections dishes-categories
-    this.dishCategory.getDishCategory().subscribe(dishesCat => {
-      this.dishesCategories = dishesCat;
-    }) */
+    this._activateRoute.params.subscribe(params => {
+      console.log('Parametro', params['id']);
+      this.idAlly = params['id']
+      if (this.idAlly >= 0) {
+        this.getHeadquarters(this.idAlly)
+      }
+    });
   }
 
   ngOnInit() {
   }
+
+  getHeadquarters(identificator) {
+    this.alliesService.getAllies().subscribe(allies => {
+      let allie: Allies = {}
+      allie = allies[identificator]
+      let realId = allie.id
+      this.headquarterService.getHeadquarters().subscribe(headquarters => {
+        headquarters.forEach((headquarters: Headquarters) => {
+          if (headquarters.idAllies == realId) {
+            const dates: Headquarters = {};
+            dates.id = headquarters.id;
+            dates.name = headquarters.name
+            this.headquarterByAlly.push(dates)
+          }
+        })
+      })
+
+    })
+  }
   createHeadquart() {
-    this._router.navigate( ['/main','createHeadquarter',this.idAlly] )
+    this._router.navigate(['/main', 'createHeadquarter', this.idAlly])
   }
-  editAlly(){
-    this._router.navigate( ['/main','editAlly',this.idAlly] )
+  editAlly() {
+    this._router.navigate(['/main', 'editAlly', this.idAlly])
   }
-  editMenu(){
-    this._router.navigate( ['/main','editmenu',this.idAlly] )
+  editMenu() {
+    this._router.navigate(['/main', 'editmenu', this.idAlly])
 
   }
-  profiles(){
-    this._router.navigate( ['/main','profiles',this.idAlly] )
+  profiles() {
+    this._router.navigate(['/main', 'profiles', this.idAlly])
   }
 
 }

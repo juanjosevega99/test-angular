@@ -46,7 +46,8 @@ export class PromotionsService {
               photo: promotions.photo,
               description: promotions.description,
               preparationTime: promotions.preparationTime,
-              reference: promotions.reference
+              reference: promotions.reference,
+              numberOfModifications : promotions.numberOfModifications
             };
             return obj;
           })
@@ -71,7 +72,8 @@ export class PromotionsService {
               photo: promotions.photo,
               description: promotions.description,
               preparationTime: promotions.preparationTime,
-              reference: promotions.reference
+              reference: promotions.reference,
+              numberOfModifications : promotions.numberOfModifications
             };
             return obj;
           })
