@@ -141,12 +141,14 @@ export class PrincipalOrdersComponent implements OnInit {
 
       if (this.profile.idHedquart == reservation.idHeadquart) {
         
-        if(this.idEvent == ""){
+        if(this.idEvent == "" && this.datereservation != "" ){
           this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
           this.datereservation = "";
         }
         this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
         this.Reservations.push(reservation);
+        this.idEvent = "";
+        this.resetIds();
 
       }
     })
@@ -403,9 +405,8 @@ export class PrincipalOrdersComponent implements OnInit {
 
       if (this.Reservations.length) {
 
-        this.Reservations.forEach((res: any) => {
-
-          document.getElementById(res.hour['id']).style.backgroundColor = background;
+        this.Reservations.forEach((res: reservation) => {
+          document.getElementById(res['hour']['id']).style.backgroundColor = background;
           document.getElementById(res.tables['id']).style.backgroundColor = background;
           document.getElementById(res.people['id']).style.backgroundColor = background;
         })
@@ -580,10 +581,10 @@ export class PrincipalOrdersComponent implements OnInit {
 
                 })
               } else {
+                this.setColor();
                 this.reservationService.deleteReservation(res['_id']).subscribe(response => {
                   this.loadReservations();
-                  this.formaterOrders();
-
+                  // this.formaterOrders();
                   Swal.fire(
                     'mesa Liberada',
                   )
@@ -671,13 +672,14 @@ export class PrincipalOrdersComponent implements OnInit {
 
           this.reservationService.postReservation(reservation).subscribe((res: reservation) => {
 
-            if(this.idEvent = ""){
+            if(this.idEvent = "" && this.datereservation != ""){
 
               this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
               this.datereservation = "";
             }
-            this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
-            this.Reservations.push(res);
+            // this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+            // this.Reservations.push(res);
+            this.idEvent = "";
             // this.createOrder(reservation);
             // this.loadReservations();
             this.resetIds();

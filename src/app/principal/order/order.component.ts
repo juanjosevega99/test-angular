@@ -5,6 +5,10 @@ import { OrdersService } from 'src/app/services/orders.service';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+// modal
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+
 
 @Component({
   selector: 'app-order',
@@ -42,6 +46,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     color: "#d2d2d2"
   }
 
+  // rating
+  currentRate = 3;
+
   @Input()
   order: OrderByUser = {};
 
@@ -50,7 +57,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   @Output() indexOrder: EventEmitter<number>;
 
-  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService) {
+  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
     this.indexOrder = new EventEmitter();
   }
 
@@ -73,6 +80,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   showDetail() {
     console.log("clic en item");
     this.showdetail = !this.showdetail;
+  }
+
+  updateStatePidelo(content){
+    this.modalService.open(content, { centered: true });
   }
 
   changeStatusOrder(minuts: number) {
