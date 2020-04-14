@@ -249,19 +249,19 @@ export class CreateCouponComponent implements OnInit {
             this.happyHour = false,
             this.referred = false
         }
-        if (element.name == "2X1") {
-           return this.typeSpecialDays = true,
+        if (element.name == "2x1") {
+           return this.typeSpecialDays = false,
             this.twhoByOne = false,
             this.variousDiscounts = false,
             this.happyHour = false,
             this.referred = false
         }
         if (element.name == "Descuentos 10, 20, 30, 40 % ") {
-          return this.typeSpecialDays = false,
+          return this.typeSpecialDays = true, // todo 
             this.twhoByOne = false,
-            this.variousDiscounts = true,
+            this.variousDiscounts = false,
             this.happyHour = false,
-            this.referred = true
+            this.referred = false
         }
         if (element.name == "Happy Hour") {
           return this.typeSpecialDays = false,
