@@ -28,7 +28,8 @@ export class PromoManagerComponent implements OnInit {
   dishgetting: DishPromotion[] = [];
   dishPromoArray = this.dishgetting;
 
-
+  today: Date;
+  writeNewDates: boolean;
 
   constructor(private dishesService: DishesService, private promoService: PromotionsService) {
 
@@ -37,6 +38,9 @@ export class PromoManagerComponent implements OnInit {
       "reference": new FormControl(),
       "name": new FormControl(),
     })
+
+    this.writeNewDates = false;
+
 
     //inicialization of dishes
     this.dishesService.getDishes().subscribe(res => {
@@ -71,10 +75,16 @@ export class PromoManagerComponent implements OnInit {
                     let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
                     let diff = dateF - dateS;
+
+                    this.today = new Date()
+                    let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+
                     const obj: DishPromotion = {};
 
                     obj.id = promo.id;
-                    obj.reference = `${dish.reference}-${item+1}`;
+                    obj.reference = `${dish.reference}-${item + 1}`;
                     obj.nameDishesCategories = dish.nameDishesCategories;
                     obj.name = dish.name;
                     obj.photo = promo.photo;
@@ -86,11 +96,35 @@ export class PromoManagerComponent implements OnInit {
                     obj.timestart = timei;
                     obj.endDatePromotion = promo.endDatePromotion;
                     obj.timeend = timee;
-                    obj.state = promo.state;
+                    /* obj.state = promo.state; */
+
+
+                    if (datetoday >= datestart && datetoday <= datefinish) {
+                      /* obj.state = promo.state */
+                      let stateDate: any = [{
+                        state: "active",
+                        check: true
+                      }, {
+                        state: "inactive",
+                        check: false
+                      }]
+                      obj.state = stateDate
+                    } else if (datetoday > datefinish || datetoday < datestart) {
+                      let stateDate: any = [{
+                        state: "active",
+                        check: false
+                      }, {
+                        state: "inactive",
+                        check: true
+                      }]
+                      obj.state = stateDate
+                    }
+
                     this.dishPromoArray.push(obj)
 
-                    const promee: Promotions = {reference: `${dish.reference}-${item+1}`};
-                    this.promoService.putPromotion(iditem,promee).subscribe(res=>{})
+                    const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
+                    this.promoService.putPromotion(iditem, promee).subscribe(res => { })
+
                   }
                 })
               })
@@ -102,6 +136,7 @@ export class PromoManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   //method for updating the state to active
@@ -132,6 +167,44 @@ export class PromoManagerComponent implements OnInit {
     }
 
     this.swallUpdateState(idDish, newstate)
+  }
+
+  //method for very the dates
+  verifyDate(idDish, i) {
+    this.promoService.getPromotions().subscribe(promos => {
+      let promo = promos[i]
+      let yf = promo.endDatePromotion[0]['year'];
+      let mf = promo.endDatePromotion[0]['month'];
+      let df = promo.endDatePromotion[0]['day'];
+      let hf = promo.endDatePromotion[1]['hour'];
+      let minf = promo.endDatePromotion[1]['minute'];
+
+      let datee = new Date(yf, mf, df, hf, minf)
+
+      let ys = promo.promotionStartDate[0]['year'];
+      let ms = promo.promotionStartDate[0]['month'];
+      let ds = promo.promotionStartDate[0]['day'];
+      let hs = promo.promotionStartDate[1]['hour'];
+      let mins = promo.promotionStartDate[1]['minute'];
+
+      let datei = new Date(ys, ms, ds, hs, mins)
+
+      this.today = new Date()
+      let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+      let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+      let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+
+      if (datetoday > datefinish) {
+        this.writeNewDates= true;
+    
+        
+      }
+      else {
+        this.changeStateA(idDish)
+        console.log("NO vas a cambiar");
+      }
+    })
+
   }
 
   //method for seaching a specific values by name and code
@@ -279,4 +352,6 @@ export class PromoManagerComponent implements OnInit {
       }
     })
   }
+
+ 
 }

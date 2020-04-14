@@ -50,7 +50,7 @@
                 <div class="col-md-7">
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
-                        <input class="form-check-input " type="radio" name="radio2" id="radio3"
+                        <input disabled class="form-check-input " type="radio" name="radio2" id="radio3"
                             [checked]="State[0].check" #activeProm [checked]="promotionArray.state[0].check"
                             (change)="selectedStateProm(activeProm.value,activeProm.checked,inactiveProm.value,inactiveProm.checked)"
                             [value]="State[0].state">
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="radio radio-danger m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio4"
+                        <input disabled class="form-check-input" type="radio" name="radio2" id="radio4"
                             [checked]="State[1].check" #inactiveProm [checked]="promotionArray.state[1].check"
                             (change)="selectedStateProm(activeProm.value,activeProm.checked,inactiveProm.value,inactiveProm.checked)"
                             [value]="State[1].state">

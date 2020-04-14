@@ -20,4 +20,5 @@ export class DishPromotion {
     daysPromo?:number;
     timestart?:string;
     timeend?:string
+    idHeadquarter?:string;
 }
