@@ -7,6 +7,7 @@ import { Promotions } from 'src/app/models/Promotions';
 import { DishPromotion } from "src/app/models/DishPromotion";
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Guid } from "guid-typescript";
 
 @Component({
   selector: 'app-promo-manager',
@@ -27,7 +28,8 @@ export class PromoManagerComponent implements OnInit {
   dishgetting: DishPromotion[] = [];
   dishPromoArray = this.dishgetting;
 
-
+  today: Date;
+  writeNewDates: boolean;
 
   constructor(private dishesService: DishesService, private promoService: PromotionsService) {
 
@@ -37,90 +39,104 @@ export class PromoManagerComponent implements OnInit {
       "name": new FormControl(),
     })
 
+    this.writeNewDates = false;
+
+
     //inicialization of dishes
     this.dishesService.getDishes().subscribe(res => {
       res.forEach((dish: Dishes) => {
         if (res.length > 0) {
           if (dish.idPromotion != null) {
-            this.promoService.getPromotions().subscribe(res => {
-              res.forEach((promo: Promotions) => {
-                if (dish.idPromotion == promo.id) {
-                  let yf = promo.endDatePromotion[0]['year'];
-                  let mf = promo.endDatePromotion[0]['month'];
-                  let df = promo.endDatePromotion[0]['day'];
-                  let hf = promo.endDatePromotion[1]['hour'];
-                  let minf = promo.endDatePromotion[1]['minute'];
+            for (let item = 0; item < dish.idPromotion.length; item++) {
+              let iditem = dish.idPromotion[item];
 
-                  let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
-                  let datee = new Date(yf, mf, df, hf, minf)
-                  let timee = datee.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+              this.promoService.getPromotions().subscribe(res => {
+                res.forEach((promo: Promotions) => {
+                  if (iditem == promo.id) {
+                    let yf = promo.endDatePromotion[0]['year'];
+                    let mf = promo.endDatePromotion[0]['month'];
+                    let df = promo.endDatePromotion[0]['day'];
+                    let hf = promo.endDatePromotion[1]['hour'];
+                    let minf = promo.endDatePromotion[1]['minute'];
+
+                    let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
+                    let datee = new Date(yf, mf, df, hf, minf)
+                    let timee = datee.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
 
-                  let ys = promo.promotionStartDate[0]['year'];
-                  let ms = promo.promotionStartDate[0]['month'];
-                  let ds = promo.promotionStartDate[0]['day'];
-                  let hs = promo.promotionStartDate[1]['hour'];
-                  let mins = promo.promotionStartDate[1]['minute'];
+                    let ys = promo.promotionStartDate[0]['year'];
+                    let ms = promo.promotionStartDate[0]['month'];
+                    let ds = promo.promotionStartDate[0]['day'];
+                    let hs = promo.promotionStartDate[1]['hour'];
+                    let mins = promo.promotionStartDate[1]['minute'];
 
-                  let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
-                  let datei = new Date(ys, ms, ds, hs, mins)
-                  let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                    let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
+                    let datei = new Date(ys, ms, ds, hs, mins)
+                    let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
-                  let diff = dateF - dateS;
-                  const obj: DishPromotion = {};
+                    let diff = dateF - dateS;
 
-                  obj.id = promo.id;
-                  obj.reference = dish.reference;
-                  obj.nameDishesCategories = dish.nameDishesCategories;
-                  obj.name = dish.name;
-                  obj.photo = promo.photo;
-                  obj.price = dish.price;
-                  obj.namepromo = promo.name;
-                  obj.pricepromo = promo.price;
-                  obj.daysPromo = diff / (1000 * 60 * 60 * 24);
-                  obj.promotionStartDate = promo.promotionStartDate;
-                  obj.timestart = timei;
-                  obj.endDatePromotion = promo.endDatePromotion;
-                  obj.timeend = timee;
-                  obj.state = promo.state
-                  this.dishPromoArray.push(obj)
-                }
+                    this.today = new Date()
+                    let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+
+                    const obj: DishPromotion = {};
+
+                    obj.id = promo.id;
+                    obj.reference = `${dish.reference}-${item + 1}`;
+                    obj.nameDishesCategories = dish.nameDishesCategories;
+                    obj.name = dish.name;
+                    obj.photo = promo.photo;
+                    obj.price = dish.price;
+                    obj.namepromo = promo.name;
+                    obj.pricepromo = promo.price;
+                    obj.daysPromo = diff / (1000 * 60 * 60 * 24);
+                    obj.promotionStartDate = promo.promotionStartDate;
+                    obj.timestart = timei;
+                    obj.endDatePromotion = promo.endDatePromotion;
+                    obj.timeend = timee;
+                    /* obj.state = promo.state; */
+
+
+                    if (datetoday >= datestart && datetoday <= datefinish) {
+                      /* obj.state = promo.state */
+                      let stateDate: any = [{
+                        state: "active",
+                        check: true
+                      }, {
+                        state: "inactive",
+                        check: false
+                      }]
+                      obj.state = stateDate
+                    } else if (datetoday > datefinish || datetoday < datestart) {
+                      let stateDate: any = [{
+                        state: "active",
+                        check: false
+                      }, {
+                        state: "inactive",
+                        check: true
+                      }]
+                      obj.state = stateDate
+                    }
+
+                    this.dishPromoArray.push(obj)
+
+                    const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
+                    this.promoService.putPromotion(iditem, promee).subscribe(res => { })
+
+                  }
+                })
               })
-            })
-
+            }
           }
         }
       })
     })
-
   }
 
   ngOnInit() {
 
-    this.dishesService.getDishes().subscribe(res => {
-      res.forEach((dish: Dishes) => {
-        if (res.length > 0) {
-          if (dish.idPromotion != null) {
-            this.promoService.getPromotions().subscribe(res => {
-              res.forEach((promo: Promotions) => {
-                const obj: DishPromotion = {};
-
-                let ys = promo.promotionStartDate[0]['year'];
-                let ms = promo.promotionStartDate[0]['month'];
-                let ds = promo.promotionStartDate[0]['day'];
-                let hs = promo.promotionStartDate[1]['hour'];
-                let mins = promo.promotionStartDate[1]['minute'];
-
-                let datei = new Date(ys, ms, ds, hs, mins)
-                let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-
-              })
-            })
-          }
-        }
-      })
-    })
   }
 
   //method for updating the state to active
@@ -151,6 +167,44 @@ export class PromoManagerComponent implements OnInit {
     }
 
     this.swallUpdateState(idDish, newstate)
+  }
+
+  //method for very the dates
+  verifyDate(idDish, i) {
+    this.promoService.getPromotions().subscribe(promos => {
+      let promo = promos[i]
+      let yf = promo.endDatePromotion[0]['year'];
+      let mf = promo.endDatePromotion[0]['month'];
+      let df = promo.endDatePromotion[0]['day'];
+      let hf = promo.endDatePromotion[1]['hour'];
+      let minf = promo.endDatePromotion[1]['minute'];
+
+      let datee = new Date(yf, mf, df, hf, minf)
+
+      let ys = promo.promotionStartDate[0]['year'];
+      let ms = promo.promotionStartDate[0]['month'];
+      let ds = promo.promotionStartDate[0]['day'];
+      let hs = promo.promotionStartDate[1]['hour'];
+      let mins = promo.promotionStartDate[1]['minute'];
+
+      let datei = new Date(ys, ms, ds, hs, mins)
+
+      this.today = new Date()
+      let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+      let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+      let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+
+      if (datetoday > datefinish) {
+        this.writeNewDates= true;
+    
+        
+      }
+      else {
+        this.changeStateA(idDish)
+        console.log("NO vas a cambiar");
+      }
+    })
+
   }
 
   //method for seaching a specific values by name and code
@@ -298,4 +352,6 @@ export class PromoManagerComponent implements OnInit {
       }
     })
   }
+
+ 
 }

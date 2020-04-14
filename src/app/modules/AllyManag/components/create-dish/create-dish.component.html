@@ -50,7 +50,7 @@
                 <div class="col-md-7">
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
-                        <input class="form-check-input " type="radio" name="radio2" id="radio3"
+                        <input disabled class="form-check-input " type="radio" name="radio2" id="radio3"
                             [checked]="State[0].check" #activeProm [checked]="promotionArray.state[0].check"
                             (change)="selectedStateProm(activeProm.value,activeProm.checked,inactiveProm.value,inactiveProm.checked)"
                             [value]="State[0].state">
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="radio radio-danger m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio4"
+                        <input disabled class="form-check-input" type="radio" name="radio2" id="radio4"
                             [checked]="State[1].check" #inactiveProm [checked]="promotionArray.state[1].check"
                             (change)="selectedStateProm(activeProm.value,activeProm.checked,inactiveProm.value,inactiveProm.checked)"
                             [value]="State[1].state">
@@ -155,10 +155,16 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div *ngIf="!promotion" class="form-group row">
                 <label class="col-md-5 col-form-label">Número de modificaciones</label>
                 <div class="col-md-7">
                     <label class="form-control">{{preDish.numberOfModifications}}</label>
+                </div>
+            </div>
+            <div *ngIf="promotion" class="form-group row">
+                <label class="col-md-5 col-form-label">Número de modificaciones</label>
+                <div class="col-md-7">
+                    <label class="form-control">{{promotionArray.numberOfModifications}}</label>
                 </div>
             </div>
 
@@ -355,7 +361,7 @@
 
                     <div class="row align-items-center ">
                         <div class="photo">
-                            <img id="photo" width="100px" height="100px" title="No hay foto subida">
+                            <img [src]="promotionArray.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -454,10 +460,15 @@
                         adicional</a>
                 </div>
             </section>
-            <section class="col-6 d-flex" style="justify-content: center;">
+            <section *ngIf="!selectuser" class="col-6 d-flex" style="justify-content: center;">
                 <div class="col-6 d-flex" style="padding: 1rem;">
                     <a [routerLink]="['/main/createDish',-2]" class="btn btn-outline-primary btn-lg">Ingresar
                         promoción</a>
+                </div>
+            </section>
+            <section *ngIf="selectuser" class="col-6 d-flex" style="justify-content: center;">
+                <div class="col-6 d-flex" style="padding: 1rem;">
+                    <a [routerLink]="['/main','userManager']" class="btn btn-outline-primary btn-lg">Seleccionar usuarios</a>
                 </div>
             </section>
         </section>
@@ -469,8 +480,10 @@
                 class="btn btn-outline-primary btn-lg">Actualizar</button>
         </section>
         <section *ngIf="promotion" class="col-12 d-flex" style="justify-content: center;">
-            <button  type="button" (click)="savePromotion()" [disabled]="!shape.valid"
-                class="btn btn-outline-primary btn-lg">Guardar promoción</button> 
+            <button *ngIf="!selectuser" type="button" (click)="savePromotion()" [disabled]="!shape.valid"
+                class="btn btn-outline-primary btn-lg">Guardar promoción</button>
+                <button *ngIf="selectuser" type="button" (click)="putPromotion()" [disabled]="!shape.valid"
+                class="btn btn-outline-primary btn-lg">Guardar promoción</button>  
         </section>
 
     </form>

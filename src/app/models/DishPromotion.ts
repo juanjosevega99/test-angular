@@ -10,7 +10,7 @@ export class DishPromotion {
     description?:string;
     preparationTime?:string[];
     idAccompaniments?:string[];
-    idPromotion?:string;
+    idPromotion?:string[];
     promotionStartDate?:string[];
     endDatePromotion?:string[];
     namepromo?:string;
@@ -19,5 +19,6 @@ export class DishPromotion {
     photo?:string;
     daysPromo?:number;
     timestart?:string;
-    timeend?:string;
+    timeend?:string
+    idHeadquarter?:string;
 }

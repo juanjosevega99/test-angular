@@ -14,5 +14,6 @@ export class DishList {
     description?:string;
     preparationTime?:string[];
     idAccompaniments?:string[];
-    idPromotion?:string;
+    idPromotion?:string[];
+    idHeadquarter?:string;
 }

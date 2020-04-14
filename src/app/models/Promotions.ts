@@ -8,5 +8,7 @@ export class Promotions {
     price?:number;
     photo?:string;
     description?:string;
-    preparationTime?:string[]
+    preparationTime?:string[];
+    reference?:string;
+    numberOfModifications?:number;
 }

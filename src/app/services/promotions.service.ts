@@ -18,7 +18,7 @@ export class PromotionsService {
     );
   }
   
-  putPromotion(id,promotion) {
+  putPromotion(id , promotion) {
     return this.httpclient.put(
       environment.UrlBase + "promotions/" + id,
       promotion
@@ -45,7 +45,9 @@ export class PromotionsService {
               price: promotions.price,
               photo: promotions.photo,
               description: promotions.description,
-              preparationTime: promotions.preparationTime
+              preparationTime: promotions.preparationTime,
+              reference: promotions.reference,
+              numberOfModifications : promotions.numberOfModifications
             };
             return obj;
           })
@@ -69,7 +71,9 @@ export class PromotionsService {
               price: promotions.price,
               photo: promotions.photo,
               description: promotions.description,
-              preparationTime: promotions.preparationTime
+              preparationTime: promotions.preparationTime,
+              reference: promotions.reference,
+              numberOfModifications : promotions.numberOfModifications
             };
             return obj;
           })
