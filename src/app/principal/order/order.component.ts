@@ -8,6 +8,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 // modal
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+// sockets
+import { WebsocketsService } from 'src/app/services/websockets.service';
+import { ProfilesService } from 'src/app/services/profiles.service';
+
 
 
 @Component({
@@ -48,6 +52,8 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   // rating
   currentRate = 3;
+  domiciliary = 'selecione';
+  domiciliariesprofiles = [];
 
   @Input()
   order: OrderByUser = {};
@@ -57,7 +63,8 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   @Output() indexOrder: EventEmitter<number>;
 
-  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
+  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService, private modalService: NgbModal, private wesocket: WebsocketsService,
+    private domiciliaries: ProfilesService) {
     this.indexOrder = new EventEmitter();
   }
 
@@ -69,7 +76,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     }, 30000)
 
-    setTimeout(() => { this.changeStatusProgressBar() }, 2000)
+    setTimeout(() => { this.changeStatusProgressBar() }, 2000);
 
   }
 
@@ -82,77 +89,138 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.showdetail = !this.showdetail;
   }
 
-  updateStatePidelo(content){
+  updateStatePidelo(content) {
     this.modalService.open(content, { centered: true });
   }
 
+  sendToCalificationUser() {
+
+    this.wesocket.emit("calification", this.order.id);
+    this.modalService.dismissAll();
+
+  }
+
+  openCalification(viewcalification) {
+    
+    this.spinner.show()
+    this.domiciliaries.getDomiciliaryProfileByHead(this.order.idHeadquarter).subscribe( (domiciliary: any[])=>{
+    console.log(domiciliary);
+
+      this.domiciliariesprofiles = domiciliary;
+      
+      this.spinner.hide();
+      this.modalService.open(viewcalification, { centered: true });
+    } )
+  }
+
+  // ====================================
+  // ========= Confirm orders ===========
+
+  confirmOrder() {
+
+    let status = {
+      orderStatus: "Entregado",
+      id: this.order.id
+    };
+
+    this.spinner.show();
+
+    this.orderservice.putCharge(status).subscribe(res => {
+
+      if (this.order.typeOfService == "pidelo") {
+
+        let profileDomi = this.domiciliariesprofiles[this.domiciliary];
+        profileDomi.ratings.push(this.currentRate);
+        const calification = { ratings: profileDomi.ratings };
+
+        this.domiciliaries.putProfile( profileDomi.id, calification).subscribe( response =>{
+
+          Swal.fire(
+            'domiciliario calificado',
+          )
+          this.modalService.dismissAll();
+
+        } )
+
+      }
+
+      this.expresionColor.fontSmall = "Entregado";
+      this.showdetail = false;
+
+      document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+      this.indexOrder.emit(this.index);
+      this.spinner.hide();
+    })
+  }
+
   changeStatusOrder(minuts: number) {
+    console.log(this.order.orderStatus);
 
-      if (minuts <= 0) {
+    if (minuts <= 0) {
 
-        this.expresionColor.colorFont = "#dfb308";
-        this.expresionColor.colorProgress = "success";
-        this.expresionColor.backgroundTimer = '#bfd5b2'
-        this.order.timeTotalCronometer = 0 + " " + 'minutos';
+      this.expresionColor.colorFont = "#dfb308";
+      this.expresionColor.colorProgress = "success";
+      this.expresionColor.backgroundTimer = '#bfd5b2'
+      this.order.timeTotalCronometer = 0 + " " + 'minutos';
 
-        if (this.order.orderStatus == "Entregado") {
-          this.expresionColor.fontSmall = "Entregado";
-          document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
-          this.indexOrder.emit(this.index);
-          this.percent = 100;
-          clearTimeout(this.progressbar);
+      if (this.order.orderStatus == "Entregado") {
+        this.expresionColor.fontSmall = "Entregado";
+        document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+        this.indexOrder.emit(this.index);
+        this.percent = 100;
+        clearTimeout(this.progressbar);
 
-        } else if (this.order.orderStatus == "Cancelada") {
+      } else if (this.order.orderStatus == "Cancelada") {
 
-          this.buttonDisable.disable = true;
-          this.buttonDisable.color = "#bfd5b2";
-          this.percent = 100;
-          this.expresionColor.fontSmall = 'Cancelado';
-          document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
-          clearTimeout(this.progressbar);
-          this.indexOrder.emit(this.index);
+        this.buttonDisable.disable = true;
+        this.buttonDisable.color = "#bfd5b2";
+        this.percent = 100;
+        this.expresionColor.fontSmall = 'Cancelado';
+        document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
+        clearTimeout(this.progressbar);
+        this.indexOrder.emit(this.index);
 
-        }else {
+      } else {
 
-          this.order.orderStatus = 'El pedido esta listo'
-          this.expresionColor.fontSmall = "Confirmar";
-          this.buttonDisable.disable = false;
-          this.buttonDisable.color = "#bfd5b2";
-          document.getElementById(this.order.code).style.backgroundColor = "#fff";
-          clearTimeout(this.progressbar);
-          this.percent = 100;
-          // this.indexOrder.emit(this.index);
-
-        }
-
-
-      } else if (minuts <= 10) {
-
-        this.order.orderStatus = `nuestro cliente llega en ${minuts} min`;
-        this.expresionColor.colorFont = "#ac0f17";
-        this.expresionColor.colorProgress = "danger";
-        this.expresionColor.fontSmall = 'Falta poco';
-        this.expresionColor.backgroundTimer = '#ffb6b9';
-        // this.startCronometer = true;
-        this.order.timeTotalCronometer = minuts + " " + 'minutos';
-        this.buttonDisable.color = '#ffb6b9';
-
-      } else if (minuts <= this.timeLimit) {
-        this.order.orderStatus = 'empieza a preparar el pedido';
-        this.expresionColor.colorFont = "#ac0f17";
-        this.expresionColor.colorProgress = "danger";
-        this.expresionColor.fontSmall = 'Prepara';
-        this.expresionColor.backgroundTimer = '#ffb6b9';
-        this.order.timeTotalCronometer = minuts > 60 ? this.convertToHours(minuts) : minuts + " " + 'minutos';
+        this.order.orderStatus = 'El pedido esta listo'
+        this.expresionColor.fontSmall = "Confirmar";
+        this.buttonDisable.disable = false;
+        this.buttonDisable.color = "#bfd5b2";
+        document.getElementById(this.order.code).style.backgroundColor = "#fff";
+        clearTimeout(this.progressbar);
+        this.percent = 100;
+        // this.indexOrder.emit(this.index);
 
       }
-      else {
 
-        this.order.orderStatus = 'Relajate';
-        this.expresionColor.colorFont = '#dfb308';
-        this.expresionColor.colorProgress = 'warning';
-        this.expresionColor.fontSmall = 'Relajate';
-      }
+
+    } else if (minuts <= 10) {
+
+      this.order.orderStatus = `nuestro cliente llega en ${minuts} min`;
+      this.expresionColor.colorFont = "#ac0f17";
+      this.expresionColor.colorProgress = "danger";
+      this.expresionColor.fontSmall = 'Falta poco';
+      this.expresionColor.backgroundTimer = '#ffb6b9';
+      // this.startCronometer = true;
+      this.order.timeTotalCronometer = minuts + " " + 'minutos';
+      this.buttonDisable.color = '#ffb6b9';
+
+    } else if (minuts <= this.timeLimit) {
+      this.order.orderStatus = 'empieza a preparar el pedido';
+      this.expresionColor.colorFont = "#ac0f17";
+      this.expresionColor.colorProgress = "danger";
+      this.expresionColor.fontSmall = 'Prepara';
+      this.expresionColor.backgroundTimer = '#ffb6b9';
+      this.order.timeTotalCronometer = minuts > 60 ? this.convertToHours(minuts) : minuts + " " + 'minutos';
+
+    }
+    else {
+
+      this.order.orderStatus = 'Relajate';
+      this.expresionColor.colorFont = '#dfb308';
+      this.expresionColor.colorProgress = 'warning';
+      this.expresionColor.fontSmall = 'Relajate';
+    }
 
   }
 
@@ -166,15 +234,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     let minuts = Math.floor((goal + 0.2 - today));
     this.timeLimit = this.getTimeLimit();
 
-    if (this.order.orderStatus == "Engregado" || this.order.orderStatus == "Cancelada") {
 
-      clearTimeout(this.progressbar);
-      this.changeStatusOrder(0);
-
-    }else{
-      this.changeStatusOrder(100);
-
-    }
 
     // if the same day
     if (now.getDate() == delivery.getDate()) {
@@ -188,7 +248,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         console.log("minutes", minuts);
 
         if (minuts > 100) {
-          this.percent = 5;
+          this.percent = 1;
         } else {
 
           this.percent = percent;
@@ -199,6 +259,17 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.percent = 100;
         // stop count
         clearTimeout(this.progressbar);
+      }
+    } else {
+
+      if (this.order.orderStatus === "Entregado" || this.order.orderStatus === "Cancelada") {
+
+        clearTimeout(this.progressbar);
+        this.changeStatusOrder(0);
+
+      } else {
+
+        this.changeStatusOrder(100);
       }
     }
 
@@ -235,28 +306,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   }
 
-  // ====================================
-  // ========= Confirm orders ===========
 
-  confirmOrder() {
-
-    let status = {
-      orderStatus: "Entregado",
-      id: this.order.id
-    };
-    this.spinner.show();
-
-    this.orderservice.putCharge(status).subscribe(res => {
-      this.expresionColor.fontSmall = "Entregado";
-      this.showdetail = false;
-
-      this.indexOrder.emit(this.index);
-      document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
-      this.spinner.hide();
-    })
-
-
-  }
 
   // ====================================
   // ========= minuts to hours ==========

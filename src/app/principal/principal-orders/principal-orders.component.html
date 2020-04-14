@@ -91,7 +91,7 @@
 
                     <div style="width: 50%;">
 
-                        <p>MESAS</p>
+                        <p>MESA</p>
                         <div style="flex-direction: row; justify-content: center; overflow: auto;">
                             <button *ngFor="let table of Tables; let idt = index" (click)="getTables($event, idt)"
                                 [id]="idt + 't'" class="btn btn-outline-success">{{table}}</button>

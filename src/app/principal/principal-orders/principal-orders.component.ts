@@ -133,6 +133,7 @@ export class PrincipalOrdersComponent implements OnInit {
       // console.log("desde server", res);
       if (res.idHeadquartes == this.profile.idHedquart) {
         this.formatOrderUnit(res);
+        this.orderList(this.orders);
 
       }
     });
@@ -140,8 +141,8 @@ export class PrincipalOrdersComponent implements OnInit {
     this.wesocket.listen("newReservation").subscribe((reservation: reservation) => {
 
       if (this.profile.idHedquart == reservation.idHeadquart) {
-        
-        if(this.idEvent == "" && this.datereservation != "" ){
+
+        if (this.idEvent == "" && this.datereservation != "") {
           this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
           this.datereservation = "";
         }
@@ -427,7 +428,6 @@ export class PrincipalOrdersComponent implements OnInit {
 
   handleDateClick(event) {
 
-    this.orderList(this.orders);
     // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
     if (this.datereservation) {
 
@@ -672,7 +672,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
           this.reservationService.postReservation(reservation).subscribe((res: reservation) => {
 
-            if(this.idEvent = "" && this.datereservation != ""){
+            if (this.idEvent = "" && this.datereservation != "") {
 
               this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
               this.datereservation = "";
@@ -715,6 +715,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
     let ordertosave: OrderByUser = {};
     this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
+      ordertosave.idHeadquarter = order.idHeadquartes;
       ordertosave.code = order.code;
       ordertosave.id = order.id ? order.id : order._id;
       ordertosave.name = user.name + " " + user.lastname;

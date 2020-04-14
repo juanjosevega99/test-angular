@@ -16,4 +16,5 @@ export class Profiles {
   name?:string;
   email?:string;
   photo?:string;
+  ratings?:number[];
 }

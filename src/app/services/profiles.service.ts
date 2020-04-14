@@ -89,4 +89,36 @@ export class ProfilesService {
         )
       );
   }
+
+  getDomiciliaryProfileByHead(id): Observable<any[]> {
+    return this.httpclient
+      .get<Profiles[]>(environment.UrlBase + "profiles/domy/" + id)
+      .pipe(
+        map((profiles: any[]) =>
+          profiles.map(profiles => {
+            let obj = {
+              id: profiles._id,
+              state: profiles.state,
+              entryDate: profiles.entryDate,
+              modificationDate: profiles.modificationDate,
+              numberOfModifications: profiles.numberOfModifications,
+              idAllies: profiles.idAllies,
+              nameAllie: profiles.nameAllie,
+              idHeadquarter: profiles.idHeadquarter,
+              nameHeadquarter: profiles.nameHeadquarter,
+              idCharge: profiles.idCharge,
+              nameCharge: profiles.nameCharge,
+              permis:profiles.permis,
+              userCode: profiles.userCode,
+              identification: profiles.identification,
+              name: profiles.name,
+              email: profiles.email,
+              photo: profiles.photo,
+              ratings: profiles.ratings
+            };
+            return obj;
+          })
+        )
+      );
+  }
 }

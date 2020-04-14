@@ -119,14 +119,35 @@
 
         <ngb-rating [(rate)]="currentRate" [max]="5">
             <ng-template let-fill="fill" let-index="index">
-              <span class="star" [class.filled]="fill === 100" >&#9733;</span>
+                <span class="star" [class.filled]="fill === 100">&#9733;</span>
             </ng-template>
-          </ngb-rating>
+        </ngb-rating>
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" style="width: 4rem; margin-right: 2rem;"  (click)="c('Save click')">Si</button>
-        <button type="button" class="btn btn-danger"  style="width: 4rem;" (click)="c('Save click')">No</button>
+        <button type="button" class="btn btn-success" style="width: 4rem; margin-right: 2rem;"
+            (click)="openCalification(calification)">Si</button>
+        <button type="button" class="btn btn-danger" style="width: 4rem;" (click)="sendToCalificationUser()">No</button>
+    </div>
+
+</ng-template>
+
+<!-- modal for calification domiciliary -->
+
+<ng-template #calification let-c="close" let-d="dismiss">
+
+    <div class="modal-body">
+
+        <h4>Sellecione el domiciliario</h4>
+
+        <select class="form-control form-control-sm" [(ngModel)]='domiciliary' required>
+            <option *ngFor="let profile of domiciliariesprofiles; let d = index" [value]="d">{{ profile.name }}</option>
+        </select>
+
+    </div>
+
+    <div class="modal-footer">
+        <button *ngIf="domiciliary != 'selecione'" type="button" class="btn btn-success" (click)="confirmOrder()">Aceptar</button>
     </div>
 
 </ng-template>
