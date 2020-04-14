@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { CouponsService } from "src/app/services/coupons.service";
 import { TypeCouponService } from "src/app/services/typeCoupons.service";
+import { AlliesService } from "src/app/services/allies.service";
+import { HeadquartersService } from "src/app/services/headquarters.service";
 //models
 import { Coupons } from 'src/app/models/Coupons';
 import { TypeCoupon } from "src/app/models/typeCoupons";
@@ -13,6 +15,9 @@ import { Guid } from "guid-typescript";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { AngularFireStorage } from "@angular/fire/storage";
+import { Allies } from '../../../models/Allies';
+import { Headquarters } from 'src/app/models/Headquarters';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-create-coupon',
@@ -21,30 +26,31 @@ import { AngularFireStorage } from "@angular/fire/storage";
 })
 export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
+    codeToRedeem: null,
+    state: [],
     name: null,
     createDate: null,
     expirationDate: null,
     numberOfModifications: 0,
+    idAllies: null,
     nameAllies: null,
+    idHeadquarters: null,
     nameHeadquarters: null,
     idtypeOfCoupon: null,
     nameTypeOfCoupon: null,
-    description: null,
-    imageCoupon: null,
-    state: [],
-    codeToRedeem: null,
-    termsAndConditions: null,
-    transferable: null,
-    cumulative: null,
-    idAllies: null,
-    idHeadquarters: null,
     idDishes: null,
     nameDishes: null,
     numberOfUnits: null,
+    description: null,
+    imageCoupon: null,
+    termsAndConditions: null,
     discountRate: null,
     creationTime: null,
     expirationTime: null,
-    code: null,    // numberOfModifications: 0,
+    transferable: null,
+    cumulative: null,
+    code: null,    
+    // numberOfModifications: 0,
     // idAllies: null,
     // nameAllie: "kfc",
     // idHeadquarter: null,
@@ -82,8 +88,7 @@ export class CreateCouponComponent implements OnInit {
   addTypeCouponButton: boolean = true;
   selectAgainarray: boolean = false;
   newTypeCoupon: String;
-  typeCoupon: String[] = [];
-
+  typeCoupon: any[] = [];
 
   //variable for the state
   State: any[] = [];
@@ -96,6 +101,11 @@ export class CreateCouponComponent implements OnInit {
   newDate: Date;
   dateModication: String;
   timesModification: String;
+  //array allies
+  arrayAllies: any[] = [];
+  // array for search headquuarters
+  arrayHeadquarter: any;
+  headquartersByIdAlly: any[]=[];
 
   //variable for upload images
   fileImagedish: any;
@@ -106,12 +116,31 @@ export class CreateCouponComponent implements OnInit {
   seeNewPhoto: boolean;
   //variable for the loading
   loading: boolean;
+  //variables time
+  meridian  = true;
+   // Variables of alerts
+   alertBadExtensionImageCoupon = false
+ 
+   //flags of type Coupons
+  typeSpecialDays = false
+  twhoByOne = false
+  variousDiscounts = false
+  happyHour = false
+  referred = false
+
+
 
   constructor(
     private _router: Router,
-    private activatedRoute: ActivatedRoute, 
+    private activatedRoute: ActivatedRoute,
     private typeCouponService: TypeCouponService,
-    private couponsServices: CouponsService) {
+    private couponsServices: CouponsService,
+    private alliesServices: AlliesService,
+    private headquartersServices: HeadquartersService) {
+
+    //inicalization code remider for coupon 
+    let codeToRedeem = Math.random().toString(36).substring(7);
+    this.preCoupon['codeToRedeem'] = codeToRedeem;
     //flags
     // this.loading = true;
     // this.buttonPut = true;
@@ -137,10 +166,16 @@ export class CreateCouponComponent implements OnInit {
       this.identificatorbyRoot = identificator
     })
     //inicialization service with collections typeCoupons
-    this.typeCouponService.getTypeCoupon().subscribe( typeCoupon => {
+    this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
       this.typeCoupon = typeCoupon;
-      console.log(this.typeCoupon)
     })
+    this.alliesServices.getAllies().subscribe(ally => {
+      this.arrayAllies = ally
+      console.log(this.arrayAllies);
+
+    })
+
+
   }
 
   ngOnInit() {
@@ -149,12 +184,102 @@ export class CreateCouponComponent implements OnInit {
   goBackProfiles() {
     this._router.navigate(['/main', 'couponManager'])
   }
+
+  //see id ally for show headquarter
   
-  seeIdTypeCoupon(selected: any) {
+  seeNameAlly(selected: any) {
+    this.arrayHeadquarter = []
+    this.headquartersByIdAlly= []
+    this.arrayAllies.forEach((element: any) => {
+      if (selected == element.id) {
+        this.preCoupon['nameAllies'] = element.name
+        this.headquartersServices.getHeadquarterByAllIdAlly(element.id).subscribe(headquarter => {
+          console.log(headquarter)
+          this.arrayHeadquarter = headquarter
+          this.arrayHeadquarter.forEach(element => {
+
+            console.log('elem',element);
+            let obj ={
+              id :  element._id,
+              name : element.name
+            }
+
+            this.headquartersByIdAlly.push(obj)
+             
+           });
+        })
+        console.log('fsdfd',this.headquartersByIdAlly)
+      }
+    })
+  }
+
+  seeNameHeadquarter(selected: any){
+    this.headquartersByIdAlly.forEach(element => {
+       if ( selected == element.id) {
+          this.preCoupon['nameHeadquarters'] = element.name       
+       }     
+    });
+  }
+
+
+  seeNameTypeCoupon(selected:any) {
     
-    this.typeCoupon.forEach((element: any) => {
-      if (selected == element.name) {
-        this.preCoupon['idtypeOfCoupon'] = element.id
+    //variable que van cuando en boton guardar  para aculizar los campos correspondientes
+    // let id = this.preCoupon['nameTypeOfCoupon'].id
+    // this.preCoupon['idtypeOfCoupon'] = id
+    
+    // let name = this.preCoupon['nameTypeOfCoupon'].name
+    // this.preCoupon['nameTypeOfCoupon'] = name
+
+    this.typeCoupon.forEach( element  => {
+      if (selected == element.id) {
+        this.preCoupon['nameTypeOfCoupon'] = element.name
+
+        if (element.name == "Bienvenida") {
+           return this.typeSpecialDays = false,
+            this.twhoByOne = false,
+            this.variousDiscounts = false,
+            this.happyHour = false,
+            this.referred = false
+        }
+        if (element.name == "Fechas Especiales") {
+           return this.typeSpecialDays = true,
+            this.twhoByOne = false,
+            this.variousDiscounts = false,
+            this.happyHour = false,
+            this.referred = false
+        }
+        if (element.name == "2X1") {
+           return this.typeSpecialDays = true,
+            this.twhoByOne = false,
+            this.variousDiscounts = false,
+            this.happyHour = false,
+            this.referred = false
+        }
+        if (element.name == "Descuentos 10, 20, 30, 40 % ") {
+          return this.typeSpecialDays = false,
+            this.twhoByOne = false,
+            this.variousDiscounts = true,
+            this.happyHour = false,
+            this.referred = true
+        }
+        if (element.name == "Happy Hour") {
+          return this.typeSpecialDays = false,
+            this.twhoByOne = false,
+            this.variousDiscounts = true,
+            this.happyHour = false,
+            this.referred = false
+        }
+        if (element.name == "Referido") {
+          return this.typeSpecialDays = false,
+            this.twhoByOne = false,
+            this.variousDiscounts = false,
+            this.happyHour = false,
+            this.referred = true
+        }
+
+      
+
       }
     })
   }
@@ -257,17 +382,26 @@ export class CreateCouponComponent implements OnInit {
   //Method for photo of the dish
   onPhotoSelected($event) {
     let input = $event.target;
-    if (input.files && input.files[0]) {
-      this.seeNewPhoto = true;
-      console.log(this.seeNewPhoto);
+    let filePath = input.value;
+    let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+    let image = "";
+    if (!allowedExtensions.exec(filePath)) { 
+      input.value = '';
+      this.alertBadExtensionImageCoupon= true;
+      return false;
+    } else { 
+      if (input.files && input.files[0]) {
+        this.seeNewPhoto = true;
+        this.alertBadExtensionImageCoupon= false;
 
-      var reader = new FileReader();
-      reader.onload = function (e: any) {
-        $('#photo')
-          .attr('src', e.target.result)
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
+        var reader = new FileReader();
+        reader.onload = function (e: any) {
+          $('#photo')
+            .attr('src', e.target.result)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+     }
     return this.fileImagedish = input.files[0]
   }
   // //save new profile
@@ -310,12 +444,12 @@ export class CreateCouponComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-      this.typeCouponService.deleteTypeCoupon(typeCouponSelected).subscribe(()=>{
-        this.typeCouponService.getTypeCoupon().subscribe( typeCoupon => {
-          this.typeCoupon = typeCoupon;
-          console.log(this.typeCoupon)
+        this.typeCouponService.deleteTypeCoupon(typeCouponSelected).subscribe(() => {
+          this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
+            this.typeCoupon = typeCoupon;
+            console.log(this.typeCoupon)
+          })
         })
-      })
         // this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
         //   this.typeCoupon = typeCoupon;
         //   this.typeCoupon.forEach((element: any) => {
