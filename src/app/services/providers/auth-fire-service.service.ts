@@ -12,9 +12,14 @@ import { Router } from '@angular/router';
 export class AuthFireServiceService {
 
   user: Observable<firebase.User>;
-  
+
   constructor(private firebaseAuth: AngularFireAuth, private route: Router) {
     this.user = this.firebaseAuth.authState;
+  }
+
+  // register/ Sign up with email/password
+  SignUp(email:string, password:string) {
+    return this.firebaseAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
   //singIn
@@ -25,17 +30,14 @@ export class AuthFireServiceService {
   }
 
   //sing Out (cerrar sesion)
-
-   signOut(){
+  signOut() {
 
     this.firebaseAuth.auth.signOut()
-    .then(res => this.route.navigate(['log']) 
-    ).catch(err => {
+      .then(res => this.route.navigate(['log'])
+      ).catch(err => {
         console.log(err)
       }
-
-    );
-
+      );
   }
 
   // Recuperar contraseña
@@ -45,20 +47,20 @@ export class AuthFireServiceService {
 
   //user is loged
 
-  isLoged():boolean{
+  isLoged(): boolean {
 
-    firebase.auth().onAuthStateChanged( user => {
+    firebase.auth().onAuthStateChanged(user => {
 
-      if (user){
+      if (user) {
         console.log("usuario logeado", user.email);
         return true;
-        
-      }else{
+
+      } else {
         console.log("usuario no logeado");
         return false;
       }
-      
-    } )
+
+    })
     return false;
   }
 
