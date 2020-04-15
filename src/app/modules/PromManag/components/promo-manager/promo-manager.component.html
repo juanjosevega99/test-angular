@@ -1,7 +1,7 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row  ">
         <div style="width: 5%;" class="d-flex align-items-center">
-            <a  [routerLink]="['/main/allyManager/',-2]"  class="d-flex">
+            <a [routerLink]="['/main/allyManager/',-2]" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -22,14 +22,14 @@
                                 <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                         <li class="nav-item mr-2">
-                                            <input placeholder="Buscar promoción por código ..." class="form-control" type="text"
-                                                (keyup)="search(reference.value, reference.id)" #reference
+                                            <input placeholder="Buscar promoción por código ..." class="form-control"
+                                                type="text" (keyup)="search(reference.value, reference.id)" #reference
                                                 id="reference" formControlName="reference">
                                         </li>
                                         <li class="nav-item">
-                                            <input placeholder="Buscar promoción por nombre del plato..." class="form-control" type="text"
-                                                (keyup)="search(name.value, name.id)" #name id="name"
-                                                formControlName="name">
+                                            <input placeholder="Buscar promoción por nombre del plato..."
+                                                class="form-control" type="text" (keyup)="search(name.value, name.id)"
+                                                #name id="name" formControlName="name">
                                         </li>
                                     </ul>
                                 </div>
@@ -83,14 +83,16 @@
                     <td>{{menuPromo.namepromo}}</td>
                     <td>{{menuPromo.pricepromo}}</td>
                     <td>{{menuPromo.daysPromo}} días</td>
-                    <td>{{menuPromo.promotionStartDate[0].day}}/{{menuPromo.promotionStartDate[0].month}}/{{menuPromo.promotionStartDate[0].year}}</td>
+                    <td>{{menuPromo.promotionStartDate[0].day}}/{{menuPromo.promotionStartDate[0].month}}/{{menuPromo.promotionStartDate[0].year}}
+                    </td>
                     <td>{{menuPromo.timestart}}</td>
-                    <td>{{menuPromo.endDatePromotion[0].day}}/{{menuPromo.endDatePromotion[0].month}}/{{menuPromo.endDatePromotion[0].year}}</td>
+                    <td>{{menuPromo.endDatePromotion[0].day}}/{{menuPromo.endDatePromotion[0].month}}/{{menuPromo.endDatePromotion[0].year}}
+                    </td>
                     <td>{{menuPromo.timeend}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
                             <input [checked]="menuPromo.state[0].check" value="{{menuPromo.id}}" type="radio" name={{i}}
-                                id="state" #active  (click)="verifyDate(active.value,i)" ><!-- (click)="changeStateA(active.value)" -->
+                                id="state" #active (click)="verifyDate(active.value,i)">
                             <label style="font-size: 15px;">
                                 Activo
                             </label>
@@ -106,41 +108,11 @@
                         </div>
                     </td>
                     <td>
-                        <a [routerLink]="[ '/main/createDish', menuPromo.reference]" class="btn"> <i class="far fa-edit"></i> </a>
+                        <a [routerLink]="[ '/main/createDish', menuPromo.reference]" class="btn"> <i
+                                class="far fa-edit"></i> </a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-
-<div *ngIf="writeNewDates"  id="exampleModal" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 </div>
