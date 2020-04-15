@@ -6,6 +6,7 @@ import { CouponsService } from "src/app/services/coupons.service";
 import { TypeCouponService } from "src/app/services/typeCoupons.service";
 import { AlliesService } from "src/app/services/allies.service";
 import { HeadquartersService } from "src/app/services/headquarters.service";
+import { DishesService } from "src/app/services/dishes.service";
 //models
 import { Coupons } from 'src/app/models/Coupons';
 import { TypeCoupon } from "src/app/models/typeCoupons";
@@ -18,6 +19,7 @@ import { AngularFireStorage } from "@angular/fire/storage";
 import { Allies } from '../../../models/Allies';
 import { Headquarters } from 'src/app/models/Headquarters';
 import { element } from 'protractor';
+import { Dishes } from '../../../models/Dishes';
 
 @Component({
   selector: 'app-create-coupon',
@@ -28,28 +30,25 @@ export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
     codeToRedeem: null,
     state: [],
-    name: null,
     createDate: null,
     expirationDate: null,
-    numberOfModifications: 0,
     idAllies: null,
     nameAllies: null,
     idHeadquarters: null,
     nameHeadquarters: null,
-    idtypeOfCoupon: null,
-    nameTypeOfCoupon: null,
     idDishes: null,
     nameDishes: null,
+    idtypeOfCoupon: null,
+    nameTypeOfCoupon: null,
     numberOfUnits: null,
-    description: null,
-    imageCoupon: null,
-    termsAndConditions: null,
+    name: null,
     discountRate: null,
     creationTime: null,
     expirationTime: null,
-    transferable: null,
-    cumulative: null,
-    code: null,    
+    description: null,
+    imageCoupon: null,
+    termsAndConditions: null,
+    codeReferred: null,    
     // numberOfModifications: 0,
     // idAllies: null,
     // nameAllie: "kfc",
@@ -107,6 +106,10 @@ export class CreateCouponComponent implements OnInit {
   arrayHeadquarter: any;
   headquartersByIdAlly: any[]=[];
 
+  //array for search diches by id Headquarters
+  arrayDishes: any;
+  dishesByIdHeadquarter: any[] = [];
+
   //variable for upload images
   fileImagedish: any;
 
@@ -119,14 +122,11 @@ export class CreateCouponComponent implements OnInit {
   //variables time
   meridian  = true;
    // Variables of alerts
-   alertBadExtensionImageCoupon = false
+  alertBadExtensionImageCoupon = false
  
    //flags of type Coupons
-  typeSpecialDays = false
-  twhoByOne = false
-  variousDiscounts = false
-  happyHour = false
-  referred = false
+  discount = false
+  timeCreation = false
 
 
 
@@ -136,7 +136,8 @@ export class CreateCouponComponent implements OnInit {
     private typeCouponService: TypeCouponService,
     private couponsServices: CouponsService,
     private alliesServices: AlliesService,
-    private headquartersServices: HeadquartersService) {
+    private headquartersServices: HeadquartersService,
+    private dishesServices: DishesService) {
 
     //inicalization code remider for coupon 
     let codeToRedeem = Math.random().toString(36).substring(7);
@@ -169,12 +170,10 @@ export class CreateCouponComponent implements OnInit {
     this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
       this.typeCoupon = typeCoupon;
     })
+    //inicialization service with collections allies
     this.alliesServices.getAllies().subscribe(ally => {
       this.arrayAllies = ally
-      console.log(this.arrayAllies);
-
     })
-
 
   }
 
@@ -185,11 +184,12 @@ export class CreateCouponComponent implements OnInit {
     this._router.navigate(['/main', 'couponManager'])
   }
 
-  //see id ally for show headquarter
-  
+  //see Name ally for show headquarter
   seeNameAlly(selected: any) {
     this.arrayHeadquarter = []
     this.headquartersByIdAlly= []
+    this.arrayDishes = []
+    this.dishesByIdHeadquarter = []
     this.arrayAllies.forEach((element: any) => {
       if (selected == element.id) {
         this.preCoupon['nameAllies'] = element.name
@@ -214,71 +214,63 @@ export class CreateCouponComponent implements OnInit {
   }
 
   seeNameHeadquarter(selected: any){
+    this.arrayDishes = []
+    this.dishesByIdHeadquarter = []
     this.headquartersByIdAlly.forEach(element => {
        if ( selected == element.id) {
-          this.preCoupon['nameHeadquarters'] = element.name       
+          this.preCoupon['nameHeadquarters'] = element.name 
+          this.dishesServices.getDishesByIdHeadquarter(element.id).subscribe( dish => {
+            this.arrayDishes = dish
+            this.arrayDishes.forEach(element => {
+              let obj ={
+                id :  element._id,
+                name : element.name
+              }
+  
+              this.dishesByIdHeadquarter.push(obj)
+            });
+
+          } )      
        }     
     });
   }
 
-
+  seeNameDish(selected: any){
+    this.dishesByIdHeadquarter.forEach( element => {
+      if ( selected == element.id) {
+        this.preCoupon['nameDishes'] = element.name;
+      }
+    })
+  }
   seeNameTypeCoupon(selected:any) {
     
-    //variable que van cuando en boton guardar  para aculizar los campos correspondientes
-    // let id = this.preCoupon['nameTypeOfCoupon'].id
-    // this.preCoupon['idtypeOfCoupon'] = id
-    
-    // let name = this.preCoupon['nameTypeOfCoupon'].name
-    // this.preCoupon['nameTypeOfCoupon'] = name
-
     this.typeCoupon.forEach( element  => {
       if (selected == element.id) {
         this.preCoupon['nameTypeOfCoupon'] = element.name
 
         if (element.name == "Bienvenida") {
-           return this.typeSpecialDays = false,
-            this.twhoByOne = false,
-            this.variousDiscounts = false,
-            this.happyHour = false,
-            this.referred = false
-        }
-        if (element.name == "Fechas Especiales") {
-           return this.typeSpecialDays = true,
-            this.twhoByOne = false,
-            this.variousDiscounts = false,
-            this.happyHour = false,
-            this.referred = false
+           return this.timeCreation = false
+            
         }
         if (element.name == "2x1") {
-           return this.typeSpecialDays = false,
-            this.twhoByOne = false,
-            this.variousDiscounts = false,
-            this.happyHour = false,
-            this.referred = false
+           return this.timeCreation = true
+            
+        }
+        if (element.name == "Fechas Especiales") {
+           return this.timeCreation = true
+            
         }
         if (element.name == "Descuentos 10, 20, 30, 40 % ") {
-          return this.typeSpecialDays = true, // todo 
-            this.twhoByOne = false,
-            this.variousDiscounts = false,
-            this.happyHour = false,
-            this.referred = false
+          return this.timeCreation = true
+            
         }
         if (element.name == "Happy Hour") {
-          return this.typeSpecialDays = false,
-            this.twhoByOne = false,
-            this.variousDiscounts = true,
-            this.happyHour = false,
-            this.referred = false
+          return this.timeCreation = true
+            
         }
         if (element.name == "Referido") {
-          return this.typeSpecialDays = false,
-            this.twhoByOne = false,
-            this.variousDiscounts = false,
-            this.happyHour = false,
-            this.referred = true
+          return this.timeCreation = false
         }
-
-      
 
       }
     })

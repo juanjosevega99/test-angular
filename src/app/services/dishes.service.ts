@@ -56,4 +56,7 @@ export class DishesService {
   getDisheById(id): Observable<any> {
     return this.httpclient.get<Dishes>(environment.UrlBase + "dishes/" + id)
   }
+  getDishesByIdHeadquarter(idHeadquarter){
+    return this.httpclient.get(environment.UrlBase + "dishes/headquarter/" + idHeadquarter)
+  }
 }

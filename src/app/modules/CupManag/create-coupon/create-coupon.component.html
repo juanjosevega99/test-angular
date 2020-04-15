@@ -78,13 +78,6 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Número de modificaciones</label>
-                <div class="col-md-7">
-                    <label class="form-control">{{preCoupon.numberOfModifications}}</label>
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label class="col-md-5 col-form-label">Entidad</label>
                 <div class="col-md-7">
                     <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
@@ -108,6 +101,20 @@
                         <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
                         <option *ngFor="let headquarter of headquartersByIdAlly;" [ngValue]=" headquarter.id">
                             {{headquarter.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Platos</label>
+                <div class="col-md-7">
+                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required
+                        [ngClass]="{'is-invalid': (!idDish.valid ) && 
+                        idDish.touched ,'is-valid':(idDish.valid) }"
+                        [(ngModel)]="preCoupon.idDishes" (change)="seeNameDish(idDish.value)">
+                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                        <option *ngFor="let dish of dishesByIdHeadquarter;" [ngValue]=" dish.id">
+                            {{dish.name}}
                         </option>
                     </select>
                 </div>
@@ -153,23 +160,19 @@
                 </div>
             </div>
 
-
-        </section>
-
-        <section class="col-5">
-            <div *ngIf="typeSpecialDays" class="form-group row">
+            <div class="form-group row">
                 <label class="col-md-5 col-form-label">%Descuento</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="discont" #discont="ngModel"
                         pattern="[0123456789,.'--]{1,10}"
                         [ngClass]="{'is-invalid': (!discont.valid && discont.touched) || discont.errors?.pattern ,'is-valid':(discont.valid) }"
                         [(ngModel)]="preCoupon.discountRate" required placeholder="Descuento">
-                    <div class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="discont.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
                     <div *ngIf="discont.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
-            <div  *ngIf="variousDiscounts" class="form-group row">
+            <div  *ngIf="timeCreation" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de creación </label>
                 <div class="col-md-7">
                     <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
@@ -181,7 +184,7 @@
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
-            <div *ngIf="variousDiscounts" class="form-group row">
+            <div *ngIf="timeCreation" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de caducidad </label>
                 <div class="col-md-7">
                     <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime" #expirationTime="ngModel" required
@@ -193,23 +196,15 @@
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
-            <div *ngIf="referred" class="form-group row">
-                <label class="col-md-5 col-form-label">Código</label>
-                <div class="col-md-7">
-                    <input class="form-control" type="text" name="code" #code="ngModel"
-                        pattern="[0123456789,.'--]{1,30}"
-                        [ngClass]="{'is-invalid': (!code.valid && code.touched) || code.errors?.pattern ,'is-valid':(code.valid) }"
-                        [(ngModel)]="preCoupon.code" required placeholder="Código">
-                    <div class="invalid-feedback">*Este campo es requerido </div>
-                    <div *ngIf="code.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
-                    <div class="valid-feedback">Ok!</div>
-                </div>
-            </div>
+
+        </section>
+
+        <section class="col-5">
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Nombre cupón</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" name="nameCoupon" #nameCoupon="ngModel" id="id"
+                    <input class="form-control" type="text" name="nameCoupon" #nameCoupon="ngModel" id="id" placeholder="Nombre cupón"
                         [ngClass]="{'is-invalid': (!nameCoupon.valid && nameCoupon.touched),'is-valid':(nameCoupon.valid) }"
                         [(ngModel)]="preCoupon.name" required>
                     <div *ngIf="nameCoupon.errors?.required" class="invalid-feedback">*Este campo es requerido
@@ -223,7 +218,18 @@
                     <label class="form-control">{{preCoupon.codeToRedeem}}</label>
                 </div>
             </div>
-
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Unidades disponibles</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"
+                        pattern="[0123456789,.'--]{1,10}"
+                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
+                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles">
+                    <div *ngIf="numberOfUnits.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="numberOfUnits.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Descripción</label>
                 <div class="col-md-7">
