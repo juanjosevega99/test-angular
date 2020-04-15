@@ -7,7 +7,6 @@ import { Promotions } from 'src/app/models/Promotions';
 import { DishPromotion } from "src/app/models/DishPromotion";
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Guid } from "guid-typescript";
 
 @Component({
   selector: 'app-promo-manager',
@@ -29,9 +28,8 @@ export class PromoManagerComponent implements OnInit {
   dishPromoArray = this.dishgetting;
 
   today: Date;
-  writeNewDates: boolean;
 
-  constructor(private dishesService: DishesService, private promoService: PromotionsService) {
+  constructor(private dishesService: DishesService, private promoService: PromotionsService, private _router: Router) {
 
     //inicialization of the table
     this.table = new FormGroup({
@@ -39,7 +37,6 @@ export class PromoManagerComponent implements OnInit {
       "name": new FormControl(),
     })
 
-    this.writeNewDates = false;
 
 
     //inicialization of dishes
@@ -181,30 +178,29 @@ export class PromoManagerComponent implements OnInit {
 
       let datee = new Date(yf, mf, df, hf, minf)
 
-      let ys = promo.promotionStartDate[0]['year'];
-      let ms = promo.promotionStartDate[0]['month'];
-      let ds = promo.promotionStartDate[0]['day'];
-      let hs = promo.promotionStartDate[1]['hour'];
-      let mins = promo.promotionStartDate[1]['minute'];
-
-      let datei = new Date(ys, ms, ds, hs, mins)
-
       this.today = new Date()
       let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-      let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
       let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-
+      
       if (datetoday > datefinish) {
-        this.writeNewDates= true;
-    
-        
+        Swal.fire({
+          title: 'Actualizar',
+          html: "Las fechas de la promoción están <b>vencidas</b>, Ingresa nuevas fechas para activar!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          cancelButtonColor: '#542b81',
+          confirmButtonText: 'Si, actualizar!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'createDish', promo.reference])
+          }
+        })  
       }
       else {
         this.changeStateA(idDish)
-        console.log("NO vas a cambiar");
       }
     })
-
   }
 
   //method for seaching a specific values by name and code
