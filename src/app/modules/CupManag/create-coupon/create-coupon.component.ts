@@ -7,19 +7,20 @@ import { TypeCouponService } from "src/app/services/typeCoupons.service";
 import { AlliesService } from "src/app/services/allies.service";
 import { HeadquartersService } from "src/app/services/headquarters.service";
 import { DishesService } from "src/app/services/dishes.service";
+import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
 //models
 import { Coupons } from 'src/app/models/Coupons';
 import { TypeCoupon } from "src/app/models/typeCoupons";
 import { CouponList } from 'src/app/models/CouponList';
+import { Allies } from '../../../models/Allies';
+import { Headquarters } from 'src/app/models/Headquarters';
+import { Dishes } from '../../../models/Dishes';
 //import for images 
 import { Guid } from "guid-typescript";
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { AngularFireStorage } from "@angular/fire/storage";
-import { Allies } from '../../../models/Allies';
-import { Headquarters } from 'src/app/models/Headquarters';
 import { element } from 'protractor';
-import { Dishes } from '../../../models/Dishes';
 
 @Component({
   selector: 'app-create-coupon',
@@ -30,7 +31,7 @@ export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
     codeToRedeem: null,
     state: [],
-    createDate: null,
+    // createDate: null,
     expirationDate: null,
     idAllies: null,
     nameAllies: null,
@@ -48,18 +49,7 @@ export class CreateCouponComponent implements OnInit {
     description: null,
     imageCoupon: null,
     termsAndConditions: null,
-    codeReferred: null,    
-    // numberOfModifications: 0,
-    // idAllies: null,
-    // nameAllie: "kfc",
-    // idHeadquarter: null,
-    // nameHeadquarter: null,
-    // idCharge: null,
-    // nameCharge: null,
-    // userCode: null,
-    // permis: null,
-    // identification: null,
-    // email: null,
+    codeReferred: null,
   }
 
   // editCoupon: Profiles = {
@@ -104,7 +94,7 @@ export class CreateCouponComponent implements OnInit {
   arrayAllies: any[] = [];
   // array for search headquuarters
   arrayHeadquarter: any;
-  headquartersByIdAlly: any[]=[];
+  headquartersByIdAlly: any[] = [];
 
   //array for search diches by id Headquarters
   arrayDishes: any;
@@ -112,23 +102,27 @@ export class CreateCouponComponent implements OnInit {
 
   //variable for upload images
   fileImagedish: any;
+  urlImagedish: any;
 
-  //variables for receiving the profile that will be edited
+
+  //variables for receiving the coupon that will be edited
   identificatorbyRoot: any;
-  // buttonPut: boolean;
+  buttonPut: boolean;
   seeNewPhoto: boolean;
-  //variable for the loading
-  loading: boolean;
-  //variables time
-  meridian  = true;
-   // Variables of alerts
-  alertBadExtensionImageCoupon = false
- 
-   //flags of type Coupons
+
+  // All Flags 
+  //flags of type Coupons
   discount = false
   timeCreation = false
-
-
+  //flag by state swall
+  upload = false;
+  // Variables of alerts
+  alertBadExtensionImageCoupon = false
+  //variables time
+  meridian = true;
+  //variable for the loading
+  loading: boolean;
+  
 
   constructor(
     private _router: Router,
@@ -137,14 +131,15 @@ export class CreateCouponComponent implements OnInit {
     private couponsServices: CouponsService,
     private alliesServices: AlliesService,
     private headquartersServices: HeadquartersService,
-    private dishesServices: DishesService) {
+    private dishesServices: DishesService,
+    private _uploadImages: UploadImagesService) {
 
     //inicalization code remider for coupon 
     let codeToRedeem = Math.random().toString(36).substring(7);
     this.preCoupon['codeToRedeem'] = codeToRedeem;
     //flags
     // this.loading = true;
-    // this.buttonPut = true;
+    this.buttonPut = true;
     this.seeNewPhoto = false;
     this.State = [{
       state: "active",
@@ -162,7 +157,7 @@ export class CreateCouponComponent implements OnInit {
         // this.getProfile(identificator)
       } else if (identificator == -1) {
         // this.loading = false
-        // this.buttonPut = false
+        this.buttonPut = false
       }
       this.identificatorbyRoot = identificator
     })
@@ -187,7 +182,7 @@ export class CreateCouponComponent implements OnInit {
   //see Name ally for show headquarter
   seeNameAlly(selected: any) {
     this.arrayHeadquarter = []
-    this.headquartersByIdAlly= []
+    this.headquartersByIdAlly = []
     this.arrayDishes = []
     this.dishesByIdHeadquarter = []
     this.arrayAllies.forEach((element: any) => {
@@ -198,75 +193,75 @@ export class CreateCouponComponent implements OnInit {
           this.arrayHeadquarter = headquarter
           this.arrayHeadquarter.forEach(element => {
 
-            console.log('elem',element);
-            let obj ={
-              id :  element._id,
-              name : element.name
+            console.log('elem', element);
+            let obj = {
+              id: element._id,
+              name: element.name
             }
 
             this.headquartersByIdAlly.push(obj)
-             
-           });
+
+          });
         })
-        console.log('fsdfd',this.headquartersByIdAlly)
+        console.log('fsdfd', this.headquartersByIdAlly)
       }
     })
   }
 
-  seeNameHeadquarter(selected: any){
+  seeNameHeadquarter(selected: any) {
     this.arrayDishes = []
     this.dishesByIdHeadquarter = []
     this.headquartersByIdAlly.forEach(element => {
-       if ( selected == element.id) {
-          this.preCoupon['nameHeadquarters'] = element.name 
-          this.dishesServices.getDishesByIdHeadquarter(element.id).subscribe( dish => {
-            this.arrayDishes = dish
-            this.arrayDishes.forEach(element => {
-              let obj ={
-                id :  element._id,
-                name : element.name
-              }
-  
-              this.dishesByIdHeadquarter.push(obj)
-            });
+      if (selected == element.id) {
+        this.preCoupon['nameHeadquarters'] = element.name
+        this.dishesServices.getDishesByIdHeadquarter(element.id).subscribe(dish => {
+          this.arrayDishes = dish
+          this.arrayDishes.forEach(element => {
+            let obj = {
+              id: element._id,
+              name: element.name
+            }
 
-          } )      
-       }     
+            this.dishesByIdHeadquarter.push(obj)
+          });
+
+        })
+      }
     });
   }
 
-  seeNameDish(selected: any){
-    this.dishesByIdHeadquarter.forEach( element => {
-      if ( selected == element.id) {
+  seeNameDish(selected: any) {
+    this.dishesByIdHeadquarter.forEach(element => {
+      if (selected == element.id) {
         this.preCoupon['nameDishes'] = element.name;
       }
     })
   }
-  seeNameTypeCoupon(selected:any) {
-    
-    this.typeCoupon.forEach( element  => {
+  seeNameTypeCoupon(selected: any) {
+
+    this.typeCoupon.forEach(element => {
       if (selected == element.id) {
         this.preCoupon['nameTypeOfCoupon'] = element.name
 
         if (element.name == "Bienvenida") {
-           return this.timeCreation = false
-            
+          return this.timeCreation = false
+
         }
         if (element.name == "2x1") {
-           return this.timeCreation = true
-            
+          return this.timeCreation = true
+
         }
         if (element.name == "Fechas Especiales") {
-           return this.timeCreation = true
-            
+          return this.timeCreation = true
+
         }
         if (element.name == "Descuentos 10, 20, 30, 40 % ") {
           return this.timeCreation = true
-            
+
         }
         if (element.name == "Happy Hour") {
           return this.timeCreation = true
-            
+
         }
         if (element.name == "Referido") {
           return this.timeCreation = false
@@ -377,14 +372,14 @@ export class CreateCouponComponent implements OnInit {
     let filePath = input.value;
     let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
     let image = "";
-    if (!allowedExtensions.exec(filePath)) { 
+    if (!allowedExtensions.exec(filePath)) {
       input.value = '';
-      this.alertBadExtensionImageCoupon= true;
+      this.alertBadExtensionImageCoupon = true;
       return false;
-    } else { 
+    } else {
       if (input.files && input.files[0]) {
         this.seeNewPhoto = true;
-        this.alertBadExtensionImageCoupon= false;
+        this.alertBadExtensionImageCoupon = false;
 
         var reader = new FileReader();
         reader.onload = function (e: any) {
@@ -393,13 +388,37 @@ export class CreateCouponComponent implements OnInit {
         };
         reader.readAsDataURL(input.files[0]);
       }
-     }
+    }
     return this.fileImagedish = input.files[0]
   }
-  // //save new profile
-  // saveProfile() {
-  //   // this.swallSave()
+  //save new coupon
+  saveCoupon() {
+    this.swallSave()
+  }
+  //putProfile
+  // putProfile() {
+  //   this.chargeProfiles.getProfiles().subscribe(profiles => {
+  //     let profile: Profiles = {};
+  //     profile = profiles[this.identificatorbyRoot];
+  //     let realId = profile.id;
+  //     this.editProfile.state = this.preProfile['state'];
+  //     this.editProfile.entryDate = profile.entryDate;
+  //     this.editProfile.modificationDate = this.today;
+  //     this.editProfile.idAllies = profile.idAllies;
+  //     this.editProfile.nameAllie = profile.nameAllie;
+  //     this.editProfile.idHeadquarter = profile.idHeadquarter;
+  //     this.editProfile.nameHeadquarter = profile.nameHeadquarter;
+  //     this.editProfile.idCharge = this.preProfile['idCharge'];
+  //     this.editProfile.nameCharge = this.preProfile['nameCharge'];
+  //     this.editProfile.userCode = this.preProfile['userCode'];
+  //     this.editProfile.permis = this.preProfile['permis'];
+  //     this.editProfile.identification = this.preProfile['identification'];
+  //     this.editProfile.name = this.preProfile['name'];
+  //     this.editProfile.email = this.preProfile['email'];
+  //     this.swallUpdate(realId)
+  //   })
   // }
+
   //sweet alerts
   swallSaveTypeCoupon(newTypeCoupon: any) {
     Swal.fire({
@@ -462,6 +481,53 @@ export class CreateCouponComponent implements OnInit {
           'Eliminado!',
           'success',
         )
+      }
+    })
+  }
+
+  //swall for save collection Coupon
+  swallSave() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+  
+        this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
+          .then(urlImage => {
+            // this.urlImagedish = urlImage;
+            this.preCoupon['imageCoupon'] = urlImage
+            // this.forma.controls['logo'].setValue(this.urlLogo)
+            this.couponsServices.postCoupon(this.preCoupon).subscribe()
+            this.upload = true
+          })
+          .catch();
+
+        if (this.upload == true) {
+          Swal.fire({
+            title: 'Guardado',
+            text: "Tu nuevo cupón ha sido creado!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'couponManager',]);
+            }
+          })
+        }else{
+          Swal.fire({
+            text: "El cupón no ha sido creado porque no se subió la imagen",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+        }
       }
     })
   }

@@ -1,6 +1,6 @@
 <div class="compenetsstyle">
     <app-loading *ngIf="loading"></app-loading>
-    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveProfile(shape)" #shape="ngForm" *ngIf="!loading">
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveCoupon(shape)" #shape="ngForm" *ngIf="!loading">
 
         <a (click)="goBackProfiles()" class="d-flex mr-2">
             <img src="assets/icons/Back.png " class="tifi-icon-back">
@@ -164,7 +164,7 @@
                 <label class="col-md-5 col-form-label">%Descuento</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="discont" #discont="ngModel"
-                        pattern="[0123456789,.'--]{1,10}"
+                        pattern="[0123456789,.'-]{1,10}"
                         [ngClass]="{'is-invalid': (!discont.valid && discont.touched) || discont.errors?.pattern ,'is-valid':(discont.valid) }"
                         [(ngModel)]="preCoupon.discountRate" required placeholder="Descuento">
                     <div *ngIf="discont.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
@@ -222,7 +222,7 @@
                 <label class="col-md-5 col-form-label">Unidades disponibles</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"
-                        pattern="[0123456789,.'--]{1,10}"
+                        pattern="[0123456789,.'-]{1,10}"
                         [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
                         [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles">
                     <div *ngIf="numberOfUnits.errors?.required" class="invalid-feedback">*Este campo es requerido </div>

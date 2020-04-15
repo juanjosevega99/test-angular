@@ -15,10 +15,10 @@ export class UploadImagesService {
   constructor(private storage: AngularFireStorage) {
     
   }
-  uploadImages(file: any, path: any) {
+  uploadImages(file: any, principalPath ,secondpath: any) {
     return new Promise((resolve, reject) => {
       const idImage: Guid = Guid.create();
-      const filePath = `assets/allies/${path}/${idImage}`
+      const filePath = `assets/${principalPath}/${secondpath}/${idImage}`
       const ref = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, file)
       task.snapshotChanges()

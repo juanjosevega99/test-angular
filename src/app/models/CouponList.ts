@@ -1,7 +1,6 @@
 export class CouponList {
     id?:string;
     name?:string;
-    numberOfModifications?:number;
     description?:string;
     imageCoupon?:string;
     idtypeOfCoupon?:string;
@@ -11,8 +10,6 @@ export class CouponList {
     expirationDate?:string;
     codeToRedeem?:string;
     termsAndConditions?:string;
-    transferable?:boolean;
-    cumulative?:boolean;
     idAllies?:string;
     nameAllies?:string;
     idHeadquarters?:string;
@@ -23,5 +20,5 @@ export class CouponList {
     discountRate?:number;
     creationTime?:string;
     expirationTime?:string;
-    code?:string;
+    codeReferred?:string;
 }

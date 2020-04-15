@@ -36,7 +36,6 @@ export class CouponsService {
           let obj = {
             id: coupons.id,
             name: coupons.name,
-            numberOfModifications: coupons.numberOfModifications, 
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
             typeOfCoupon: coupons.typeOfCoupon,
@@ -46,8 +45,6 @@ export class CouponsService {
             expirationDate: coupons.expirationDate,
             codeToRedeem: coupons.codeToRedeem,
             termsAndConditions: coupons.termsAndConditions,
-            transferable: coupons.transferable,
-            cumulative: coupons.cumulative,
             idAllies: coupons.idAllies,
             nameAllies: coupons.nameAllies,
             idHeadquarters: coupons.idHeadquarters,
@@ -58,7 +55,7 @@ export class CouponsService {
             discountRate: coupons.discountRate,
             creationTime: coupons.creationTime,
             expirationTime: coupons.expirationTime,
-            code: coupons.code
+            codeReferred: coupons.code
           };
           return obj;
         })
@@ -75,7 +72,6 @@ export class CouponsService {
             let obj = {
               id: coupons.id,
               name: coupons.name,
-              numberOfModifications: coupons.numberOfModifications,
               description: coupons.description,
               imageCoupon: coupons.imageCoupon,
               typeOfCoupon: coupons.typeOfCoupon,
@@ -84,8 +80,6 @@ export class CouponsService {
               expirationDate: coupons.expirationDate,
               codeToRedeem: coupons.codeToRedeem,
               termsAndConditions: coupons.termsAndConditions,
-              transferable: coupons.transferable,
-              cumulative: coupons.cumulative,
               idAllies: coupons.idAllies,
               nameAllies: coupons.nameAllies,
               idHeadquarters: coupons.idHeadquarters,
@@ -96,7 +90,7 @@ export class CouponsService {
               discountRate: coupons.discountRate,
               creationTime: coupons.creationTime,
               expirationTime: coupons.expirationTime,
-              code: coupons.code
+              codeReferred: coupons.code
             };
             return obj;
           })
