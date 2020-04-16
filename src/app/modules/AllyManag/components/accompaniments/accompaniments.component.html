@@ -106,7 +106,7 @@
         </section>
     </form>
 
-    <section class="col-12 " [formGroup]="addForm">
+    <form class="col-12 " [formGroup]="addForm" (ngSubmit)="saveAccompaniments()" novalidate="">
         <div class="form-group tableFixHead mt-5">
             <table>
                 <thead>
@@ -127,12 +127,12 @@
                 <tbody>
                     <tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
                         <td><input class="text-center" [formControl]="row.get('quantity')">
-                            <!-- [ngClass]="{ 'is-invalid': (!row.get('quantity').valid && 
-                            row.get('quantity').touched ),'is-valid':(row.get('quantity').valid )}"
-                                <div *ngIf="row.get('quantity').errors?.required " class="invalid-feedback">
+                          <!--  [ngClass]="{ 'is-invalid': (!addForm.get('quantity').valid && 
+                             addForm.get('quantity').touched ),'is-valid':(addForm.get('quantity').valid )}"
+                                <div *ngIf="addForm.get('quantity').errors?.required " class="invalid-feedback">
                                 Este campo es requerido
                             </div>
-                            <div *ngIf="row.get('quantity').errors?.minlength " class="invalid-feedback">
+                            <div *ngIf="addForm.get('quantity').errors?.minlength " class="invalid-feedback">
                                 Como mínimo 2 caracteres
                             </div>
                             <div class="valid-feedback">Ok!</div> -->
@@ -148,19 +148,19 @@
                             </select>
                         </td>
                         <td><input class="text-center" [formControl]="row.get('typeOfAccompaniment')" type="checkbox" [value]="withCost"
-                                (change)="check($event)"  ></td>
-                        <td><input class="text-center"  [formControl]="row.get('preparationTime')"></td>
-                        <td> <select
-                             [formControl]="row.get('preparationTime')" class="input-group-text">
+                                (change)="check($event)" ></td>
+                        <td><input #num class="text-center" [formControl]="row.get('preparationTimeNumber')"></td><!-- (keyup)="seeunity(num.value)" -->
+                        <td> <select  #unity [formControl]="row.get('preparationTimeUnity')"
+                              class="input-group-text " value="unity" ><!-- [value]="preparationTimeArray2" -->
                                 <option *ngFor="let time of time">
                                     {{time}}
                                 </option>
                             </select> </td>
                         <td><input class="text-center" [formControl]="row.get('accompanimentValue')"></td>
                         <td><input disabled class="text-center" value={{date}}></td>
-                        <td><input disabled [formControl]="row.get('name')"></td>
+                        <td><input disabled class="text-center" value={{date}}></td>
                         <td><div class="radio radio-success m-2  form-check-inline">
-                            <input (change)="checkActive($event,active.value)" [value]="states"
+                            <input (change)="checkActive($event,active.value)" [value]="stateA"
                             [formControl]="row.get('state')"
                             #active value="active" type="radio" name={{index}} id="state">
                             <label  style="font-size: 15px;">
@@ -180,7 +180,7 @@
                 </tbody>
             </table>
 
-            <label class="label-control">Items</label>
+            <!-- <label class="label-control">Items</label>
             <br>
             <label class="switch">
                 <input type="checkbox" class="form-control" formControlName="items">
@@ -192,23 +192,25 @@
                         {{addForm.value.items_value}}
                     </span>
                 </span>
-            </label>
+            </label> -->
         </div>
-    </section>
 
-    <section class="col-12 d-flex mt-4 form-group">
-        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-            <button class="btn btn-outline-primary btn-lg">No hay acompañamientos</button>
-        </div>
-        <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-            <button (click)="onAddRow()" *ngIf="addForm.get('rows')" class="btn btn-outline-primary btn-lg">
-                Nuevo acompañamiento</button>
-        </div>
-        <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-            <button class="btn btn-outline-primary btn-lg">Guardar</button>
-        </div>
-    </section>
-    <!-- <pre>{{rows.value | json}}</pre> -->
+        <section class="col-12 d-flex mt-4 form-group">
+            <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+                <button type="button"  class="btn btn-outline-primary btn-lg">No hay acompañamientos</button><!-- (click)="removeRows()" -->
+            </div>
+            <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+                <button (click)="onAddRow()" type="button" class="btn btn-outline-primary btn-lg"><!--  *ngIf="addForm.get('rows')" -->
+                    Nuevo acompañamiento</button>
+            </div>
+            <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
+                <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
+            </div>
+        </section>
+    </form>
+
+    
+    <pre>{{rows.value | json}}</pre>
 </div>
 
  
