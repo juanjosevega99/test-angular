@@ -115,7 +115,7 @@ export class CreateCouponComponent implements OnInit {
   discount = false
   timeCreation = false
   //flag by state swall
-  upload = false;
+  upload: boolean;
   // Variables of alerts
   alertBadExtensionImageCoupon = false
   //variables time
@@ -497,18 +497,17 @@ export class CreateCouponComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-  
         this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
           .then(urlImage => {
-            // this.urlImagedish = urlImage;
             this.preCoupon['imageCoupon'] = urlImage
-            // this.forma.controls['logo'].setValue(this.urlLogo)
             this.couponsServices.postCoupon(this.preCoupon).subscribe()
-            this.upload = true
+            this.upload = false;
           })
-          .catch();
+          .catch((e)=> {
+            return this.upload = true;
+          });
 
-        if (this.upload == true) {
+        if (this.upload == false) {
           Swal.fire({
             title: 'Guardado',
             text: "Tu nuevo cupón ha sido creado!",
@@ -520,7 +519,7 @@ export class CreateCouponComponent implements OnInit {
               this._router.navigate(['/main', 'couponManager',]);
             }
           })
-        }else{
+        }else if (this.upload == true){
           Swal.fire({
             text: "El cupón no ha sido creado porque no se subió la imagen",
             icon: 'warning',

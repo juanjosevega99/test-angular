@@ -23,8 +23,8 @@
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                         <li class="nav-item mr-md-2">
                                             <input placeholder="Buscar por código..." class="form-control text-center" type="text"
-                                                (keyup)="search(identification.value, identification.id)"
-                                                #identification id="identification" formControlName="code">
+                                                (keyup)="search(code.value, code.id)"
+                                                #code id="code" formControlName="code">
                                         </li>
                                         <li class="nav-item">
                                             <input placeholder="Buscar por nombre de establecimiento ..." class="form-control text-center" type="text"
@@ -98,18 +98,17 @@
                 </tr>
             </thead>
             <tbody  class="mt-5">
-                <!-- <tr *ngFor="let prof of newArray; let i = index " class="text-center">
-                    <td>{{prof.nameCharge}}</td>
-                    <td>{{prof.identification}}</td>
-                    <td>{{prof.name}}</td>
-                    <td> <img src={{prof.photo}} alt="" class="sizeLogo mx-2"></td>
-                    <td>{{prof.nameHeadquarter}}</td>
-                    <td>{{prof.entryDate}}</td>
-                    <td>{{prof.modificationDate}}</td>
-                    <td>{{prof.numberOfModifications}}</td>
+                <tr *ngFor="let coupon of newArray; let i = index " class="text-center">
+                    <td>{{coupon.codeToRedeem}}</td>
+                    <td> <img src={{coupon.imageCoupon}} alt="" class="sizeLogo mx-2"></td>
+                    <td>{{coupon.nameAllies}}</td>
+                    <td>{{coupon.nameTypeOfCoupon}}</td>
+                    <!-- <td>{{coupon.createDate}}</td> -->
+                    <td>{{coupon.expirationDate[0]}}</td>
+                    <td>{{coupon.expirationDate[0]}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
-                            <input [checked]="prof.state[0].check" value="{{prof.id}}" type="radio" name={{i}}
+                            <input [checked]="coupon.state[0].check" value="{{coupon.id}}" type="radio" name={{i}}
                                 id="state" #active (click)="changeStateA(active.value)">
                             <label style="font-size: 15px;">
                                 Activo
@@ -118,7 +117,7 @@
                     </td>
                     <td>
                         <div class="radio radio-danger m-2 form-check-inline">
-                            <input [checked]="prof.state[1].check" value="{{prof.id}}" type="radio" name={{i}}
+                            <input [checked]="coupon.state[1].check" value="{{coupon.id}}" type="radio" name={{i}}
                                 id="state" #inactive (click)="changeStateI(inactive.value)">
                             <label style="font-size: 15px;">
                                 Inactivo
@@ -128,7 +127,7 @@
                     <td>
                         <a [routerLink]="[ '/main/createProfile', i ]" class="btn"> <i class="far fa-edit"></i> </a>
                     </td>
-                </tr> -->
+                </tr>
             </tbody>
         </table>
     </div>
