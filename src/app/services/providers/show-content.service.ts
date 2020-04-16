@@ -8,9 +8,6 @@ export class ShowContentService {
 
   constructor() { }
 
-  getProfileStorage() {
-    // get profile localstorage
-  }
 
   showMenus(): profileStorage {
     let profile: profileStorage = new profileStorage();

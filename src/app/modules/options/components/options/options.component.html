@@ -1,84 +1,85 @@
 <div class="continer compenetsstyle d-flex justify-content-center flex-column align-items-center father ">
   <div class="row container-fluid d-flex justify-content-center col-xl-9 align-items-center son">
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/ManagerAllys.png">
+    <div *ngIf="profile.showContent.options" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/ManagerAllys.png">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main/allyManager',-1]" class="btn btn-lg btn-block buttonstyle">Admin de Aliados</a>
+        </div>
       </div>
-      <div class="card-body">
-        <a [routerLink]="['/main/allyManager',-1]" class="btn btn-lg btn-block buttonstyle">Admin de Aliados</a>
+    </div>
+    <div *ngIf="profile.showContent.options" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/astronaut.png">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main','userManager']" class="btn btn-lg btn-block buttonstyle">Admin de Usuarios</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="profile.showContent.options" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/ManagerPromo.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main/allyManager',-2]" class="btn-lg btn-block buttonstyle btn">Admin de Promos</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="profile.showContent.options" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/Managercupons.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main','couponManager']" class="btn btn-lg btn-block buttonstyle">Admin de Cupones</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="profile.showContent.options || profile.showContent.reports || profile.showContent.principal" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/ReportGenerator.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main','reportGenerator']" class="btn btn-lg btn-block buttonstyle">Generador de
+            informes</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="profile.showContent.options || profile.showContent.pqrs" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/Manager-pqr.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main','pqrList']" class="btn btn-lg btn-block buttonstyle">Admin de PQR's</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="profile.showContent.options" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/ManagerBanner.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <a routerLink="/bannerManager" class="btn btn-lg btn-block buttonstyle">Admin de Banners</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="profile.showContent.options" class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card border-primary mb-3">
+        <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
+          <img class="card-img-top imageI" src="assets/img/Managertyc.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <a [routerLink]="['/main','tycManager']" class="btn btn-lg btn-block buttonstyle">Admin de T y C</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/astronaut.png">
-      </div>
-      <div class="card-body">
-        <a [routerLink]="['/main','userManager']" class="btn btn-lg btn-block buttonstyle">Admin de Usuarios</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/ManagerPromo.png" alt="Card image cap">
-      </div>
-      <div class="card-body">
-        <a [routerLink]="['/main/allyManager',-2]" class="btn-lg btn-block buttonstyle btn">Admin de Promos</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/Managercupons.png" alt="Card image cap">
-      </div>
-      <div class="card-body">
-        <a [routerLink]="['/main','couponManager']" class="btn btn-lg btn-block buttonstyle">Admin de Cupones</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/ReportGenerator.png" alt="Card image cap">
-      </div>
-      <div class="card-body">
-        <a [routerLink]="['/main','reportGenerator']" class="btn btn-lg btn-block buttonstyle">Generador de informes</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/Manager-pqr.png" alt="Card image cap">
-      </div>
-      <div class="card-body">
-        <a [routerLink]="['/main','pqrList']" class="btn btn-lg btn-block buttonstyle">Admin de PQR's</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/ManagerBanner.png" alt="Card image cap">
-      </div>
-      <div class="card-body">
-        <a routerLink="/bannerManager" class="btn btn-lg btn-block buttonstyle">Admin de Banners</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card border-primary mb-3">
-      <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-        <img class="card-img-top imageI" src="assets/img/Managertyc.png" alt="Card image cap">
-      </div>
-      <div class="card-body">
-        <a [routerLink]="['/main','tycManager']" class="btn btn-lg btn-block buttonstyle">Admin de T y C</a>
-      </div>
-    </div>
-  </div>
-</div>
 </div>

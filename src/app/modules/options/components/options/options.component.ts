@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthFireServiceService } from '../../../../services/providers/auth-fire-service.service';
 import { Router } from '@angular/router';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import { profileStorage } from 'src/app/models/ProfileStorage';
 
 @Component({
   selector: 'app-options',
@@ -9,8 +11,9 @@ import { Router } from '@angular/router';
 })
 export class OptionsComponent implements OnInit {
   user:boolean;
+  profile: profileStorage = new profileStorage;
 
-  constructor( public firebaseservice: AuthFireServiceService, public route:Router ) {
+  constructor( public firebaseservice: AuthFireServiceService, public route:Router, private showmenu: ShowContentService ) {
 
     this.user = this.firebaseservice.isLoged();
 
@@ -20,12 +23,15 @@ export class OptionsComponent implements OnInit {
     }else{
       console.log("usuario no logeado");
       // this.route.navigate(['log']);
-
     }
+
+    this.profile = this.showmenu.showMenus();
 
    }
 
   ngOnInit() {
+    console.log(this.profile);
+    
 
   }
 

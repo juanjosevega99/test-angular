@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProfilesService } from '../../services/profiles.service';
 import { Profiles } from 'src/app/models/Profiles';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -81,6 +82,11 @@ export class LoginFormComponent implements OnInit {
               break;
           }
 
+        }, err =>{
+          this.spinner.hide();
+          Swal.fire(
+            "Comprueba tu conexión a internet"
+          )
         })
 
       }).catch(err => {
