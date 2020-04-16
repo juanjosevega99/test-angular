@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SectionsService } from "src/app/services/sections.service";
 import Swal from 'sweetalert2';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray, NgForm } from '@angular/forms'
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AccompanimentsService } from 'src/app/services/accompaniments.service';
 
 
 @Component({
@@ -17,13 +18,18 @@ export class AccompanimentsComponent implements OnInit {
   rows: FormArray; //Object that saves all the values of the form
   itemForm: FormGroup;
   withCost: boolean;
-  preparationTimeArray: [];
+  preparationTimeArray1: any[] = [];
+  preparationTimeArray2: {
+    number: '',
+    unity: 'minutos'
+  };
+
   //arrays to save the states
-  states: any[] = [];
-  stateI:any[] =[];
+  stateA: any[] = [];
+  stateI: any[] = [];
 
   //Object that saves all the values of the form
-  /* preAccompaniments: Object = {
+  /* preAccompaniments: Object = {A
     quantity: null,
     unitMeasurement: null,
     name: null,
@@ -57,13 +63,14 @@ export class AccompanimentsComponent implements OnInit {
   date: string;
   times: string;
   today: Date;
-   //variables of idAlly
-   idAlly: number;
+  //variables of idAlly
+  idAlly: number;
 
-  constructor(private sectionService: SectionsService, 
-    private fb: FormBuilder,private _router: Router,
+  constructor(private sectionService: SectionsService,
+    private accompanimentService: AccompanimentsService,
+    private fb: FormBuilder, private _router: Router,
     private _activateRoute: ActivatedRoute) {
-      //get Ally's parameter
+    //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
       console.log('Parametro', params['id']);
       this.idAlly = params['id']
@@ -74,6 +81,7 @@ export class AccompanimentsComponent implements OnInit {
       items_value: ['no', Validators.required]
     });
     this.rows = this.fb.array([]);
+    this.addForm.addControl('rows', this.rows);
 
     //preparation time
     this.time = ['minutos', 'horas']
@@ -83,14 +91,37 @@ export class AccompanimentsComponent implements OnInit {
       this.sections = section;
     })
 
-    //inicialization for the states
-    this.states = [{ name: "inactive", state: true }]
-    this.stateI =[{ name: "inactive", state: true }]
+    //inicialization of states
+    this.stateA = [{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }]
+    this.stateI = [{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }]
+
+    //inialization of preparation time
+    this.preparationTimeArray1 = [{
+      number: null,
+      unity: 'minutos'
+    }]
+
+    this.preparationTimeArray2 = {
+      number: '',
+      unity: 'minutos'
+    }
   }
 
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
-    this.addForm.get("items").valueChanges.subscribe(val => {
+    /* this.addForm.get("items").valueChanges.subscribe(val => {
       if (val === true) {
         this.addForm.get("items_value").setValue("yes");
 
@@ -100,23 +131,28 @@ export class AccompanimentsComponent implements OnInit {
         this.addForm.get("items_value").setValue("no");
         this.addForm.removeControl('rows');
       }
-    });
+    }); */
   }
 
-  goBackCreateDish(){
+  goBackCreateDish() {
     this._router.navigate(['/main', 'createDish', this.idAlly])
+  }
+
+  //Method to remove the rows
+  removeRows() {
+    this.addForm.removeControl('rows');
   }
 
   //Method to set the section selected
   seeValue(name: String, id: String) {
     this.sectionSelected = name;
     console.log(id);
-    
+
     this.sectiontoUpdate = { name: name, id: id }
   }
 
   //Method for see the id of the section selected
-  seeIdSection(sectionSelected){
+  seeIdSection(sectionSelected) {
     this.sectionService.getSections().subscribe(section => {
       this.sections = section;
       this.sections.forEach((element: any) => {
@@ -127,8 +163,9 @@ export class AccompanimentsComponent implements OnInit {
         if (sec.name == sectionSelected) {
           this.sectionId = element.id
         }
+      })
     })
-  })}
+  }
 
   //Method for saving the state of the type of cost
   check(event) {
@@ -139,25 +176,43 @@ export class AccompanimentsComponent implements OnInit {
   checkActive(event, value: String) {
     const check = event.target.checked;
     const active = {
-      name: value,
-      state: check
+      state: value,
+      check: check
     }
-    this.states[0] = active
+    this.stateA[0] = active
   }
 
   //Method for saving the inactive state
-  checkInactive(event,value: String) {
+  checkInactive(event, value: String) {
     const check = event.target.checked;
     const inactive = {
       name: value,
       state: check
     }
-    this.stateI[0] = inactive
+    this.stateI[1] = inactive
   }
 
   //Method to save the values of preparation time
-  preparationTime() {
-    console.log(this.preparationTimeArray);
+  seeunity(number) {
+    let numbe = [{
+      number: number,
+      unity: 'minutos'
+    }]
+    console.log(numbe);
+    this.preparationTimeArray1 = numbe
+    console.log(this.preparationTimeArray1);
+    /* this.fb['preparationTime'] = numbe */
+  }
+
+  preparationTime(num, unity) {
+    let preparationTimeArray = {
+      number: num,
+      unity: unity
+    }
+    this.preparationTimeArray2.number = preparationTimeArray.number
+    this.preparationTimeArray2.unity = preparationTimeArray.unity
+    /* this.rows.value['preparationTime'] = this.preparationTimeArray2 */
+    console.log(this.preparationTimeArray2);
   }
 
   //Method for the admission date
@@ -214,15 +269,14 @@ export class AccompanimentsComponent implements OnInit {
     this.rows.removeAt(rowIndex);
   }
 
-
-
   createItemFormGroup(): FormGroup {
     return this.fb.group({
       quantity: null,
       unitMeasurement: null,
       name: null,
-      preparationTime: [],
-      numberOfModifications: null,
+      preparationTimeNumber: null,
+      preparationTimeUnity: null,
+      numberOfModifications: 0,
       state: [],
       typeOfAccompaniment: false,
       accompanimentValue: null,
@@ -231,6 +285,33 @@ export class AccompanimentsComponent implements OnInit {
     });
   }
 
+  //sweet alerts
+  saveAccompaniments() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar estos nuevos acompañamientos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log(this.rows.value);
+        this.rows.value.forEach(res => {
+          this.accompanimentService.postAccompaniment(res).subscribe(res => {
+            Swal.fire(
+              'Guardado!',
+              'Tu(s) acompañamiento(s) ha(n) sido creado(s)',
+              'success',
+            )
+          })
+        })
+      }
+
+
+    })
+  }
   //Sweet alert for adding a new section
   swallSaveOtherSection(newCategory: any) {
     Swal.fire({

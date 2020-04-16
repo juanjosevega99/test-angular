@@ -9,7 +9,7 @@ import { Accompaniments } from "../models/Accompaniments";
   providedIn: "root"
 })
 export class AccompanimentsService {
-  constructor(private httpclient: HttpClient) {}
+  constructor(private httpclient: HttpClient) { }
 
   postAccompaniment(accompaniment): Observable<Accompaniments> {
     return this.httpclient.post<Accompaniments>(
@@ -48,7 +48,9 @@ export class AccompanimentsService {
               typeOfAccompaniment: accompaniments.typeOfAccompaniment,
               accompanimentValue: accompaniments.accompanimentValue,
               idTypeSection: accompaniments.idTypeSection,
-              nameTypeSection: accompaniments.nameTypeSection
+              nameTypeSection: accompaniments.nameTypeSection,
+              preparationTimeNumber: accompaniments.preparationTimeNumber,
+              preparationTimeUnity: accompaniments.preparationTimeUnity
             };
             return obj;
           })
@@ -75,7 +77,9 @@ export class AccompanimentsService {
               typeOfAccompaniment: accompaniments.typeOfAccompaniment,
               accompanimentValue: accompaniments.accompanimentValue,
               idTypeSection: accompaniments.idTypeSection,
-              nameTypeSection: accompaniments.nameTypeSection
+              nameTypeSection: accompaniments.nameTypeSection,
+              preparationTimeNumber: accompaniments.preparationTimeNumber,
+              preparationTimeUnity: accompaniments.preparationTimeUnity
             };
             return obj;
           })

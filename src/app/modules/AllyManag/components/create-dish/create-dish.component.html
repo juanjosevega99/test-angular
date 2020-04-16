@@ -446,17 +446,17 @@
             </div>
         </section>
 
-        <section *ngIf="!buttonPut" class="col-12 d-flex" style="justify-content: center;">
+        <!-- <section *ngIf="!buttonPut" class="col-12 d-flex" style="justify-content: center;">
             <div style="padding: 1rem;">
                 <a (click)="routeAccompaniments()" class="btn btn-outline-primary btn-lg">Acompañamiento
                     adicional</a>
             </div>
-        </section>
+        </section> -->
 
         <section *ngIf="buttonPut" class="col-12 d-flex">
             <section class="col-6 d-flex" style="justify-content: center;">
                 <div style="padding: 1rem;">
-                    <a [routerLink]="['/main','accompaniments']" class="btn btn-outline-primary btn-lg">Acompañamiento
+                    <a (click)="routeAccompaniments()" class="btn btn-outline-primary btn-lg">Acompañamiento
                         adicional</a>
                 </div>
             </section>
