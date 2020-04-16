@@ -39,13 +39,12 @@ export class CouponsService {
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
             typeOfCoupon: coupons.typeOfCoupon,
+            nameTypeOfCoupon: coupons.nameTypeOfCoupon,
             state: coupons.state,
             createDate: coupons.createDate,
             expirationDate: coupons.expirationDate,
             codeToRedeem: coupons.codeToRedeem,
             termsAndConditions: coupons.termsAndConditions,
-            transferable: coupons.transferable,
-            cumulative: coupons.cumulative,
             idAllies: coupons.idAllies,
             nameAllies: coupons.nameAllies,
             idHeadquarters: coupons.idHeadquarters,
@@ -56,7 +55,7 @@ export class CouponsService {
             discountRate: coupons.discountRate,
             creationTime: coupons.creationTime,
             expirationTime: coupons.expirationTime,
-            code: coupons.code
+            codeReferred: coupons.code
           };
           return obj;
         })
@@ -81,8 +80,6 @@ export class CouponsService {
               expirationDate: coupons.expirationDate,
               codeToRedeem: coupons.codeToRedeem,
               termsAndConditions: coupons.termsAndConditions,
-              transferable: coupons.transferable,
-              cumulative: coupons.cumulative,
               idAllies: coupons.idAllies,
               nameAllies: coupons.nameAllies,
               idHeadquarters: coupons.idHeadquarters,
@@ -93,7 +90,7 @@ export class CouponsService {
               discountRate: coupons.discountRate,
               creationTime: coupons.creationTime,
               expirationTime: coupons.expirationTime,
-              code: coupons.code
+              codeReferred: coupons.code
             };
             return obj;
           })

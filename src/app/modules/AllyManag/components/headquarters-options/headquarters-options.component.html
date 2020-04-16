@@ -2,7 +2,7 @@
 
     <div class="container-fluid d-flex flex-row align-items-center " style="margin-bottom: 5rem;">
 
-        <a [routerLink] = "['/main', 'allyManager']" class="d-flex mr-2">
+        <a [routerLink]="['/main', 'allyManager','-1']" class="d-flex mr-2">
             <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 
@@ -10,10 +10,16 @@
 
         <div class="input-group" style=" width: 13rem;">
 
-            <select class="custom-select" id="inputGroupSelect01" >
-               
-                <option selected *ngFor="let hq of headquarterByAlly" value="1"> {{hq.name}} </option>
+            <select name="nameHeadquarters" #nameHeadquarters="ngModel" [(ngModel)]="idHeadquarter" class="form-control"
+                (change)="seeNameHeadquarter()">
+
+                <option *ngFor="let hq of headquartersByIdAlly" [ngValue]="hq.id">
+                    {{hq.name}}
+                </option>
             </select>
+            <div *ngIf="alertDontRegisters" class="alert alert-secondary" role="alert">
+                No hay sedes registradas
+            </div>
         </div>
 
     </div>
@@ -25,7 +31,7 @@
                     <i class="fas fa-info imageI" style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a (click)="editAlly()"  class="btn btn-lg btn-block buttonstyle">Info del establecimiento</a>
+                    <a (click)="editAlly()" class="btn btn-lg btn-block buttonstyle">Info del establecimiento</a>
                 </div>
             </div>
         </div>
@@ -36,8 +42,8 @@
                     <i class="fas fa-map-marker-alt imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a [routerLink]="['/main','options']" class="btn btn-lg btn-block buttonstyle">Info de la sede</a>
-                </div>
+                    <button [routerLink]="['/main','options']" class="btn btn-lg btn-block buttonstyle" [disabled]="enableInfHeadquarter" >Info de la sede </button>
+                    </div>
             </div>
         </div>
 
@@ -47,7 +53,7 @@
                     <i class="fas fa-folder-open imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a (click)="editMenu()" class="btn btn-lg btn-block buttonstyle">Editar menu</a>
+                    <button (click)="editMenu()" class="btn btn-lg btn-block buttonstyle" [disabled]="enableEditMenu">Editar menu</button>
                 </div>
             </div>
         </div>
@@ -58,7 +64,7 @@
                     <i class="fas fa-warehouse imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a  (click)="createHeadquart()" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
+                    <a (click)="createHeadquart()" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
                 </div>
             </div>
         </div>
@@ -69,7 +75,7 @@
                     <i class="fas fa-user-tie imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <a  (click)="profiles()" class="btn btn-lg btn-block buttonstyle" >Perfiles</a>
+                    <button (click)="profiles()" class="btn btn-lg btn-block buttonstyle" [disabled]="enableProfiles">Perfiles</button>
                 </div>
             </div>
         </div>
