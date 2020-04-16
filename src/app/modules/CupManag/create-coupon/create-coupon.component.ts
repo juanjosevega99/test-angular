@@ -115,7 +115,7 @@ export class CreateCouponComponent implements OnInit {
   discount = false
   timeCreation = false
   //flag by state swall
-  upload: boolean;
+  upload: boolean = false;
   // Variables of alerts
   alertBadExtensionImageCoupon = false
   //variables time
@@ -461,22 +461,6 @@ export class CreateCouponComponent implements OnInit {
             console.log(this.typeCoupon)
           })
         })
-        // this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
-        //   this.typeCoupon = typeCoupon;
-        //   this.typeCoupon.forEach((element: any) => {
-        //     let coupon: any = {
-        //       id: element.id,
-        //       name: element.name
-        //     }
-        //     if (coupon.name == typeCouponSelected) {
-        //       this.typeCouponService.deleteTypeCoupon(coupon.id).subscribe(() => {
-        //         this.typeCouponService.getTypeCoupon().subscribe(coupons => {
-        //           this.typeCoupon = coupons;
-        //         })
-        //       })
-        //     }
-        //   });
-        // })
         Swal.fire(
           'Eliminado!',
           'success',
@@ -497,36 +481,38 @@ export class CreateCouponComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
-          .then(urlImage => {
+        this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon') 
+        .then(urlImage => {
+            this.upload = true;
             this.preCoupon['imageCoupon'] = urlImage
             this.couponsServices.postCoupon(this.preCoupon).subscribe()
-            this.upload = false;
-          })
-          .catch((e)=> {
-            return this.upload = true;
-          });
-
-        if (this.upload == false) {
-          Swal.fire({
-            title: 'Guardado',
-            text: "Tu nuevo cupón ha sido creado!",
-            icon: 'warning',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          }).then((result) => {
-            if (result.value) {
-              this._router.navigate(['/main', 'couponManager',]);
+            if (this.upload == true) {
+              Swal.fire({
+                title: 'Guardado',
+                text: "Tu nuevo cupón ha sido creado!",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'couponManager',]);
+                }
+              })
             }
           })
-        }else if (this.upload == true){
-          Swal.fire({
-            text: "El cupón no ha sido creado porque no se subió la imagen",
-            icon: 'warning',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          })
-        }
+          .catch((e)=> { console.log(e)
+            if (this.upload == false) {
+              Swal.fire({
+                text: "El cupón no ha sido creado porque no se subió la imagen",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              })
+            }
+          }
+          );
+
+       
       }
     })
   }
