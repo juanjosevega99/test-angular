@@ -51,6 +51,7 @@ export class LoginFormComponent implements OnInit {
             idHeadquarter: profileservice.idHeadquarter,
             nameHeadquarter: profileservice.nameHeadquarter,
             nameCharge: profileservice.nameCharge,
+            permis: profileservice.permis
 
           }
 
@@ -58,16 +59,26 @@ export class LoginFormComponent implements OnInit {
 
           this.spinner.hide();
 
+          console.log(profileservice.nameCharge.toLocaleLowerCase());
           switch (profileservice.nameCharge.toLocaleLowerCase()) {
-
-            case 'cajero':
+            
+            case 'cajero': 
+            case 'administradorpdv': 
+            case 'gerentegeneral':
               this.route.navigate(['main/principal-orders']);
+              break;
 
             case 'asesor':
               this.route.navigate(['main/pqrList']);
+              break;
+
+            case 'contador':
+              this.route.navigate([ '/main', 'reportGenerator' ]);
+              break;
 
             default:
               this.route.navigate(['main/options']);
+              break;
           }
 
         })

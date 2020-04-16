@@ -116,7 +116,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.preProfile['state'] = this.State;
 
-    this.permiss = ["permiso1", "permiso2"];
+    this.permiss = ["cajero", "administradorPDV", "GerenteGeneral"];
 
     //inicialization for charging the data of a profile to edit
     this.activatedRoute.params.subscribe(params => {
