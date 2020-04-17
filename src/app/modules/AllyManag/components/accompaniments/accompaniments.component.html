@@ -144,8 +144,14 @@
                                 (blur)="updateList(id, 'name', $event)">{{person.name}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'nameTypeSection', $event)"
-                                (blur)="updateList(id, 'nameTypeSection', $event)">{{person.nameTypeSection}}</span>
+                            <select  class="input-group-text"> <!-- [formControl]="row.get('nameTypeSection')" #sec (change)="seeid(sec.value)" -->
+                                <option selected>{{person.nameTypeSection}}</option>
+                                <option  *ngFor="let section of sections" >
+                                    {{section.name}}
+                                </option>
+                            </select>
+                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'nameTypeSection', $event)"
+                                (blur)="updateList(id, 'nameTypeSection', $event)">{{person.nameTypeSection}}</span> -->
                         </td>
                         <td>
                             <span contenteditable="true" (click)="changeValue(id, 'typeOfAccompaniment', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">
@@ -159,8 +165,14 @@
                                 (blur)="updateList(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'preparationTimeUnity', $event)"
-                                (blur)="updateList(id, 'preparationTimeNumber', $event)">{{person.preparationTimeUnity}}</span>
+                            <select  #unity class="input-group-text " value="unity" >
+                                <option selected>{{person.preparationTimeUnity}}</option>
+                              <option *ngFor="let time of time">
+                                  {{time}}
+                              </option>
+                          </select>
+                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'preparationTimeUnity', $event)"
+                                (blur)="updateList(id, 'preparationTimeNumber', $event)">{{person.preparationTimeUnity}}</span> -->
                         </td>
                         <td>
                             <span contenteditable="true" (keyup)="changeValue(id, 'accompanimentValue', $event)"
@@ -175,12 +187,38 @@
                                 (blur)="updateList(id, 'creationDate', $event)">{{person.modificationDate}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'state', $event)"
-                               > </span><!--  (blur)="updateList(id, 'modificationDate', $event)" -->
+                            <span contenteditable="true" (click)="changeValue(id, 'state', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">
+                            <div class="radio radio-success m-2  form-check-inline"><!-- (change)="checkActive($event,active.value)" [value]="stateA"
+                                [formControl]="row.get('state')"
+                                #active -->
+                            <input [checked]="person.state[0].check" value="active" type="radio" name={{index}} id="stateAI">
+                            <label  style="font-size: 15px;">
+                               
+                            </label>
+                        </div>
+                    </span>
+                            <!-- <span contenteditable="true" (click)="changeValue(id, 'state', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">  -->
+                                <!-- <div class="radio radio-success m-2  form-check-inline"> -->
+                                    <!-- <input [checked]="person.state[0].check" type="radio" >  -->
+                                    <!-- <input [checked]="person.state[0].check" type="radio">
+                                </div> -->
+                            <!-- </span> --><!--  <input (change)="checkActive($event,active.value)" [value]="stateA"
+                                [formControl]="row.get('state')"
+                                #active value="active" type="radio" name={{index}} id="state"> (blur)="updateList(id, 'modificationDate', $event)" -->
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'state', $event)"
-                                (blur)="updateList(id, 'modificationDate', $event)"> </span>
+                            <span contenteditable="true" (click)="changeValue(id, 'state', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">
+                            <div class="radio radio-danger m-2 form-check-inline"><!-- (change)="checkInactive($event,inactive.value)" [value]="stateI"
+                                [formControl]="row.get('state')"
+                                #inactive -->
+                                <input [checked]="person.state[1].check" value="inactive" type="radio" name={{index}} id="stateAI" >
+                                <label style="font-size: 15px;" >
+                                   
+                                </label>
+                            </div>
+                        </span>
+                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'state', $event)"
+                                (blur)="updateList(id, 'modificationDate', $event)"> </span> -->
                         </td>
                         <td>
                             <span class="table-remove">

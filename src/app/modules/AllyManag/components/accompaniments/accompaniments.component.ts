@@ -205,7 +205,13 @@ export class AccompanimentsComponent implements OnInit {
 
   add() {
     const obj =  { id: null, quantity: '',unitMeasurement:'', name: '', nameTypeSection: '',typeOfAccompaniment:'', preparationTimeNumber: null,
-    preparationTimeUnity: '',accompanimentValue:'', creationDate:'', modificationDate:'', state:'' };
+    preparationTimeUnity: '',accompanimentValue:'', creationDate:'', modificationDate:'', state:[{
+      state: "active",
+      check: false
+    }, {
+      state: "inactive",
+      check: false
+    }] };
     this.personList.push(obj);
     /* if (this.awaitingPersonList.length > 0) {
       const person = this.awaitingPersonList[0];
@@ -216,7 +222,7 @@ export class AccompanimentsComponent implements OnInit {
 
   changeValue(id: number, property: string, event: any) {
     let editField = event.target.textContent;
-    this.personList[id][property] = '';
+    /* this.personList[id][property] = ''; */
     this.personList[id][property] = editField;
 
    /*  this.editField = event.target.textContent;
