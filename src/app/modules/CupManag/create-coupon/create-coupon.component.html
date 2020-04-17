@@ -1,9 +1,9 @@
 <div class="compenetsstyle">
     <app-loading *ngIf="loading"></app-loading>
     <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveCoupon(shape)" #shape="ngForm" *ngIf="!loading">
-
-        <a (click)="goBackProfiles()" class="d-flex mr-2">
-            <img src="assets/icons/Back.png " class="tifi-icon-back">
+        
+        <a  class="d-flex mr-2">
+            <img (click)="goBackProfiles()" src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
 
         <section class="col-6">
@@ -55,15 +55,30 @@
                             </a>
                         </div>
 
-                        <ngb-timepicker name="start" [(ngModel)]="preCoupon.createDate[1]" #it="ngModel"
+                        <!-- <ngb-timepicker name="start" [(ngModel)]="preCoupon.createDate[1]" #it="ngModel"
                             required [ngClass]="{'is-invalid': (!it.valid && it.touched),'is-valid':(it.valid)}"
-                            [meridian]="meridian"></ngb-timepicker>
+                            [meridian]="meridian"></ngb-timepicker> -->
+                        <!-- <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
+                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
+                        [meridian]="meridian">
+                    </ngb-timepicker> -->
                         <div class="col-md-4" *ngIf="i.errors?.required" class="invalid-feedback">*Campo fecha y hora es
                             requerido</div>
                     </div>
                 </div>
             </div>
-
+            <div  class="form-group row">
+                <label class="col-md-5 col-form-label">Hora de creación </label>
+                <div class="col-md-7">
+                    <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
+                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
+                        [meridian]="meridian">
+                    </ngb-timepicker>
+                    <div class="col-md-4" *ngIf="timeCreate.errors?.required" class="invalid-feedback">*la hora es
+                        requerida</div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Entidad</label>
                 <div class="col-md-7">
@@ -117,13 +132,15 @@
                             nameTypeOfCoupon.touched ,'is-valid':(nameTypeOfCoupon.valid) }"
                             [(ngModel)]="preCoupon.idtypeOfCoupon" (change)="seeNameTypeCoupon(nameTypeOfCoupon.value)">
                             <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
-                            <option *ngFor="let coupon of typeCoupon" [ngValue]="coupon.id">
+                            <option *ngFor="let coupon of typeCoupon" 
+                                [ngValue]="coupon.id">
                                 {{coupon.name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherTypeCouponInput" placeholder="Otro cupon"
-                            class="col-md-9 col-form-label mr-2 form-control " type="text" name="otherTypeCoupon">
+                        <input *ngIf="otherTypeCouponInput" placeholder="Otro cupon" #TypeCoupon="ngModel"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherTypeCoupon" 
+                            type="text" name="otherTypeCoupon">
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
                             (click)="handleBoxTypeCoupons()"> Cancelar</button>
@@ -160,7 +177,7 @@
                 </div>
             </div>
 
-            <div  *ngIf="timeCreation" class="form-group row">
+            <!-- <div  *ngIf="timeCreation" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de creación </label>
                 <div class="col-md-7">
                     <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
@@ -171,7 +188,7 @@
                         requerida</div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
-            </div>
+            </div> -->
             <div *ngIf="finishDate" class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de vencimiento</label>
                 <div class="col-md-7">
@@ -196,7 +213,7 @@
                         [ngClass]="{'is-invalid': (!expirationTime.valid && expirationTime.touched),'is-valid':(expirationTime.valid)}"
                         [meridian]="meridian">
                     </ngb-timepicker>
-                    <div class="col-md-4" *ngIf="expirationTime.errors?.required" class="invalid-feedback">*hora es
+                    <div  *ngIf="expirationTime.errors?.required" class="invalid-feedback">*hora es
                         requerida</div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
@@ -272,10 +289,10 @@
 
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row justify-content-center ">
                 <div class="col-md-7">
 
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-center container-fluid">
                         <button class="btn1 btn btn-outline-primary">Terminos y condiciones </button>
                     </div>
 

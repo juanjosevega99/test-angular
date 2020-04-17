@@ -82,9 +82,8 @@ export class CreateCouponComponent implements OnInit {
 
   // All Flags 
   //flags of type Coupons
-  discount = false
-  timeCreation = false
-  finishDate = false
+  timeCreation = true
+  finishDate = true
   //flag by state swall
   upload: boolean = false;
   // Variables of alerts
@@ -146,11 +145,12 @@ export class CreateCouponComponent implements OnInit {
     //inicialization service with collections allies
     this.alliesServices.getAllies().subscribe(ally => {
       this.arrayAllies = ally
-      this.seeNameAlly;
+      
       if (this.preCoupon['idAllies']) {
         var dbAlly = this.arrayAllies.find(element => element.id === this.preCoupon['idAllies'])
         this.preCoupon['idAllies'] = dbAlly.id
-
+        this.seeNameAlly(this.preCoupon['idAllies'])
+        
       }
     })
 
@@ -188,14 +188,13 @@ export class CreateCouponComponent implements OnInit {
               id: element._id,
               name: element.name
             }
-
             this.headquartersByIdAlly.push(obj)
+              if (this.preCoupon['idHeadquarters'] && obj.id == this.preCoupon['idHeadquarters'] ) {
+                this.seeNameHeadquarter(this.preCoupon['idHeadquarters']);
+              }
 
           });
-          if (this.preCoupon['idHeadquarters']) {
-            var dbHeadquarter = this.headquartersByIdAlly.find(element => element.id === this.preCoupon['idHeadquarters'])
-            this.preCoupon['idHeadquarters'] = dbHeadquarter.id
-          }
+          
         })
       }
     })
@@ -236,10 +235,7 @@ export class CreateCouponComponent implements OnInit {
       if (selected == element.id) {
         this.preCoupon['nameTypeOfCoupon'] = element.name
 
-        if (element.name == "Bienvenida") {
-          return this.timeCreation = false, this.finishDate= false
-
-        }
+        
         if (element.name == "2x1") {
           return this.timeCreation = true, this.finishDate= true
 
@@ -255,9 +251,6 @@ export class CreateCouponComponent implements OnInit {
         if (element.name == "Happy Hour") {
           return this.timeCreation = true, this.finishDate= true
 
-        }
-        if (element.name == "Referido") {
-          return this.timeCreation = false, this.finishDate= false
         }
 
       }

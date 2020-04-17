@@ -1,12 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 //services
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service"
 import { CouponsService } from 'src/app/services/coupons.service';
+import { UsersService } from 'src/app/services/users.service';
+import { OrdersService } from 'src/app/services/orders.service';
 //models
 import { Coupons } from 'src/app/models/Coupons';
 import { CouponList } from 'src/app/models/CouponList';
-import { Router, ActivatedRoute } from '@angular/router';
+import { OrderByUser } from 'src/app/models/OrderByUser';
+import { Orders } from 'src/app/models/Orders';
+import { Users } from 'src/app/models/Users';
+
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -31,11 +38,48 @@ export class CuponManagerComponent implements OnInit {
   getCuponById: any;
    //variable of don't results
    noResults = false
+
+   //variables for users
+   usergetting: OrderByUser[] = []; //tofo
+   newdateArray = this.usergetting;
   constructor(
     private couponsServices: CouponsService,
     private saveLocalStorageServices: SaveLocalStorageService,
-    private _router: Router,
+    private _router: Router,private userservice: UsersService, 
+    private orderservice: OrdersService
+
   ) {
+
+    //inicialization users by ally 
+    this.userservice.getUsers().subscribe(res => {
+
+      res.forEach((user: Users) => {
+
+        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
+          if (res.length > 0) {
+
+            const obj: OrderByUser = {};
+
+            res.forEach((order: Orders) => {
+              obj.name = user.name;
+              obj.email = user.email;
+              obj.phone = user.phone;
+              obj.birthday = this.convertDate(user.birthday);
+              obj.gender = user.gender;
+              obj.nameAllie = order.nameAllies;
+              obj.nameHeadquarter = order.nameHeadquartes;
+              obj.usability = order.orderValue ? 1 : 0;
+              obj.purchaseAmount = order.orderValue;
+              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+            }
+            )
+            this.usergetting.push(obj);
+
+          }
+        })
+
+      })
+    })
     //clean local storage  for ally and headquarter
     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
 
@@ -52,11 +96,11 @@ export class CuponManagerComponent implements OnInit {
 
         let createDate = [`${ds}/${ms}/${ys}`]
 
-        let yf = coupon.expirationDate[0]['year'];
-        let mf = coupon.expirationDate[0]['month'];
-        let df = coupon.expirationDate[0]['day'];
+        // let yf = coupon.expirationDate[0]['year'];
+        // let mf = coupon.expirationDate[0]['month'];
+        // let df = coupon.expirationDate[0]['day'];
 
-        let finishDate = [`${df}/${mf}/${yf}`]
+        // let finishDate = [`${df}/${mf}/${yf}`]
 
 
         const obj: CouponList = {};
@@ -66,7 +110,7 @@ export class CuponManagerComponent implements OnInit {
         obj.nameAllies = coupon.nameAllies;
         obj.nameTypeOfCoupon = coupon.nameTypeOfCoupon;
         obj.createDate = createDate;
-        obj.expirationDate = finishDate
+        // obj.expirationDate = finishDate
         obj.state = coupon.state
 
         this.couponsGettting.push(obj)
@@ -164,6 +208,30 @@ export class CuponManagerComponent implements OnInit {
       }
 
   }
+
+  //get data to export
+  datafor_Users(){
+    // this.typepdf = false;
+    this.selectforsend();
+  }
+  //selected All items
+  selectedAll(event) {
+    const checked = event.target.checked;
+    this.newdateArray.forEach(item => item.selected = checked)
+  }
+  
+  selectedOne(event, pos: number) {
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    this.newdateArray[pos].selected = checked;
+  }
+  
+  selectforsend() {
+    // this.userSelected = []
+    // this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
+  }
+  
+
   //sweets alerts
   swallUpdateState() {
     Swal.fire({
