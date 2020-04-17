@@ -103,8 +103,7 @@
                     <td> <img src={{coupon.imageCoupon}} alt="" class="sizeLogo mx-2"></td>
                     <td>{{coupon.nameAllies}}</td>
                     <td>{{coupon.nameTypeOfCoupon}}</td>
-                    <!-- <td>{{coupon.createDate}}</td> -->
-                    <td>{{coupon.expirationDate[0]}}</td>
+                    <td>{{coupon.createDate[0]}}</td>
                     <td>{{coupon.expirationDate[0]}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
@@ -125,7 +124,7 @@
                         </div>
                     </td>
                     <td>
-                        <a [routerLink]="[ '/main/createProfile', i ]" class="btn"> <i class="far fa-edit"></i> </a>
+                        <button (click)="goToEditCoupon(coupon.id, i)" class="btn"> <i class="far fa-edit"></i> </button>
                     </td>
                 </tr>
             </tbody>

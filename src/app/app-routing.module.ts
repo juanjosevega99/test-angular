@@ -71,6 +71,7 @@ const routes: Routes = [
       { path: "promoManager", component: PromoManagerComponent },
       { path: "couponManager", component: CuponManagerComponent },
       { path: "createCoupon/:id", component: CreateCouponComponent },
+      { path: "editCoupon/:id", component: CreateCouponComponent },
       { path: "reportGenerator", component: ReportGeneratorComponent },
       { path: "pqrList", component: PqrListComponent },
       { path: "pqrManager/:id", component: PqrManagerComponent },

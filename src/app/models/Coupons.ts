@@ -6,7 +6,7 @@ export class Coupons {
     idtypeOfCoupon?:string;
     nameTypeOfCoupon?:string;
     state?:string[];
-    createDate?:Date;
+    createDate?:string[];
     expirationDate?:string[];
     codeToRedeem?:string;
     termsAndConditions?:string;

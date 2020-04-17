@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+//services
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service"
+import { CouponsService } from 'src/app/services/coupons.service';
+//models
 import { Coupons } from 'src/app/models/Coupons';
 import { CouponList } from 'src/app/models/CouponList';
-import { CouponsService } from 'src/app/services/coupons.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -28,7 +31,11 @@ export class CuponManagerComponent implements OnInit {
   getCuponById : any;
   constructor(
     private couponsServices: CouponsService,
+    private saveLocalStorageServices: SaveLocalStorageService,
+    private _router: Router,
   ) {
+     //clean local storage  for ally and headquarter
+     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
 
     this.table = new FormGroup({
       "code": new FormControl(),
@@ -38,11 +45,18 @@ export class CuponManagerComponent implements OnInit {
     this.couponsServices.getCoupons().subscribe(res => {
       res.forEach((coupon: Coupons) => {
         console.log('coupons', coupon)
+          let ys = coupon.createDate[0]['year'];
+          let ms = coupon.createDate[0]['month'];
+          let ds = coupon.createDate[0]['day'];
+          
+          let createDate = [`${ds}/${ms}/${ys}`]
+          
           let yf = coupon.expirationDate[0]['year'];
           let mf = coupon.expirationDate[0]['month'];
           let df = coupon.expirationDate[0]['day'];
           
           let finishDate = [`${df}/${mf}/${yf}`]
+
           
           const obj: CouponList = {};
           obj.id = coupon.id;
@@ -50,21 +64,25 @@ export class CuponManagerComponent implements OnInit {
           obj.imageCoupon = coupon.imageCoupon;
           obj.nameAllies = coupon.nameAllies;
           obj.nameTypeOfCoupon = coupon.nameTypeOfCoupon;
-          // obj.createDate =  this.convertDate(coupon.createDate);
+          obj.createDate =  createDate;
           obj.expirationDate = finishDate
           obj.state = coupon.state
 
           this.couponsGettting.push(obj)
           console.log('array ',this.couponsGettting);
-          
-        
+                  
       })
     })
   }
 
   ngOnInit() {
-  }
 
+  }
+  goToEditCoupon(idCoupon: string, i){
+    
+    this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
+    this._router.navigate(['/main', 'editCoupon', i])
+  }
   //method to convert the modification date
   convertDate(date: Date): string {
     const d = new Date(date);

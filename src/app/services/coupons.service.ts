@@ -73,6 +73,7 @@ export class CouponsService {
               name: coupons.name,
               description: coupons.description,
               imageCoupon: coupons.imageCoupon,
+              idtypeOfCoupon: coupons.idtypeOfCoupon,
               nameTypeOfCoupon: coupons.nameTypeOfCoupon,
               state: coupons.state,
               createDate: coupons.createDate,
