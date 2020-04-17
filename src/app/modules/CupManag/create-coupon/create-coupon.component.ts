@@ -84,6 +84,7 @@ export class CreateCouponComponent implements OnInit {
   //flags of type Coupons
   discount = false
   timeCreation = false
+  finishDate = false
   //flag by state swall
   upload: boolean = false;
   // Variables of alerts
@@ -236,27 +237,27 @@ export class CreateCouponComponent implements OnInit {
         this.preCoupon['nameTypeOfCoupon'] = element.name
 
         if (element.name == "Bienvenida") {
-          return this.timeCreation = false
+          return this.timeCreation = false, this.finishDate= false
 
         }
         if (element.name == "2x1") {
-          return this.timeCreation = true
+          return this.timeCreation = true, this.finishDate= true
 
         }
         if (element.name == "Fechas Especiales") {
-          return this.timeCreation = true
+          return this.timeCreation = true, this.finishDate= true
 
         }
         if (element.name == "Descuentos 10, 20, 30, 40 % ") {
-          return this.timeCreation = true
+          return this.timeCreation = false, this.finishDate= false
 
         }
         if (element.name == "Happy Hour") {
-          return this.timeCreation = true
+          return this.timeCreation = true, this.finishDate= true
 
         }
         if (element.name == "Referido") {
-          return this.timeCreation = false
+          return this.timeCreation = false, this.finishDate= false
         }
 
       }

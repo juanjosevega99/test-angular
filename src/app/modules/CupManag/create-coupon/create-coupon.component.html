@@ -65,24 +65,6 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Fecha de vencimiento</label>
-                <div class="col-md-7">
-                    <div class="input-group align-items-center">
-                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp2" #f="ngModel"
-                            [(ngModel)]="preCoupon.expirationDate[0]" ngbDatepicker #df="ngbDatepicker" required
-                            [ngClass]="{'is-invalid': (!f.valid && f.touched),'is-valid':(f.valid)}">
-                        <div class="input-group-append mr-3">
-                            <a (click)="df.toggle()" class="btn btn-outline-primary">
-                                <i class="far fa-calendar-alt"></i>
-                            </a>
-                        </div>
-                        <div class="col-md-4" *ngIf="f.errors?.required" class="invalid-feedback">*Campo fecha y hora es
-                            requerido</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label class="col-md-5 col-form-label">Entidad</label>
                 <div class="col-md-7">
                     <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
@@ -177,6 +159,7 @@
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
+
             <div  *ngIf="timeCreation" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de creación </label>
                 <div class="col-md-7">
@@ -187,6 +170,23 @@
                     <div class="col-md-4" *ngIf="timeCreate.errors?.required" class="invalid-feedback">*la hora es
                         requerida</div>
                     <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+            <div *ngIf="finishDate" class="form-group row">
+                <label class="col-md-5 col-form-label">Fecha de vencimiento</label>
+                <div class="col-md-7">
+                    <div class="input-group align-items-center">
+                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp2" #f="ngModel"
+                            [(ngModel)]="preCoupon.expirationDate[0]" ngbDatepicker #df="ngbDatepicker" required
+                            [ngClass]="{'is-invalid': (!f.valid && f.touched),'is-valid':(f.valid)}">
+                        <div class="input-group-append mr-3">
+                            <a (click)="df.toggle()" class="btn btn-outline-primary">
+                                <i class="far fa-calendar-alt"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-4" *ngIf="f.errors?.required" class="invalid-feedback">*Campo fecha y hora es
+                            requerido</div>
+                    </div>
                 </div>
             </div>
             <div *ngIf="timeCreation" class="form-group row">
