@@ -24,12 +24,12 @@
                                         <li class="nav-item mr-md-2">
                                             <input placeholder="Buscar por código..." class="form-control text-center" type="text"
                                                 (keyup)="search(code.value, code.id)"
-                                                #code id="code" formControlName="code">
+                                                #code id="code" formControlName="codeToRedeem">
                                         </li>
                                         <li class="nav-item">
                                             <input placeholder="Buscar por nombre de establecimiento ..." class="form-control text-center" type="text"
                                                 (keyup)="search(name.value, name.id)" #name id="name"
-                                                formControlName="nameEstablishment">
+                                                formControlName="nameAllies">
                                         </li>
                                     </ul>
                                 </div>
@@ -125,6 +125,14 @@
                     </td>
                     <td>
                         <button (click)="goToEditCoupon(coupon.id, i)" class="btn"> <i class="far fa-edit"></i> </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngIf="noResults">
+                        <a> No se encontraron resultados </a>
                     </td>
                 </tr>
             </tbody>

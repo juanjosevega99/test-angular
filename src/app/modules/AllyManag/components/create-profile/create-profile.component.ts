@@ -18,8 +18,6 @@ import { async } from '@angular/core/testing';
   styleUrls: ['./create-profile.component.scss']
 })
 export class CreateProfileComponent implements OnInit {
-
-
   preProfile: Object = {
     state: [],
     numberOfModifications: 0,
@@ -88,10 +86,8 @@ export class CreateProfileComponent implements OnInit {
   fileImagedish: any;
   urlPorfile: Observable<string>;
   
-
   //variable for the loading
   loading: boolean;
-
 
   constructor(private _router: Router, 
     private activatedRoute: ActivatedRoute, 

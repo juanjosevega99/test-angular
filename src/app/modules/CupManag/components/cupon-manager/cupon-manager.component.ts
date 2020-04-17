@@ -28,49 +28,49 @@ export class CuponManagerComponent implements OnInit {
   newArrarSearch: Coupons[] = [];
   filteredArray: CouponList[] = [];
   // obtain coupon by id coupon
-  getCuponById : any;
+  getCuponById: any;
+   //variable of don't results
+   noResults = false
   constructor(
     private couponsServices: CouponsService,
     private saveLocalStorageServices: SaveLocalStorageService,
     private _router: Router,
   ) {
-     //clean local storage  for ally and headquarter
-     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
+    //clean local storage  for ally and headquarter
+    this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
 
     this.table = new FormGroup({
-      "code": new FormControl(),
-      "nameEstablishment": new FormControl(),
-      "cupon": new FormControl()
+      "codeToRedeem": new FormControl(),
+      "nameAllies": new FormControl(),
+      "general": new FormControl()
     })
     this.couponsServices.getCoupons().subscribe(res => {
       res.forEach((coupon: Coupons) => {
-        console.log('coupons', coupon)
-          let ys = coupon.createDate[0]['year'];
-          let ms = coupon.createDate[0]['month'];
-          let ds = coupon.createDate[0]['day'];
-          
-          let createDate = [`${ds}/${ms}/${ys}`]
-          
-          let yf = coupon.expirationDate[0]['year'];
-          let mf = coupon.expirationDate[0]['month'];
-          let df = coupon.expirationDate[0]['day'];
-          
-          let finishDate = [`${df}/${mf}/${yf}`]
+        let ys = coupon.createDate[0]['year'];
+        let ms = coupon.createDate[0]['month'];
+        let ds = coupon.createDate[0]['day'];
 
-          
-          const obj: CouponList = {};
-          obj.id = coupon.id;
-          obj.codeToRedeem = coupon.codeToRedeem;
-          obj.imageCoupon = coupon.imageCoupon;
-          obj.nameAllies = coupon.nameAllies;
-          obj.nameTypeOfCoupon = coupon.nameTypeOfCoupon;
-          obj.createDate =  createDate;
-          obj.expirationDate = finishDate
-          obj.state = coupon.state
+        let createDate = [`${ds}/${ms}/${ys}`]
 
-          this.couponsGettting.push(obj)
-          console.log('array ',this.couponsGettting);
-                  
+        let yf = coupon.expirationDate[0]['year'];
+        let mf = coupon.expirationDate[0]['month'];
+        let df = coupon.expirationDate[0]['day'];
+
+        let finishDate = [`${df}/${mf}/${yf}`]
+
+
+        const obj: CouponList = {};
+        obj.id = coupon.id;
+        obj.codeToRedeem = coupon.codeToRedeem;
+        obj.imageCoupon = coupon.imageCoupon;
+        obj.nameAllies = coupon.nameAllies;
+        obj.nameTypeOfCoupon = coupon.nameTypeOfCoupon;
+        obj.createDate = createDate;
+        obj.expirationDate = finishDate
+        obj.state = coupon.state
+
+        this.couponsGettting.push(obj)
+
       })
     })
   }
@@ -78,8 +78,8 @@ export class CuponManagerComponent implements OnInit {
   ngOnInit() {
 
   }
-  goToEditCoupon(idCoupon: string, i){
-    
+  goToEditCoupon(idCoupon: string, i) {
+
     this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
     this._router.navigate(['/main', 'editCoupon', i])
   }
@@ -89,33 +89,33 @@ export class CuponManagerComponent implements OnInit {
     const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
     return n;
   }
-   //method for updating the state to active
-   changeStateA(idCoupon) {
+  //method for updating the state to active
+  changeStateA(idCoupon) {
     this.couponsServices.getCouponById(idCoupon).subscribe(coupon => {
       this.getCuponById = coupon
       let state: any = [{
-          state: "active",
-          check: true
-        }, {
-          state: "inactive",
-          check: false
-        }]
-      this.getCuponById['state'] = state      
+        state: "active",
+        check: true
+      }, {
+        state: "inactive",
+        check: false
+      }]
+      this.getCuponById['state'] = state
       this.swallUpdateState()
     })
   }
-   //method for updating the state to inactive
-   changeStateI(idCoupon) {
+  //method for updating the state to inactive
+  changeStateI(idCoupon) {
     this.couponsServices.getCouponById(idCoupon).subscribe(coupon => {
       this.getCuponById = coupon
       let state: any = [{
-          state: "active",
-          check: false
-        }, {
-          state: "inactive",
-          check: true
-        }]
-        this.getCuponById['state'] = state      
+        state: "active",
+        check: false
+      }, {
+        state: "inactive",
+        check: true
+      }]
+      this.getCuponById['state'] = state
       this.swallUpdateState()
     })
   }
@@ -123,38 +123,45 @@ export class CuponManagerComponent implements OnInit {
   //method for a specific search
   search(termino?: string, id?: string) {
 
-    // let objsearch = {
-    //   identification: "",
-    //   name: ""
-    // };
+    let objsearch = {
+      codeToRedeem: "",
+      nameAllies: ""
+    };
 
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
+        objsearch[i] = this.table.value[i];
+      }
+    }
 
-    // for (var i in this.table.value) {
-    //   // search full fields
-    //   if (this.table.value[i] !== null && this.table.value[i] !== "") {
-    //     objsearch[i] = this.table.value[i];
-    //   }
-    // }
+    // let for general searh
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
 
-    // // let for general searhch
-    // var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
+    this.newArray = this.couponsGettting.
+      filter(function (coupon) {
+        if (coupon["nameAllies"].toLowerCase().indexOf(this.nameAllies) >= 0) {
+          return coupon; 
+        } 
+      }, objsearch).
+      filter(function (coupon) {
+        if (coupon["codeToRedeem"].toLowerCase().indexOf(this.codeToRedeem) >= 0) {
+          return coupon;
+        }
+      }, objsearch).
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.codeToRedeem) || myRegex.test(item.nameAllies) ||
+          myRegex.test(item.nameTypeOfCoupon) || myRegex.test(item.createDate.toString()) ||
+          myRegex.test(item.expirationDate.toString()))
+      })
+       // condition by when don't exit results in the table
+       if (this.newArray.length == 0) {
+        this.noResults = true;
 
-    // this.newArray = this.couponsGettting.
-    //   filter(function (dish) {
-    //     if (dish["name"].toLowerCase().indexOf(this.name) >= 0) {
-    //       return dish;
-    //     }
-    //   }, objsearch).
-    //   filter(function (dish) {
-    //     if (dish["identification"].toLowerCase().indexOf(this.identification) >= 0) {
-    //       return dish;
-    //     }
-    //   }, objsearch).
-    //   filter(function (item) {
-    //     //We test each element of the object to see if one string matches the regexp.
-    //     return (myRegex.test(item.nameCharge) || myRegex.test(item.identification) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.entryDate) || myRegex.test(item.modificationDate) ||
-    //       myRegex.test(item.numberOfModifications.toString()))
-    //   })
+      } else {
+        this.noResults = false;
+      }
 
   }
   //sweets alerts
@@ -169,7 +176,6 @@ export class CuponManagerComponent implements OnInit {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
-        console.log('new state: ', this.getCuponById)
         this.couponsServices.putCoupon(this.getCuponById).subscribe(res => {
           this.couponsServices.getCoupons().subscribe(profile => {
             this.couponsGettting = profile

@@ -109,7 +109,7 @@ export class CreateCouponComponent implements OnInit {
     let codeToRedeem = Math.random().toString(36).substring(7);
     this.preCoupon['codeToRedeem'] = codeToRedeem;
     //flags
-    // this.loading = true;
+    this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
     this.State = [{
@@ -531,16 +531,7 @@ export class CreateCouponComponent implements OnInit {
           })
         }
       })
-      
-      // this.chargeProfiles.getProfiles().subscribe(profiles => {
-      //   let profile: ProfileList = {}
-      //   profile = profiles[this.identificatorbyRoot]
-      //   let realId = profile.id
-      //   this.swallDelete(realId)
-      // })
     }
-
-
   }
 
 }
