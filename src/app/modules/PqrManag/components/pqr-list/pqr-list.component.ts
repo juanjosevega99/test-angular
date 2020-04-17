@@ -65,25 +65,44 @@ export class PqrListComponent implements OnInit {
 
     })
 
-    this.pqrlistservice.getPqrs().subscribe(res => {
+    if(this.profile.nameCharge.toLocaleLowerCase() == "administradortifi"){
+      this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
 
-      if (res.length > 0) {
+        if (res.length > 0) {
+  
+          res.forEach((order: any) => {
+  
+            if (order.idUser) {
+  
+              this.formaterPqr(order);
+  
+            } else {
+              console.log("problem with order.userid", order.userid);
+            }
+          },
+          )
+        }
+      })
+    }else{
 
-        res.forEach((order: any) => {
-
-          if (order.idUser) {
-
-            this.formaterPqr(order);
-
-          } else {
-            console.log("problem with order.userid", order.userid);
-          }
-        },
-        )
-
-      }
-
-    })
+      this.pqrlistservice.getPqrs().subscribe(res => {
+  
+        if (res.length > 0) {
+  
+          res.forEach((order: any) => {
+  
+            if (order.idUser) {
+  
+              this.formaterPqr(order);
+  
+            } else {
+              console.log("problem with order.userid", order.userid);
+            }
+          },
+          )
+        }
+      })
+    }
 
   }
 
@@ -232,42 +251,6 @@ export class PqrListComponent implements OnInit {
   // ================================
   // filters
   // ================================
-
-  // SeachingRange(dateFrom: string, dateTo: string) {
-
-  //   this.from = dateFrom;
-  //   this.to = dateTo;
-
-  //   const mydateFrom = new Date(this.from);
-  //   const mydateTo = new Date(this.to);
-
-  //   if (!this.filteredArray.length) {
-
-  //     this.newdateArray = [];
-
-  //     this.usergetting.forEach(user => {
-
-  //       const userdate = new Date(user.date)
-
-  //       if (userdate >= mydateFrom && userdate <= mydateTo) {
-  //         this.newdateArray.push(user)
-  //       }
-  //     });
-
-  //   } else {
-
-  //     this.newdateArray = [];
-
-  //     this.filteredArray.forEach(user => {
-  //       const userdate = new Date(user.date)
-  //       if (userdate >= mydateFrom && userdate <= mydateTo) {
-  //         this.newdateArray.push(user);
-  //       }
-  //     });
-  //   }
-
-  // }
-
 
   clear() {
 

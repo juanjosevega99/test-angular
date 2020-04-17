@@ -159,9 +159,17 @@
                         </a>
                     </td>
                 </tr>
+                <tr *ngIf=" !newdateArray.length " >
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>No hay Resultados</td>
+                </tr>
             </tbody>
 
         </table>
+
     </div>
 
     <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
@@ -240,3 +248,5 @@
     </div>
 
 </div>
+
+{{newdateArray.length }}
