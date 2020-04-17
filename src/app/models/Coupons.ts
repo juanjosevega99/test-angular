@@ -5,9 +5,9 @@ export class Coupons {
     imageCoupon?:string;
     idtypeOfCoupon?:string;
     nameTypeOfCoupon?:string;
-    state?:boolean;
-    createDate?:Date;
-    expirationDate?:Date;
+    state?:string[];
+    createDate?:string[];
+    expirationDate?:string[];
     codeToRedeem?:string;
     termsAndConditions?:string;
     idAllies?:string;
@@ -18,7 +18,7 @@ export class Coupons {
     nameDishes?:string;
     numberOfUnits?:number;
     discountRate?:number;
-    creationTime?:Date;
-    expirationTime?:Date;
+    creationTime?:string[];
+    expirationTime?:string[];
     codeReferred?:string;
 }

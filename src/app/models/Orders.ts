@@ -10,6 +10,7 @@ export class Orders {
     nameDishe?:string[];
     valueDishe?:number;
     typeOfService?:object;
+    typeOfServiceobj?:object;
     orderValue?:number;
     dateAndHourReservation?:Date;
     dateAndHourDelivey?:Date;

@@ -19,7 +19,7 @@
                     <li class="nav-item">
                         <a class="nav-link">Nombre</a>
                         <input class="form-control" type="text" (keyup)="search(name.value, name.id)" #name
-                            id="nameUser" formControlName="name">
+                            id="nameUser" formControlName="nameUser">
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">Correo</a>
@@ -80,7 +80,7 @@
     <div class="container-fluid m-3 d-flex flex-row ">
 
         <input style="width: 50%;" class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-            #general (keyup)="searchbyterm(general.value)" [(ngModel)]="generalsearch">
+            #general (keyup)="search()" [(ngModel)]="generalsearch">
 
         <form class="form-inline container-fluid justify-content-end" style="width: 75%;" #formadate>
             <div class="form-group hidden">
@@ -159,9 +159,17 @@
                         </a>
                     </td>
                 </tr>
+                <tr *ngIf=" !newdateArray.length " >
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>No hay Resultados</td>
+                </tr>
             </tbody>
 
         </table>
+
     </div>
 
     <div style="margin-top: 2rem;" class=" container-fluid d-flex flex-row justify-content-between">
@@ -240,3 +248,5 @@
     </div>
 
 </div>
+
+{{newdateArray.length }}

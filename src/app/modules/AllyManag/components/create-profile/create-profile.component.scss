@@ -155,7 +155,12 @@
     top: 0;
     opacity: 0;
   }
-  
+  .btn1 {
+    margin-left: 5px;
+    background-color: white;
+    padding: 5px;
+    border-radius: .5rem;
+  }
   //style for the admission date
   .dt {
     margin-right: 10px;
@@ -163,4 +168,18 @@
     height: 30px;
     border: solid 0.5px gray;
   }
-  
+  .form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}

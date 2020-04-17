@@ -24,6 +24,14 @@ export class SaveLocalStorageService {
     let idHeadquarter = localStorage.getItem("idHeadquarter")
     return idHeadquarter;
   }
+  saveLocalStorageIdCoupon(idCoupon: string) {
+    localStorage.setItem("idCoupon", idCoupon)
+  }
+
+  getLocalStorageIdCoupon() {
+    let idCoupon = localStorage.getItem("idCoupon")
+    return idCoupon;
+  }
 
 
 }

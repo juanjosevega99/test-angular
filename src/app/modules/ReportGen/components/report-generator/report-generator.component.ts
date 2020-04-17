@@ -17,6 +17,8 @@ import { HeadquartersService } from 'src/app/services/headquarters.service';
 import { environment } from 'src/environments/environment';
 import { DishesService } from 'src/app/services/dishes.service';
 import { ReportGenerate } from 'src/app/models/ReportGenerate';
+import { ShowContentService } from '../../../../services/providers/show-content.service';
+import { profileStorage } from 'src/app/models/ProfileStorage';
 
 
 @Component({
@@ -35,9 +37,11 @@ export class ReportGeneratorComponent implements OnInit {
   // =====================
   // user perfil
 
-  user = {
-    perfil: 'cajero'
-  }
+  profile: profileStorage;
+
+  reportComplete = false;
+  reportSummary = false;
+
 
   /*name of the excel-file which will be downloaded. */
   fileName = 'generalReport.xlsx';
@@ -53,7 +57,7 @@ export class ReportGeneratorComponent implements OnInit {
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
     private userservice: UsersService, private orderservice: OrdersService, private headquartsservice: HeadquartersService,
-    private allyservice: AlliesService, private dishService: DishesService) {
+    private allyservice: AlliesService, private dishService: DishesService, private showcontent: ShowContentService) {
 
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getToday();
@@ -70,57 +74,62 @@ export class ReportGeneratorComponent implements OnInit {
 
               // in this place get headquarts by id
               this.headquartsservice.getHeadquarterById(order.idHeadquartes).subscribe(
+
                 (headq: any) => {
+                  if (headq) {
 
-                  obj.idHeadquarter = order.idHeadquartes;
-                  obj.location = headq.ubication;
-                  obj.codeOrder = order.code;
-                  obj.client = user.name +" "+ user.lastname;
-                  obj.typeOfService = order.typeOfService['type'];
-                  obj.purchaseAmount = order.orderValue;
-                  obj.registerDate = this.convertDate(order.dateAndHourReservation);
-                  obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
-                  obj.controlOrder = order.deliveryStatus;
-                  obj.valueTotalWithRes = order.orderValue;
+                    obj.idHeadquarter = order.idHeadquartes;
+                    obj.location = headq.ubication;
+                    obj.codeOrder = order.code;
+                    obj.client = user.name + " " + user.lastname;
+                    obj.typeOfService = order.typeOfService['type'];
+                    obj.purchaseAmount = order.orderValue;
+                    obj.registerDate = this.convertDate(order.dateAndHourReservation);
+                    obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
+                    obj.controlOrder = order.deliveryStatus;
+                    obj.valueTotalWithRes = order.orderValue;
 
-                  headq.costPerService.map(service => {
-                    if (service.id == order.typeOfService) {
-                      obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
-                      obj.costReservationIva = parseFloat(service.value);
-                      obj.valueTotalWithoutRes = (order.orderValue - service.value);
-                    }
-                  })
-
-                  // ally
-                  this.allyservice.getAlliesById(order.idAllies).subscribe((ally: any) => {
-                    obj.ally = ally.name;
-                    obj.percent = ally.intermediationPercentage;
-                    obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
-                    let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
-                    obj.valueIntermediationIva = auxvalue;
-                    obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
-                    obj.valueForAlly = (order.orderValue - (auxvalue + obj.costReservationIva));
-                  })
-
-                  // dish
-                  let namedsh = [];
-                  let valueDish = []
-                  let quanty = []
-                  order.idDishe.forEach((object: any) => {
-
-                    quanty.push(object.quantity);
-
-                    this.dishService.getDisheById(object.id).subscribe((dish: any) => {
-                      namedsh.push(dish.name);
-
-                      valueDish.push(dish.price * object.quantity);
+                    headq.costPerService.map(service => {
+                      if (service.id == order.typeOfService) {
+                        obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
+                        obj.costReservationIva = parseFloat(service.value);
+                        obj.valueTotalWithoutRes = (order.orderValue - service.value);
+                      }
                     })
-                    obj.nameDishe = namedsh;
-                    obj.valueDishe = valueDish;
-                    obj.quantity = quanty;
 
-                  })
+                    // ally
+                    this.allyservice.getAlliesById(order.idAllies).subscribe((ally: any) => {
+                      obj.ally = ally.name;
+                      obj.percent = ally.intermediationPercentage;
+                      obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
+                      let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
+                      obj.valueIntermediationIva = auxvalue;
+                      obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
+                      obj.valueForAlly = (order.orderValue - (auxvalue + obj.costReservationIva));
+                    })
 
+                    // dish
+                    let namedsh = [];
+                    let valueDish = []
+                    let quanty = []
+                    order.idDishe.forEach((object: any) => {
+
+                      quanty.push(object.quantity);
+
+                      this.dishService.getDisheById(object.id).subscribe((dish: any) => {
+                        if (dish) {
+
+                          namedsh.push(dish.name);
+                          valueDish.push(dish.price * object.quantity);
+                        }
+
+                      })
+                      obj.nameDishe = namedsh;
+                      obj.valueDishe = valueDish;
+                      obj.quantity = quanty;
+
+                    })
+                  }
                 }
               )
 
@@ -134,6 +143,7 @@ export class ReportGeneratorComponent implements OnInit {
       })
     })
 
+    this.profile = this.showcontent.showMenus();
 
   }
 
@@ -218,6 +228,79 @@ export class ReportGeneratorComponent implements OnInit {
       // objpdf.costReservationIva = obj.costReservationIva;
       // objpdf.valueTotalWithRes = obj.valueTotalWithRes;
       // objpdf.valueTotalWithoutRes = obj.valueTotalWithoutRes;
+      // objpdf.costReservation = obj.costReservation;
+      // objpdf.percent = obj.percent;
+      // objpdf.valueIntermediation = obj.valueIntermediation;
+      // objpdf.valueIntermediationIva = obj.valueIntermediationIva;
+      // objpdf.valueTotalIntRes = obj.valueTotalIntRes;
+      // objpdf.valueForAlly = obj.valueForAlly;
+
+      arraytopdf.push(objpdf);
+    })
+
+    arraytopdf.map((user, i) => {
+      auxrow = [];
+      // auxrow[0] = i + 1;
+      for (const key in user) {
+        if (user.hasOwnProperty(key)) {
+
+          auxrow.push(user[key]);
+        }
+      }
+      rows.push(auxrow);
+    });
+
+    //build the pdf file
+    doc.setFontSize(10);
+    doc.autoTable(col, rows, {
+      // theme: "grid",
+      styles: { halign: 'center', columnWidth: 'auto', minCellWidth: 50 }
+    });
+
+    doc.save('Test.pdf');
+  }
+
+
+  generateReportPDVPdf() {
+
+    //'p', 'mm', 'a4'
+
+    let doc = new jsPDF('landscape', 'pt', 'legal');
+
+
+    let col = ["C. Sede", "Establecimiento", "zona", "Codigo Pedido", "Cliente", "T. Servicio", "Valor Pedido", "F. H. Reserva",
+      "F. H Entrega", "Control Pedidos", "cantidad/Plato", "V. unidad", "Costo reserva IVA", "valor T. con-reserva", "valor T. sin-reserva"];
+    let rows = [];
+    let auxrow = [];
+    let arraytopdf = [];
+
+    this.newdateArray.forEach((obj: ReportGenerate) => {
+      let objpdf: ReportGenerate = {};
+      let auxnamearray = []
+
+      obj.nameDishe.map((name, i) => {
+        let auxname = obj.quantity[i] + "-" + name;
+        auxnamearray.push(auxname);
+      })
+
+      objpdf.idHeadquarter = obj.idHeadquarter.slice(17, obj.idHeadquarter.length);
+      objpdf.ally = obj.ally;
+      objpdf.location = obj.location;
+      objpdf.codeOrder = obj.codeOrder;
+      objpdf.client = obj.client;
+      objpdf.typeOfService = obj.typeOfService;
+      objpdf.purchaseAmount = obj.purchaseAmount;
+      objpdf.registerDate = obj.registerDate;
+      objpdf.dateAndHourDelivery = obj.dateAndHourDelivery;
+      objpdf.controlOrder = obj.controlOrder;
+      // objpdf.quantity = obj.quantity;
+      // objpdf.nameDishe = obj.nameDishe;
+
+      objpdf.nameDishe = auxnamearray;
+      objpdf.valueDishe = obj.valueDishe;
+      objpdf.costReservationIva = obj.costReservationIva;
+      objpdf.valueTotalWithRes = obj.valueTotalWithRes;
+      objpdf.valueTotalWithoutRes = obj.valueTotalWithoutRes;
       // objpdf.costReservation = obj.costReservation;
       // objpdf.percent = obj.percent;
       // objpdf.valueIntermediation = obj.valueIntermediation;

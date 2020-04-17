@@ -52,7 +52,7 @@
             </form>
         </div>
     </div>
-    <div *ngIf="user.perfil == 'gerente'" class="container-fluid">
+    <div *ngIf="profile.reportPermissions.reportComplete" class="container-fluid">
         <div class="tableFixHead">
             <table id="excel-table-general" >
 
@@ -124,8 +124,82 @@
             </table>
         </div>
     </div>
+    <!-- report admin pdv -->
 
-    <div *ngIf="user.perfil == 'cajero'" class="container-fluid">
+    <div *ngIf="profile.reportPermissions.reportadminpdv" class="container-fluid">
+        <div class="tableFixHead">
+            <table id="excel-table-general" >
+
+                <thead>
+                    <tr>
+                        <th class="text-center">C. sede</th>
+                        <th class="text-center">Establecimiento</th>
+                        <th class="text-center">zona</th>
+                        <th class="text-center">C. Pedido</th>
+                        <th class="text-center">Cliente</th>
+                        <th class="text-center">T. servicio</th>
+                        <th class="text-center">Valor Pedido</th>
+                        <th class="text-center">F. H. Reserva</th>
+                        <th class="text-center">F. H Entrega</th>
+                        <th class="text-center">Control Pedidos</th>
+                        <!-- <th class="text-center">Catidad</th> -->
+                        <th class="text-center">Cantidad/Plato</th>
+                        <th class="text-center">V. unidad</th>
+                        <th class="text-center">Costo reserva IVA</th>
+                        <th class="text-center">valor T. con-reserva</th>
+                        <th class="text-center">valor T. sin-reserva</th>
+                        <!-- <th class="text-center">Costo reserva sin IVA</th>
+                        <th class="text-center">% Intermediación</th> 
+                        <th class="text-center">Valor Intermediación sin IVA</th>
+                        <th class="text-center">Valor Intermediación IVA</th>
+                        <th class="text-center">Valor T. Intermediación y Reserva</th>
+                        <th class="text-center">Valor a pagar-Aliado</th> -->
+                    </tr>
+
+                </thead>
+                <tbody class="mt-5">
+                    <tr *ngFor="let order of newdateArray; let i = index " class="text-center">
+
+                        <td>{{ order.idHeadquarter.slice(17, order.idHeadquarter.length) }}</td>
+                        <td>{{ order.ally }}</td>
+                        <td>{{ order.location }}</td>
+                        <td>{{ order.codeOrder }}</td>
+                        <td>{{ order.client }}</td>
+                        <td>{{ order.typeOfService }}</td>
+                        <td>{{ order.purchaseAmount }}</td>
+                        <td>{{ order.registerDate }}</td>
+                        <td>{{ order.dateAndHourDelivery }}</td>
+                        <td>{{ order.controlOrder }}</td>
+
+                        <!-- <td>
+                            <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
+                        </td> -->
+                        <td>
+                            <tr *ngFor=" let dish of order.nameDishe; let i = index">
+                             {{ order.quantity[i] + "-" + dish }}
+                            </tr>
+                        </td>
+                        <td>
+                            <tr *ngFor="let valueDishe of order.valueDishe" >{{valueDishe}}</tr>
+                        </td>
+                        <td>{{"$ " + order.costReservationIva }}</td>
+                        <td>{{"$ " + order.purchaseAmount }}</td>
+                        <td>{{"$ " + order.valueTotalWithoutRes }}</td>
+                        <!-- <td>{{"$ " + order.costReservation }}</td>
+                        <td>{{ order.percent + "%" }}</td>
+                        <td>{{"$ " + order.valueIntermediation  }}</td>
+                        <td>{{"$ " + order.valueIntermediationIva  }}</td>
+                        <td>{{"$ " + order.valueTotalIntRes }}</td>
+                        <td>{{"$ " + order.valueForAlly }}</td> -->
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="profile.reportPermissions.reportsummary" class="container-fluid">
         <div class="tableFixHead">
             <table id="excel-table-cajero" >
 
@@ -178,11 +252,15 @@
     </div>
     <div class="container-fluid text-center mt-3">
 
-        <button *ngIf="user.perfil == 'cajero'" type="button" (click)="generatePdf()" class="btnForInforms" data-toggle="modal"
+        <button *ngIf="profile.reportPermissions.reportSummary" type="button" (click)="generatePdf()" class="btnForInforms" data-toggle="modal"
             data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png" class="tifi-icon-back">
             Descargar PDF</button>
 
-        <button *ngIf="user.perfil == 'gerente'" type="button" (click)="generateExcel()" class="btnForInforms" data-toggle="modal"
+        <button *ngIf="profile.reportPermissions.reportadminpdv" type="button" (click)="generateReportPDVPdf()" class="btnForInforms" data-toggle="modal"
+            data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png" class="tifi-icon-back">
+            Descargar PDF</button>
+
+        <button *ngIf="profile.reportPermissions.reportComplete" type="button" (click)="generateExcel()" class="btnForInforms" data-toggle="modal"
             data-target="#exampleModalCenter"><img src="assets/icons/excel.png" class="tifi-icon-back">Descargar excel</button>
     </div>
 </div>

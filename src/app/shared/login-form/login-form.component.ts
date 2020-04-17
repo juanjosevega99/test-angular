@@ -3,6 +3,9 @@ import { NgForm } from '@angular/forms';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ProfilesService } from '../../services/profiles.service';
+import { Profiles } from 'src/app/models/Profiles';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -21,7 +24,8 @@ export class LoginFormComponent implements OnInit {
 
   loading: boolean = false;
 
-  constructor(public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService) { }
+  constructor(public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService,
+    private serviceProfile: ProfilesService) { }
 
   ngOnInit() {
     this.signError = true;
@@ -35,15 +39,66 @@ export class LoginFormComponent implements OnInit {
     this.spinner.show();
     this.authentication.login(this.email, this.pass)
       .then(res => {
-        console.log(res);
-        this.spinner.hide();
-        this.route.navigate(['main']);
+
+        let userlogged = res.user;
+
+        // console.log(res);
+        this.serviceProfile.getProfileById(userlogged.uid).subscribe((profileservice) => {
+
+          // console.log("en el login", profileservice);          
+
+          let profile = {
+            id: profileservice['_id'],
+            idAllies: profileservice.idAllies,
+            nameAllie: profileservice.nameAllie,
+            idHeadquarter: profileservice.idHeadquarter,
+            nameHeadquarter: profileservice.nameHeadquarter,
+            nameCharge: profileservice.nameCharge,
+            permis: profileservice.permis
+
+          }
+
+          localStorage.setItem('profile', JSON.stringify( profile ));
+
+          this.spinner.hide();
+
+          // console.log(profileservice.nameCharge.toLocaleLowerCase());
+          switch (profileservice.nameCharge.toLocaleLowerCase()) {
+            
+            case 'cajero': 
+            case 'administradorpdv': 
+            case 'gerentegeneral':
+              this.route.navigate(['main/principal-orders']);
+              break;
+
+            case 'asesor':
+              this.route.navigate(['main/pqrList']);
+              break;
+
+            case 'contador':
+              this.route.navigate([ '/main', 'reportGenerator' ]);
+              break;
+
+            default:
+              this.route.navigate(['main/options']);
+              break;
+          }
+
+        }, err =>{
+          this.spinner.hide();
+          Swal.fire(
+            "Comprueba tu conexión a internet"
+          )
+        })
 
       }).catch(err => {
-        this.signError = false;
+
         this.spinner.hide();
+        this.signError = false;
+
       }
       );
+
     this.email = '';
     this.pass = '';
 

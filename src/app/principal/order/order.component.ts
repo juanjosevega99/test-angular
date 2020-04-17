@@ -1,9 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { OrderByUser } from 'src/app/models/OrderByUser';
 import { OrdersService } from 'src/app/services/orders.service';
 // swall pop up
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
+
+// modal
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+// sockets
+import { WebsocketsService } from 'src/app/services/websockets.service';
+import { ProfilesService } from 'src/app/services/profiles.service';
+
 
 
 @Component({
@@ -11,7 +19,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
 
   // variable to manage colors and fonts on statte
   expresionColor = {
@@ -42,6 +50,11 @@ export class OrderComponent implements OnInit {
     color: "#d2d2d2"
   }
 
+  // rating
+  currentRate = 3;
+  domiciliary = 'selecione';
+  domiciliariesprofiles = [];
+
   @Input()
   order: OrderByUser = {};
 
@@ -50,56 +63,25 @@ export class OrderComponent implements OnInit {
 
   @Output() indexOrder: EventEmitter<number>;
 
-  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService) {
+  constructor(private orderservice: OrdersService, private spinner: NgxSpinnerService, private modalService: NgbModal, private wesocket: WebsocketsService,
+    private domiciliaries: ProfilesService) {
     this.indexOrder = new EventEmitter();
   }
 
   ngOnInit() {
 
-    this.spinner.show();
     this.progressbar = setInterval(() => {
 
       this.changeStatusProgressBar();
 
-    }, 3000)
+    }, 30000)
 
+    setTimeout(() => { this.changeStatusProgressBar() }, 2000);
 
-    // let initprogress = setInterval(() => {
+  }
 
-    //   this.changeStatusProgressBar();
-
-    //   if (this.stopOrder) {
-
-    //     clearInterval(initprogress);
-
-    //   }
-
-    // }, 3000);
-
-    // let postcronometer = setInterval(() => {
-
-    //   this.InitCronometer();
-
-    //   if (this.stopOrder) {
-    //     clearInterval(postcronometer);
-    //   }
-
-    // }, 1000);
-
-
-    // let precronometer = setInterval(() => {
-
-    //   this.cronometer();
-
-    //   if (this.startCronometer) {
-    //     console.log("limpando");
-
-    //     clearInterval(precronometer);
-    //   }
-
-    // }, 1000);
-
-
+  ngOnDestroy() {
+    clearTimeout(this.progressbar);
   }
 
   showDetail() {
@@ -107,108 +89,72 @@ export class OrderComponent implements OnInit {
     this.showdetail = !this.showdetail;
   }
 
-  // cronometer() {
+  updateStatePidelo(content) {
+    this.modalService.open(content, { centered: true });
+  }
 
-  //   // datedelivery = 31/3/2020
-  //   let datedelivery = new Date(this.order.DateDelivery).toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-  //   // today = 31/3/2020
-  //   let today = new Date().toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+  sendToCalificationUser() {
 
-  //   // hours
-  //   // time today = 4:21 PM
-  //   let timeToday = new Date().toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  //   let timeDelivery = new Date(this.order.DateDelivery).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    this.wesocket.emit("calification", this.order.id);
+    this.modalService.dismissAll();
 
-  //   // timecronometer = 30 minutos || 1:15 min
-  //   let timeCronometer = this.order.timeTotal;
+  }
 
-  //   // console.log( "comparando", datedelivery, today);
+  openCalification(viewcalification) {
+    
+    this.spinner.show()
+    this.domiciliaries.getDomiciliaryProfileByHead(this.order.idHeadquarter).subscribe( (domiciliary: any[])=>{
+    console.log(domiciliary);
 
-  //   // console.log("time cronometer", timeCronometer);
+      this.domiciliariesprofiles = domiciliary;
+      
+      this.spinner.hide();
+      this.modalService.open(viewcalification, { centered: true });
+    } )
+  }
 
-  //   let hourtoday = parseInt(timeToday.split(" ")[0].split(":")[0]);
-  //   let minutstoday = parseInt(timeToday.split(" ")[0].split(":")[1]);
+  // ====================================
+  // ========= Confirm orders ===========
 
-  //   let hoursCronometer = 0;
-  //   let minutsCronometer = 0;
+  confirmOrder() {
 
-  //   if (datedelivery == today) {
+    let status = {
+      orderStatus: "Entregado",
+      id: this.order.id
+    };
 
-  //     switch (timeCronometer.split(" ")[1]) {
+    this.spinner.show();
 
-  //       case 'min':
-  //         hoursCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[0]);
-  //         minutsCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[1]);
-  //         break;
+    this.orderservice.putCharge(status).subscribe(res => {
 
-  //       case 'minutos':
-  //         minutsCronometer = parseInt(timeCronometer.split(" ")[0]);
-  //         break
-  //     }
+      if (this.order.typeOfService == "pidelo") {
 
-  //     if ((minutstoday + minutsCronometer) > 59) {
-  //       hoursCronometer += 1;
-  //       minutsCronometer = 0;
-  //     }
-  //     // hour to compare with hour delivery 
-  //     let hourCompare = (hourtoday + hoursCronometer) + ":" + (minutstoday + minutsCronometer) + " " + timeDelivery.split(" ")[1];
-  //     console.log("comparando", hourCompare, timeDelivery);
+        let profileDomi = this.domiciliariesprofiles[this.domiciliary];
+        profileDomi.ratings.push(this.currentRate);
+        const calification = { ratings: profileDomi.ratings };
 
-  //     if (hourCompare === timeDelivery) {
-  //       console.log("son iguales");
+        this.domiciliaries.putProfile( profileDomi.id, calification).subscribe( response =>{
 
-  //       this.startCronometer = true;
-  //     }
+          Swal.fire(
+            'domiciliario calificado',
+          )
+          this.modalService.dismissAll();
 
-  //   }
-  // }
+        } )
 
+      }
 
-  // InitCronometer() {
+      this.expresionColor.fontSmall = "Entregado";
+      this.showdetail = false;
 
-  //   if (this.startCronometer) {
-
-  //     // timecronometer = 30 minutos || 1:15 min
-  //     let timeCronometer = this.order.timeTotalCronometer;
-
-  //     let hoursCronometer = 0;
-  //     let minutsCronometer = 0;
-
-  //     let seconds = new Date().getSeconds();
-
-  //     if (seconds >= 59) {
-
-  //       switch (timeCronometer.split(" ")[1]) {
-
-  //         case 'min':
-  //           minutsCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[1]);
-  //           minutsCronometer -= 1;
-  //           hoursCronometer = parseInt(timeCronometer.split(" ")[0].split(":")[0]);
-  //           hoursCronometer = minutsCronometer == 0 ? hoursCronometer -= 1 : hoursCronometer;
-  //           this.timeToralOut = hoursCronometer + ':' + minutsCronometer + " " + 'min';
-  //           this.timeInMinutos = (hoursCronometer * 60) + minutsCronometer;
-  //           break;
-
-  //         case 'minutos':
-  //           minutsCronometer = parseInt(timeCronometer.split(" ")[0]);
-  //           minutsCronometer -= 1;
-  //           this.timeToralOut = minutsCronometer + " " + 'minutos';
-  //           this.timeInMinutos = minutsCronometer;
-  //           break
-  //       }
-
-  //       if (hoursCronometer < 0 && minutsCronometer < 0) {
-  //         this.stopOrder = true;
-  //       }
-  //       // this.changeStatusOrder(this.timeInMinutos);
-
-  //       // asign new cronometer
-  //       this.order.timeTotalCronometer = this.timeToralOut;
-  //     }
-  //   }
-  // }
+      document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+      this.indexOrder.emit(this.index);
+      this.spinner.hide();
+    })
+  }
 
   changeStatusOrder(minuts: number) {
+    console.log(this.order.orderStatus);
 
     if (minuts <= 0) {
 
@@ -217,16 +163,33 @@ export class OrderComponent implements OnInit {
       this.expresionColor.backgroundTimer = '#bfd5b2'
       this.order.timeTotalCronometer = 0 + " " + 'minutos';
 
-      if (this.order.orderStatus != "Entregado") {
+      if (this.order.orderStatus == "Entregado") {
+        this.expresionColor.fontSmall = "Entregado";
+        document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
+        this.indexOrder.emit(this.index);
+        this.percent = 100;
+        clearTimeout(this.progressbar);
+
+      } else if (this.order.orderStatus == "Cancelada") {
+
+        this.buttonDisable.disable = true;
+        this.buttonDisable.color = "#bfd5b2";
+        this.percent = 100;
+        this.expresionColor.fontSmall = 'Cancelado';
+        document.getElementById(this.order.code).style.backgroundColor = "#e5e5e5";
+        clearTimeout(this.progressbar);
+        this.indexOrder.emit(this.index);
+
+      } else {
+
         this.order.orderStatus = 'El pedido esta listo'
         this.expresionColor.fontSmall = "Confirmar";
         this.buttonDisable.disable = false;
         this.buttonDisable.color = "#bfd5b2";
-
-      } else {
-        this.expresionColor.fontSmall = "Entregado";
-        document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
-        this.indexOrder.emit(this.index);
+        document.getElementById(this.order.code).style.backgroundColor = "#fff";
+        clearTimeout(this.progressbar);
+        this.percent = 100;
+        // this.indexOrder.emit(this.index);
 
       }
 
@@ -257,37 +220,58 @@ export class OrderComponent implements OnInit {
       this.expresionColor.colorFont = '#dfb308';
       this.expresionColor.colorProgress = 'warning';
       this.expresionColor.fontSmall = 'Relajate';
-
     }
+
   }
 
   changeStatusProgressBar() {
 
-    let today = new Date().getTime() / (1000 * 60);
-    let goal = new Date(this.order.DateDelivery).getTime() / (1000 * 60);
-    let percent = 100;
-    let minuts = 0;
+    let delivery = new Date(this.order.DateDelivery);
+    let now = new Date();
 
-    minuts = Math.floor(goal - today);
-
-    this.changeStatusOrder(Math.floor(minuts));
-
-    if (minuts > 0) {
-
-      percent = Math.abs(Math.floor((100 - minuts - 1) - (minuts / (minuts + 1))));
-      console.log(percent);
-      console.log("minutres", minuts);
+    let today = now.getTime() / (1000 * 60);
+    let goal = delivery.getTime() / (1000 * 60);
+    let minuts = Math.floor((goal + 0.2 - today));
+    this.timeLimit = this.getTimeLimit();
 
 
-      this.percent = percent;
 
+    // if the same day
+    if (now.getDate() == delivery.getDate()) {
+
+      let percent = 100;
+      this.changeStatusOrder(minuts);
+
+      if (minuts >= 0) {
+
+        percent = Math.abs(Math.floor((100 - minuts) - (minuts / (minuts + 1))));
+        console.log("minutes", minuts);
+
+        if (minuts > 100) {
+          this.percent = 1;
+        } else {
+
+          this.percent = percent;
+        }
+
+      }
+      else {
+        this.percent = 100;
+        // stop count
+        clearTimeout(this.progressbar);
+      }
+    } else {
+
+      if (this.order.orderStatus === "Entregado" || this.order.orderStatus === "Cancelada") {
+
+        clearTimeout(this.progressbar);
+        this.changeStatusOrder(0);
+
+      } else {
+
+        this.changeStatusOrder(100);
+      }
     }
-    else {
-      this.percent = 100;
-      // stop count
-      clearTimeout(this.progressbar);
-    }
-    this.spinner.hide();
 
   }
 
@@ -322,27 +306,7 @@ export class OrderComponent implements OnInit {
 
   }
 
-  // ====================================
-  // ========= Confirm orders ===========
 
-  confirmOrder() {
-
-    let status = {
-      orderStatus: "Entregado",
-      id: this.order.id
-    };
-    this.spinner.show();
-    this.orderservice.putCharge(status).subscribe(res => {
-      this.expresionColor.fontSmall = "Entregado";
-      this.showdetail = false;
-
-      this.indexOrder.emit(this.index);
-      this.spinner.hide();
-    })
-
-    document.getElementById(this.order.code).style.backgroundColor = "#4e4f4f";
-
-  }
 
   // ====================================
   // ========= minuts to hours ==========
@@ -350,7 +314,7 @@ export class OrderComponent implements OnInit {
   convertToHours(minuts: number): string {
 
     let hours = minuts / 60;
-    let minut = minuts % 60;
+    let minut = Math.floor(minuts % 60);
     return hours + ":" + minut + " " + "min"
 
   }

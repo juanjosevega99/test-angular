@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
+import { profileStorage } from '../../models/ProfileStorage';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-side-bar',
@@ -8,39 +11,92 @@ import { AuthFireServiceService } from '../../services/providers/auth-fire-servi
   styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent implements OnInit {
-  
-  Stablishment:String="KFC"; 
-  headquarters:String ="Galerías";
-  
-  constructor( public firebaseservise: AuthFireServiceService ) {}
+
+
+  Stablishment: String = "KFC";
+  headquarters: String = "Galerías";
+
+  // // to show menu
+  // options = false;
+  // principal = false;
+  // reports = false;
+  // pqrs = false;
+
+  profile: profileStorage;
+
+  constructor(public firebaseservise: AuthFireServiceService, private showmenu: ShowContentService) {
+
+    // get profile localstorage
+    // let profile = JSON.parse(localStorage.getItem('profile'));
+    // this.asigVariables(profile);
+    this.profile = this.showmenu.showMenus();
+
+  }
 
   ngOnInit() {
-      
+
     $(document).ready(function () {
 
 
       $('#dismiss, .overlay').on('click', function () {
-          // hide sidebar
-          $('#sidebar').removeClass('active');
-          // hide overlay
-          $('.overlay').removeClass('active');
+        // hide sidebar
+        $('#sidebar').removeClass('active');
+        // hide overlay
+        $('.overlay').removeClass('active');
       });
 
       $('#sidebarCollapse').on('click', function () {
-          // open sidebar
-          $('#sidebar').addClass('active');
-          // fade in the overlay
-          $('.overlay').addClass('active');
-          $('.collapse.in').toggleClass('in');
-          $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        // open sidebar
+        $('#sidebar').addClass('active');
+        // fade in the overlay
+        $('.overlay').addClass('active');
+        $('.collapse.in').toggleClass('in');
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
       });
-  });
+    });
 
-  }   
+  }
 
   signOut() {
-    console.log("cerrar sesion");
-    this.firebaseservise.signOut();
+    Swal.fire({
+      
+      title: '¿Cerrar Sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+
+    }).then((result) => {
+      if (result.value) {
+        
+        this.firebaseservise.signOut();
+        localStorage.removeItem('profile');
+      }
+    })
+
   }
+
+  // asigVariables(profile: any) {
+
+  //   this.Stablishment = profile['nameAllie'];
+  //   this.headquarters = profile['nameHeadquarter'];
+
+  //   switch (profile['nameCharge']) {
+
+  //     case 'cajero' || 'administradorPDv' || 'GerenteGeneral':
+  //       this.principal = true;
+
+  //     case 'asesor':
+  //       this.pqrs = true;
+
+  //     case 'contador':
+  //       this.reports = true;
+
+  //     case 'administradorTIFI':
+  //       this.options = true;
+  //   }
+  // }
 
 }

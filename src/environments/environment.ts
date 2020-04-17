@@ -15,7 +15,8 @@ export const environment = {
   },
 
   UrlBase:"http://localhost:5000/",
-  /* UrlBase:"https://tifi.herokuapp.com/", */
+  UrlBaseSocket:"http://localhost:5001",
+  //https://tifi.herokuapp.com/
   //https://tifi.herokuapp.com/
 
   IVA: 0.19

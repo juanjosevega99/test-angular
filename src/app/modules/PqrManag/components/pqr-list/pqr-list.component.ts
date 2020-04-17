@@ -10,6 +10,9 @@ import { PqrsService } from 'src/app/services/pqrs.service';
 import { Pqrs } from 'src/app/models/Pqrs';
 import { UsersService } from 'src/app/services/users.service';
 import { Users } from 'src/app/models/Users';
+import { WebsocketsService } from 'src/app/services/websockets.service';
+import { profileStorage } from '../../../../models/ProfileStorage';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
 
 @Component({
   selector: 'app-pqr-list',
@@ -39,15 +42,20 @@ export class PqrListComponent implements OnInit {
   newdateArray = this.usergetting;
   filteredArray = [];
   userSelected: {}[] = [];
-  generalsearch: string;
+  generalsearch: string = '';
   table: FormGroup;
 
+  // profile
+  profile: profileStorage;
+
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private pqrlistservice: PqrsService,
-    private userService: UsersService) {
+    private userService: UsersService, private websocket: WebsocketsService, private showmenu: ShowContentService) {
+
+    this.profile = this.showmenu.showMenus();
 
     this.table = new FormGroup({
       "date": new FormControl(),
-      "name": new FormControl(),
+      "nameUser": new FormControl(),
       "email": new FormControl(),
       "phone": new FormControl(),
       "birthday": new FormControl(),
@@ -57,45 +65,53 @@ export class PqrListComponent implements OnInit {
 
     })
 
-    this.pqrlistservice.getPqrs().subscribe(res => {
+    if(this.profile.nameCharge.toLocaleLowerCase() == "administradortifi"){
+      this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
 
-      if (res.length > 0) {
+        if (res.length > 0) {
+  
+          res.forEach((order: any) => {
+  
+            if (order.idUser) {
+  
+              this.formaterPqr(order);
+  
+            } else {
+              console.log("problem with order.userid", order.userid);
+            }
+          },
+          )
+        }
+      })
+    }else{
 
-        res.forEach((order: any) => {
-
-          if (order.idUser) {
-
-            this.userService.getUserById(order.idUser).subscribe((user: Users) => {
-              const obj: Pqrs = {};
-
-              obj.id = order.id,
-              obj.date = this.convertDate(order.date);
-              obj.nameUser = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
-              obj.nameAllie = order.nameAllie;
-              obj.nameHeadquarter = order.nameHeadquarter;
-              obj.typeOfService = order.typeOfService;
-              obj.state = order.state;
-
-              this.usergetting.push(obj)
-            })
-
-          } else {
-            console.log("problem with order.userid", order.userid);
-          }
-        },
-        )
-
-      }
-
-    })
+      this.pqrlistservice.getPqrs().subscribe(res => {
+  
+        if (res.length > 0) {
+  
+          res.forEach((order: any) => {
+  
+            if (order.idUser) {
+  
+              this.formaterPqr(order);
+  
+            } else {
+              console.log("problem with order.userid", order.userid);
+            }
+          },
+          )
+        }
+      })
+    }
 
   }
 
   ngOnInit() {
+    this.websocket.listen('newPqr').subscribe((pqr: Pqrs) => {
+      if (pqr.idHeadquarter == this.profile.idHeadquarter) {
+        this.formaterPqr(pqr);
+      }
+    })
   }
 
   // =====================================
@@ -207,51 +223,40 @@ export class PqrListComponent implements OnInit {
   }
 
 
-  // ================================
-  // filters
-  // ================================
+  // ============================
+  // formaterpqr
 
-  SeachingRange(dateFrom: string, dateTo: string) {
+  formaterPqr(order: any) {
 
-    this.from = dateFrom;
-    this.to = dateTo;
+    this.userService.getUserById(order.idUser).subscribe((user: Users) => {
+      const obj: Pqrs = {};
 
-    const mydateFrom = new Date(this.from);
-    const mydateTo = new Date(this.to);
+      obj.id = order.id,
+      obj.date = this.convertDate(order.date);
+      obj.nameUser = user.name;
+      obj.email = user.email;
+      obj.phone = user.phone;
+      obj.birthday = this.convertDate(user.birthday);
+      obj.gender = user.gender;
+      obj.nameAllie = order.nameAllie;
+      obj.nameHeadquarter = order.nameHeadquarter;
+      obj.typeOfService = order.typeOfService;
+      obj.state = order.state;
 
-    if (!this.filteredArray.length) {
-
-      this.newdateArray = [];
-
-      this.usergetting.forEach(user => {
-
-        const userdate = new Date(user.date)
-
-        if (userdate >= mydateFrom && userdate <= mydateTo) {
-          this.newdateArray.push(user)
-        }
-      });
-
-    } else {
-
-      this.newdateArray = [];
-
-      this.filteredArray.forEach(user => {
-        const userdate = new Date(user.date)
-        if (userdate >= mydateFrom && userdate <= mydateTo) {
-          this.newdateArray.push(user);
-        }
-      });
-    }
+      this.usergetting.push(obj)
+    })
 
   }
 
+  // ================================
+  // filters
+  // ================================
 
   clear() {
 
     this.table.reset({
       date: null,
-      name: null,
+      nameUser: null,
       email: null,
       phone: null,
       birthday: null,
@@ -277,160 +282,194 @@ export class PqrListComponent implements OnInit {
 
   search(termino?: string, id?: string) {
 
-    if (this.fromDate && this.toDate) {
+    // vars to filter table
+    let objsearch = {
+      nameUser: "",
+      email: "",
+      phone: "",
+      birthday: "", 
+      gender: "",
+      nameAllie: "",
+      nameHeadquarter: ""
+    };
 
-      if (termino) {
-        this.filteredArray = [];
-        termino = termino.toLowerCase();
+    // let for date search
+    let objdate = {
+      fromdate: this.fromDate != null ? [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-') : '',
+      todate: this.toDate != null ? [this.toDate.year, this.toDate.month, this.toDate.day].join('-') : ''
+    }
 
-        const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-        const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-        this.SeachingRange(fromdate, todate);
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
 
-        const aux = this.newdateArray;
-        this.newdateArray = [];
-
-        aux.forEach(user => {
-          if (user[id].toLowerCase().indexOf(termino) >= 0) {
-            this.newdateArray.push(user);
-            this.filteredArray.push(user);
-          }
-
-        });
-
-      } else {
-
-        const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-        const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-        this.SeachingRange(fromdate, todate);
-
+        objsearch[i] = this.table.value[i];
       }
+    }
 
+    // let for general searhch
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
 
-    } else {
-
-      if (termino) {
-
-        if (this.filteredArray.length) {
-
-          termino = termino.toLowerCase();
-
-          this.newdateArray = [];
-
-          this.filteredArray.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-
-            }
-
-          });
+    this.newdateArray = this.usergetting.
+      filter(function (dish) {
+        if (dish["nameUser"].toLowerCase().indexOf(this.nameUser) >= 0) {
+          return dish;
         }
-        else {
-          console.log("no filtered array");
-          console.log(id);
-
-
-          this.newdateArray = [];
-
-          this.usergetting.forEach(user => {
-
-            user[id] = user[id].toString();
-
-            if (user[id].toLowerCase().indexOf(termino) >= 0) {
-              this.newdateArray.push(user);
-              this.filteredArray.push(user);
-
-            }
-
-          });
-
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["email"].toLowerCase().indexOf(this.email) >= 0) {
+          return dish;
         }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["phone"].toLowerCase().indexOf(this.phone) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["birthday"].toLowerCase().indexOf(this.birthday) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["gender"].toLowerCase().indexOf(this.gender) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["nameAllie"].toLowerCase().indexOf(this.nameAllie) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["nameHeadquarter"].toLowerCase().indexOf(this.nameHeadquarter) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.date) || myRegex.test(item.nameUser) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService))
 
+      }).
+      filter(function (item) {
 
-      } else {
+        if (this.fromdate != '' && this.todate != '') {
 
-        this.table.value[id] = null;
+          const mydateFrom = new Date(this.fromdate);
+          const mydateTo = new Date(this.todate);
 
-        let count = 0;
-        for (var i in this.table.value) {
-
-          if (this.table.value[i] == null || this.table.value[i] == "") {
-            count += 1;
+          let datetransform = item.date.split("/");
+          let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
+          const userdate = new Date(newdatetransform);
+          if (userdate >= mydateFrom && userdate <= mydateTo) {
+            return item;
+          } else {
+            return null
           }
-        }
-
-        if (count > 7 && !this.generalsearch) {
-
-          this.newdateArray = this.usergetting;
-          this.filteredArray = []
-          count = 0;
-
         } else {
-
-          this.newdateArray = this.filteredArray;
-          count = 0;
+          return item;
         }
-      }
-    }
-  }
+      }, objdate)
+
+    // if (this.fromDate && this.toDate) {
+
+    //   if (termino) {
+    //     this.filteredArray = [];
+    //     termino = termino.toLowerCase();
+
+    //     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+    //     const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
+    //     this.SeachingRange(fromdate, todate);
+
+    //     const aux = this.newdateArray;
+    //     this.newdateArray = [];
+
+    //     aux.forEach(user => {
+    //       if (user[id].toLowerCase().indexOf(termino) >= 0) {
+    //         this.newdateArray.push(user);
+    //         this.filteredArray.push(user);
+    //       }
+
+    //     });
+
+    //   } else {
+
+    //     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
+    //     const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
+    //     this.SeachingRange(fromdate, todate);
+
+    //   }
 
 
-  searchbyterm(termino: string) {
+    // } else {
 
-    if (termino) {
-      termino = termino.toLowerCase();
-      var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+    //   if (termino) {
 
-      if (this.filteredArray.length) {
+    //     if (this.filteredArray.length) {
 
-        this.newdateArray = this.filteredArray.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) )
+    //       termino = termino.toLowerCase();
 
-        });
-      } else {
+    //       this.newdateArray = [];
 
-        this.newdateArray = this.usergetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) )
+    //       this.filteredArray.forEach(user => {
 
-        });
-        this.filteredArray = this.usergetting.filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.date) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-            myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) )
+    //         user[id] = user[id].toString();
 
-        });
+    //         if (user[id].toLowerCase().indexOf(termino) >= 0) {
+    //           this.newdateArray.push(user);
 
-      }
+    //         }
 
-    } else {
+    //       });
+    //     }
+    //     else {
+    //       console.log("no filtered array");
+    //       console.log(id);
 
-      let count = 0;
-      for (var i in this.table.value) {
-        if (this.table.value[i] == null || this.table.value[i] == "") {
-          count += 1;
-        }
-      }
 
-      if (count > 7 && !this.generalsearch) {
+    //       this.newdateArray = [];
 
-        this.newdateArray = this.usergetting;
-        this.filteredArray = []
-        count = 0;
+    //       this.usergetting.forEach(user => {
 
-      } else {
+    //         user[id] = user[id].toString();
 
-        this.newdateArray = this.filteredArray;
-        count = 0;
-      }
-    }
+    //         if (user[id].toLowerCase().indexOf(termino) >= 0) {
+    //           this.newdateArray.push(user);
+    //           this.filteredArray.push(user);
 
+    //         }
+
+    //       });
+
+    //     }
+
+
+    //   } else {
+
+    //     this.table.value[id] = null;
+
+    //     let count = 0;
+    //     for (var i in this.table.value) {
+
+    //       if (this.table.value[i] == null || this.table.value[i] == "") {
+    //         count += 1;
+    //       }
+    //     }
+
+    //     if (count > 7 && !this.generalsearch) {
+
+    //       this.newdateArray = this.usergetting;
+    //       this.filteredArray = []
+    //       count = 0;
+
+    //     } else {
+
+    //       this.newdateArray = this.filteredArray;
+    //       count = 0;
+    //     }
+    //   }
+    // }
   }
 
 
@@ -443,38 +482,35 @@ export class PqrListComponent implements OnInit {
 
       case 'pidelo':
         this.servicepidelo = !this.servicepidelo;
+        this.servicellevalo = false;
+        this.servicereservalo=false;
         service = this.servicepidelo ? service : "";
         break;
       case 'llevalo':
         this.servicellevalo = !this.servicellevalo;
+        this.servicepidelo = false;
+        this.servicereservalo=false;
         service = this.servicellevalo ? service : "";
         break;
       case 'reservalo':
         this.servicereservalo = !this.servicereservalo;
+        this.servicepidelo = false;
+        this.servicellevalo = false;
         service = this.servicereservalo ? service : "";
         break;
     }
 
-    this.searchbyterm( service);
+    // this.searchbyterm(service);
+    this.generalsearch = service;
+    this.search();
 
   }
 
 
-  // ===========================
-  // convert date
-  // ===========================
-
 
   convertDate(date: Date): string {
-    let n: string;
-    try {
-
-      const d = new Date(date);
-      n = d.toISOString().split("T")[0];
-    } catch{
-      console.log(date);
-
-    }
+    const d = new Date(date);
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
     return n;
   }
 

@@ -11,6 +11,7 @@ import { Guid } from "guid-typescript";
 import { ProfileList } from 'src/app/models/ProfileList';
 import { Profiles } from 'src/app/models/Profiles';
 import { async } from '@angular/core/testing';
+import { AuthFireServiceService } from 'src/app/services/providers/auth-fire-service.service';
 
 @Component({
   selector: 'app-create-profile',
@@ -18,8 +19,6 @@ import { async } from '@angular/core/testing';
   styleUrls: ['./create-profile.component.scss']
 })
 export class CreateProfileComponent implements OnInit {
-
-
   preProfile: Object = {
     state: [],
     numberOfModifications: 0,
@@ -88,13 +87,13 @@ export class CreateProfileComponent implements OnInit {
   fileImagedish: any;
   urlPorfile: Observable<string>;
   
-
   //variable for the loading
   loading: boolean;
 
 
-  constructor(private _router: Router, 
-    private activatedRoute: ActivatedRoute, 
+  constructor(
+    private _router: Router, private firebaseservice: AuthFireServiceService,
+    private activatedRoute: ActivatedRoute,
     private chargeProfiles: ProfilesService,
      private profiles: ProfilesService, 
     private storage: AngularFireStorage, 
@@ -114,7 +113,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.preProfile['state'] = this.State;
 
-    this.permiss = ["permiso1", "permiso2"];
+    this.permiss = ["cajero", "administradorPDV", "GerenteGeneral"];
 
     //inicialization for charging the data of a profile to edit
     this.activatedRoute.params.subscribe(params => {
@@ -137,7 +136,8 @@ export class CreateProfileComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
   }
-  goBackProfiles(){
+
+  goBackProfiles() {
     this._router.navigate(['/main', 'profiles', this.identificatorbyRoot])
   }
 
@@ -387,34 +387,56 @@ export class CreateProfileComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log("Array FINAL: ", this.preProfile);
+
+        // console.log("Array FINAL: ", this.preProfile);
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/profiles/${id}`;
         const ref = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file)
-        task.snapshotChanges()
-          .pipe(
+
+        this.firebaseservice.SignUp(this.preProfile['email'], this.preProfile['identification']).then(response => {
+
+          const task = this.storage.upload(filePath, file);
+          // console.log(response.user.uid);
+          
+          task.snapshotChanges().pipe(
+
             finalize(() => {
+
               ref.getDownloadURL().subscribe(urlImage => {
+
                 this.urlPorfile = urlImage;
-                console.log(this.urlPorfile);
+                // console.log(this.urlPorfile);
                 this.preProfile['photo'] = this.urlPorfile
-                this.profiles.postProfile(this.preProfile).subscribe(message => { })
+                this.preProfile['idFirebase'] = response.user.uid;
+                this.preProfile['_id'] = response.user.uid;
+                
+                this.profiles.postProfile(this.preProfile).subscribe(message => {
+
+                  Swal.fire({
+                    title: 'Guardado',
+                    text: "Tu nuevo perfil ha sido creado!",
+                    icon: 'warning',
+                    confirmButtonColor: '#542b81',
+                    confirmButtonText: 'Ok!'
+                  }).then((result) => {
+                    if (result.value) {
+                      // console.log("usuario resgistrado", message);                      
+                      this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+                    }
+                  })
+
+                })
               })
             }
             )
-          ).subscribe()
-        Swal.fire({
-          title: 'Guardado',
-          text: "Tu nuevo perfil ha sido creado!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
-          }
+          ).subscribe(res => { })
+
+        }).catch(err => {
+          console.log(err);
+          Swal.fire(
+            `TifiAdmin ${err['message']} `,
+          )
         })
       }
     })
@@ -485,8 +507,6 @@ export class CreateProfileComponent implements OnInit {
                 )
               ).subscribe()
           }
-          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
-         
           this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
 
             Swal.fire({
@@ -503,17 +523,6 @@ export class CreateProfileComponent implements OnInit {
 
           })
 
-        })
-        Swal.fire({
-          title: 'Guardado',
-          text: "Tu perfil ha sido actualizado!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'profiles',this.identificatorbyRoot]);
-          }
         })
       }
     })

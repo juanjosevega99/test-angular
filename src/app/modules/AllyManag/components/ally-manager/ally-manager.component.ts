@@ -97,9 +97,6 @@ export class AllyManagerComponent implements OnInit {
 
           let obj: any = {}
           
-            
-
-
           obj = {
             idAlly: ally.id,
             code: ally.nit,

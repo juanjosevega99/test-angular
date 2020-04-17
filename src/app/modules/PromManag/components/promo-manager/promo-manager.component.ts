@@ -118,7 +118,6 @@ export class PromoManagerComponent implements OnInit {
                     }
 
                     this.dishPromoArray.push(obj)
-
                     const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
                     this.promoService.putPromotion(iditem, promee).subscribe(res => { })
 

@@ -153,6 +153,13 @@
           <td>{{user.purchaseAmount}}</td>
           <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
         </tr>
+        <tr *ngIf=" !newdateArray.length " >
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>No hay Resultados</td>
+      </tr>
       </tbody>
 
     </table>

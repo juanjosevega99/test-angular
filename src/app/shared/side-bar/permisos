@@ -1,0 +1,29 @@
+permisos
+
+cajero{
+    principal,
+    informes cortos
+},
+
+administradorPDV{
+    principal,
+    informes cortospdv
+},
+
+gerenteGeneral{
+    principal,
+    infomes_largos
+},
+
+contador{
+    infomes_largos
+},
+
+asesor (adminPqrs) {
+    adminPqrs
+},
+
+AdministradorTifi{
+    menuOpciones (todos)
+
+}

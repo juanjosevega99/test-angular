@@ -1,4 +1,5 @@
 export class Profiles {
+  _id?:string;
   id?:string;
   state?:string[];
   entryDate?:Date;
@@ -16,4 +17,5 @@ export class Profiles {
   name?:string;
   email?:string;
   photo?:string;
+  ratings?:number[];
 }

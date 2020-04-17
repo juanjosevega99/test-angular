@@ -16,10 +16,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 
 // swall
 import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 // reservation
 import { ReservationService } from 'src/app/services/reservation.service';
 import { reservation } from 'src/app/models/reservation';
+import { WebsocketsService } from 'src/app/services/websockets.service';
+import { profileStorage } from 'src/app/models/ProfileStorage';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
 
 
 @Component({
@@ -34,17 +38,18 @@ export class PrincipalOrdersComponent implements OnInit {
   calendarPlugins = [dayGridPlugin, interactionPlugin, dayGridPlugin];
 
   datereservation: string = '';
-  hourreservation = { id: '', valueToShow: '', value: '' };
-  Tablereservation = { id: '', value: '' }
-  Peoplereservation = { id: '', value: '' }
+  idEvent: string = "";
+  hourreservation = { id: "", valueToShow: "", value: "" };
+  Tablereservation = { id: "", value: "" }
+  Peoplereservation = { id: "", value: "" }
   idButton = '';
   idTable = '';
   idPeople = '';
 
   calendarEvents = [
-    { title: 'event 1', date: '2020-04-04', target: 'evento1' },
-    { title: 'event 1', date: '2020-04-06', target: 'evento2' },
-    { title: 'event 2', date: '2020-04-05', target: 'evento3' },
+    { publicId: "", title: 'event 1', date: '2020-04-04', target: 'evento1' },
+    { publicId: "", title: 'event 1', date: '2020-04-06', target: 'evento2' },
+    { publicId: "", title: 'event 2', date: '2020-04-05', target: 'evento3' },
 
   ];
 
@@ -52,12 +57,16 @@ export class PrincipalOrdersComponent implements OnInit {
   // =========================
   // ====== profile ==========
 
-  profile = {
+  profilegen = {
     id: '123',
     name: 'pepito',
     idAllies: "5e7b744640e2af2d2f5a6610",
     idHedquart: "5e7b7cf227d3a60b0fb06494"
   }
+
+  profile: profileStorage;
+
+
 
   // ============================================
   // ====== to save dishes to reservation =======
@@ -77,7 +86,10 @@ export class PrincipalOrdersComponent implements OnInit {
   orders = []
   orders2 = []
   constructor(private serviceOrders: OrdersService, private userservice: UsersService, private dishService: DishesService,
-    private reservationService: ReservationService) {
+    private reservationService: ReservationService, private wesocket: WebsocketsService, private spinner: NgxSpinnerService,
+    private showmenu: ShowContentService) {
+
+    this.profile = this.showmenu.showMenus();
 
     this.preOrder = new FormGroup({
 
@@ -87,15 +99,17 @@ export class PrincipalOrdersComponent implements OnInit {
 
     })
 
+    // spinner
+    this.spinner.show();
+
     // init hours
     this.createHours();
 
     // init Tables
     this.createTables();
 
-    this.serviceOrders.getOrdersByAllyHead(this.profile.idHedquart).subscribe((orders: Orders[]) => {
-      this.formaterOrders(orders);
-    })
+
+    this.formaterOrders();
 
     // load reservations
     this.loadReservations();
@@ -118,6 +132,37 @@ export class PrincipalOrdersComponent implements OnInit {
     // this.orderList();
     this.orders2 = this.orders;
 
+    // listen websocket
+    this.wesocket.listen('connection').subscribe(res => {
+      console.log(res);
+    })
+
+    this.wesocket.listen('newOrder').subscribe((res: Orders) => {
+
+      // console.log("desde server", res);
+      if (res.idHeadquartes == this.profile.idHeadquarter) {
+        this.formatOrderUnit(res);
+        this.orderList(this.orders);
+
+      }
+    });
+
+    this.wesocket.listen("newReservation").subscribe((reservation: reservation) => {
+
+      if (this.profile.idHeadquarter == reservation.idHeadquart) {
+
+        if (this.idEvent == "" && this.datereservation != "") {
+          this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+          this.datereservation = "";
+        }
+        this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
+        this.Reservations.push(reservation);
+        this.idEvent = "";
+        this.resetIds();
+
+      }
+    })
+
   }
 
 
@@ -131,8 +176,8 @@ export class PrincipalOrdersComponent implements OnInit {
       if (dateres >= today) {
 
         this.copilist = this.listOfDishes.slice();
-        this.showmodal = true;
-        // this.setReservation();
+        // this.showmodal = true;
+        this.setReservation();
 
       } else {
 
@@ -173,14 +218,12 @@ export class PrincipalOrdersComponent implements OnInit {
     let idDishesa = [];
 
     this.selectDishes.forEach(diss => {
-      console.log(diss);
-      
       let obj = {
         id: diss.id,
         quantity: diss.quantity
       }
 
-      idDishesa.push(obj)
+      idDishesa.push(obj);
     });
 
     let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
@@ -189,62 +232,25 @@ export class PrincipalOrdersComponent implements OnInit {
       code: "R-05",
       idUser: "5e1f18008f7efe00172e5037",
       idAllies: this.profile.idAllies,
-      idHeadquartes: this.profile.idHedquart,
+      idHeadquartes: this.profile.idHeadquarter,
       idDishe: idDishesa,
-      typeOfService: reservation,
+      typeOfServiceobj: reservation['_id'],
+      typeOfService: { type: reservation['type'], tables: reservation['tables']['value'] },
       orderValue: this.totalCash,
       dateAndHourDelivey: dateres,
       chronometer: this.totalTime,
       orderStatus: "Relajate",
       deliveryStatus: false,
       costReservation: 2010,
-
     }
 
-    // order.code = "R-05";
-    // order.idUser = "5e1f18008f7efe00172e5037";
-    // order.idAllies = this.profile.idAllies;
-    // // order.nameAllies = "";
-    // order.idHeadquartes = this.profile.idHedquart;
-    // // order.nameHeadquartes = "";
-    // order.idDishe = idDishesa;
-    // // order.nameDishe=""
-    // order.typeOfService = reservation;
-    // order.orderValue = this.totalCash;
-    // order.dateAndHourDelivey = dateres;
-    // order.chronometer = this.totalTime;
-    // order.orderStatus = "Relajate";
-    // order.deliveryStatus = false;
-    // order.costReservation = 2010;
-    // {
-    //   "code": "R-01",
-    //     "idUser": "5e1f18008f7efe00172e5037",
-    //       "idAllies": "5e84ab6afe9b711716853bac",
-    //         "nameAllies": "frisby",
-    //           "idHeadquartes": "5e7a40f5d57eae2b7e5868a7",
-    //             "nameHeadquartes": "Galerias",
-    //               "idDishe": [{
-    //                 "id": "5e7eec51a965820ca366bd3d",
-    //                 "quantity": 8
-    //               }],
-    //                 "nameDishe": "camaron",
-    //                   "typeOfService": { "type": "reservalo", "tables": "2" },
-    //   "orderValue": 30000,
-    //     "dateAndHourDelivey": "2020-03-27T14:20:04.671Z",
-    //       "chronometer": 2,
-    //         "orderStatus": "pending",
-    //           "deliveryStatus": false,
-    //             "costReservation": 2010
-    // }
-
-
     this.serviceOrders.postCharge(order).subscribe(res => {
-      console.log("respuesta de la orden", res)
-      this.loadReservations();
-      this.resetIds();
+      // this.loadReservations();
+      // this.resetIds();
+      // Swal.fire(
+      //   'Reservación Guardada',
+      // )
     });
-    // console.log(order);
-
   }
 
   adddish() {
@@ -252,6 +258,8 @@ export class PrincipalOrdersComponent implements OnInit {
     const indexO = this.preOrder.value.dish;
     let dish = this.copilist.slice(indexO, indexO + 1);
     dish[0]['location'] = indexO;
+    dish[0]['quantity'] = 1;
+
     this.selectDishes.push(dish[0]);
     this.totalTime = this.totalTime + parseFloat(dish[0]['preparationTime'][0]);
     this.totalCash = this.totalCash + dish[0]['price'];
@@ -332,6 +340,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
 
   tolast(index: number) {
+    console.log("to Last");
 
     let auxOrder: Orders = this.orders2[index];
     this.orders2.splice(index, 1);
@@ -340,18 +349,34 @@ export class PrincipalOrdersComponent implements OnInit {
 
   }
 
+  orderList(ordersArray) {
+
+    console.log(ordersArray.sort((a, b) => new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime()));
+
+    ordersArray.forEach((order: Orders, i) => {
+      console.log(order.orderStatus);
+
+      if (order.orderStatus == "Cancelada" || order.orderStatus == "Entregado") {
+        this.tolast(i);
+      }
+    })
+
+  }
+
   // ============================
   // === charge reservation =====
   loadReservations() {
     console.log("loading reservations");
-    
-    this.calendarEvents = [];
 
-    this.reservationService.getReservationsByHeadquart(this.profile.idHedquart).subscribe((reservations: reservation[]) => {
+    this.calendarEvents = [];
+    this.Reservations = [];
+
+    this.reservationService.getReservationsByHeadquart(this.profile.idHeadquarter).subscribe((reservations: reservation[]) => {
 
       this.Reservations = reservations;
-      this.Reservations.forEach((res: any) => {
-        this.calendarEvents.push({ title: 'Reservado', date: res['date'], target: res['date'] });
+      this.Reservations.forEach((res: reservation) => {
+
+        this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
 
       });
     })
@@ -369,8 +394,10 @@ export class PrincipalOrdersComponent implements OnInit {
     this.idTable = '';
     this.datereservation = '';
     this.hourreservation = { id: '', valueToShow: '', value: '' };
-    this.Tablereservation = { id: '', value: '' }
-    this.Peoplereservation = { id: '', value: '' }
+    this.Tablereservation = { id: '', value: '' };
+    this.Peoplereservation = { id: '', value: '' };
+
+    this.selectDishes = [];
   }
 
   setColor(color?: string, res?: {}) {
@@ -388,9 +415,8 @@ export class PrincipalOrdersComponent implements OnInit {
 
       if (this.Reservations.length) {
 
-        this.Reservations.forEach((res: any) => {
-
-          document.getElementById(res.hour['id']).style.backgroundColor = background;
+        this.Reservations.forEach((res: reservation) => {
+          document.getElementById(res['hour']['id']).style.backgroundColor = background;
           document.getElementById(res.tables['id']).style.backgroundColor = background;
           document.getElementById(res.people['id']).style.backgroundColor = background;
         })
@@ -402,43 +428,46 @@ export class PrincipalOrdersComponent implements OnInit {
   // ============================
   // ======= Calendar ===========
   eventClick(event) {
-    console.log("from event", event.event._def.extendedProps.target);
-    this.handleDateClick(event.event._def.extendedProps.target);
+
+    // get id of event, this id is on order.typeOfServiceobj
+    // console.log("from event", event.event._def.extendedProps.publicId);
+    this.handleDateClick(event.event._def.extendedProps);
 
   }
 
-  handleDateClick(date) {
+  handleDateClick(event) {
 
-    let resToCompare = {};
-
+    // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
     if (this.datereservation) {
 
       this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
 
     }
 
-    this.datereservation = date;
-    let objdate = { title: 'programar', date: this.datereservation, target: this.datereservation }
+    // setting date of event
+    this.datereservation = event.target ? event.target : event.dateStr;
+
+    // setting the id event's is necessary to use in setFree()  Reservation
+    this.idEvent = event.publicId ? event.publicId : "";
+
+    // this event should not id, because is a generic event only for see
+    let objdate = { publicId: "", title: 'programar', date: this.datereservation, target: this.datereservation }
     this.calendarEvents.push(objdate);
 
     if (this.Reservations.length) {
 
       this.setColor();
 
-      this.Reservations.forEach((res: any) => {
+      this.Reservations.forEach((res: reservation) => {
 
-        if (this.datereservation == res['date']) {
+        if (event.publicId == res._id) {
 
-          resToCompare = res;
+          this.setColor("#ffb6b9", res);
           return
 
         }
       });
 
-      if (resToCompare['date']) {
-        this.setColor("red", resToCompare);
-        resToCompare = {};
-      }
     }
 
   }
@@ -450,7 +479,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
     }
 
-    document.getElementById(id).style.backgroundColor = "green";
+    document.getElementById(id).style.backgroundColor = "#54a735";
     this.idButton = id;
     this.hourreservation = this.Hours[id];
     this.hourreservation.id = this.idButton;
@@ -490,11 +519,15 @@ export class PrincipalOrdersComponent implements OnInit {
 
   setFree() {
 
-    if (this.datereservation && this.Reservations) {
+    // if exists date pickle and exist reservations
+    if (this.idEvent && this.Reservations.length) {
 
+      let countres = 0;
       this.Reservations.forEach((res: reservation) => {
 
-        if (this.datereservation == res['date']) {
+        countres++;
+        if (this.idEvent == res._id) {
+          countres--;
           let dateres = new Date(res.date + "T" + res.hour['value']);
 
           Swal.fire({
@@ -512,17 +545,79 @@ export class PrincipalOrdersComponent implements OnInit {
           }).then(response => {
 
             if (response.value) {
+              if (this.orders2.length) {
+                let count = 0;
+                this.orders2.forEach(order => {
 
-              this.reservationService.deleteReservation(res['_id']).subscribe(res => {
-                Swal.fire(
-                  'mesa Liberada',
-                )
-              })
-              this.loadReservations();
-              return;
+                  count++;
+
+                  if (res._id == order.typeOfServiceobj['idReservation']) {
+
+                    count--;
+                    order.orderStatus = "Cancelada";
+                    // is necesary formater the typeOfService because the origin forma is alterate in formaterOrder
+                    order.typeOfService = { type: "reservalo", tables: res['tables']['value'] }
+
+                    this.serviceOrders.putCharge(order).subscribe(resorder => {
+                      this.setColor("#fff", res);
+                      this.reservationService.deleteReservation(res['_id']).subscribe(response => {
+                        this.loadReservations();
+                        // this.formaterOrders();
+
+                        Swal.fire(
+                          'mesa Liberada',
+                        )
+
+                      })
+
+                    })
+
+                  } else {
+
+                    if (count == this.orders2.length) {
+                      this.setColor();
+                      this.reservationService.deleteReservation(res['_id']).subscribe(response => {
+                        this.loadReservations();
+                        // this.formaterOrders();
+                        Swal.fire(
+                          'mesa Liberada',
+                        )
+                        count = 0;
+
+                      })
+                    }
+                  }
+
+                })
+              } else {
+                this.setColor();
+                this.reservationService.deleteReservation(res['_id']).subscribe(response => {
+                  this.loadReservations();
+                  // this.formaterOrders();
+                  Swal.fire(
+                    'mesa Liberada',
+                  )
+                })
+              }
             }
           })
 
+        } else {
+          if (countres == this.Reservations.length) {
+
+            Swal.fire({
+
+              title: 'No existen reservas para la fecha',
+              icon: 'warning',
+              // showCancelButton: true,
+              confirmButtonColor: '#542b81',
+              // cancelButtonColor: '#542b81',
+              confirmButtonText: 'Aceptar',
+              // cancelButtonText: 'No'
+
+            })
+
+          }
         }
 
       })
@@ -564,7 +659,7 @@ export class PrincipalOrdersComponent implements OnInit {
     reservation.hour = this.hourreservation;
     reservation.tables = this.Tablereservation;
     reservation.people = this.Peoplereservation;
-    reservation.idHeadquart = this.profile.idHedquart;
+    reservation.idHeadquart = this.profile.idHeadquarter;
     // this.resetIds();
 
     Swal.fire({
@@ -583,81 +678,101 @@ export class PrincipalOrdersComponent implements OnInit {
       .then((result) => {
 
         if (result.value) {
-          console.log( "tis is reservation", reservation);
 
+          this.reservationService.postReservation(reservation).subscribe((res: reservation) => {
 
-          this.reservationService.postReservation(reservation).subscribe(res => {
+            if (this.idEvent = "" && this.datereservation != "") {
 
-            this.Reservations.push(reservation);
-            this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-            this.createOrder(reservation);
+              this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+              this.datereservation = "";
+            }
+            // this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+            // this.Reservations.push(res);
+            this.idEvent = "";
+            // this.createOrder(reservation);
+            // this.loadReservations();
+            this.resetIds();
+            this.setColor();
             Swal.fire(
               'Reservación Guardada',
             )
+
           })
         }
-
       })
-
-
   }
 
   // ========================================================
   // ========= funtion to formater all prders by ally =======
   // ========================================================
-  formaterOrders(orders: Orders[]) {
+  formaterOrders() {
+    this.orders2 = [];
+    this.orders = [];
+    this.serviceOrders.getOrdersByAllyHead(this.profile.idHeadquarter).subscribe((orders: Orders[]) => {
 
-    orders.forEach(order => {
-      let ordertosave: OrderByUser = {};
-      this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
-        ordertosave.code = order.code;
-        ordertosave.id = order.id;
-        ordertosave.name = user.name + " " + user.lastname;
-        ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables']["value"] + " mesas" : order.typeOfService['type'];
-        ordertosave.purchaseAmount = order.orderValue;
-        ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
-        ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
-        ordertosave.DateDelivery = order.dateAndHourDelivey;
-        ordertosave.orderStatus = order.orderStatus;
-      });
-      let objdishes = [];
-      let timeTotal = 0;
-      order.idDishe.forEach((iddish: any) => {
-        let objDish: any = {};
-        this.dishService.getDisheById(iddish.id).subscribe((dish: Dishes) => {
-          objDish.quantity = iddish.quantity;
-          objDish.name = dish.name;
-          objDish.description = dish.description;
-          objDish.timedish = dish.preparationTime[0] + " " + dish.preparationTime[1];
-          objDish.valueDish = dish.price * iddish.quantity;
+      orders.forEach(order => {
+        this.formatOrderUnit(order);
+      })
+      this.spinner.hide();
+      this.orders2 = this.orders;
 
-          switch (dish.preparationTime[1]) {
-            case 'segundos':
-              timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) / 60);
-              break;
-            case "minutos":
-              timeTotal = (timeTotal + parseInt(dish.preparationTime[0]));
-              break;
-            case 'horas':
-              timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) * 60);
-              break;
-          }
-          if (timeTotal >= 60) {
-            ordertosave.timeTotal = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
-              (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
-            ordertosave.timeTotalCronometer = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
-              (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
-          }
-          else {
-            ordertosave.timeTotal = timeTotal + " " + "minutos";
-            ordertosave.timeTotalCronometer = timeTotal + " " + "minutos";
-          }
-        });
-        objdishes.push(objDish);
-      });
-      ordertosave.nameDishe = objdishes;
-      this.orders.push(ordertosave);
     })
+
+  }
+
+  formatOrderUnit(order) {
+
+    let ordertosave: OrderByUser = {};
+    this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
+      ordertosave.idHeadquarter = order.idHeadquartes;
+      ordertosave.code = order.code;
+      ordertosave.id = order.id ? order.id : order._id;
+      ordertosave.name = user.name + " " + user.lastname;
+      ordertosave.typeOfServiceobj = order.typeOfServiceobj; //new change is nesscesary to order :)
+      ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables'] + " mesas" : order.typeOfService['type'];
+      ordertosave.purchaseAmount = order.orderValue;
+      ordertosave.registerDate = this.convertDate(order.dateAndHourReservation);
+      ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
+      ordertosave.DateDelivery = order.dateAndHourDelivey;
+      ordertosave.orderStatus = order.orderStatus;
+    });
+    let objdishes = [];
+    let timeTotal = 0;
+    order.idDishe.forEach((iddish: any) => {
+      let objDish: any = {};
+      this.dishService.getDisheById(iddish.id).subscribe((dish: Dishes) => {
+        objDish.quantity = iddish.quantity;
+        objDish.name = dish.name;
+        objDish.description = dish.description;
+        objDish.timedish = dish.preparationTime[0] + " " + dish.preparationTime[1];
+        objDish.valueDish = dish.price * iddish.quantity;
+
+        switch (dish.preparationTime[1]) {
+          case 'segundos':
+            timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) / 60);
+            break;
+          case "minutos":
+            timeTotal = (timeTotal + parseInt(dish.preparationTime[0]));
+            break;
+          case 'horas':
+            timeTotal = timeTotal + (parseInt(dish.preparationTime[0]) * 60);
+            break;
+        }
+        if (timeTotal >= 60) {
+          ordertosave.timeTotal = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
+            (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : Math.floor(((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
+          ordertosave.timeTotalCronometer = Math.floor(timeTotal / 60) + ":" + ((((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) < 10 ? '0' +
+            (((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60) : Math.floor(((timeTotal / 60) - Math.floor(timeTotal / 60)) * 60)) + " " + "min";
+        }
+        else {
+          ordertosave.timeTotal = timeTotal + " " + "minutos";
+          ordertosave.timeTotalCronometer = timeTotal + " " + "minutos";
+        }
+      });
+      objdishes.push(objDish);
+    });
+    ordertosave.nameDishe = objdishes;
+    this.orders.push(ordertosave);
   }
 
 }

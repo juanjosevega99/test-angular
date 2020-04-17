@@ -444,6 +444,7 @@ export class CreateAllyComponent implements OnInit {
             return this._uploadImages.uploadImages(this.fileImgLogo, 'allies','logos')
           })
           .then(urlImage => {
+            this.upload = true
             this.urlLogo = urlImage;
             this.forma.controls['logo'].setValue(this.urlLogo)
             // put the values of properties establishment
@@ -474,37 +475,32 @@ export class CreateAllyComponent implements OnInit {
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
               this.allieService.postAllie(objAllie).subscribe()
-              // this._router.navigate(['/main', 'allyManager'])
+              // this._router.navigate(['/main', 'allyManager','-1']);
             })
-            this.upload = true
+            if (this.upload == true) {
+              Swal.fire({
+                title: 'Guardado',
+                text: "Tu nuevo aliado ha sido creado",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'allyManager','-1']);;
+                }
+              })
+            }
           })
-          .catch();
-          if (this.upload == true) {
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu nuevo aliado ha sido creado",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'allyManager',]);
-              }
-            })
-          }else{
-            Swal.fire({
-              text: "El aliado no ha sido creado porque no se subió la imagen",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            })
-          }
-            // Swal.fire(
-            //   'Guardado!',
-            //   'Tu nuevo aliado ha sido creado',
-            //   'success',
-            // )
-          
+          .catch((e)=> { 
+            if (this.upload == false){
+              Swal.fire({
+                text: "El aliado no ha sido creado porque no se subió la imagen",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              })
+            }
+          });
       }
     })
   }
@@ -608,7 +604,7 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
-        this._router.navigate(['/main', 'allyManager'])
+        this._router.navigate(['/main', 'allyManager','-1']);
       }
     })
   }
@@ -626,7 +622,7 @@ export class CreateAllyComponent implements OnInit {
         if (this.idParams != -1) {
           this._router.navigate(['/main', 'headquarts', this.idParams])
         } else {
-          this._router.navigate(['/main', 'allyManager'])
+          this._router.navigate(['/main', 'allyManager','-1']);
         }
       }
     })
