@@ -22,6 +22,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { reservation } from 'src/app/models/reservation';
 import { WebsocketsService } from 'src/app/services/websockets.service';
+import { profileStorage } from 'src/app/models/ProfileStorage';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
 
 
 @Component({
@@ -55,12 +57,16 @@ export class PrincipalOrdersComponent implements OnInit {
   // =========================
   // ====== profile ==========
 
-  profile = {
+  profilegen = {
     id: '123',
     name: 'pepito',
     idAllies: "5e7b744640e2af2d2f5a6610",
     idHedquart: "5e7b7cf227d3a60b0fb06494"
   }
+
+  profile: profileStorage;
+
+
 
   // ============================================
   // ====== to save dishes to reservation =======
@@ -80,7 +86,10 @@ export class PrincipalOrdersComponent implements OnInit {
   orders = []
   orders2 = []
   constructor(private serviceOrders: OrdersService, private userservice: UsersService, private dishService: DishesService,
-    private reservationService: ReservationService, private wesocket: WebsocketsService, private spinner: NgxSpinnerService) {
+    private reservationService: ReservationService, private wesocket: WebsocketsService, private spinner: NgxSpinnerService,
+    private showmenu: ShowContentService) {
+
+    this.profile = this.showmenu.showMenus();
 
     this.preOrder = new FormGroup({
 
@@ -131,7 +140,7 @@ export class PrincipalOrdersComponent implements OnInit {
     this.wesocket.listen('newOrder').subscribe((res: Orders) => {
 
       // console.log("desde server", res);
-      if (res.idHeadquartes == this.profile.idHedquart) {
+      if (res.idHeadquartes == this.profile.idHeadquarter) {
         this.formatOrderUnit(res);
         this.orderList(this.orders);
 
@@ -140,7 +149,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
     this.wesocket.listen("newReservation").subscribe((reservation: reservation) => {
 
-      if (this.profile.idHedquart == reservation.idHeadquart) {
+      if (this.profile.idHeadquarter == reservation.idHeadquart) {
 
         if (this.idEvent == "" && this.datereservation != "") {
           this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
@@ -223,7 +232,7 @@ export class PrincipalOrdersComponent implements OnInit {
       code: "R-05",
       idUser: "5e1f18008f7efe00172e5037",
       idAllies: this.profile.idAllies,
-      idHeadquartes: this.profile.idHedquart,
+      idHeadquartes: this.profile.idHeadquarter,
       idDishe: idDishesa,
       typeOfServiceobj: reservation['_id'],
       typeOfService: { type: reservation['type'], tables: reservation['tables']['value'] },
@@ -362,7 +371,7 @@ export class PrincipalOrdersComponent implements OnInit {
     this.calendarEvents = [];
     this.Reservations = [];
 
-    this.reservationService.getReservationsByHeadquart(this.profile.idHedquart).subscribe((reservations: reservation[]) => {
+    this.reservationService.getReservationsByHeadquart(this.profile.idHeadquarter).subscribe((reservations: reservation[]) => {
 
       this.Reservations = reservations;
       this.Reservations.forEach((res: reservation) => {
@@ -650,7 +659,7 @@ export class PrincipalOrdersComponent implements OnInit {
     reservation.hour = this.hourreservation;
     reservation.tables = this.Tablereservation;
     reservation.people = this.Peoplereservation;
-    reservation.idHeadquart = this.profile.idHedquart;
+    reservation.idHeadquart = this.profile.idHeadquarter;
     // this.resetIds();
 
     Swal.fire({
@@ -699,7 +708,7 @@ export class PrincipalOrdersComponent implements OnInit {
   formaterOrders() {
     this.orders2 = [];
     this.orders = [];
-    this.serviceOrders.getOrdersByAllyHead(this.profile.idHedquart).subscribe((orders: Orders[]) => {
+    this.serviceOrders.getOrdersByAllyHead(this.profile.idHeadquarter).subscribe((orders: Orders[]) => {
 
       orders.forEach(order => {
         this.formatOrderUnit(order);

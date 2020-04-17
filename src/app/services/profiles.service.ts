@@ -59,8 +59,8 @@ export class ProfilesService {
       );
   }
 
-  getProfileById(id): Observable<Profiles> {
-    return this.httpclient.get<Profiles>(environment.UrlBase + "profiles/" + id);
+  getProfileById(id): Observable<any> {
+    return this.httpclient.get<any>(environment.UrlBase + "profiles/" + id);
       // .pipe(
       //   map((profiles: any[]) =>
       //     profiles.map(profiles => {

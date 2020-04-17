@@ -38,6 +38,11 @@ import { ProfileComponent } from './modules/AllyManag/components/profile/profile
 import { CreateProfileComponent } from './modules/AllyManag/components/create-profile/create-profile.component';
 import { PqrListComponent } from './modules/PqrManag/components/pqr-list/pqr-list.component';
 import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
+import { GuardloginService } from './services/guards/guardlogin.service';
+import { GuardAdminTifiService } from './services/guards/guard-admin-tifi.service';
+import { GuardCAGService } from './services/guards/guard-cag.service';
+import { GuardPqrService } from './services/guards/guard-pqr.service';
+import { GuardContadorService } from './services/guards/guard-contador.service';
 
 
 const routes: Routes = [
@@ -59,33 +64,34 @@ const routes: Routes = [
   {
     path: "main",
     component: MainComponent,
+    canActivate: [GuardloginService],
     children: [
 
-      { path: "principal", component: PrincipalPageComponent },
-      { path: "principal-orders", component: PrincipalOrdersComponent },
-      { path: "options", component: OptionsComponent },
-      { path: "userManager", component: UserManagerComponent },
-      { path: "allyManager/:id", component: AllyManagerComponent },
-      { path: "createAlly/:id", component: CreateAllyComponent },
-      { path: "editAlly/:id", component: CreateAllyComponent },
-      { path: "promoManager", component: PromoManagerComponent },
-      { path: "couponManager", component: CuponManagerComponent },
-      { path: "createCoupon/:id", component: CreateCouponComponent },
-      { path: "reportGenerator", component: ReportGeneratorComponent },
-      { path: "pqrList", component: PqrListComponent },
-      { path: "pqrManager/:id", component: PqrManagerComponent },
-      { path: "bannerManager", component: BannerManagerComponent },
-      { path: "tycManager", component: TycManagerComponent },
-      { path: "add-sede", component: AddSedeComponent },
-      { path: "createHeadquarter/:id", component: CreateHeadquarterComponent },
-      { path: "editmenu/:id", component: EditMenuComponent },
-      { path: "createDish/:id", component: CreateDishComponent },
-      { path : "accompaniments/:id", component: AccompanimentsComponent},
-      { path : "profiles/:id", component: ProfileComponent},
-      { path : "createProfile/:id", component: CreateProfileComponent},
-      { path: "headquarts/:id", component: HeadquartersOptionsComponent },
+      { path: "principal", component: PrincipalPageComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "principal-orders", component: PrincipalOrdersComponent, canActivate: [ GuardCAGService ] },
+      { path: "options", component: OptionsComponent, canActivate: [ GuardPqrService ] },
+      { path: "userManager", component: UserManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "allyManager/:id", component: AllyManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createAlly/:id", component: CreateAllyComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "editAlly/:id", component: CreateAllyComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "promoManager", component: PromoManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "couponManager", component: CuponManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createCoupon/:id", component: CreateCouponComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "reportGenerator", component: ReportGeneratorComponent, canActivate: [ GuardContadorService ] },
+      { path: "pqrList", component: PqrListComponent, canActivate: [ GuardPqrService ] },
+      { path: "pqrManager/:id", component: PqrManagerComponent, canActivate: [ GuardPqrService ] },
+      { path: "bannerManager", component: BannerManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "tycManager", component: TycManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "add-sede", component: AddSedeComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "editmenu/:id", component: EditMenuComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createDish/:id", component: CreateDishComponent, canActivate: [ GuardAdminTifiService ] },
+      { path : "accompaniments/:id", component: AccompanimentsComponent, canActivate: [ GuardAdminTifiService ]},
+      { path : "profiles/:id", component: ProfileComponent, canActivate: [ GuardAdminTifiService ]},
+      { path : "createProfile/:id", component: CreateProfileComponent, canActivate: [ GuardAdminTifiService ]},
+      { path: "headquarts/:id", component: HeadquartersOptionsComponent, canActivate: [ GuardAdminTifiService ] },
       
-      { path: "**", redirectTo: "options", pathMatch: 'full' },
+      { path: "**", redirectTo: "options", pathMatch: 'full'},
 
     ]
     

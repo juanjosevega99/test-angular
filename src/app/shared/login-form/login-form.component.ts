@@ -45,6 +45,8 @@ export class LoginFormComponent implements OnInit {
         // console.log(res);
         this.serviceProfile.getProfileById(userlogged.uid).subscribe((profileservice) => {
 
+          // console.log("en el login", profileservice);          
+
           let profile = {
             id: profileservice['_id'],
             idAllies: profileservice.idAllies,
@@ -60,7 +62,7 @@ export class LoginFormComponent implements OnInit {
 
           this.spinner.hide();
 
-          console.log(profileservice.nameCharge.toLocaleLowerCase());
+          // console.log(profileservice.nameCharge.toLocaleLowerCase());
           switch (profileservice.nameCharge.toLocaleLowerCase()) {
             
             case 'cajero': 

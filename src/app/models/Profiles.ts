@@ -1,4 +1,5 @@
 export class Profiles {
+  _id?:string;
   id?:string;
   state?:string[];
   entryDate?:Date;

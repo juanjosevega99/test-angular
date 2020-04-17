@@ -7,7 +7,7 @@ cajero{
 
 administradorPDV{
     principal,
-    informes cortos
+    informes cortospdv
 },
 
 gerenteGeneral{

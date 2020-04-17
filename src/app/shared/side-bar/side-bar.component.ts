@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 import { profileStorage } from '../../models/ProfileStorage';
 import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-side-bar',
@@ -21,10 +22,10 @@ export class SideBarComponent implements OnInit {
   // reports = false;
   // pqrs = false;
 
-  profile:profileStorage;
+  profile: profileStorage;
 
   constructor(public firebaseservise: AuthFireServiceService, private showmenu: ShowContentService) {
-    
+
     // get profile localstorage
     // let profile = JSON.parse(localStorage.getItem('profile'));
     // this.asigVariables(profile);
@@ -57,9 +58,24 @@ export class SideBarComponent implements OnInit {
   }
 
   signOut() {
-    console.log("cerrar sesion");
-    this.firebaseservise.signOut();
-    localStorage.removeItem('profile');
+    Swal.fire({
+      
+      title: '¿Cerrar Sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+
+    }).then((result) => {
+      if (result.value) {
+        
+        this.firebaseservise.signOut();
+        localStorage.removeItem('profile');
+      }
+    })
+
   }
 
   // asigVariables(profile: any) {
