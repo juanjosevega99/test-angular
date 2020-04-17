@@ -1,18 +1,24 @@
-export class Dishes {
+export class DishPromotion {
     id?:string;
     idDishesCategories?:string;
     nameDishesCategories?:string;
     reference?:string;
     name?:string;
-    creationDate?:Date;
-    modificationDate?:Date;
     numberOfModifications?:number;
     state?:string[];
     price?:number;
-    imageDishe?:string;
     description?:string;
     preparationTime?:string[];
     idAccompaniments?:string[];
     idPromotion?:string[];
+    promotionStartDate?:string[];
+    endDatePromotion?:string[];
+    namepromo?:string;
+    idnamepromo?:string;
+    pricepromo?:number;
+    photo?:string;
+    daysPromo?:number;
+    timestart?:string;
+    timeend?:string
     idHeadquarter?:string;
 }

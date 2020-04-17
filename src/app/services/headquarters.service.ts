@@ -100,5 +100,8 @@ export class HeadquartersService {
   getHeadquarterByIdAlly(idAlly){
     return this.httpclient.get(environment.UrlBase + "headquarters/ally/" + idAlly)
   }
+  getHeadquarterByAllIdAlly(idAlly){
+    return this.httpclient.get(environment.UrlBase + "headquarters/allAlly/" + idAlly)
+  }
 
 }

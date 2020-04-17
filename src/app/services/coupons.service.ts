@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
-import { Coupons } from "../models/Coupons";
+import { Coupons } from 'src/app/models/Coupons';
 
 @Injectable({
   providedIn: "root"
@@ -20,7 +20,7 @@ export class CouponsService {
 
   putCoupon(coupon): Observable<Coupons> {
     return this.httpclient.put<Coupons>(
-      environment.UrlBase + "coupons" + coupon.id,
+      environment.UrlBase + "coupons/" + coupon.id,
       coupon
     );
   }
@@ -34,18 +34,17 @@ export class CouponsService {
       map((coupons: any[]) =>
         coupons.map(coupons => {
           let obj = {
-            id: coupons.id,
+            id: coupons._id,
             name: coupons.name,
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
-            typeOfCoupon: coupons.typeOfCoupon,
+            idtypeOfCoupon: coupons.idtypeOfCoupon,
+            nameTypeOfCoupon: coupons.nameTypeOfCoupon,
             state: coupons.state,
             createDate: coupons.createDate,
             expirationDate: coupons.expirationDate,
             codeToRedeem: coupons.codeToRedeem,
             termsAndConditions: coupons.termsAndConditions,
-            transferable: coupons.transferable,
-            cumulative: coupons.cumulative,
             idAllies: coupons.idAllies,
             nameAllies: coupons.nameAllies,
             idHeadquarters: coupons.idHeadquarters,
@@ -56,7 +55,7 @@ export class CouponsService {
             discountRate: coupons.discountRate,
             creationTime: coupons.creationTime,
             expirationTime: coupons.expirationTime,
-            code: coupons.code
+            codeReferred: coupons.codeReferred
           };
           return obj;
         })
@@ -64,25 +63,23 @@ export class CouponsService {
     );
   }
 
-  getCouponById(id): Observable<any[]> {
+  getCouponById(id): Observable<Coupons> {
     return this.httpclient
-      .get<Coupons[]>(environment.UrlBase + "coupons/" + id)
+      .get<Coupons>(environment.UrlBase + "coupons/" + id)
       .pipe(
-        map((coupons: any[]) =>
-          coupons.map(coupons => {
+        map((coupons: Coupons) =>{
             let obj = {
-              id: coupons.id,
+              id: id,
               name: coupons.name,
               description: coupons.description,
               imageCoupon: coupons.imageCoupon,
-              typeOfCoupon: coupons.typeOfCoupon,
+              idtypeOfCoupon: coupons.idtypeOfCoupon,
+              nameTypeOfCoupon: coupons.nameTypeOfCoupon,
               state: coupons.state,
               createDate: coupons.createDate,
               expirationDate: coupons.expirationDate,
               codeToRedeem: coupons.codeToRedeem,
               termsAndConditions: coupons.termsAndConditions,
-              transferable: coupons.transferable,
-              cumulative: coupons.cumulative,
               idAllies: coupons.idAllies,
               nameAllies: coupons.nameAllies,
               idHeadquarters: coupons.idHeadquarters,
@@ -93,10 +90,10 @@ export class CouponsService {
               discountRate: coupons.discountRate,
               creationTime: coupons.creationTime,
               expirationTime: coupons.expirationTime,
-              code: coupons.code
+              codeReferred: coupons.codeReferred
             };
             return obj;
-          })
+          }
         )
       );
   }

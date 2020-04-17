@@ -3,13 +3,15 @@ export class Accompaniments {
     quantity?:number;
     unitMeasurement?:string;
     name?:string;
-    preparationTime?:string[];
+    preparationTimeNumber?:string;
+    preparationTimeUnity?:string;
     creationDate?:Date;
     modificationDate?: Date;
     numberOfModifications?: number;
-    state?: boolean;
+    state?: string[];
     typeOfAccompaniment?: boolean;
     accompanimentValue?: number;
     idTypeSection?:string;
     nameTypeSection?:string;
+    
 }

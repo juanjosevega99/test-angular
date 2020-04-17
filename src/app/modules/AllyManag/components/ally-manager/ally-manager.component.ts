@@ -21,7 +21,9 @@ export class AllyManagerComponent implements OnInit {
   manageHq: boolean;
   manageProm: boolean;
 
-  //varibales to obtain data
+  //variable to get headquaerters
+
+  //varibales to get data
   // attentionSchedule: string;
   arrayAllyManager: any[] = []
   newdateArray = this.arrayAllyManager;
@@ -34,7 +36,7 @@ export class AllyManagerComponent implements OnInit {
   noResults = false
   //variable for the loading
   // loading: boolean;
-
+  
   constructor(
     private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
@@ -42,12 +44,16 @@ export class AllyManagerComponent implements OnInit {
     private _router: Router,
     private _saveLocalStorageService: SaveLocalStorageService,
     private activatedRoute: ActivatedRoute) {
-
-    this.manageHq = false;
-    this.manageProm = false;
-
-    //inicialization for charging the data of a profile to edit
-    this.activatedRoute.params.subscribe(params => {
+      
+      //clean local storage  for ally and headquarter
+      this._saveLocalStorageService.saveLocalStorageIdAlly("");
+      this._saveLocalStorageService.saveLocalStorageIdHeadquarter("");
+      
+      this.manageHq = false;
+      this.manageProm = false;
+      
+      //inicialization for charging the data of a profile to edit
+      this.activatedRoute.params.subscribe(params => {
       let identificator = params['id']
       if (identificator == -1) {
         this.manageHq = true;
@@ -59,9 +65,7 @@ export class AllyManagerComponent implements OnInit {
         this.manageHq = false;
       }
     })
-
-    //inicialization local storage IdAlly
-    this._saveLocalStorageService.saveLocalStorageIdAlly;
+    
     // inicialization date
     this.today = new Date()
     this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
@@ -93,9 +97,6 @@ export class AllyManagerComponent implements OnInit {
 
           let obj: any = {}
           
-            
-
-
           obj = {
             idAlly: ally.id,
             code: ally.nit,

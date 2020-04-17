@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HeadquartersService } from 'src/app/services/headquarters.service';
-import { Headquarters } from 'src/app/models/Headquarters';
 import { Router, ActivatedRoute } from '@angular/router';
+// services
+import { HeadquartersService } from 'src/app/services/headquarters.service';
+import { AlliesService } from 'src/app/services/allies.service';
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+//modules
+import { Headquarters } from 'src/app/models/Headquarters';
+import { Allies } from 'src/app/models/Allies';
 
 
 @Component({
@@ -11,53 +16,101 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class HeadquartersOptionsComponent implements OnInit {
 
-  headquartersgetting: Headquarters[] = [];
-  headquarters = this.headquartersgetting;
-
   //variables of idAlly
-  idAlly:number;
-
-  constructor(private headquarterService: HeadquartersService,
+  idAlly: number;
+  identificador:number;
+  // array for search headquuarters
+  arrayHeadquarter: any;
+  headquartersByIdAlly: any[] = [];
+  idHeadquarter: string;
+  // flags
+  alertDontRegisters = false;
+  //enbles options headquarters
+  enableInfHeadquarter= true;
+  enableEditMenu = true;
+  enableProfiles = true;
+  constructor(
+    private headquarterService: HeadquartersService,
+    private alliesService: AlliesService,
     private _router: Router,
-    private _activateRoute: ActivatedRoute, ) {
+    private _activateRoute: ActivatedRoute,
+    private _saveLocalStorageService: SaveLocalStorageService) {
 
-      this._activateRoute.params.subscribe(params => {
-        console.log('Parametro', params['id']);
-        this.idAlly =  params['id']
-      });
-      
-      this.headquarterService.getHeadquarters().subscribe(res => {
-    
-      res.forEach((headquarters: Headquarters) => {
-        const dates: Headquarters = {};
-        dates.id = headquarters.id;
-        dates.name = headquarters.name
-        this.headquartersgetting.push(dates)
-        console.log(this.headquartersgetting);
+    //inicialization local storage IdAlly
+    this._saveLocalStorageService.saveLocalStorageIdAlly;
+
+    //inicialization for charging the data of an Ally to headquarter
+    this._activateRoute.params.subscribe(params => {
+
+      let idAlly = this._saveLocalStorageService.getLocalStorageIdAlly();
+     this.identificador = params['id']
+
+      this.headquarterService.getHeadquarterByAllIdAlly(idAlly).subscribe(headquarter => {
+        console.log(headquarter)
+        if (headquarter != "") {
+          this.arrayHeadquarter = headquarter
+          this.arrayHeadquarter.forEach(element => {
+
+            console.log('elem', element);
+            let obj = {
+              id: element._id,
+              name: element.name
+            }
+            this.headquartersByIdAlly.push(obj)
+
+          });
+        } else {
+          this.alertDontRegisters = true;
+        }
 
       })
-
-    })
-    /*  //inicialization service with collections dishes-categories
-    this.dishCategory.getDishCategory().subscribe(dishesCat => {
-      this.dishesCategories = dishesCat;
-    }) */
+    });
   }
 
   ngOnInit() {
   }
+  seeNameHeadquarter(selected: any) {
+
+    this.headquartersByIdAlly.forEach(element => {
+      if (this.idHeadquarter == element.id) {
+        this._saveLocalStorageService.saveLocalStorageIdHeadquarter(element.id)
+        this.enableInfHeadquarter= false;
+        this.enableEditMenu = false;
+        this.enableProfiles = false;
+      }
+    });
+  }
+
+  // getHeadquarters(identificator) {
+  //   this.alliesService.getAllies().subscribe(allies => {
+  //     let allie: Allies = {}
+  //     allie = allies[identificator]
+  //     let realId = allie.id
+  //     this.headquarterService.getHeadquarters().subscribe(headquarters => {
+  //       headquarters.forEach((headquarters: Headquarters) => {
+  //         if (headquarters.idAllies == realId) {
+  //           const dates: Headquarters = {};
+  //           dates.id = headquarters.id;
+  //           dates.name = headquarters.name
+  //           this.headquarterByAlly.push(dates)
+  //         }
+  //       })
+  //     })
+
+  //   })
+  // }
   createHeadquart() {
-    this._router.navigate( ['/main','createHeadquarter',this.idAlly] )
+    this._router.navigate(['/main', 'createHeadquarter', this.identificador])
   }
-  editAlly(){
-    this._router.navigate( ['/main','editAlly',this.idAlly] )
+  editAlly() {
+    this._router.navigate(['/main', 'editAlly', this.identificador])
   }
-  editMenu(){
-    this._router.navigate( ['/main','editmenu',this.idAlly] )
+  editMenu() {
+    this._router.navigate(['/main', 'editmenu', this.identificador])
 
   }
-  profiles(){
-    this._router.navigate( ['/main','profiles',this.idAlly] )
+  profiles() {
+    this._router.navigate(['/main', 'profiles', this.identificador])
   }
 
 }

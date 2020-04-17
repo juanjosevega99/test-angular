@@ -1,7 +1,7 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
-            <a [routerLink]="['/main','options']"  class="d-flex">
+            <a [routerLink]="['/main','options']" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -15,21 +15,22 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03" >
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 
                         <section class="col-md-4 mr-1 " style="flex-direction: column;">
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                                 <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                         <li class="nav-item mr-md-2">
-                                            <input placeholder="Buscar por código..." class="form-control text-center" type="text"
-                                                (keyup)="search(identification.value, identification.id)"
-                                                #identification id="identification" formControlName="code">
+                                            <input placeholder="Buscar por código..." class="form-control text-center"
+                                                type="text" (keyup)="search(code.value, code.id)" #code id="code"
+                                                formControlName="codeToRedeem">
                                         </li>
                                         <li class="nav-item">
-                                            <input placeholder="Buscar por nombre de establecimiento ..." class="form-control text-center" type="text"
+                                            <input placeholder="Buscar por nombre de establecimiento ..."
+                                                class="form-control text-center" type="text"
                                                 (keyup)="search(name.value, name.id)" #name id="name"
-                                                formControlName="nameEstablishment">
+                                                formControlName="nameAllies">
                                         </li>
                                     </ul>
                                 </div>
@@ -37,14 +38,14 @@
                             <div class="form-group">
                                 <div class="input-group mt-3" style="justify-content: center;">
                                     <div class="radio radio-success m-2 form-check form-check-inline">
-                                        <input class="form-check-input " type="radio" checked >
+                                        <input class="form-check-input " type="radio" checked>
                                         <label style="font-size: 15px;">
                                             Activo
                                         </label>
                                     </div>
                                     <div class="radio radio-danger m-2 form-check form-check-inline">
                                         <input class="form-check-input" type="radio" checked>
-                                        <label style="font-size: 15px;" >
+                                        <label style="font-size: 15px;">
                                             Inactivo
                                         </label>
                                     </div>
@@ -57,7 +58,8 @@
                                 </div>
                             </div>
                         </section>
-                        <section class="col-md-6 overflow-auto mr-1 " style="flex-direction: column;  margin-bottom: 4.8rem;">
+                        <section class="col-md-6 overflow-auto mr-1 "
+                            style="flex-direction: column;  margin-bottom: 4.8rem;">
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
                                     <li class="nav-item container-fluid d-flex">
@@ -68,17 +70,17 @@
                                 </ul>
                             </nav>
                         </section>
-                        <section class="col-md-2 col-2"  style="margin-bottom: 4.8rem;">
+                        <section class="col-md-2 col-2" style="margin-bottom: 4.8rem;">
                             <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-center ">
                                 <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
                                     <li class="nav-item">
-                                        <a [routerLink]="[ '/main/createCoupon', -1 ]" class="btn btn-outline-primary"
-                                           >Crear cupon</a>
+                                        <a [routerLink]="[ '/main/createCoupon', -1 ]"
+                                            class="btn btn-outline-primary">Crear cupon</a>
                                 </ul>
                             </nav>
 
                         </section>
-                        
+
                     </div>
                 </nav>
             </div>
@@ -97,19 +99,22 @@
                     <th class="text-center"> </th>
                 </tr>
             </thead>
-            <tbody  class="mt-5">
-                <!-- <tr *ngFor="let prof of newArray; let i = index " class="text-center">
-                    <td>{{prof.nameCharge}}</td>
-                    <td>{{prof.identification}}</td>
-                    <td>{{prof.name}}</td>
-                    <td> <img src={{prof.photo}} alt="" class="sizeLogo mx-2"></td>
-                    <td>{{prof.nameHeadquarter}}</td>
-                    <td>{{prof.entryDate}}</td>
-                    <td>{{prof.modificationDate}}</td>
-                    <td>{{prof.numberOfModifications}}</td>
+            <tbody class="mt-5">
+                <tr *ngFor="let coupon of newArray; let i = index " class="text-center">
+                    <td>{{coupon.codeToRedeem}}</td>
+                    <td> <img src={{coupon.imageCoupon}} alt="" class="sizeLogo mx-2"></td>
+                    <td>{{coupon.nameAllies}}</td>
+                    <td>
+                        <button type="button" class="btn btn-link" (click)="datafor_Users()" data-toggle="modal"
+                            data-target="#exampleModalCenter">
+                            {{coupon.nameTypeOfCoupon}}</button>
+                       
+                    </td>
+                    <td>{{coupon.createDate[0]}}</td>
+                    <!-- <td>{{coupon.expirationDate[0]}}</td> -->
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
-                            <input [checked]="prof.state[0].check" value="{{prof.id}}" type="radio" name={{i}}
+                            <input [checked]="coupon.state[0].check" value="{{coupon.id}}" type="radio" name={{i}}
                                 id="state" #active (click)="changeStateA(active.value)">
                             <label style="font-size: 15px;">
                                 Activo
@@ -118,7 +123,7 @@
                     </td>
                     <td>
                         <div class="radio radio-danger m-2 form-check-inline">
-                            <input [checked]="prof.state[1].check" value="{{prof.id}}" type="radio" name={{i}}
+                            <input [checked]="coupon.state[1].check" value="{{coupon.id}}" type="radio" name={{i}}
                                 id="state" #inactive (click)="changeStateI(inactive.value)">
                             <label style="font-size: 15px;">
                                 Inactivo
@@ -126,12 +131,76 @@
                         </div>
                     </td>
                     <td>
-                        <a [routerLink]="[ '/main/createProfile', i ]" class="btn"> <i class="far fa-edit"></i> </a>
+                        <button (click)="goToEditCoupon(coupon.id, i)" class="btn"> <i class="far fa-edit"></i>
+                        </button>
                     </td>
-                </tr> -->
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngIf="noResults">
+                        <a> No se encontraron resultados </a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
+
+  <!-- Modal Enviar cupones a usuarios-->
+    <div class="modal fade bd-example-modal-xl" id="exampleModalCenter" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #572483; text-align: center;">
+          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white; ">Usuarios seleccionados</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="table-content">
+          <div id="table-print">
+
+            <table class="table table-responsive" id="users-table">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Coreo</th>
+                <th class="text-center">Celular</th>
+                <th class="text-center">F.Nacimiento</th>
+                <th class="text-center">Genero</th>
+                <th class="text-center">Establecimiento</th>
+                <th class="text-center">Sede</th>
+                <th class="text-center">Usabilidad</th>
+                <th class="text-center">Monto Compra</th>
+                <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
+                    (change)="selectedAll($event)"> </th>
+              </tr>
+              <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
+                <td>{{i+1}}</td>
+                <td>{{user.registerDate}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phone}}</td>
+                <td>{{user.birthday}}</td>
+                <td>{{user.gender}}</td>
+                <td>{{user.nameAllie}}</td>
+                <td>{{user.nameHeadquarter}}</td>
+                <td>{{user.usability}}</td>
+                <td>{{user.purchaseAmount}}</td>
+                <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="selectforsend()" >Enviar cupones</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 </div>

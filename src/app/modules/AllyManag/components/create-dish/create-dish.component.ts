@@ -12,6 +12,7 @@ import { Dishes } from 'src/app/models/Dishes';
 import { DishList } from 'src/app/models/DishList';
 import { Promotions } from 'src/app/models/Promotions';
 import { PromotionsCategoriesService } from 'src/app/services/promotions-categories.service';
+import { PromotionsService } from 'src/app/services/promotions.service';
 
 
 @Component({
@@ -25,8 +26,6 @@ export class CreateDishComponent implements OnInit {
   preDish: Object = {
     idDishesCategories: null,
     state: [],
-    /* creationDate: null,
-    modificationDate: null, */
     numberOfModifications: 0,
     nameDishesCategories: null,
     reference: null,
@@ -36,7 +35,7 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: [],
     idAccompaniments: [],
-    idPromotion: null
+    idPromotion: []
   }
 
   editDish: Dishes = {
@@ -45,7 +44,6 @@ export class CreateDishComponent implements OnInit {
     reference: null,
     name: null,
     creationDate: null,
-    modificationDate: null,
     numberOfModifications: null,
     state: [],
     price: null,
@@ -53,19 +51,21 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: null,
     idAccompaniments: [],
-    idPromotion: null
+    idPromotion: []
   }
 
-  promotionArray: Promotions ={
-    state:[],
-    idname:null,
-    name:null,
-    promotionStartDate:null,
-    endDatePromotion:null,
-    price:null,
-    photo:null,
-    description:null,
-    preparationTime:[]
+  promotionArray: Object = {
+    state: [],
+    idname: null,
+    name: null,
+    promotionStartDate: [],
+    endDatePromotion: [],
+    price: null,
+    photo: null,
+    description: null,
+    preparationTime: [],
+    reference: null,
+    numberOfModifications: 0
   }
 
   //variables for receiving the profile that will be edited
@@ -83,7 +83,6 @@ export class CreateDishComponent implements OnInit {
   timesModification: String;
 
   //variables for categories
-  /* Categories: String[] = []; */
   arrayCategorySelect: boolean = true;
   otherCategoryInput: boolean = false;
   addcategoryButton: boolean = true;
@@ -104,21 +103,20 @@ export class CreateDishComponent implements OnInit {
 
   //varibles for dishes with promotion
   promotion: boolean;
-  dateEntryProm:Date;
-  timeEntryProm = {};
-  dateFinishProm:Date;
-  timeFinishProm = {};
   meridian = true;
   promotionsCategories: any[] = [];
+  idPromotion: string;
+  idroute: string[] = [];
+  selectuser: boolean;
 
-
-  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService) {
+  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService, private promotionService: PromotionsService) {
 
     //flags
     this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
     this.promotion = false;
+    this.selectuser = false;
 
     this.State = [{
       state: "active",
@@ -127,6 +125,7 @@ export class CreateDishComponent implements OnInit {
       state: "inactive",
       check: false
     }]
+
     this.preDish['state'] = this.State;
     this.promotionArray['state'] = this.State;
     this.time = ['segundos', 'minutos', 'horas']
@@ -134,15 +133,21 @@ export class CreateDishComponent implements OnInit {
     //inicialization for charging the data of a dish to edit
     this.activatedRoute.params.subscribe(params => {
       let identificator = params['id']
-      if (identificator >= 0 ) {
+      if (identificator >= 0) {
         this.getDish(identificator)
       } else if (identificator == -1) {
         this.loading = false
         this.buttonPut = false
-      } else if (identificator == -2){
+      } else if (identificator == -2) {
         this.loading = false
         this.buttonPut = false
+        this.selectuser = false
         this.promotion = true
+      } else if (identificator != "") {
+        this.buttonPut = true
+        this.promotion = true
+        this.selectuser = true
+        this.getDishwithPromo(identificator)
       }
       this.identificatorbyRoot = identificator
     })
@@ -161,10 +166,11 @@ export class CreateDishComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
   }
+
   goBackEditMenu() {
     this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot])
   }
-  routeAccompaniments(){
+  routeAccompaniments() {
     this._router.navigate(['/main', 'accompaniments', this.identificatorbyRoot])
   }
 
@@ -206,16 +212,42 @@ export class CreateDishComponent implements OnInit {
     }
   }
 
-  //charge a profile with the id
+  //charge a dish with the id
   getDish(id: string) {
     this.loading;
     this.chargeDishes.getDishes().subscribe(dishes => {
+      this.loading;
       let dish: Dishes = {}
-      let obj: Dishes = {}
       dish = dishes[id]
       this.editDish = dish;
       this.preDish = this.editDish;
-      this.loading = false;
+    })
+    this.loading = false;
+  }
+
+  //charge a promotion with the id
+  getDishwithPromo(reference: string) {
+    this.loading;
+    this.promotionService.getPromotions().subscribe(promos => {
+      let promo: Promotions = {}
+      promos.forEach(x => {
+        if (reference == x.reference) {
+          promo = x
+          this.promotionArray = promo;
+          this.chargeDishes.getDishes().subscribe(dishes => {
+            dishes.forEach(y => {
+              for (let index = 0; index < y.idPromotion.length; index++) {
+                const element = y.idPromotion[index];
+                if (x.id == element) {
+                  this.editDish = y;
+                  this.preDish = this.editDish
+                }
+              }
+            })
+          })
+          this.loading = false
+        }
+      })
     })
   }
 
@@ -268,12 +300,10 @@ export class CreateDishComponent implements OnInit {
     }
     console.log(this.fileImagedish);
     return this.fileImagedish = input.files[0]
-    
-    
   }
 
   //Method for selecting the state of a promotion
-  selectedStateProm(valueA, checkedA, valueB, checkedB){
+  selectedStateProm(valueA, checkedA, valueB, checkedB) {
     let fullstate: any = [{
       state: "active",
       check: false
@@ -349,12 +379,143 @@ export class CreateDishComponent implements OnInit {
   }
 
   //CRUD PROMOTION
+
   //save a promotion
+  savePromotion() {
+    this.swallSavePromotion(this.promotionArray)
+  }
+
+  //put the promotion
+  putPromotion() {
+    this.promotionService.getPromotions().subscribe(promos => {
+      let promo: Promotions = {};
+      promos.forEach(x => {
+        if (this.identificatorbyRoot == x.reference) {
+          promo = x
+          let realId = x.id;
+          Swal.fire({
+            title: 'Estás seguro?',
+            text: "de que deseas guardar los cambios!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#542b81',
+            cancelButtonColor: '#542b81',
+            confirmButtonText: 'Si, guardar!'
+          }).then(async (result) => {
+            if (result.value) {
+              console.log("Array FINAL: ", this.promotionArray);
+              this.promotionArray['numberOfModifications'] = this.promotionArray['numberOfModifications'] + 1
+              if (this.seeNewPhoto == false) {
+                this.promotionArray['photo'] = x.photo;
+                this.promotionService.putPromotion(realId, this.promotionArray).subscribe(res => {
+                  Swal.fire({
+                    title: 'Guardado',
+                    text: "Tu promoción ha sido actualizada!",
+                    icon: 'warning',
+                    confirmButtonColor: '#542b81',
+                    confirmButtonText: 'Ok!'
+                  }).then((result) => {
+                    if (result.value) {
+                      this._router.navigate(['/main', 'promoManager']);
+                    }
+                  })
+
+                })
+              } else if (this.seeNewPhoto == true) {
+                const id: Guid = Guid.create();
+                const file = this.fileImagedish;
+                const filePath = `assets/allies/promotions/${id}`;
+                const ref = this.storage.ref(filePath);
+                const task = this.storage.upload(filePath, file);
+                task.snapshotChanges()
+                  .pipe(
+                    finalize(() => {
+                      ref.getDownloadURL().subscribe(urlImage => {
+                        this.urlDish = urlImage;
+                        console.log(this.urlDish);
+                        this.promotionArray['photo'] = this.urlDish
+                        this.promotionService.putPromotion(realId, this.promotionArray).subscribe(res => {
+                          Swal.fire({
+                            title: 'Guardado',
+                            text: "Tu promoción ha sido actualizada!",
+                            icon: 'warning',
+                            confirmButtonColor: '#542b81',
+                            confirmButtonText: 'Ok!'
+                          }).then((result) => {
+                            if (result.value) {
+                              this._router.navigate(['/main', 'promoManager']);
+                            }
+                          })
+                        })
+                      })
+                    }
+                    )
+                  ).subscribe()
+              }
+            }
+          })
+        }
+      })
+
+    })
+  }
 
   //delete a promotion
-  deletePromo(){
-
+  deletePromo() {
+    if (this.identificatorbyRoot == -2) {
+      Swal.fire('No puedes eliminar esta promoción ya que no ha sido creado!!')
+    } else {
+      this.promotionService.getPromotions().subscribe(promos => {
+        let promo: Promotions = {};
+        promos.forEach(x => {
+          if (this.identificatorbyRoot == x.reference) {
+            promo = x
+            let realId = x.id;
+            Swal.fire({
+              title: 'Estás seguro?',
+              text: "de que deseas eliminar este plato!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#542b81',
+              cancelButtonColor: '#542b81',
+              confirmButtonText: 'Si, eliminar!'
+            }).then((result) => {
+              if (result.value) {
+                this.promotionService.deletePromotion(realId).subscribe(message => {
+                  this.chargeDishes.getDishes().subscribe(res => {
+                    res.forEach(dish => {
+                      for (let index = 0; index < dish.idPromotion.length; index++) {
+                        if (realId == dish.idPromotion[index]) {
+                          console.log(dish.idPromotion);
+                          dish.idPromotion.splice(index, 1)
+                          let newids: any = {
+                            idPromotion: dish.idPromotion
+                          }
+                          this.chargeDishes.putDishe(dish.id, newids).subscribe(res => { })
+                        }
+                      }
+                    })
+                  })
+                })
+                Swal.fire({
+                  title: 'Eliminado',
+                  text: "Tu plato ha sido eliminado!",
+                  icon: 'warning',
+                  confirmButtonColor: '#542b81',
+                  confirmButtonText: 'Ok!'
+                }).then((result) => {
+                  if (result.value) {
+                    this._router.navigate(['/main', 'promoManager']);
+                  }
+                })
+              }
+            })
+          }
+        })
+      })
+    }
   }
+
 
   //CRUD DISH
   //save new dish
@@ -364,7 +525,7 @@ export class CreateDishComponent implements OnInit {
 
   //delete the dish
   deleteDish() {
-    if (this.identificatorbyRoot == -1 || this.identificatorbyRoot == -2) {
+    if (this.identificatorbyRoot == -1) {
       Swal.fire('No puedes eliminar este plato ya que no ha sido creado!!')
     } else {
       this.chargeDishes.getDishes().subscribe(dishes => {
@@ -398,8 +559,10 @@ export class CreateDishComponent implements OnInit {
     })
   }
 
+
+
   //sweet alerts
-  swallSaveOtherPromo(newCategory:any){
+  swallSaveOtherPromo(newCategory: any) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar esta nueva categoría!",
@@ -424,7 +587,7 @@ export class CreateDishComponent implements OnInit {
     })
   }
 
-  swallDeleteCatPromo(categorySelected: string){
+  swallDeleteCatPromo(categorySelected: string) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar esta categoría!",
@@ -543,22 +706,23 @@ export class CreateDishComponent implements OnInit {
                 this.urlDish = urlImage;
                 console.log(this.urlDish);
                 this.preDish['imageDishe'] = this.urlDish
-                this.dishes.postDishe(this.preDish).subscribe(message => { })
+                this.dishes.postDishe(this.preDish).subscribe(message => {
+                  Swal.fire({
+                    title: 'Guardado',
+                    text: "Tu nuevo plato ha sido creado!",
+                    icon: 'warning',
+                    confirmButtonColor: '#542b81',
+                    confirmButtonText: 'Ok!'
+                  }).then((result) => {
+                    if (result.value) {
+                      this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                    }
+                  })
+                })
               })
             }
             )
           ).subscribe()
-        Swal.fire({
-          title: 'Guardado',
-          text: "Tu nuevo plato ha sido creado!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
-          }
-        })
       }
     })
   }
@@ -574,17 +738,24 @@ export class CreateDishComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-        this.chargeDishes.deleteDishe(realId).subscribe()
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
-        this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
+        this.chargeDishes.deleteDishe(realId).subscribe(message => {
+          Swal.fire({
+            title: 'Eliminado',
+            text: "Tu plato ha sido eliminado!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+            }
+          })
+        })
       }
     })
   }
 
-  swallUpdate(realId) {
+  async swallUpdate(realId) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -596,12 +767,28 @@ export class CreateDishComponent implements OnInit {
     }).then(async (result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.editDish);
-        this.chargeDishes.getDishes().subscribe(dishes => {
+        await this.chargeDishes.getDishes().subscribe(dishes => {
           let dish: Dishes = {};
           dish = dishes[this.identificatorbyRoot];
           this.editDish.numberOfModifications = this.editDish['numberOfModifications'] + 1;
           if (this.seeNewPhoto == false) {
             this.editDish.imageDishe = dish.imageDishe;
+
+            this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
+
+              Swal.fire({
+                title: 'Guardado',
+                text: "Tu plato ha sido actualizado!",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                }
+              })
+
+            })
           } else if (this.seeNewPhoto == true) {
             const id: Guid = Guid.create();
             const file = this.fileImagedish;
@@ -615,28 +802,74 @@ export class CreateDishComponent implements OnInit {
                     this.urlDish = urlImage;
                     console.log(this.urlDish);
                     this.preDish['imageDishe'] = this.urlDish
-                    this.chargeDishes.putDishe(realId, this.editDish).subscribe()
+                    this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
+                      Swal.fire({
+                        title: 'Guardado',
+                        text: "Tu plato ha sido actualizado!",
+                        icon: 'warning',
+                        confirmButtonColor: '#542b81',
+                        confirmButtonText: 'Ok!'
+                      }).then((result) => {
+                        if (result.value) {
+                          this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                        }
+                      })
+                    })
                   })
                 }
                 )
               ).subscribe()
           }
-          this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
-
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu plato ha sido actualizado!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'editmenu',this.identificatorbyRoot]);
-              }
-            })
-            
-          })
         })
+      }
+    })
+  }
+
+  swallSavePromotion(promotionArray) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.promotionArray);
+        const id: Guid = Guid.create();
+        const file = this.fileImagedish;
+        const filePath = `assets/allies/promotions/${id}`;
+        const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file)
+        task.snapshotChanges()
+          .pipe(
+            finalize(() => {
+              ref.getDownloadURL().subscribe(urlImage => {
+                this.urlDish = urlImage;
+                console.log(this.urlDish);
+                this.promotionArray['photo'] = this.urlDish
+                /* this.promotionArray['reference'] = this.editDish.reference */
+                this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
+                  this.editDish.idPromotion.push(message._id)
+                  this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {
+                    Swal.fire({
+                      title: 'Guardado',
+                      text: "Tu nuevo plato con promoción ha sido creado!",
+                      icon: 'warning',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    }).then((result) => {
+                      if (result.value) {
+                        this._router.navigate(['/main', 'promoManager']);
+                      }
+                    })
+                  })
+                })
+              })
+            }
+            )
+          ).subscribe()
       }
     })
   }

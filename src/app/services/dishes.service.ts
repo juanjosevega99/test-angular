@@ -44,7 +44,8 @@ export class DishesService {
             description: dishes.description,
             preparationTime: dishes.preparationTime,
             idAccompaniments: dishes.idAccompaniments,
-            idPromotion: dishes.idPromotion
+            idPromotion: dishes.idPromotion,
+            idHeadquarter : dishes.idHeadquarter
           };
           return obj;
         })
@@ -54,5 +55,8 @@ export class DishesService {
 
   getDisheById(id): Observable<any> {
     return this.httpclient.get<Dishes>(environment.UrlBase + "dishes/" + id)
+  }
+  getDishesByIdHeadquarter(idHeadquarter){
+    return this.httpclient.get(environment.UrlBase + "dishes/headquarter/" + idHeadquarter)
   }
 }

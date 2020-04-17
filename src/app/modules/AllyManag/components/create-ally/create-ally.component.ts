@@ -64,10 +64,12 @@ export class CreateAllyComponent implements OnInit {
   buttonPut: boolean;
   seeNewPhoto: boolean;
   seeNewImagesAlly: boolean;
-  //
+  //All flags
   // Variables of alerts
   alertBadExtensionLogo = false;
   alertBadExtensionPhotosAlly = false
+   //flag by state swall
+   upload = false;
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -103,7 +105,7 @@ export class CreateAllyComponent implements OnInit {
       'name': new FormControl('', [Validators.required, Validators.minLength(2),
       ]),
       'nit': new FormControl('', [Validators.required,
-      Validators.pattern("[0123456789,.'--]{8,20}")
+      Validators.pattern("[0123456789,.'-]{8,20}")
 
       ]),
       'legalRepresentative': new FormControl('', [Validators.required,
@@ -111,7 +113,7 @@ export class CreateAllyComponent implements OnInit {
 
       ]),
       'documentNumber': new FormControl('', [Validators.required,
-      Validators.pattern("[0123456789,.'--]{8,20}")
+      Validators.pattern("[0123456789,.'-]{8,20}")
 
       ]),
       'logo': new FormControl('', [Validators.required,
@@ -120,13 +122,13 @@ export class CreateAllyComponent implements OnInit {
       'idTypeOfEstablishment': new FormControl('', [Validators.required]),
       'nameTypeOfEstablishment': new FormControl(''),
       'NumberOfLocations': new FormControl('', [Validators.required,
-      Validators.pattern("[0123456789,.'--]{1,5}")
+      Validators.pattern("[0123456789,.'-]{1,5}")
       ]),
       'idMealsCategories': new FormControl('', [Validators.required]),
       'nameMealsCategories': new FormControl(''),
       'typeAlly': new FormControl('', [Validators.required]),
       'intermediationPercentage': new FormControl('', [Validators.required,
-      Validators.pattern("[0123456789,.'--]{1,3}")
+      Validators.pattern("[0123456789,.'-]{1,3}")
       ]),
       'description': new FormControl('', [Validators.maxLength(20)]),
       'idAttentionSchedule': new FormControl('', [Validators.required,]),
@@ -433,15 +435,16 @@ export class CreateAllyComponent implements OnInit {
         console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
         //read promise of upladImages 
         const promesasImages = this.imagesAlly.map(fileImage => {
-          return this._uploadImages.uploadImages(fileImage, 'ImagesEstablishment')
+          return this._uploadImages.uploadImages(fileImage, 'allies','ImagesEstablishment')
         });
         Promise
           .all(promesasImages)
           .then(urlImageAlly => {
             this.forma.controls['imagesAllies'].setValue(urlImageAlly)
-            return this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
+            return this._uploadImages.uploadImages(this.fileImgLogo, 'allies','logos')
           })
           .then(urlImage => {
+            this.upload = true
             this.urlLogo = urlImage;
             this.forma.controls['logo'].setValue(this.urlLogo)
             // put the values of properties establishment
@@ -472,16 +475,32 @@ export class CreateAllyComponent implements OnInit {
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
               this.allieService.postAllie(objAllie).subscribe()
-              this._router.navigate(['/main', 'allyManager'])
+              // this._router.navigate(['/main', 'allyManager','-1']);
             })
-
+            if (this.upload == true) {
+              Swal.fire({
+                title: 'Guardado',
+                text: "Tu nuevo aliado ha sido creado",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'allyManager','-1']);;
+                }
+              })
+            }
           })
-          .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
-        Swal.fire(
-          'Guardado!',
-          'Tu nuevo aliado ha sido creado',
-          'success',
-        )
+          .catch((e)=> { 
+            if (this.upload == false){
+              Swal.fire({
+                text: "El aliado no ha sido creado porque no se subió la imagen",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              })
+            }
+          });
       }
     })
   }
@@ -513,7 +532,7 @@ export class CreateAllyComponent implements OnInit {
     let objAllie = this.forma.value
     objAllie._id = this.identificatorbyRoot
     this.allieService.putAllie(objAllie).subscribe()
-    this._router.navigate(['/main', 'allyManager'])
+    this._router.navigate(['/main', 'allyManager','-1'])
   }
   swallPutAllie() {
     Swal.fire({
@@ -532,13 +551,13 @@ export class CreateAllyComponent implements OnInit {
 
         } else if (this.seeNewPhoto == true && this.seeNewImagesAlly == true) {
           const promesasImages = this.imagesAlly.map(fileImage => {
-            return this._uploadImages.uploadImages(fileImage, 'ImagesEstablishment')
+            return this._uploadImages.uploadImages(fileImage, 'allies','ImagesEstablishment')
           });
           Promise
             .all(promesasImages)
             .then(urlImageAlly => {
               this.forma.controls['imagesAllies'].setValue(urlImageAlly)
-              return this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
+              return this._uploadImages.uploadImages(this.fileImgLogo,'allies', 'logos')
             })
             .then(urlImage => {
               this.urlLogo = urlImage;
@@ -547,7 +566,7 @@ export class CreateAllyComponent implements OnInit {
             })
             .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
         } else if (this.seeNewPhoto == true && this.seeNewImagesAlly == false) {
-          this._uploadImages.uploadImages(this.fileImgLogo, 'logos')
+          this._uploadImages.uploadImages(this.fileImgLogo, 'allies','logos')
             .then(urlImage => {
               this.urlLogo = urlImage;
               this.forma.controls['logo'].setValue(this.urlLogo)
@@ -556,7 +575,7 @@ export class CreateAllyComponent implements OnInit {
             .catch(error => console.log('error al subir las imagenes a fireBase: ', error));
         } else if (this.seeNewPhoto == false && this.seeNewImagesAlly == true) {
           const promesasImages = this.imagesAlly.map(fileImage => {
-            return this._uploadImages.uploadImages(fileImage, 'ImagesEstablishment')
+            return this._uploadImages.uploadImages(fileImage, 'allies','ImagesEstablishment')
           });
           Promise
             .all(promesasImages)
@@ -585,7 +604,7 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
-        this._router.navigate(['/main', 'allyManager'])
+        this._router.navigate(['/main', 'allyManager','-1']);
       }
     })
   }
@@ -603,7 +622,7 @@ export class CreateAllyComponent implements OnInit {
         if (this.idParams != -1) {
           this._router.navigate(['/main', 'headquarts', this.idParams])
         } else {
-          this._router.navigate(['/main', 'allyManager'])
+          this._router.navigate(['/main', 'allyManager','-1']);
         }
       }
     })

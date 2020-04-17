@@ -1,14 +1,9 @@
-<div class="compenetsstyle"  >
-    <p>Trabajando en la interfaz</p>
-</div>
-
-<!-- 
-<div class="compenetsstyle"  >
+<div class="compenetsstyle">
     <app-loading *ngIf="loading"></app-loading>
-    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveProfile(shape)" #shape="ngForm" *ngIf="!loading" >
-
-        <a  (click)="goBackProfiles()" class="d-flex mr-2">
-            <img src="assets/icons/Back.png " class="tifi-icon-back">
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveCoupon(shape)" #shape="ngForm" *ngIf="!loading">
+        
+        <a  class="d-flex mr-2">
+            <img (click)="goBackProfiles()" src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
 
         <section class="col-6">
@@ -18,118 +13,147 @@
                 <div class="col-md-7">
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
-                        <input class="form-check-input " type="radio" name="radio2" id="radio3" [checked]="State[0].check" #active
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" 
-                            [value]="State[0].state" [checked]="preProfile.state[0].check"  >
+                        <input class="form-check-input " type="radio" name="radio2" id="radio3"
+                            [checked]="State[0].check" #active
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)"
+                            [value]="State[0].state" [checked]="preCoupon.state[0].check">
                         <label for="radio3">
                             Activo
                         </label>
                     </div>
 
                     <div class="radio radio-danger m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio4" [checked]="State[1].check" #inactive
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)" 
-                            [value]="State[1].state" [checked]="preProfile.state[1].check" >
+                        <input class="form-check-input" type="radio" name="radio2" id="radio4"
+                            [checked]="State[1].check" #inactive
+                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)"
+                            [value]="State[1].state" [checked]="preCoupon.state[1].check">
                         <label for="radio4">
                             Inactivo
                         </label>
                     </div>
 
                     <div class="radio m-2 form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio2" id="radio5" (click)="deleteProfile()" >
+                        <input class="form-check-input" type="radio" name="radio2" id="radio5"
+                            (click)="swallDeleteCoupon()">
                         <label for="radio5">
                             Eliminar
                         </label>
                     </div>
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Fecha de ingreso</label>
+            
+            <div class="form-group row align-items-center">
+                <label class="col-md-5 col-form-label">Fecha de creación</label>
                 <div class="col-md-7">
-                    <label class="dt">
-                        <p class="text-center">
-                            {{dateEntry}}
-                        </p>
-                    </label>
+                    <div class="input-group align-items-center">
+                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp1" #i="ngModel"
+                            [(ngModel)]="preCoupon.createDate[0]" ngbDatepicker #ds="ngbDatepicker" required
+                            [ngClass]="{'is-invalid': (!i.valid && i.touched),'is-valid':(i.valid)}">
+                        <div class="input-group-append mr-3">
+                            <a (click)="ds.toggle()" class="btn btn-outline-primary">
+                                <i class="far fa-calendar-alt"></i>
+                            </a>
+                        </div>
 
-                    <label class="dt" style="margin-right: 10px;">
-                        <p class="text-center">
-                            {{timesEntry}}
-                        </p>
-                    </label>
+                        <!-- <ngb-timepicker name="start" [(ngModel)]="preCoupon.createDate[1]" #it="ngModel"
+                            required [ngClass]="{'is-invalid': (!it.valid && it.touched),'is-valid':(it.valid)}"
+                            [meridian]="meridian"></ngb-timepicker> -->
+                        <!-- <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
+                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
+                        [meridian]="meridian">
+                    </ngb-timepicker> -->
+                        <div class="col-md-4" *ngIf="i.errors?.required" class="invalid-feedback">*Campo fecha y hora es
+                            requerido</div>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Fecha de modificación</label>
+            <div  class="form-group row">
+                <label class="col-md-5 col-form-label">Hora de creación </label>
                 <div class="col-md-7">
-                    <label class="dt">
-                        <p class="text-center">
-                            {{dateModication}}
-                        </p>
-                    </label>
-
-                    <label class="dt" style="margin-right: 10px;">
-                        <p class="text-center">
-                            {{timesModification}}
-                        </p>
-                    </label>
+                    <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
+                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
+                        [meridian]="meridian">
+                    </ngb-timepicker>
+                    <div class="col-md-4" *ngIf="timeCreate.errors?.required" class="invalid-feedback">*la hora es
+                        requerida</div>
+                    <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Número de modificaciones</label>
-                <div class="col-md-7">
-                    <label class="form-control">{{preProfile.numberOfModifications}}</label>
-                </div>
-            </div>
-
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Entidad</label>
                 <div class="col-md-7">
-                    <label  class="form-control">{{preProfile.nameAllie}}</label>
+                    <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
+                        nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.idAllies"
+                        (change)="seeNameAlly(nameAllies.value)">
+                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                        <option *ngFor="let ally of arrayAllies" [ngValue]=ally.id>
+                            {{ally.name}}
+                        </option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Sede</label>
                 <div class="col-md-7">
-                    <label class="form-control">{{preProfile.nameHeadquarter}}</label>
+                    <select class="form-control mr-2" name="nameHeadquarters" #nameHeadquarters="ngModel" required
+                        [ngClass]="{'is-invalid': (!nameHeadquarters.valid ) && 
+                        nameHeadquarters.touched ,'is-valid':(nameHeadquarters.valid) }"
+                        [(ngModel)]="preCoupon.idHeadquarters" (change)="seeNameHeadquarter(nameHeadquarters.value)">
+                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                        <option *ngFor="let headquarter of headquartersByIdAlly;" [ngValue]=" headquarter.id">
+                            {{headquarter.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Platos</label>
+                <div class="col-md-7">
+                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required
+                        [ngClass]="{'is-invalid': (!idDish.valid ) && 
+                        idDish.touched ,'is-valid':(idDish.valid) }"
+                        [(ngModel)]="preCoupon.idDishes" (change)="seeNameDish(idDish.value)">
+                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                        <option *ngFor="let dish of dishesByIdHeadquarter;" [ngValue]=" dish.id">
+                            {{dish.name}}
+                        </option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Perfil</label>
+                <label class="col-md-5 col-form-label">Tipo de cupón</label>
                 <div class="col-md-7">
                     <div class="input-group">
 
-                        <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="nameCharge" #nameCharge="ngModel"
-                            required [ngClass]="{'is-invalid': (!nameCharge.valid ),'is-valid':(nameCharge.valid) }"
-                            [(ngModel)]="preProfile.nameCharge" #select (change)="seeId(select.value)" >
-                            <option selected>{{preProfile.nameCharge}}</option>
-                            <option *ngFor="let profile of Categories">
-                                {{profile.name}}
+                        <select *ngIf="arrayTypeCouponSelect" class="form-control mr-2" name="nameTypeOfCoupon"
+                            #nameTypeOfCoupon="ngModel" required [ngClass]="{'is-invalid': (!nameTypeOfCoupon.valid ) && 
+                            nameTypeOfCoupon.touched ,'is-valid':(nameTypeOfCoupon.valid) }"
+                            [(ngModel)]="preCoupon.idtypeOfCoupon" (change)="seeNameTypeCoupon(nameTypeOfCoupon.value)">
+                            <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                            <option *ngFor="let coupon of typeCoupon" 
+                                [ngValue]="coupon.id">
+                                {{coupon.name}}
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otro perfil" required #category="ngModel"
-                            [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}"
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCategory" type="text"
-                            name="otherCategory">
+                        <input *ngIf="otherTypeCouponInput" placeholder="Otro cupon" #TypeCoupon="ngModel"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherTypeCoupon" 
+                            type="text" name="otherTypeCoupon">
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                            (click)="handleBoxCategories()"> Cancelar</button>
+                            (click)="handleBoxTypeCoupons()"> Cancelar</button>
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                            (click)="addCategory(otherCategory)"> Guardar</button>
+                            (click)="addTypeCoupon(otherTypeCoupon)"> Guardar</button>
 
-                        <button *ngIf="addcategoryButton" (click)="handleBoxCategories()"
+                        <button *ngIf="addTypeCouponButton" (click)="handleBoxTypeCoupons()"
                             class="btn1 btn btn-outline-primary">
                             Otro
                         </button>
 
-                        <button *ngIf="addcategoryButton" (click)=" deleteCategory()" type="button"
+                        <button *ngIf="addTypeCouponButton" (click)=" deleteTypeCoupon()" type="button"
                             class="btn1 btn btn-outline-primary">
                             Borrar
                         </button>
@@ -141,9 +165,57 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Usuario</label>
+                <label class="col-md-5 col-form-label">%Descuento</label>
                 <div class="col-md-7">
-                    <label class="form-control" >{{preProfile.nameAllie}}{{preProfile.identification}}</label>
+                    <input class="form-control" type="text" name="discont" #discont="ngModel"
+                        pattern="[0123456789,.'-]{1,10}"
+                        [ngClass]="{'is-invalid': (!discont.valid && discont.touched) || discont.errors?.pattern ,'is-valid':(discont.valid) }"
+                        [(ngModel)]="preCoupon.discountRate" required placeholder="Descuento">
+                    <div *ngIf="discont.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="discont.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+
+            <!-- <div  *ngIf="timeCreation" class="form-group row">
+                <label class="col-md-5 col-form-label">Hora de creación </label>
+                <div class="col-md-7">
+                    <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
+                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
+                        [meridian]="meridian">
+                    </ngb-timepicker>
+                    <div class="col-md-4" *ngIf="timeCreate.errors?.required" class="invalid-feedback">*la hora es
+                        requerida</div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div> -->
+            <div *ngIf="finishDate" class="form-group row">
+                <label class="col-md-5 col-form-label">Fecha de vencimiento</label>
+                <div class="col-md-7">
+                    <div class="input-group align-items-center">
+                        <input class="col-md-4  form-control " placeholder="yyyy-mm-dd" name="dp2" #f="ngModel"
+                            [(ngModel)]="preCoupon.expirationDate[0]" ngbDatepicker #df="ngbDatepicker" required
+                            [ngClass]="{'is-invalid': (!f.valid && f.touched),'is-valid':(f.valid)}">
+                        <div class="input-group-append mr-3">
+                            <a (click)="df.toggle()" class="btn btn-outline-primary">
+                                <i class="far fa-calendar-alt"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-4" *ngIf="f.errors?.required" class="invalid-feedback">*Campo fecha y hora es
+                            requerido</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="timeCreation" class="form-group row">
+                <label class="col-md-5 col-form-label">Hora de caducidad </label>
+                <div class="col-md-7">
+                    <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime" #expirationTime="ngModel" required
+                        [ngClass]="{'is-invalid': (!expirationTime.valid && expirationTime.touched),'is-valid':(expirationTime.valid)}"
+                        [meridian]="meridian">
+                    </ngb-timepicker>
+                    <div  *ngIf="expirationTime.errors?.required" class="invalid-feedback">*hora es
+                        requerida</div>
+                    <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
 
@@ -152,75 +224,76 @@
         <section class="col-5">
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Permisos de informes</label>
+                <label class="col-md-5 col-form-label">Nombre cupón</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="nameCoupon" #nameCoupon="ngModel" id="id" placeholder="Nombre cupón"
+                        [ngClass]="{'is-invalid': (!nameCoupon.valid && nameCoupon.touched),'is-valid':(nameCoupon.valid) }"
+                        [(ngModel)]="preCoupon.name" required>
+                    <div *ngIf="nameCoupon.errors?.required" class="invalid-feedback">*Este campo es requerido
+                    </div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Código redimir</label>
+                <div class="col-md-7">
+                    <label class="form-control">{{preCoupon.codeToRedeem}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Unidades disponibles</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"
+                        pattern="[0123456789,.'-]{1,10}"
+                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
+                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles">
+                    <div *ngIf="numberOfUnits.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
+                    <div *ngIf="numberOfUnits.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Descripción</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <select class="form-control" name="permis"
-                            #permis="ngModel" required
-                            [ngClass]="{'is-invalid': (!permis.valid),'is-valid':(permis.valid) }"
-                            [(ngModel)]="preProfile.permis">
-                            <option *ngFor="let type of permiss">
-                                {{type}}
-                            </option>
-                        </select>
-                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <textarea class="form-control " name="description" [(ngModel)]="preCoupon.description"
+                            #description="ngModel" rows="2"></textarea>
+                        <div *ngIf="description.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
                         <div class="valid-feedback">Ok!</div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Identificación</label>
-                <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Identificación" name="id"
-                        pattern="[0-9.]{8,10}$" #id="ngModel" id="id" (change)="generateCode($event)"
-                        [ngClass]="{'is-invalid': (!id.valid && id.touched) || id.errors?.pattern ,'is-valid':(id.valid) }"
-                        [(ngModel)]="preProfile.identification" required>
-                    <div *ngIf="id.errors?.required" class="invalid-feedback">*Este campo es requerido
-                    </div>
-                    <div *ngIf="id.errors?.pattern" class="invalid-feedback">*Ingrese una identificación válida</div>
-                    <div class="valid-feedback">Ok!</div>
-                </div>
-            </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Nombre</label>
-                <div class="col-md-7">
-                    <input class="form-control" type="text" name="name" #name="ngModel" minlength="3"
-                        [ngClass]="{'is-invalid': (!name.valid && name.touched ),'is-valid':(name.valid) }"
-                        [(ngModel)]="preProfile.name" required placeholder="Nombre">
-                    <div class="invalid-feedback">*Este campo es requerido </div>
-                    <div class="valid-feedback">Ok!</div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Correo</label>
-                <div class="col-md-7">
-                    <input class="form-control" type="email" placeholder="Correo" name="email"
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #email="ngModel"
-                        [ngClass]="{'is-invalid': (!email.valid && email.touched) || email.errors?.pattern ,'is-valid':(email.valid) }"
-                        [(ngModel)]="preProfile.email" required>
-                    <div *ngIf="email.errors?.required" class="invalid-feedback">*Este campo es requerido
-                    </div>
-                    <div *ngIf="email.errors?.pattern" class="invalid-feedback">*El campo no tiene formato de
-                        correo</div>
-                    <div class="valid-feedback">Ok!</div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Foto del perfil</label>
+                <label class="col-md-5 col-form-label">Foto del cupón</label>
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
-                        <div class="photo"> 
-                            <img [src]="preProfile.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
+                        <div class="photo">
+                            <img [src]="preCoupon.imageCoupon" id="photo" width="100px" height="100px"
+                                title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
+                            <div *ngIf="alertBadExtensionImageCoupon" class="alert alert-danger" role="alert">
+                                Por favor solo subir archivos que tengan como
+                                extensión .jpeg/.jpg/.png/.gif
+                            </div>
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
+                            <span tooltip="Tooltip text"></span>
                             <input type="file" name="photo" (change)="onPhotoSelected($event)" />
                         </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group row justify-content-center ">
+                <div class="col-md-7">
+
+                    <div class="row justify-content-center container-fluid">
+                        <button class="btn1 btn btn-outline-primary">Terminos y condiciones </button>
                     </div>
 
                 </div>
@@ -230,14 +303,13 @@
 
         <section class="col-12 d-flex" style="justify-content: center;">
 
-            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-            <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button>
+            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit"
+                class="btn btn-outline-primary btn-lg">Guardar</button>
+            <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="swallUpdateCoupon()"
+                class="btn btn-outline-primary btn-lg">Actualizar</button>
         </section>
 
     </form>
 
-     <pre>
-        {{ preProfile | json }}
-    </pre> 
 
-</div> -->
+</div>

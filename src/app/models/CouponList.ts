@@ -1,4 +1,4 @@
-export class Coupons {
+export class CouponList {
     id?:string;
     name?:string;
     description?:string;
