@@ -15,7 +15,7 @@ export const environment = {
   },
 
   UrlBase:"http://localhost:5000/",
-  UrlBaseSocket:"http://localhost:5001",
+  // UrlBaseSocket:"http://localhost:5000", no es necesario con los nuevos cambios
   //https://tifi.herokuapp.com/
   //https://tifi.herokuapp.com/
 
