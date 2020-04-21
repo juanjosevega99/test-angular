@@ -4,20 +4,22 @@
         <img [routerLink]="[ '/main', 'bannerManager' ]" src="assets/icons/Back.png " class="tifi-icon-back">
     </a>
 
-    <form novalidate="novalidate" class="form-banner">
+    <form novalidate="novalidate" class="form-banner" [formGroup]="formulary">
 
         <div class="row-form">
             <label for="exampleInputEmail1">Estado</label>
             <div class="row-form-radios" id="exampleInputEmail1">
                 <div class="radio radio-success m-2 form-check form-check-inline">
-                    <input class="form-check-input " type="radio">
+                    <input class="form-check-input " type="radio" (click)="changeState()"
+                        [checked]="formulary.value.state">
                     <label for="radio3">
                         Activo
                     </label>
                 </div>
 
                 <div class="radio radio-danger m-2 form-check form-check-inline">
-                    <input class="form-check-input" type="radio">
+                    <input class="form-check-input" type="radio" (click)="changeState()"
+                        [checked]="!formulary.value.state">
                     <label for="radio4">
                         Inactivo
                     </label>
@@ -34,57 +36,69 @@
         </div>
 
         <div class="row-form">
-            <label for="exampleInputPassword1">Fecha Creación</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" [value]="today">
+            <label for="exampleInputPassword1">Código</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" formControlName="code">
         </div>
-        
+
+        <div class="row-form">
+            <label for="exampleInputPassword1">Fecha Creación</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" formControlName="creationDate">
+        </div>
+
         <div class="row-form">
             <label for="exampleInputPassword1">Fecha Vencimiento</label>
             <!-- <input type="password" class="form-control" id="exampleInputPassword1"> -->
             <!-- <div class="form-group"> -->
-                <div class="input-group">
-                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="expirationDate" ngbDatepicker
-                        #d="ngbDatepicker">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-primary calendar" (click)="d.toggle()" type="button">
-                            <img src="assets/icons/calendar.png" style="width: 1rem;" alt="">
-                        </button>
-                    </div>
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
+                    formControlName="expirationDate">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary calendar" (click)="d.toggle()" type="button">
+                        <img src="assets/icons/calendar.png" style="width: 1rem;" alt="">
+                    </button>
                 </div>
+            </div>
             <!-- </div> -->
         </div>
 
         <div class="row-form">
             <label for="exampleInputPassword1">Establecimiento</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option *ngFor="let ally of allies" >{{ ally.name }}</option>
+            <select class="form-control" id="exampleFormControlSelect1" formControlName="idAllies">
+                <option *ngFor="let ally of allies" [value]="ally.id">{{ ally.name }}</option>
             </select>
         </div>
         <div class="row-form">
             <label for="exampleInputPassword1">Sede</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option *ngFor="let head of heads" >{{ head.name }}</option>
+            <select class="form-control" id="exampleFormControlSelect1" formControlName="idHeadquarters">
+                <option *ngFor="let head of heads" [value]="head.id">{{ head.name }}</option>
             </select>
         </div>
         <div class="row-form">
-            <label for="exampleInputPassword1">Descripción</label>
-            <input type="text" class="form-control" id="exampleInputPassword1">
+            <label for="exampleFormControlTextarea1">Descripción</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                formControlName="description"></textarea>
+            <!-- <input type="text" class="form-control" id="exampleInputPassword1"  > -->
         </div>
         <div class="row-form">
             <label for="exampleInputPassword1">Nombre</label>
-            <input type="text" class="form-control" id="exampleInputPassword1">
+            <input type="text" class="form-control" id="exampleInputPassword1" formControlName="name">
         </div>
 
         <div class="container-fluid d-flex justify-content-center mt-4">
-            <button type="button" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-primary" (click)="saveBanner()">Guardar</button>
         </div>
 
+        <div *ngIf="showinfocontent" class="showalert" >Todos los campos deben estar Diligenciados</div>
     </form>
     <div class="form-img">
+
         <figure class="figure">
-            <img src="assets/img/antojo.png" class="figure-img img-fluid rounded" alt="...">
+            <img src="assets/img/antojo.png" class="figure-img img-fluid rounded" alt="..." id='photo'>
         </figure>
-        <button type="button" class="btn btn-primary">Cargar Imagen</button>
+
+        <input style="display: none;" type="file" class=" btn btn-primary" id="inputGroupFile04" (change)="photoSelected($event)">
+        <label class="btn btn-primary" for="inputGroupFile04">Cargar Imagen</label>
+        <div class="showalert" *ngIf="showimgalert">Seleccione una Imagen valida</div>
     </div>
 
 </div>
