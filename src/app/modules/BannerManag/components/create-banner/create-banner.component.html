@@ -1,0 +1,90 @@
+<div class="compenetsstyle ">
+
+    <a class="mr-2">
+        <img [routerLink]="[ '/main', 'bannerManager' ]" src="assets/icons/Back.png " class="tifi-icon-back">
+    </a>
+
+    <form novalidate="novalidate" class="form-banner">
+
+        <div class="row-form">
+            <label for="exampleInputEmail1">Estado</label>
+            <div class="row-form-radios" id="exampleInputEmail1">
+                <div class="radio radio-success m-2 form-check form-check-inline">
+                    <input class="form-check-input " type="radio">
+                    <label for="radio3">
+                        Activo
+                    </label>
+                </div>
+
+                <div class="radio radio-danger m-2 form-check form-check-inline">
+                    <input class="form-check-input" type="radio">
+                    <label for="radio4">
+                        Inactivo
+                    </label>
+                </div>
+
+                <div class="radio m-2 form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radio2" id="radio5"
+                        (click)="swallDeleteCoupon()">
+                    <label for="radio5">
+                        Eliminar
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-form">
+            <label for="exampleInputPassword1">Fecha Creación</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" [value]="today">
+        </div>
+        
+        <div class="row-form">
+            <label for="exampleInputPassword1">Fecha Vencimiento</label>
+            <!-- <input type="password" class="form-control" id="exampleInputPassword1"> -->
+            <!-- <div class="form-group"> -->
+                <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="expirationDate" ngbDatepicker
+                        #d="ngbDatepicker">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary calendar" (click)="d.toggle()" type="button">
+                            <img src="assets/icons/calendar.png" style="width: 1rem;" alt="">
+                        </button>
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+
+        <div class="row-form">
+            <label for="exampleInputPassword1">Establecimiento</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option *ngFor="let ally of allies" >{{ ally.name }}</option>
+            </select>
+        </div>
+        <div class="row-form">
+            <label for="exampleInputPassword1">Sede</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option *ngFor="let head of heads" >{{ head.name }}</option>
+            </select>
+        </div>
+        <div class="row-form">
+            <label for="exampleInputPassword1">Descripción</label>
+            <input type="text" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="row-form">
+            <label for="exampleInputPassword1">Nombre</label>
+            <input type="text" class="form-control" id="exampleInputPassword1">
+        </div>
+
+        <div class="container-fluid d-flex justify-content-center mt-4">
+            <button type="button" class="btn btn-primary">Guardar</button>
+        </div>
+
+    </form>
+    <div class="form-img">
+        <figure class="figure">
+            <img src="assets/img/antojo.png" class="figure-img img-fluid rounded" alt="...">
+        </figure>
+        <button type="button" class="btn btn-primary">Cargar Imagen</button>
+    </div>
+
+</div>

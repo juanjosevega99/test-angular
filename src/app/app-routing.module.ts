@@ -43,6 +43,7 @@ import { GuardAdminTifiService } from './services/guards/guard-admin-tifi.servic
 import { GuardCAGService } from './services/guards/guard-cag.service';
 import { GuardPqrService } from './services/guards/guard-pqr.service';
 import { GuardContadorService } from './services/guards/guard-contador.service';
+import { CreateBannerComponent } from './modules/BannerManag/components/create-banner/create-banner.component';
 
 
 const routes: Routes = [
@@ -81,6 +82,7 @@ const routes: Routes = [
       { path: "pqrList", component: PqrListComponent, canActivate: [ GuardPqrService ] },
       { path: "pqrManager/:id", component: PqrManagerComponent, canActivate: [ GuardPqrService ] },
       { path: "bannerManager", component: BannerManagerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createBanner", component: CreateBannerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "tycManager", component: TycManagerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "add-sede", component: AddSedeComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },

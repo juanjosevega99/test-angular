@@ -34,7 +34,8 @@ export class BannersService {
       map((banners: any[]) =>
         banners.map(banners => {
           let obj = {
-            id: banners.id,
+            id: banners._id,
+            logo: banners.logo,
             state: banners.state,
             creationDate: banners.creationDate,
             expirationDate: banners.expirationDate,
