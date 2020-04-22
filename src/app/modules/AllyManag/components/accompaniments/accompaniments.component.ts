@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SectionsService } from "src/app/services/sections.service";
 import Swal from 'sweetalert2';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray, NgForm } from '@angular/forms'
+import { FormBuilder, } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccompanimentsService } from 'src/app/services/accompaniments.service';
 import { Accompaniments } from 'src/app/models/Accompaniments';
+import { PromotionsService } from 'src/app/services/promotions.service';
+import { Promotions } from 'src/app/models/Promotions';
 
 
 @Component({
@@ -14,54 +16,34 @@ import { Accompaniments } from 'src/app/models/Accompaniments';
 })
 export class AccompanimentsComponent implements OnInit {
 
-  //variables for the form
- /*  addForm: FormGroup;
-  rows: FormArray; */ //Object that saves all the values of the form
- /*  itemForm: FormGroup;*/
   withCost: boolean;
-  idSec: string; 
+  idSec: string;
 
-  //arrays to save the states
-  stateA: any[] = [];
-  stateI: any[] = [];
-
-  //Object that saves all the values of the form
-  /* preAccompaniments: Object = {A
-    quantity: null,
-    unitMeasurement: null,
-    name: null,
-    preparationTime: [],
-    numberOfModifications: null,
-    state: null,
-    typeOfAccompaniment: null,
-    accompanimentValue: null,
-    idTypeSection: null,
-    nameTypeSection: null
-  } */
 
   //variables for the table
   editField: string;
-  personList: Array<any> = []
-  awaitingPersonList: Array<any> = [
-    { id: null, name: 'new', preparationTimeNumber: null, nameTypeSection: '', preparationTimeUnity: '', quantity: '' },
-    { id: null, name: '', preparationTimeNumber: null, nameTypeSection: '', preparationTimeUnity: '', quantity: '' },
-    { id: null, name: '', preparationTimeNumber: null, nameTypeSection: '', preparationTimeUnity: '', quantity: '' },
-    { id: null, name: '', preparationTimeNumber: null, nameTypeSection: '', preparationTimeUnity: '', quantity: '' },
-    { id: null, name: '', preparationTimeNumber: null, nameTypeSection: '', preparationTimeUnity: '', quantity: '' },]
+  dishgetting: Array<any> = []
+  personList = this.dishgetting;
+  newAccompanimentList: Array<any> = []
+  flag: boolean
+  additionalCost: boolean
+  acti: boolean
+  inacti: boolean
+  /* 
+  dishgetting: DishPromotion[] = [];
+  dishPromoArray = this.dishgetting; */
+
+  //variables for the filter
+  generalsearch: string;
+  terminoaux = '';
+  newArrarSearch: Accompaniments[] = [];
+  filteredArray: Accompaniments[] = []
 
   //variables for sections
   sections: any[] = [];
   sectionSelected: String = null;
   sectionId: String = null;
   sectiontoUpdate = {};
-
-  //variables for personalize the name of section
-  /* arrayCategorySelect: boolean = true;
-  otherCategoryInput: boolean = false;
-  addcategoryButton: boolean = true;
-  selectAgainarray: boolean = false;
-  newCategory: String;
-  personalizeSections : any[] = []; */
 
   //variable for preparation time
   time: String[] = [];
@@ -70,54 +52,29 @@ export class AccompanimentsComponent implements OnInit {
   date: string;
   times: string;
   today: Date;
-  //variables of idAlly
-  idAlly: number;
 
-  constructor(private sectionService: SectionsService,
-    private accompanimentService: AccompanimentsService,
-    private fb: FormBuilder, private _router: Router,
+  //variables of Promo
+  idPromo: string;
+  promotion: Promotions;
+  accgetting: any[] = [];
+  accompanimetsOfPromo = this.accgetting
+  promoAccompaniments: boolean;
+
+  constructor(private sectionService: SectionsService, private promoService: PromotionsService,
+    private accompanimentService: AccompanimentsService, private _router: Router,
     private _activateRoute: ActivatedRoute) {
 
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
       console.log('Parametro', params['id']);
-      this.idAlly = params['id']
+      this.idPromo = params['id']
+      this.getPromo()
     });
 
-    //inicialization for the table
-   /*  this.addForm = this.fb.group({
-      items: [null, Validators.required],
-      items_value: ['no', Validators.required]
-    });
-
-    this.rows = this.fb.array([]);
-    this.addForm.addControl('rows', this.rows); */
-
-     //inicialization of accompaniments created
-    /*  this.accompanimentService.getAccompaniments().subscribe(accompaniments=>{
-      accompaniments.forEach(items =>{
-       let obj:any=[]
-      obj.quantity= items.quantity,
-      obj.unitMeasurement= items.unitMeasurement,
-      obj.name= items.name,
-      obj.preparationTimeNumber = items.preparationTimeNumber,
-      obj.preparationTimeUnity= items.preparationTimeUnity,
-      obj.numberOfModifications= items.numberOfModifications,
-      obj.state= items.state,
-      obj.typeOfAccompaniment= items.typeOfAccompaniment,
-      obj.accompanimentValue= items.accompanimentValue,
-      obj.idTypeSection= items.idTypeSection,
-      obj.nameTypeSection = items.nameTypeSection
-
-      this.rows = this.fb.array(obj);
-      this.addForm.addControl('rows', this.rows);
-      })
-   }) */
-
-     //inicialization of accompaniments
-     this.accompanimentService.getAccompaniments().subscribe(res=>{
-      res.forEach(accompaniment=>{
-        let obj: any={}
+    //inicialization of accompaniments
+    this.accompanimentService.getAccompaniments().subscribe(res => {
+      res.forEach(accompaniment => {
+        let obj: any = {}
 
         obj.id = accompaniment.id
         obj.quantity = accompaniment.quantity
@@ -128,21 +85,20 @@ export class AccompanimentsComponent implements OnInit {
         obj.preparationTimeNumber = accompaniment.preparationTimeNumber
         obj.preparationTimeUnity = accompaniment.preparationTimeUnity
         obj.accompanimentValue = accompaniment.accompanimentValue
-
-        let cd = accompaniment.creationDate
-        const d = new Date(cd);
-        obj.creationDate = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
-
-        let md = accompaniment.modificationDate
-        const m = new Date(md);
-        obj.modificationDate = m.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
-
+        obj.numberOfModifications = accompaniment.numberOfModifications
+        obj.creationDate = this.convertDate(accompaniment.creationDate);
+        obj.modificationDate = this.convertDate(accompaniment.modificationDate)
         obj.state = accompaniment.state
 
         this.personList.push(obj)
       })
     })
 
+    this.flag = false
+    this.additionalCost = false
+    this.acti = false
+    this.inacti = false
+    this.promoAccompaniments = true
 
     //preparation time
     this.time = ['minutos', 'horas']
@@ -151,96 +107,370 @@ export class AccompanimentsComponent implements OnInit {
     this.sectionService.getSections().subscribe(section => {
       this.sections = section;
     })
-
-    //inicialization of states
-    this.stateA = [{
-      state: "active",
-      check: false
-    }, {
-      state: "inactive",
-      check: false
-    }]
-    this.stateI = [{
-      state: "active",
-      check: false
-    }, {
-      state: "inactive",
-      check: false
-    }]
-
-   
   }
 
   ngOnInit() {
     setInterval(() => this.tick(), 1000);
-    /* this.addForm.get("items").valueChanges.subscribe(val => {
-      if (val === true) {
-        this.addForm.get("items_value").setValue("yes");
+  }
 
-        this.addForm.addControl('rows', this.rows);
-      }
-      if (val === false) {
-        this.addForm.get("items_value").setValue("no");
-        this.addForm.removeControl('rows');
-      }
-    }); */
+  //method to convert date from type Date to string
+  convertDate(date: Date): string {
+    let result
+    const d = new Date(date);
+    result = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    return result
   }
 
   goBackCreateDish() {
-    this._router.navigate(['/main', 'createDish', this.idAlly])
+    this._router.navigate(['/main', 'createDish', this.idPromo])
   }
 
-  updateList(id: number, property: string, event: any) {
-    /* let editField = event.target.textContent;
-    this.personList[id][property] = editField;
-    editField = null;
-    console.log(event.target.textContent); */
-    
+  //get promotion with the param
+  getPromo() {
+    this.promoService.getPromotions().subscribe(res => {
+      res.forEach((promo: Promotions) => {
+        if (this.idPromo == promo.reference) {
+          this.promotion = promo
+          this.accompanimentService.getAccompaniments().subscribe(res => {
+            res.forEach((accomp: Accompaniments) => {
+              for (let index = 0; index < promo.idAccompaniments.length; index++) {
+                const element = promo.idAccompaniments[index];
+                if (accomp.id == element) {
+                  this.accompanimetsOfPromo[index] = accomp
+                  this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
+                  this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
+                  console.log(this.accompanimetsOfPromo);
+                }
+              }
+            })
+          })
+        }
+      })
+    })
   }
+
+  //selected one item for add an accompaniments
+  selectedOne(event, pos: number) {
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas añadir este accompañamiento a esta promoción!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, añadir!'
+    }).then((result) => {
+      if (result.value) {
+        let dish = this.personList[pos];
+        let id = dish.id
+        this.promotion['idAccompaniments'].push(id)
+        this.promoService.putPromotion(this.promotion.id, this.promotion).subscribe(res => {
+          Swal.fire({
+            title: 'Añadido',
+            text: "Tu acompañamiento ha sido añadido a la promoción!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this.promoAccompaniments = true
+            }
+          })
+        })
+      }
+    })
+  }
+
+  //remove accompaniment of promotion
+  removeAccompanimentOfPromo(id) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar este accompañamiento de esta promoción!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        let idAccompaniment = this.accompanimetsOfPromo[id].id
+        let idsAccompanimentPromo = this.promotion.idAccompaniments
+        for (let index = 0; index < idsAccompanimentPromo.length; index++) {
+          const element = idsAccompanimentPromo[index];
+          if (element == idAccompaniment) {
+            idsAccompanimentPromo.splice(index, 1)
+            let newids: any = {
+              idAccompaniments: idsAccompanimentPromo
+            }
+            this.promoService.putPromotion(this.promotion.id, newids).subscribe(res => {
+              Swal.fire({
+                title: 'Eliminado',
+                text: "Tu acompañamiento ha sido eliminado de la promoción!",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this.promoAccompaniments = true
+                }
+              })
+            })
+          }
+        }
+      }
+    })
+  }
+
+  //method fot the button "No hay acompañamientos", remove all the accompaniments of the promo
+  removeAllAccompanimentOfPromo() {
+  /*   if(this.promotion.idAccompaniments == []){
+      Swal.fire({
+        title: 'Error',
+        text: "Esta promoción no tiene acompañamientos!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'ok!'
+      })
+    }else{ */
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        let clearids: any = {
+          idAccompaniments: this.promotion.idAccompaniments = []
+        }
+        this.promoService.putPromotion(this.promotion.id,clearids).subscribe(res=>{
+          Swal.fire({
+            title: 'Eliminado',
+            text: "Tus acompañamientos han sido eliminados de la promoción!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this.promoAccompaniments = true
+            }
+          })
+        })
+      }
+    })
+  /* } */ 
+  }
+
+  //see accompaniments of the promotion
+  back() {
+    this.promoAccompaniments = true
+  }
+  //see the general list of accompaniments
+  seeList() {
+    this.promoAccompaniments = false
+  }
+
+  //method for general searching 
+  searchbyterm(termino: string) {
+    termino = termino.toLowerCase();
+    var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+    if (this.promoAccompaniments == true) {
+      if (termino.length > 1) {
+        this.accompanimetsOfPromo = this.accgetting.filter(function (item) {
+          return myRegex.test(item.name)
+        });
+        this.filteredArray = this.accompanimetsOfPromo;
+      } else {
+        this.filteredArray = this.accgetting;
+        this.accompanimetsOfPromo = this.filteredArray
+      }
+    } else {
+      if (termino.length > 1) {
+        this.personList = this.dishgetting.filter(function (item) {
+          return myRegex.test(item.name)
+        });
+        this.filteredArray = this.personList;
+      } else {
+        this.filteredArray = this.dishgetting;
+        this.personList = this.filteredArray
+      }
+    }
+  }
+
+  //CRUD ACCOMPANIMENTS
 
   remove(id: any) {
-    this.awaitingPersonList.push(this.personList[id]);
-    this.personList.splice(id, 1);
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar este accompañamiento!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        let dish = this.personList[id];
+        this.accompanimentService.deleteAccompaniment(dish.id).subscribe(res => {
+          this.personList.splice(id, 1);
+          Swal.fire(
+            'Eliminado!',
+            'success',
+          )
+        })
+      }
+    })
   }
 
+  update(id: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas actualizar este accompañamiento!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, actualizar!'
+    }).then((result) => {
+      if (result.value) {
+        let dish = this.personList[id];
+        let accompaniment = {
+          quantity: dish.quantity,
+          unitMeasurement: dish.unitMeasurement,
+          name: dish.name,
+          state: dish.state,
+          nameTypeSection: dish.nameTypeSection,
+          typeOfAccompaniment: dish.typeOfAccompaniment,
+          preparationTimeNumber: dish.preparationTimeNumber,
+          preparationTimeUnity: dish.preparationTimeUnity,
+          accompanimentValue: dish.accompanimentValue,
+          numberOfModifications: dish.numberOfModifications + 1,
+          modificationDate: this.today
+        }
+        this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res =>
+          Swal.fire({
+            title: 'Actualizado',
+            text: "Tu nuevo acompañamiento ha sido actualizado!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this.flag = false
+            }
+          })
+        )
+      }
+    })
+
+  }
+
+  addNewAcc() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar estos nuevos acompañamientos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        console.log(this.newAccompanimentList);
+        this.newAccompanimentList.forEach(res => {
+          this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
+            accomp.creationDate = this.convertDate(accomp.creationDate)
+            accomp.modificationDate = this.convertDate(accomp.modificationDate)
+            this.personList.push(accomp)
+            this.flag = false
+            Swal.fire({
+              title: 'Guardado',
+              text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
+              icon: 'warning',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
+            this.newAccompanimentList = []
+          })
+        })
+      }
+    })
+  }
+
+  //Methods for accompaniments
   add() {
-    const obj =  { id: null, quantity: '',unitMeasurement:'', name: '', nameTypeSection: '',typeOfAccompaniment:'', preparationTimeNumber: null,
-    preparationTimeUnity: '',accompanimentValue:'', creationDate:'', modificationDate:'', state:[{
-      state: "active",
-      check: false
-    }, {
-      state: "inactive",
-      check: false
-    }] };
-    this.personList.push(obj);
-    /* if (this.awaitingPersonList.length > 0) {
-      const person = this.awaitingPersonList[0];
-      this.personList.push(person);
-      this.awaitingPersonList.splice(0, 1);
-    } */
+    this.flag = true
+    const obj = {
+      id: '', quantity: '', unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "tiempo", numberOfModifications: 0,
+      preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
+        state: "active",
+        check: false
+      }]
+    };
+    this.newAccompanimentList.push(obj)
+  }
+
+  cancelAdd() {
+    this.flag = false
+    this.newAccompanimentList = []
   }
 
   changeValue(id: number, property: string, event: any) {
     let editField = event.target.textContent;
-    /* this.personList[id][property] = ''; */
     this.personList[id][property] = editField;
-
-   /*  this.editField = event.target.textContent;
-    console.log(this.editField); */
-    
   }
 
+  changeValueSelect1(id: number, property: string, value: string) {
+    console.log(value);
+    this.personList[id][property] = value;
+  }
 
-  //Method to remove the rows
-  /* removeRows() {
-    this.addForm.removeControl('rows');
-  } */
+  changeValuecheck1(id: number, property: string, event: any) {
+    let editField = event.target.checked;
+    this.personList[id][property] = editField;
+    if (editField == true) {
+      this.additionalCost = true
+    } else if (editField == false) {
+      this.additionalCost = false
+    }
+  }
+
+  changeValue2(id: number, property: string, event: any) {
+    let editField = event.target.textContent;
+    this.newAccompanimentList[id][property] = editField;
+  }
+
+  changeValueSelect(id: number, property: string, value: string) {
+    console.log(value);
+    this.newAccompanimentList[id][property] = value;
+  }
+
+  changeValuecheck(id: number, property: string, event: any) {
+    let editField = event.target.checked;
+    this.newAccompanimentList[id][property] = editField;
+    if (editField == true) {
+      this.additionalCost = true
+    } else if (editField == false) {
+      this.additionalCost = false
+    }
+  }
+
+  changeStateA(id: number, property: string, event) {
+    this.newAccompanimentList[id][property][0]["check"] = !this.newAccompanimentList[id][property][0]["check"];
+  }
+
+  changeStateI(id: number, property: string, event) {
+    this.personList[id][property][0]["check"] = !this.personList[id][property][0]["check"];
+  }
 
   //Method to set the section selected
   seeValue(name: String, id: String) {
     this.sectionSelected = name;
     console.log(id);
-
     this.sectiontoUpdate = { name: name, id: id }
   }
 
@@ -265,26 +495,6 @@ export class AccompanimentsComponent implements OnInit {
     this.withCost = event.target.checked;
   }
 
-  //Method for saving the active state
-  checkActive(event, value: String) {
-    const check = event.target.checked;
-    const active = {
-      state: value,
-      check: check
-    }
-    this.stateA[0] = active
-  }
-
-  //Method for saving the inactive state
-  checkInactive(event, value: String) {
-    const check = event.target.checked;
-    const inactive = {
-      name: value,
-      state: check
-    }
-    this.stateI[1] = inactive
-  }
-
   seeid(id) {
     this.sectionService.getSections().subscribe(res => {
       res.forEach(section => {
@@ -300,7 +510,6 @@ export class AccompanimentsComponent implements OnInit {
     this.today = new Date();
     this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
-    /* this.preDish['creationDate'] = this.date.concat("-",this.times) */
   }
 
 
@@ -340,62 +549,6 @@ export class AccompanimentsComponent implements OnInit {
     this.swallDeleteSection(this.sectionSelected)
   }
 
-  //Methods for the table add, remove and create item
-/*   onAddRow() {
-    this.rows.push(this.createItemFormGroup());
-  }
-
-  onRemoveRow(rowIndex: number) {
-    this.rows.removeAt(rowIndex);
-  }
-
-  createItemFormGroup(): FormGroup {
-    return this.fb.group({
-      quantity: ['', Validators.required],
-      unitMeasurement: null,
-      name: null,
-      preparationTimeNumber: null,
-      preparationTimeUnity: 'minutos',
-      numberOfModifications: 0,
-      state: [],
-      typeOfAccompaniment: false,
-      accompanimentValue: null,
-      idTypeSection: null,
-      nameTypeSection: null
-    });
-  } */
-
-  //sweet alerts
-  /* saveAccompaniments() {
-    Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas guardar estos nuevos acompañamientos!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, guardar!'
-    }).then((result) => {
-      if (result.value) {
-        console.log(this.rows.value);
-        this.rows.value.forEach(res => {
-          this.accompanimentService.postAccompaniment(res).subscribe(res => {
-            
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }
-            )
-          })
-        })
-      }
-
-
-    })
-  } */
   //Sweet alert for adding a new section
   swallSaveOtherSection(newCategory: any) {
     Swal.fire({

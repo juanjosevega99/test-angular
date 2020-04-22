@@ -11,4 +11,5 @@ export class Promotions {
     preparationTime?:string[];
     reference?:string;
     numberOfModifications?:number;
+    idAccompaniments?:string[];
 }
