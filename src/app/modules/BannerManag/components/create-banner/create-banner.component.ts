@@ -149,7 +149,6 @@ export class CreateBannerComponent implements OnInit {
   }
 
   saveEditBanner(Banner) {
-
     this.bannerService.putBanner(Banner).subscribe(banner => {
       this.spinner.hide();
       Swal.fire(
