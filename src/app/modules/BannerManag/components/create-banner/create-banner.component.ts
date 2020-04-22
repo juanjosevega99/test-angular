@@ -149,7 +149,6 @@ export class CreateBannerComponent implements OnInit {
   }
 
   saveEditBanner(Banner) {
-    console.log("banner a actualizar", Banner, Banner.id);
 
     this.bannerService.putBanner(Banner).subscribe(banner => {
       this.spinner.hide();
