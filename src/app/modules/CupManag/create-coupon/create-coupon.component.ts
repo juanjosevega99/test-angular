@@ -17,7 +17,6 @@ import { SaveLocalStorageService } from "src/app/services/save-local-storage.ser
 })
 export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
-    codeToRedeem: null, // delete
     state: [],
     createDate: [],
     expirationDate: [],
