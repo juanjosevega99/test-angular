@@ -11,7 +11,7 @@ export class WebsocketsService {
   socket:any;
 
   constructor() {
-    this.socket = io( environment.UrlBaseSocket )
+    this.socket = io( environment.UrlBase )
    }
 
   listen(eventName: string){

@@ -37,7 +37,7 @@
                     [disabled]="buttonDisable.disable" type="button" class="radiobutton" (click)="swallUpdateState()"
                     [id]="order.code"> </button>
                 <button *ngIf="order.typeOfService == 'pidelo'" [ngStyle]="{'border-color': buttonDisable.color}"
-                    [disabled]="!buttonDisable.disable" type="button" class="radiobutton"
+                    [disabled]="buttonDisable.disable" type="button" class="radiobutton"
                     (click)="updateStatePidelo(content)" [id]="order.code">
                 </button>
             </li>

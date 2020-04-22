@@ -1,25 +1,150 @@
-<app-app-navbar></app-app-navbar>
-
-<p>banner-manager works!</p>
-<div class="search ">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 ">
-                <a href="/n" class="btn btn-outline-primary">
-                    <i class="fas fa-chevron-left  "></i>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-                </form>                
-            </div>
-            <div class="col-md-4">
-                <a href="/n" class="btn btn-outline-primary">
-                    <p>Crear aliado</p>
-                </a>
-            </div>
+<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+    <div class="row">
+        <div style="width: 5%;" class="d-flex align-items-center">
+            <a [routerLink]="['/main','options']" class="d-flex">
+                <img src="assets/icons/Back.png" class="tifi-icon-back">
+            </a>
         </div>
+        <section class="col-11">
+            <div class="filerControl px-1">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light" style="width: 100%;">
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+
+                        <section class="col-md-4 mr-1 " style="flex-direction: column;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                        <li class="nav-item mr-md-2">
+                                            <input placeholder="Buscar por código..." class="form-control text-center"
+                                                type="text" (keyup)="search()" #code id="code"
+                                                formControlName="code">
+                                        </li>
+                                        <li class="nav-item">
+                                            <input placeholder="Buscar por nombre de establecimiento ..."
+                                                class="form-control text-center" type="text"
+                                                (keyup)="search()" id="name"
+                                                formControlName="nameAllies">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                            <div class="form-group">
+                                <div class="input-group mt-3" style="justify-content: center;">
+                                    <div class="radio radio-success m-2 form-check form-check-inline">
+                                        <input class="form-check-input " type="radio" checked>
+                                        <label style="font-size: 15px;">
+                                            Activo
+                                        </label>
+                                    </div>
+                                    <div class="radio radio-danger m-2 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" checked>
+                                        <label style="font-size: 15px;">
+                                            Inactivo
+                                        </label>
+                                    </div>
+                                    <div class="radio m-2 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" checked>
+                                        <label style="font-size: 15px;">
+                                            Eliminar
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="col-md-6 overflow-auto mr-1 "
+                            style="flex-direction: column;  margin-bottom: 4.8rem;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                                    <li class="nav-item container-fluid d-flex">
+                                        <input (keyup)="search()" class="form-control text-center" [(ngModel)]="generalsearch"
+                                            id="general" type="text" placeholder="Buscar cupon ...">
+                                    </li>
+                                </ul>
+                            </nav>
+                        </section>
+                        <section class="col-md-2 col-2" style="margin-bottom: 4.8rem;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-center ">
+                                <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
+                                    <li class="nav-item">
+                                        <a [routerLink]="[ '/main','createBanner', '']"
+                                            class="btn btn-outline-primary">Crear Banner</a>
+                                </ul>
+                            </nav>
+
+                        </section>
+
+                    </div>
+                </nav>
+            </div>
+        </section>
     </div>
+
+    <div class="tableFixHead mt-5">
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Logo</th>
+                    <th class="text-center">Establecimiento</th>
+                    <th class="text-center">Sede</th>
+                    <th class="text-center">Imagen</th>
+                    <th class="text-center">Descripción</th>
+                    <th class="text-center" colspan="2">Fecha de Promoción</th>
+                    <th class="text-center" colspan="2">Estado</th>
+                    <th class="text-center"> </th>
+                </tr>
+            </thead>
+            <tbody class="mt-5">
+
+                <tr *ngFor="let coupon of bannerArray; let i = index " class="text-center">
+
+                    <td>{{coupon.code}}</td>
+                    <td> <img src={{coupon.logo}} alt="" class="sizeLogo mx-2"></td>
+                    <td>{{coupon.nameAllies}}</td>
+                    <td>{{coupon.nameHeadquarters}}</td>
+                    <td> <img src={{coupon.imageBanner}} alt="" class="sizeLogo mx-2"></td>
+                    <td>{{coupon.description}}</td>
+
+                    <td>{{convertDate(coupon.creationDate)}}</td>
+                    <td>{{ convertDate(coupon.creationDate)}}</td>
+                    <td>
+                        <div class="radio radio-success m-2 form-check-inline">
+                            <input [checked]="coupon.state" type="radio" (click)="changestate(coupon.id)">
+                            <label style="font-size: 15px;">
+                                Activo
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="radio radio-danger m-2 form-check-inline">
+                            <input [checked]="!coupon.state" type="radio" (click)="changestate(coupon.id)">
+                            <label style="font-size: 15px;">
+                                Inactivo
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <button [routerLink]="['/main', 'createBanner', coupon.id]" class="btn"> <i class="far fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td *ngIf="noResults">
+                        <a> No se encontraron resultados </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>

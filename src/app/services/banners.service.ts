@@ -9,7 +9,7 @@ import { Banners } from "../models/Banners";
   providedIn: "root"
 })
 export class BannersService {
-  constructor(private httpclient: HttpClient) {}
+  constructor(private httpclient: HttpClient) { }
 
   postBanner(banner): Observable<Banners> {
     return this.httpclient.post<Banners>(
@@ -20,7 +20,7 @@ export class BannersService {
 
   putBanner(banner): Observable<Banners> {
     return this.httpclient.put<Banners>(
-      environment.UrlBase + "banners" + banner.id,
+      environment.UrlBase + "banners/" + banner.id,
       banner
     );
   }
@@ -34,7 +34,8 @@ export class BannersService {
       map((banners: any[]) =>
         banners.map(banners => {
           let obj = {
-            id: banners.id,
+            id: banners._id,
+            logo: banners.logo,
             state: banners.state,
             creationDate: banners.creationDate,
             expirationDate: banners.expirationDate,
@@ -54,30 +55,28 @@ export class BannersService {
     );
   }
 
-  getBannerById(id): Observable<any[]> {
-    return this.httpclient
-      .get<Banners[]>(environment.UrlBase + "banners/" + id)
-      .pipe(
-        map((banners: any[]) =>
-          banners.map(banners => {
-            let obj = {
-              id: banners.id,
-              state: banners.state,
-              creationDate: banners.creationDate,
-              expirationDate: banners.expirationDate,
-              idAllies: banners.idAllies,
-              nameAllies: banners.nameAllies,
-              idHeadquarters: banners.idHeadquarters,
-              nameHeadquarters: banners.nameHeadquarters,
-              description: banners.description,
-              name: banners.name,
-              imageBanner: banners.imageBanner,
-              code: banners.code,
-              typeOfBanner: banners.typeOfBanner
-            };
-            return obj;
-          })
-        )
-      );
+  getBannerById(id): Observable<Banners> {
+    return this.httpclient.get<Banners>(environment.UrlBase + "banners/" + id).pipe(
+      map((banners: any) => {
+        let obj = {
+          id: banners._id,
+          logo: banners.logo,
+          state: banners.state,
+          creationDate: banners.creationDate,
+          expirationDate: banners.expirationDate,
+          idAllies: banners.idAllies,
+          nameAllies: banners.nameAllies,
+          idHeadquarters: banners.idHeadquarters,
+          nameHeadquarters: banners.nameHeadquarters,
+          description: banners.description,
+          name: banners.name,
+          imageBanner: banners.imageBanner,
+          code: banners.code,
+          typeOfBanner: banners.typeOfBanner
+        };
+        return obj;
+      })
+
+    );
   }
 }

@@ -1,24 +1,24 @@
-<div class="d-flex row container-fluid h-100" style="padding: 0; margin: 0;">
-    <div class="col-md-4 d-flex  justify-content-center align-items-center" >
+<div class="d-flex row container-fluid h-100 justify-content-center" style="padding: 0; margin: 0;">
+    <div class="col-md-4 d-flex  justify-content-center align-items-center">
         <div class="d-flex flex-column align-items-center h-100" style=" padding-top: 10%;">
 
-            <div class="d-flex justify-content-center" style="margin-bottom: 15%;">
+            <!-- <div class="d-flex justify-content-center" style="margin-bottom: 15%;"> -->
+
+            <figure class="figure text-center">
 
                 <img src="assets/icons/iconTifi.png" style="width: 80%;" class="img-fluid" alt="Responsive image">
-            </div>
+            </figure>
 
             <div style="width: 80%; margin-bottom: 5%;">
 
-                <!-- <app-login-form></app-login-form> -->
-                <!-- <app-login-forget></app-login-forget> -->
-                <!-- <app-resest-password></app-resest-password> -->
                 <router-outlet></router-outlet>
 
             </div>
 
             <div class=" d-flex flex-column container-fluid align-items-center">
 
-                <app-clock class="margin-padding-tifi mx-auto" style="background-color: #f6f6f6; width: 70%;"></app-clock>
+                <app-clock class="margin-padding-tifi mx-auto" style="background-color: #f6f6f6; width: 70%;">
+                </app-clock>
 
                 <p class="links-tifi text-center"><i class="far fa-copyright"></i> {{ year }} All Rights reserved.
                     TifiApp</p>
@@ -27,7 +27,10 @@
         </div>
     </div>
 
-    <div class="d-flex col-md-8 " style="padding: 0;">
-        <img src="assets/img/antojo-2.jpg" class="img-fluid" alt="Responsive image">
+    <div class="d-flex justify-content-center col-md-8 " style="padding: 0;">
+        <!-- <img src="assets/img/antojo-2.jpg" class="img-fluid" alt="Responsive image"> -->
+        <figure class="figure">
+            <img src="assets/img/antojo.png" class="figure-img img-fluid rounded" alt="..." id='photo'>
+        </figure>
     </div>
 </div>

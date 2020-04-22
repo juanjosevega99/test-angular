@@ -1,5 +1,6 @@
 export class Banners {
     id?:string;
+    logo?:string;
     state?:boolean;
     creationDate?:Date;
     expirationDate?:Date;
