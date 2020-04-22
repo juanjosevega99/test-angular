@@ -30,9 +30,10 @@ export class LoginFormComponent implements OnInit {
   ngOnInit() {
     this.signError = true;
 
-    // if( this.authentication.user ){
-    //   this.route.navigate(['options']);
-    // }
+    if( localStorage.getItem('profile')){
+      let profile = JSON.parse(localStorage.getItem('profile'));
+      this.navigateProfile(profile);
+    }
   }
 
   login() {
@@ -63,26 +64,7 @@ export class LoginFormComponent implements OnInit {
           this.spinner.hide();
 
           // console.log(profileservice.nameCharge.toLocaleLowerCase());
-          switch (profileservice.nameCharge.toLocaleLowerCase()) {
-            
-            case 'cajero': 
-            case 'administradorpdv': 
-            case 'gerentegeneral':
-              this.route.navigate(['main/principal-orders']);
-              break;
-
-            case 'asesor':
-              this.route.navigate(['main/pqrList']);
-              break;
-
-            case 'contador':
-              this.route.navigate([ '/main', 'reportGenerator' ]);
-              break;
-
-            default:
-              this.route.navigate(['main/options']);
-              break;
-          }
+          this.navigateProfile(profileservice);
 
         }, err =>{
           this.spinner.hide();
@@ -101,6 +83,30 @@ export class LoginFormComponent implements OnInit {
 
     this.email = '';
     this.pass = '';
+
+  }
+
+  navigateProfile(profileservice){
+    switch (profileservice.nameCharge.toLocaleLowerCase()) {
+            
+      case 'cajero': 
+      case 'administradorpdv': 
+      case 'gerentegeneral':
+        this.route.navigate(['main/principal-orders']);
+        break;
+
+      case 'asesor':
+        this.route.navigate(['main/pqrList']);
+        break;
+
+      case 'contador':
+        this.route.navigate([ '/main', 'reportGenerator' ]);
+        break;
+
+      default:
+        this.route.navigate(['main/options']);
+        break;
+    }
 
   }
 
