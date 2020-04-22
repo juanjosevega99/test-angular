@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { BannersService } from 'src/app/services/banners.service';
 import { Banners } from 'src/app/models/Banners';
+import { NgxSpinnerService } from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-banner-manager',
@@ -18,7 +20,7 @@ export class BannerManagerComponent implements OnInit {
   bannergetting = [];
   bannerArray = this.bannergetting;
 
-  constructor( private bannerservice:BannersService ) {
+  constructor(private bannerservice: BannersService, private spinner: NgxSpinnerService) {
 
     this.loadBanners();
 
@@ -33,16 +35,11 @@ export class BannerManagerComponent implements OnInit {
   ngOnInit() {
   }
 
-  loadBanners(){
-    this.bannerservice.getBanners().subscribe( banners => {
-
-      banners.forEach( (banner:any)=>{
-        banner.creationDate = this.convertDate(banner.creationDate);
-        banner.expirationDate = this.convertDate(banner.expirationDate);
-        this.bannergetting.push(banner);
-      })
-
-    } );
+  loadBanners() {
+    this.bannerservice.getBanners().subscribe((banners:Banners[]) => {
+      banners.forEach( banner=>{
+        this.bannergetting.push(banner);  
+      } )});
   }
 
   convertDate(date: Date): string {
@@ -51,11 +48,44 @@ export class BannerManagerComponent implements OnInit {
     return n;
   }
 
+  UpdateBanner(banner:Banners) {
+
+    Swal.fire({
+      title: '¿Actualizar Banner?',
+      // text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then(res => {
+      if (res) {
+        this.saveEditBanner(banner);
+      }
+    })
+  }
+
+  saveEditBanner(Banner) {
+    this.spinner.show();
+    this.bannerservice.putBanner(Banner).subscribe(banner => {
+      this.spinner.hide();
+      Swal.fire(
+        "Cambios Guardados Exitosamente"
+      )
+    })
+  }
+
+  changestate(idcupon:string){
+    let Banner = this.bannerArray.find(banner => banner.id === idcupon);
+    Banner.state = !Banner.state;
+    this.UpdateBanner(Banner);    
+  }
+
   search() {
     // vars to filter table
     let objsearch = {
       code: "",
-      nameAllies : ""
+      nameAllies: ""
     };
 
     for (var i in this.table.value) {
@@ -81,8 +111,8 @@ export class BannerManagerComponent implements OnInit {
       }, objsearch).
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.code) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarters) || 
-                myRegex.test(item.description) || myRegex.test(item.typeOfBanner) || myRegex.test(item.creationDate) || myRegex.test(item.expirationDate))
+        return (myRegex.test(item.code) || myRegex.test(item.name) || myRegex.test(item.nameHeadquarters) ||
+          myRegex.test(item.description) || myRegex.test(item.typeOfBanner) || myRegex.test(item.creationDate) || myRegex.test(item.expirationDate))
       })
   }
 

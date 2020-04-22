@@ -82,7 +82,7 @@ const routes: Routes = [
       { path: "pqrList", component: PqrListComponent, canActivate: [ GuardPqrService ] },
       { path: "pqrManager/:id", component: PqrManagerComponent, canActivate: [ GuardPqrService ] },
       { path: "bannerManager", component: BannerManagerComponent, canActivate: [ GuardAdminTifiService ] },
-      { path: "createBanner", component: CreateBannerComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createBanner/:id", component: CreateBannerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "tycManager", component: TycManagerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "add-sede", component: AddSedeComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },

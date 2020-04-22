@@ -10,12 +10,12 @@ import { finalize } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UploadImagesService {
-  private folderImages = 'assets' 
+  private folderImages = 'assets'
 
   constructor(private storage: AngularFireStorage) {
-    
+
   }
-  uploadImages(file: any, principalPath ,secondpath: any) {
+  uploadImages(file: any, principalPath, secondpath: any) {
     return new Promise((resolve, reject) => {
       const idImage: Guid = Guid.create();
       const filePath = `assets/${principalPath}/${secondpath}/${idImage}`
@@ -32,5 +32,15 @@ export class UploadImagesService {
     })
   }
 
+
+  // the filepath is as let urlImg = 'assets/allies/banners/' + this.editBanner.imageBanner.split("%")[3].split("?")[0].slice(2);
+  DeleteImage(filePath) {
+
+    return new Promise((resolve, reject) => {
+      const ref = this.storage.ref(filePath).delete().subscribe(res => {
+        resolve(res);
+      })
+    })
+  }
 
 }

@@ -7,7 +7,8 @@ import { Banners } from '../../../../models/Banners';
 import { UploadImagesService } from 'src/app/services/providers/uploadImages.service';
 import { BannersService } from 'src/app/services/banners.service';
 import Swal from 'sweetalert2';
-import { Guid } from "guid-typescript";
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -18,38 +19,54 @@ import { Guid } from "guid-typescript";
 export class CreateBannerComponent implements OnInit {
 
   expirationDate: NgbDateStruct;
-  codeBanner :Guid;
+  codeBanner = '';
   today = '';
   allies = [];
   heads = [];
+  state = false;
+  photo: any = '';
 
   // alerts
   showimgalert = false;
   showinfocontent = false;
 
+  // item To edit
+  editBanner: Banners = {};
+
   formulary: FormGroup;
 
   constructor(private allyservice: AlliesService, private headService: HeadquartersService, private uploadimg: UploadImagesService,
-    private bannerService: BannersService) {
+    private bannerService: BannersService, private spinner: NgxSpinnerService, private router: Router, private activate: ActivatedRoute) {
+
     this.loadAllies();
     this.loadHeads();
-    this.creationDate();
-    this.codeBanner =  Guid.create();
+
+    if (this.activate.params['_value'].id) {
+      this.bannerService.getBannerById(this.activate.params['_value'].id).subscribe((banner: Banners) => {
+        this.editBanner = banner;
+        this.setDataEdit();
+
+      });
+
+    } else {
+      this.creationDate();
+      this.codeBanner = Math.random().toString(36).substring(7);
+    }
 
     this.formulary = new FormGroup({
       'code': new FormControl(this.codeBanner, [Validators.required]),
-      'state': new FormControl('', Validators.required),
-      'creationDate': new FormControl(this.today, [Validators.required, Validators.maxLength(10)]),
+      'state': new FormControl(this.state, Validators.required),
+      'creationDate': new FormControl(this.today, [Validators.required, Validators.maxLength(11)]),
       'expirationDate': new FormControl('', [Validators.required]),
       'idAllies': new FormControl('', Validators.required),
       'idHeadquarters': new FormControl('', Validators.required),
       'description': new FormControl('', [Validators.maxLength(100)]),
       'name': new FormControl('', Validators.required),
-      'imageBanner': new FormControl('', Validators.required)
+      'imageBanner': new FormControl('')
     })
+
   }
 
-  //  `${this.expirationDate.day}-${this.expirationDate.month}-${this.expirationDate.year} `
   ngOnInit() {
   }
 
@@ -72,48 +89,97 @@ export class CreateBannerComponent implements OnInit {
   }
 
   saveBanner() {
-    const expirationdate = this.formulary.value.expirationDate;
-    const date = expirationdate['day'] + "-"+ expirationdate['month']+ "-"+ expirationdate['year'];
-    console.log(this.formulary.value.expirationDate, date);
-    
-    if (this.formulary.valid) {
 
-      let Banner = this.createBanenr();
+    let Banner = this.createBanenr();
 
-      this.uploadimg.uploadImages(Banner.imageBanner, "allies", "banners").then((result: string) => {
+    if (this.formulary.valid && this.photo) {
+      this.spinner.show();
+      this.uploadimg.uploadImages(this.photo, "allies", "banners").then((result: string) => {
         Banner.imageBanner = result;
-        this.bannerService.postBanner(Banner).subscribe(banner => {
-          console.log(banner);
 
-          Swal.fire(
-            "Banner Guardado Exitosamente"
-          )
+        if (this.editBanner.id) {
+          Banner.id = this.editBanner.id;
+          this.saveEditBanner(Banner);
+        } else {
+          this.saveNewBanner(Banner);
+        }
 
-        })
+      }).catch(err => {
+        this.spinner.hide();
+        console.log(err);
+        Swal.fire(
+          "Problemas con tu connexión a internet"
+        )
       })
 
-      console.log(Banner);
       this.showinfocontent = false;
 
-    } else {
+    } else if (this.formulary.valid && !this.photo) {
+      this.spinner.show();
+      if (this.editBanner.id) {
+        Banner.id = this.editBanner.id;
+        this.saveEditBanner(Banner);
+      } else {
+        this.spinner.hide();
+        this.showinfocontent = true;
+      }
+
+    }
+    else {
       this.showinfocontent = true;
     }
 
+  }
+
+  saveNewBanner(Banner) {
+    this.bannerService.postBanner(Banner).subscribe(banner => {
+
+      this.spinner.hide();
+      Swal.fire(
+        "Banner Guardado Exitosamente"
+      ).then(res => {
+
+        if (res) {
+          this.router.navigate(["/main", 'bannerManager']);
+        }
+      })
+
+    })
+
+  }
+
+  saveEditBanner(Banner) {
+    console.log("banner a actualizar", Banner, Banner.id);
+
+    this.bannerService.putBanner(Banner).subscribe(banner => {
+      this.spinner.hide();
+      Swal.fire(
+        "Banner Guardado Exitosamente"
+      ).then(res => {
+        if (res) {
+          this.router.navigate(["/main", 'bannerManager']);
+        }
+      })
+    })
   }
 
 
   createBanenr(): Banners {
 
     const expirationdate = this.formulary.value.expirationDate;
+    const date = expirationdate['year'] + "/" + (expirationdate['month'] < 10 ? '0' + expirationdate['month'] : expirationdate['month']) + "/" + expirationdate['day'];
+    let creationDate = this.formulary.value.creationDate;
+    creationDate = creationDate.split("/");
+
     let Banner: Banners = new Banners;
     Banner.logo = this.allies.find(ally => ally.id == this.formulary.value.idAllies)['logo'];
-    Banner.state = this.formulary.value.state;
-    Banner.creationDate = this.formulary.value.creationDate;
-    Banner.expirationDate = this.formulary.value.expirationDate;
+    Banner.state = this.state;
+    Banner.creationDate = new Date(creationDate[2], creationDate[1] - 1, creationDate[0]);
+    Banner.expirationDate = new Date(date);
     Banner.idAllies = this.formulary.value.idAllies;
-    Banner.nameAllies = this.allies.find(banner => banner.id == this.formulary.value.idAllies)['nameAllies'];
+    Banner.nameAllies = this.allies.find(ally => ally.id == this.formulary.value.idAllies)['name'];
     Banner.idHeadquarters = this.formulary.value.idHeadquarters;
-    Banner.nameHeadquarters = this.heads.find(banner => banner.id == this.formulary.value.idHeadquarters)['nameHeadquarters'];
+    Banner.nameHeadquarters = this.heads.find(headquartes => headquartes.id == this.formulary.value.idHeadquarters)['name'];
     Banner.description = this.formulary.value.description;
     Banner.name = this.formulary.value.name;
     Banner.imageBanner = this.formulary.value.imageBanner;
@@ -124,9 +190,8 @@ export class CreateBannerComponent implements OnInit {
   }
 
   changeState() {
-    this.formulary.value.state = !this.formulary.value.state;
-    console.log("new value", this.formulary.value.state);
-    
+    this.state = !this.state;
+    this.formulary.value.state = this.state;
   }
 
   photoSelected(event) {
@@ -142,12 +207,67 @@ export class CreateBannerComponent implements OnInit {
       };
       reader.readAsDataURL(input.files[0]);
 
-      this.formulary.value.imageBanner = input.files[0];
       this.showimgalert = false;
+      this.photo = input.files[0];
 
     } else {
       this.showimgalert = true;
+      this.photo = '';
     }
+  }
+
+  setDataEdit() {
+
+    let date = new Date(this.editBanner.expirationDate);
+    this.expirationDate = { day: date.getUTCDate(), month: date.getUTCMonth() + 1, year: date.getUTCFullYear() };
+    this.formulary.setValue({
+      'code': this.editBanner.code,
+      'state': this.editBanner.state,
+      'creationDate': this.convertDate(this.editBanner.creationDate),
+      'expirationDate': this.expirationDate,
+      'idAllies': this.editBanner.idAllies,
+      'idHeadquarters': this.editBanner.idHeadquarters,
+      'description': this.editBanner.description,
+      'name': this.editBanner.name,
+      'imageBanner': this.editBanner.imageBanner
+    })
+  }
+
+  swallDeleteCoupon() {
+    Swal.fire({
+      title: '¿Eliminar Banner?',
+      // text: "de que deseas guardar los cambios!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Eliminar'
+    }).then(res => {
+      if (res) {
+        this.spinner.show();
+        let urlImg = 'assets/allies/banners/' + this.editBanner.imageBanner.split("%")[3].split("?")[0].slice(2);
+
+        this.uploadimg.DeleteImage(urlImg).then(res => {
+
+          this.bannerService.deleteBanner(this.editBanner.id).subscribe(response => {
+            this.spinner.hide();
+            Swal.fire(
+              "Banner Eliminado Exitosamente"
+            ).then(res => {
+              if (res) {
+                this.router.navigate(["/main", 'bannerManager']);
+              }
+            })
+          })
+
+        }).catch(err =>{
+          this.spinner.hide();
+          console.log(err);
+          
+        })
+
+      }
+    })
   }
 
 }

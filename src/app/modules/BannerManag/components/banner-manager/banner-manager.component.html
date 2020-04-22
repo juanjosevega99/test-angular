@@ -73,7 +73,7 @@
                             <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-center ">
                                 <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
                                     <li class="nav-item">
-                                        <a [routerLink]="[ '/main','createBanner']"
+                                        <a [routerLink]="[ '/main','createBanner', '']"
                                             class="btn btn-outline-primary">Crear Banner</a>
                                 </ul>
                             </nav>
@@ -112,12 +112,11 @@
                     <td> <img src={{coupon.imageBanner}} alt="" class="sizeLogo mx-2"></td>
                     <td>{{coupon.description}}</td>
 
-                    <td>{{coupon.creationDate}}</td>
-                    <td>{{coupon.expirationDate}}</td>
+                    <td>{{convertDate(coupon.creationDate)}}</td>
+                    <td>{{ convertDate(coupon.creationDate)}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
-                            <input [checked]="coupon.state" value="{{coupon.id}}" type="radio" name={{i}}
-                                id="state" #active (click)="changeStateA(active.value)">
+                            <input [checked]="coupon.state" type="radio" (click)="changestate(coupon.id)">
                             <label style="font-size: 15px;">
                                 Activo
                             </label>
@@ -125,15 +124,14 @@
                     </td>
                     <td>
                         <div class="radio radio-danger m-2 form-check-inline">
-                            <input [checked]="!coupon.state" value="{{coupon.id}}" type="radio" name={{i}}
-                                id="state" #inactive (click)="changeStateI(inactive.value)">
+                            <input [checked]="!coupon.state" type="radio" (click)="changestate(coupon.id)">
                             <label style="font-size: 15px;">
                                 Inactivo
                             </label>
                         </div>
                     </td>
                     <td>
-                        <button (click)="goToEditCoupon(coupon.id, i)" class="btn"> <i class="far fa-edit"></i>
+                        <button [routerLink]="['/main', 'createBanner', coupon.id]" class="btn"> <i class="far fa-edit"></i>
                         </button>
                     </td>
                 </tr>
