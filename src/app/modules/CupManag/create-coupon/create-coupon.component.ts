@@ -17,7 +17,7 @@ import { SaveLocalStorageService } from "src/app/services/save-local-storage.ser
 })
 export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
-    state: [],
+    state: [],  
     createDate: [],
     expirationDate: [],
     idAllies: null,
