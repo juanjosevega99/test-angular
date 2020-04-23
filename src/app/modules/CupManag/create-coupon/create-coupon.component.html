@@ -239,8 +239,9 @@
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"
                         pattern="[0123456789,.'-]{1,10}"
-                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
-                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles">
+                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || 
+                        numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
+                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles" >
                     <div *ngIf="numberOfUnits.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
                     <div *ngIf="numberOfUnits.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
                     <div class="valid-feedback">Ok!</div>

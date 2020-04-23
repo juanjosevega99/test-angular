@@ -11,7 +11,6 @@ import { SaveLocalStorageService } from "../../../../services/save-local-storage
 //other libraris
 import * as $ from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-create-ally',
@@ -471,11 +470,9 @@ export class CreateAllyComponent implements OnInit {
             this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
               this.idSchedule = schedule._id;
               this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
-              console.log(this.forma.value); //delete console.log
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
               this.allieService.postAllie(objAllie).subscribe()
-              // this._router.navigate(['/main', 'allyManager','-1']);
             })
             if (this.upload == true) {
               Swal.fire({

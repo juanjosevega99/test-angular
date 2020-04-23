@@ -127,6 +127,9 @@ export class CuponManagerComponent implements OnInit {
     this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
     this._router.navigate(['/main', 'editCoupon', i])
   }
+  goToUserManger(i){
+    this._router.navigate(['/main', 'userManager', i])
+  }
   //method to convert the modification date
   convertDate(date: Date): string {
     const d = new Date(date);
@@ -210,10 +213,10 @@ export class CuponManagerComponent implements OnInit {
   }
 
   //get data to export
-  datafor_Users(){
-    // this.typepdf = false;
-    this.selectforsend();
-  }
+  // datafor_Users(){
+  //   // this.typepdf = false;
+  //   this.selectforsend();
+  // }
   //selected All items
   selectedAll(event) {
     const checked = event.target.checked;
@@ -226,10 +229,10 @@ export class CuponManagerComponent implements OnInit {
     this.newdateArray[pos].selected = checked;
   }
   
-  selectforsend() {
-    // this.userSelected = []
-    // this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
-  }
+  // selectforsend() {
+  //   // this.userSelected = []
+  //   // this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
+  // }
   
 
   //sweets alerts
