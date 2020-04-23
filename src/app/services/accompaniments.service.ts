@@ -15,12 +15,32 @@ export class AccompanimentsService {
     return this.httpclient.post<Accompaniments>(
       environment.UrlBase + "accompaniments",
       accompaniment
+    ).pipe(
+      map((accompaniments: any) => {
+          let obj = {
+            id: accompaniments._id,
+            quantity: accompaniments.quantity,
+            unitMeasurement: accompaniments.unitMeasurement,
+            name: accompaniments.name,
+            creationDate: accompaniments.creationDate,
+            modificationDate: accompaniments.modificationDate,
+            numberOfModifications: accompaniments.numberOfModifications,
+            state: accompaniments.state,
+            typeOfAccompaniment: accompaniments.typeOfAccompaniment,
+            accompanimentValue: accompaniments.accompanimentValue,
+            idTypeSection: accompaniments.idTypeSection,
+            nameTypeSection: accompaniments.nameTypeSection,
+            preparationTimeNumber: accompaniments.preparationTimeNumber,
+            preparationTimeUnity: accompaniments.preparationTimeUnity
+          };
+          return obj;
+        }
+      )
     );
   }
 
-  putAccompaniment(accompaniment): Observable<Accompaniments> {
-    return this.httpclient.put<Accompaniments>(
-      environment.UrlBase + "accompaniments" + accompaniment.id,
+  putAccompaniment(id,accompaniment){
+    return this.httpclient.put(environment.UrlBase + "accompaniments/" + id,
       accompaniment
     );
   }
@@ -36,7 +56,7 @@ export class AccompanimentsService {
         map((accompaniments: any[]) =>
           accompaniments.map(accompaniments => {
             let obj = {
-              id: accompaniments.id,
+              id: accompaniments._id,
               quantity: accompaniments.quantity,
               unitMeasurement: accompaniments.unitMeasurement,
               name: accompaniments.name,

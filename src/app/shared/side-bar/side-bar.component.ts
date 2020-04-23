@@ -63,8 +63,8 @@ export class SideBarComponent implements OnInit {
       title: '¿Cerrar Sesión?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
       confirmButtonText: 'Sí',
       cancelButtonText: 'No'
 
