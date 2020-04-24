@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class LocationServiceService {
 
   constructor(private http: HttpClient) {
-    console.log("Ubicaciones de cundinamarca listo");
+    /* console.log("Ubicaciones de cundinamarca listo"); */
    }
 
    getLocations(){

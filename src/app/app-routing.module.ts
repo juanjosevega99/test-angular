@@ -86,6 +86,7 @@ const routes: Routes = [
       { path: "tycManager", component: TycManagerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "add-sede", component: AddSedeComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "editHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "editmenu/:id", component: EditMenuComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createDish/:id", component: CreateDishComponent, canActivate: [ GuardAdminTifiService ] },
       { path : "accompaniments/:id", component: AccompanimentsComponent, canActivate: [ GuardAdminTifiService ]},

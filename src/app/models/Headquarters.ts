@@ -9,6 +9,8 @@ export class Headquarters {
     local?:string;
     generalContact?:string;
     chargeGC?:string;
+    emailGeneral?: string;
+    code?: string;
     mobileGC?:string;
     telephoneGC?:string;
     principarlServices?:string[];
