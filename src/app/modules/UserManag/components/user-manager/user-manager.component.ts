@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
 import * as XLSX from 'xlsx';
 
@@ -15,7 +16,15 @@ import { UsersService } from 'src/app/services/users.service';
 import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Promotions } from 'src/app/models/Promotions';
+import { DishPromotion } from 'src/app/models/DishPromotion';
+import { DishesService } from 'src/app/services/dishes.service';
+import { Dishes } from 'src/app/models/Dishes';
+import { PromotionsService } from 'src/app/services/promotions.service';
+import { AlliesService } from 'src/app/services/allies.service';
+import Swal from 'sweetalert2';
 
 
 
@@ -40,6 +49,16 @@ export class UserManagerComponent implements OnInit {
   from: string;
   to: string;
 
+  // promotions
+  dishgetting: DishPromotion[] = [];
+  dishPromoArray = this.dishgetting;
+  today: Date;
+  promosSelected = [];
+  allies = [];
+  alertPromos = false;
+  loadingPromos = false;
+
+
   generalsearch: string = '';
 
 
@@ -48,6 +67,7 @@ export class UserManagerComponent implements OnInit {
   newdateArray = this.usergetting;
 
   filteredArray: OrderByUser[] = [];
+  loadingUsers = false;
 
   userSelected: {}[] = [];
 
@@ -55,7 +75,8 @@ export class UserManagerComponent implements OnInit {
   table: FormGroup;
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
-    private userservice: UsersService, private orderservice: OrdersService) {
+    private userservice: UsersService, private orderservice: OrdersService, private dishesService: DishesService, private promoService: PromotionsService,
+    private allyservice: AlliesService, private modalpromo: NgbModal) {
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -71,6 +92,7 @@ export class UserManagerComponent implements OnInit {
 
     })
 
+    this.loadingUsers = true;
     this.userservice.getUsers().subscribe(res => {
 
       res.forEach((user: Users) => {
@@ -81,6 +103,7 @@ export class UserManagerComponent implements OnInit {
             const obj: OrderByUser = {};
 
             res.forEach((order: Orders) => {
+              obj.idUser = user.id;
               obj.name = user.name;
               obj.email = user.email;
               obj.phone = user.phone;
@@ -91,10 +114,12 @@ export class UserManagerComponent implements OnInit {
               obj.usability = order.orderValue ? 1 : 0;
               obj.purchaseAmount = order.orderValue;
               obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-            }
-            )
+            })
             this.usergetting.push(obj);
+            this.loadingUsers = false;
 
+          } else {
+            this.loadingUsers = false;
           }
         })
 
@@ -146,12 +171,22 @@ export class UserManagerComponent implements OnInit {
     const checked = event.target.checked;
     event.target.checked = checked;
     this.newdateArray[pos].selected = checked;
-
   }
 
   selectforsend() {
     this.userSelected = []
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
+  }
+
+  selectedPromo(event, pos: number) {
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    this.dishPromoArray[pos]['selected'] = checked;
+  }
+
+  async selectPromosSend() {
+    this.promosSelected = [];
+    await this.dishPromoArray.forEach(promo => promo['selected'] ? this.promosSelected.push(promo) : this.promosSelected);
   }
 
   sendCupons() {
@@ -162,10 +197,36 @@ export class UserManagerComponent implements OnInit {
   // Send promos
   // ==========================
   sendPromos() {
-    this.selectforsend();
-    // console.log("users", this.usergetting);
-    // console.log(this.table);
+    this.selectPromosSend();
 
+    if (this.promosSelected.length) {
+      this.alertPromos = false;
+
+    } else {
+      this.alertPromos = true;
+    }
+    console.log(this.promosSelected);
+    console.log("usuarios para enviar", this.userSelected);
+
+  }
+
+
+  loadAllies(content) {
+    this.dishPromoArray = [];
+    this.selectforsend();
+
+    if (this.userSelected.length) {
+
+      this.modalpromo.open(content, { size: 'xl', scrollable: true, centered: true });
+      this.allyservice.getAllies().subscribe((allies: []) => {
+        this.allies = allies;
+      })
+
+    } else {
+      Swal.fire(
+        'seleccione almenos un usuario'
+      )
+    }
   }
 
   //get data to export
@@ -265,7 +326,7 @@ export class UserManagerComponent implements OnInit {
     };
     // let for date search
     let objdate = {
-      fromdate: this.fromDate != null ?  [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-') : '',
+      fromdate: this.fromDate != null ? [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-') : '',
       todate: this.toDate != null ? [this.toDate.year, this.toDate.month, this.toDate.day].join('-') : ''
     }
 
@@ -336,21 +397,21 @@ export class UserManagerComponent implements OnInit {
 
       }).
       filter(function (item) {
-        
-        if (this.fromdate != '' && this.todate != '' ){
-          
+
+        if (this.fromdate != '' && this.todate != '') {
+
           const mydateFrom = new Date(this.fromdate);
           const mydateTo = new Date(this.todate);
-  
+
           let datetransform = item.registerDate.split("/");
           let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
           const userdate = new Date(newdatetransform);
           if (userdate >= mydateFrom && userdate <= mydateTo) {
             return item;
-          }else{
+          } else {
             return null
           }
-        }else{
+        } else {
           return item;
         }
       }, objdate)
@@ -358,87 +419,115 @@ export class UserManagerComponent implements OnInit {
   }
 
 
-  // searchbyterm(termino: string) {
-
-  //   termino = termino.toLowerCase();
-  //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-  //   if (this.newdateArray.length == this.usergetting.length) {
-
-  //     this.newdateArray = this.usergetting.filter(function (item) {
-  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //     });
-
-  //   } else {
-
-  //     let aux = this.newdateArray;
-  //     this.newdateArray = aux.filter(function (item) {
-  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //     });
-
-  //   }
-
-  //   // if (termino) {
-  //   //   termino = termino.toLowerCase();
-  //   //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-  //   //   if (this.filteredArray.length) {
-
-  //   //     this.newdateArray = this.filteredArray.filter(function (item) {
-  //   //       //We test each element of the object to see if one string matches the regexp.
-  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //   //     });
-  //   //   } else {
-
-  //   //     this.newdateArray = this.usergetting.filter(function (item) {
-  //   //       //We test each element of the object to see if one string matches the regexp.
-  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //   //     });
-  //   //     this.filteredArray = this.usergetting.filter(function (item) {
-  //   //       //We test each element of the object to see if one string matches the regexp.
-  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //   //     });
-
-  //   //   }
-
-  //   // } else {
-
-  //   //   let count = 0;
-  //   //   for (var i in this.table.value) {
-  //   //     if (this.table.value[i] == null || this.table.value[i] == "") {
-  //   //       count += 1;
-  //   //     }
-  //   //   }
-
-  //   //   if (count > 9 && !this.generalsearch) {
-
-  //   //     this.newdateArray = this.usergetting;
-  //   //     this.filteredArray = []
-  //   //     count = 0;
-
-  //   //   } else {
-
-  //   //     this.newdateArray = this.filteredArray;
-  //   //     count = 0;
-  //   //   }
-  //   // }
-
-  // }
-
   convertDate(date: Date): string {
     const d = new Date(date);
     const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
     return n;
+  }
+
+  // load promotions
+  loadPromos(event) {
+    
+    this.loadingPromos = true;
+    this.dishPromoArray = [];
+    const idAlly = event.target.value;
+
+    this.dishesService.getDishesByIdAlly(idAlly).subscribe(res => {
+      if (res.length > 0) {
+        res.forEach((dish: Dishes) => {
+          if (dish.idPromotion != null) {
+            for (let item = 0; item < dish.idPromotion.length; item++) {
+              let iditem = dish.idPromotion[item];
+
+              this.promoService.getPromotions().subscribe(res => {
+                res.forEach((promo: Promotions) => {
+                  if (iditem == promo.id) {
+                    let yf = promo.endDatePromotion[0]['year'];
+                    let mf = promo.endDatePromotion[0]['month'];
+                    let df = promo.endDatePromotion[0]['day'];
+                    let hf = promo.endDatePromotion[1]['hour'];
+                    let minf = promo.endDatePromotion[1]['minute'];
+
+                    let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
+                    let datee = new Date(yf, mf, df, hf, minf)
+                    let timee = datee.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+
+                    let ys = promo.promotionStartDate[0]['year'];
+                    let ms = promo.promotionStartDate[0]['month'];
+                    let ds = promo.promotionStartDate[0]['day'];
+                    let hs = promo.promotionStartDate[1]['hour'];
+                    let mins = promo.promotionStartDate[1]['minute'];
+
+                    let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
+                    let datei = new Date(ys, ms, ds, hs, mins)
+                    let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+                    let diff = dateF - dateS;
+
+                    this.today = new Date()
+                    let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+
+                    const obj: any = {};
+
+                    obj.id = promo.id;
+                    obj.reference = `${dish.reference}-${item + 1}`;
+                    obj.nameDishesCategories = dish.nameDishesCategories;
+                    obj.name = dish.name;
+                    obj.photo = promo.photo;
+                    obj.price = dish.price;
+                    obj.namepromo = promo.name;
+                    obj.pricepromo = promo.price;
+                    obj.daysPromo = diff / (1000 * 60 * 60 * 24);
+                    obj.promotionStartDate = promo.promotionStartDate;
+                    obj.timestart = timei;
+                    obj.endDatePromotion = promo.endDatePromotion;
+                    obj.timeend = timee;
+                    /* obj.state = promo.state; */
+
+
+                    if (datetoday >= datestart && datetoday <= datefinish) {
+                      /* obj.state = promo.state */
+                      let stateDate: any = [{
+                        state: "active",
+                        check: true
+                      }, {
+                        state: "inactive",
+                        check: false
+                      }]
+                      obj.state = stateDate
+                    } else if (datetoday > datefinish || datetoday < datestart) {
+                      let stateDate: any = [{
+                        state: "active",
+                        check: false
+                      }, {
+                        state: "inactive",
+                        check: true
+                      }]
+                      obj.state = stateDate
+                      obj.selected = false;
+                    }
+
+                    if (obj.state[0].check){
+
+                      this.dishPromoArray.push(obj)
+                    }
+                    // const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
+                    // this.promoService.putPromotion(iditem, promee).subscribe(res => { })
+
+                  }
+                })
+              })
+            }
+            this.loadingPromos = false;
+          }
+        })
+      } else {
+        this.loadingPromos = false;
+      }
+    })
   }
 
 }

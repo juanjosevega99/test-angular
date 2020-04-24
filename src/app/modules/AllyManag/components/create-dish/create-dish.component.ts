@@ -694,6 +694,7 @@ export class CreateDishComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
+        this.preDish['idAlly'] = localStorage.getItem('idAlly');
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;

@@ -199,6 +199,33 @@ th {
   flex-direction: row;
 }
 
+// modal promos
+
+ // dish photo
+.sizeLogo {
+  width: 5rem;
+  height: 5rem;
+}
+
+.custom-select{
+  width: 30% !important;
+}
+
+.modal-header{
+  align-items: center;
+}
+.invalid-length{
+  color: red;
+  font-size: .8rem;
+}
+
+.btn-cancel{
+  color: #572483;
+  background-color: #fff;
+  border-color: #572483;
+}
+
+
 // ================================
 // medias
 // ================================

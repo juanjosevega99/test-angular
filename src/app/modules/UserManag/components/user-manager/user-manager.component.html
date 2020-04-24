@@ -69,12 +69,12 @@
   <div class=" filterDateGen">
 
     <div class="filterGen">
-      <input  class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-        #general (keyup)="search(general.value)" [(ngModel)]="generalsearch">
+      <input class="form-control text-center " id="general" type="text" placeholder="Buscar.." #general
+        (keyup)="search(general.value)" [(ngModel)]="generalsearch">
     </div>
 
     <div class="filterDate">
-      <form class="form-inline d-flex justify-content-end "  #formadate>
+      <form class="form-inline d-flex justify-content-end " #formadate>
         <div class="form-group hidden">
           <div class="input-group">
             <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
@@ -153,13 +153,16 @@
           <td>{{user.purchaseAmount}}</td>
           <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
         </tr>
-        <tr *ngIf=" !newdateArray.length " >
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>No hay Resultados</td>
-      </tr>
+        <tr>
+          <td colspan="11">
+            <div *ngIf="loadingUsers" class="fa-3x text-center">
+              <i class="fas fa-spinner fa-pulse"></i>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf=" !newdateArray.length && !loadingUsers ">
+          <td colspan="11">No hay Resultados</td>
+        </tr>
       </tbody>
 
     </table>
@@ -169,8 +172,8 @@
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btnForInforms mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
         cupones</button>
-      <button type="button" class="btnForInforms" style="background-color: #f4b081" (click)="sendPromos()">Enviar
-        promociones</button>
+      <button type="button" class="btnForInforms" style="background-color: #f4b081"
+        (click)="loadAllies(modalpromos)">Enviar promociones</button>
     </div>
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
@@ -246,5 +249,96 @@
       </div>
     </div>
   </div>
+
+  <!-- modal promos -->
+  <ng-template #modalpromos let-modal>
+    <div class="modal-header" style="background-color: #572483;">
+      <h5 class="modal-title mr-4" id="modalpromosTitle" style="color: white;">Enviar Promociones</h5>
+      <select class="custom-select" (change)="loadPromos($event)" #ally>
+        <option value="" selected>Seleccione un Aliado</option>
+        <option *ngFor="let ally of allies" [value]="ally.id">{{ally.name}}</option>
+      </select>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid text-center" *ngIf="ally.value && !dishPromoArray.length && !loadingPromos">No ha
+        promociones registradas en el aliado</div>
+      <div *ngIf="loadingPromos" class="fa-3x text-center">
+        <i class="fas fa-spinner fa-pulse"></i>
+      </div>
+      <table class="table table-responsive" id="ally-table" *ngIf="dishPromoArray.length">
+        <tr>
+          <!-- <th class="text-center">Referencia</th> -->
+          <th class="text-center">Categoría</th>
+          <th class="text-center">Nombre del plato</th>
+          <th class="text-center">Foto del plato</th>
+          <th class="text-center">Precio</th>
+          <th class="text-center">Tipo de promoción</th>
+          <th class="text-center">Precio con promoción</th>
+          <th class="text-center">Dias de promoción</th>
+          <!-- <th class="text-center">Fecha de inicio de promoción</th> -->
+          <!-- <th class="text-center">Hora de inicio de promoción</th> -->
+          <th class="text-center">Fecha de finalización de promoción</th>
+          <th class="text-center">Hora de finalización de promoción</th>
+          <th class="text-center" colspan="1">Estado</th>
+          <th class="text-center">Seleccionar</th>
+          <!-- <th class="text-center"> </th> -->
+        </tr>
+        <tr *ngFor="let menuPromo of dishPromoArray; let i = index " class="text-center">
+          <!-- <td>{{menuPromo.reference}}</td> -->
+          <td>{{menuPromo.nameDishesCategories}}</td>
+          <td>{{menuPromo.name}}</td>
+          <td><img src={{menuPromo.photo}} alt="" class="sizeLogo mx-2"></td>
+          <td>{{menuPromo.price}}</td>
+          <td>{{menuPromo.namepromo}}</td>
+          <td>{{menuPromo.pricepromo}}</td>
+          <td>{{menuPromo.daysPromo}} días</td>
+          <!-- <td>{{menuPromo.promotionStartDate[0].day}}/{{menuPromo.promotionStartDate[0].month}}/{{menuPromo.promotionStartDate[0].year}}
+          </td> -->
+          <!-- <td>{{menuPromo.timestart}}</td> -->
+          <td>
+            {{menuPromo.endDatePromotion[0].day}}/{{menuPromo.endDatePromotion[0].month}}/{{menuPromo.endDatePromotion[0].year}}
+          </td>
+          <td>{{menuPromo.timeend}}</td>
+          <td>
+            <div class="radio radio-success m-2 form-check-inline">
+              <!-- <input [checked]="menuPromo.state[0].check" value="{{menuPromo.id}}" type="radio" name={{i}}
+                    id="state" #active (click)="verifyDate(active.value,i)"> -->
+              <label *ngIf="menuPromo.state[0].check" style="font-size: 15px;">
+                Activo
+              </label>
+              <label *ngIf="!menuPromo.state[0].check" style="font-size: 15px;">
+                Inactivo
+              </label>
+            </div>
+          </td>
+          <td><input type="checkbox" class="m-1" [checked]="menuPromo.selected" (change)="selectedPromo($event, i)">
+          </td>
+          <!-- <td> 
+            <div class="radio radio-danger m-2 form-check-inline">
+                <input [checked]="menuPromo.state[1].check" value="{{menuPromo.id}}" type="radio" name={{i}}
+                    id="state" #inactive (click)="changeStateI(inactive.value)">
+                <label style="font-size: 15px;">
+                    Inactivo
+                </label>
+            </div>
+        </td> -->
+          <!-- <td>
+            <a [routerLink]="[ '/main/createDish', menuPromo.reference]" class="btn"> <i
+                    class="far fa-edit"></i> </a>
+        </td> -->
+        </tr>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <div class="invalid-length" *ngIf="alertPromos">Seleccione almenos una promoción para enviar</div>
+      <button *ngIf="dishPromoArray.length" type="button" class="btn btn-primary" style="background-color: #572483;"
+        (click)="sendPromos()">Enviar Promociones</button>
+      <button type="button" class="btn btn-secondary btn-cancel" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+
 
 </div>
