@@ -20,7 +20,7 @@ export class CreateCouponComponent implements OnInit {
   preCoupon: Object = {
     state: [],
     createDate: [],
-    expirationDate: [],
+    creationTime: [],
     idAllies: null,
     nameAllies: null,
     idHeadquarters: null,
@@ -30,11 +30,12 @@ export class CreateCouponComponent implements OnInit {
     idtypeOfCoupon: null,
     nameTypeOfCoupon: null,
     discountRate: null,
-    creationTime: null,
-    expirationTime: null,
+    expirationDate: [],
+    expirationTime: [],
     name: null,
-    idCouponsAvailable: null, //new propertie
+    // idCouponsAvailable: null, //new propertie
     numberOfUnits: null,
+    numberOfCouponsAvailable: null,
     description: null,
     imageCoupon: null,
     termsAndConditions: null,
@@ -70,6 +71,8 @@ export class CreateCouponComponent implements OnInit {
   arrayDishes: any;
   dishesByIdHeadquarter: any[] = [];
 
+  //array for search couponsAvailable by idCoupon
+  couponsAvailableByIdCoupon : any;
   //variable for upload images
   fileImagedish: any;
   urlImagedish: any;
@@ -344,14 +347,21 @@ export class CreateCouponComponent implements OnInit {
   //save new coupon
   saveCoupon() {
     this.swallSave()
-    let obj = {
-      idCoupon: "idCoupon",
-    }
-    this.couponsAvilableService.postCouponAvailable(obj).subscribe(() => alert('CouponsAvailable created'))
   }
   //method for create coupon units
   generateCoupons(idCoupon: string) {
-    
+    for (let i = 0; i < this.preCoupon['numberOfUnits']; i++) {
+      // const element = array[i];
+      let obj = {
+        idCoupon: idCoupon,
+      }
+      this.couponsAvilableService.postCouponAvailable(obj).subscribe()
+      // (couponAvailable:any) => {
+        //   let idCouponsAvailable = couponAvailable._id
+        //   this.preCoupon['idCouponsAvailable'] = idCouponsAvailable
+        //   this.couponsServices.putCoupon(this.preCoupon).subscribe()
+        // }
+    }
   }
 
   //sweet alerts
@@ -419,16 +429,11 @@ export class CreateCouponComponent implements OnInit {
           .then(urlImage => {
             this.upload = true;
             this.preCoupon['imageCoupon'] = urlImage
+            this.preCoupon['numberOfCouponsAvailable'] = this.preCoupon['numberOfUnits']
             this.couponsServices.postCoupon(this.preCoupon).subscribe((coupon: any) => {
               let idCoupon = coupon._id;
+              this.generateCoupons(idCoupon)
 
-              // for (let i = 0; i < this.preCoupon['numberOfUnits']; i++) {
-              //   // const element = array[i];
-              //   let obj = {
-              //     idCoupon: idCoupon,
-              //   }
-              //   this.couponsAvilableService.postCouponAvailable(obj).subscribe(() => alert('CouponsAvailable created'))
-              // }
             })
 
             if (this.upload == true) {
@@ -462,6 +467,7 @@ export class CreateCouponComponent implements OnInit {
   uploadCouponUpdate() {
     let objCoupon: any = this.preCoupon
     objCoupon.id = this.identificatorbyRoot
+    objCoupon.numberOfCouponsAvailable = this.preCoupon['numberOfUnits']
     this.couponsServices.putCoupon(objCoupon).subscribe()
     this._router.navigate(['/main', 'couponManager',]);
   }
@@ -532,6 +538,13 @@ export class CreateCouponComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
+          this.couponsAvilableService.getCouponAvailableByIdCoupon(this.identificatorbyRoot)
+          .subscribe( couponAvailable => {
+            this.couponsAvailableByIdCoupon = couponAvailable
+            this.couponsAvailableByIdCoupon.forEach(element => {
+              this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
+            });
+          })
           Swal.fire({
             title: 'Eliminado',
             text: "Tu cupón ha sido eliminado!",

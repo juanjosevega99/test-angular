@@ -30,22 +30,22 @@ export class CuponManagerComponent implements OnInit {
   generalsearch: string = "";
 
   //varibales to obtain data
-  couponsGettting: CouponList[] = [];
+  couponsGettting: Coupons[] = [];
   newArray = this.couponsGettting;
   newArrarSearch: Coupons[] = [];
-  filteredArray: CouponList[] = [];
+  filteredArray: Coupons[] = [];
   // obtain coupon by id coupon
   getCuponById: any;
-   //variable of don't results
-   noResults = false
+  //variable of don't results
+  noResults = false
 
-   //variables for users
-   usergetting: OrderByUser[] = []; //tofo
-   newdateArray = this.usergetting;
+  //variables for users
+  usergetting: OrderByUser[] = []; //tofo
+  newdateArray = this.usergetting;
   constructor(
     private couponsServices: CouponsService,
     private saveLocalStorageServices: SaveLocalStorageService,
-    private _router: Router,private userservice: UsersService, 
+    private _router: Router, private userservice: UsersService,
     private orderservice: OrdersService
 
   ) {
@@ -84,7 +84,7 @@ export class CuponManagerComponent implements OnInit {
     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
 
     this.table = new FormGroup({
-      "codeToRedeem": new FormControl(),
+      "name": new FormControl(),
       "nameAllies": new FormControl(),
       "general": new FormControl()
     })
@@ -101,17 +101,29 @@ export class CuponManagerComponent implements OnInit {
         // let df = coupon.expirationDate[0]['day'];
 
         // let finishDate = [`${df}/${mf}/${yf}`]
-
-
-        const obj: CouponList = {};
+        const obj: Coupons = {};
         obj.id = coupon.id;
-        obj.codeToRedeem = coupon.codeToRedeem;
+        obj.name = coupon.name;
         obj.imageCoupon = coupon.imageCoupon;
         obj.nameAllies = coupon.nameAllies;
         obj.nameTypeOfCoupon = coupon.nameTypeOfCoupon;
+        obj.numberOfUnits = coupon.numberOfUnits;
+        obj.numberOfCouponsAvailable = coupon.numberOfCouponsAvailable
         obj.createDate = createDate;
         // obj.expirationDate = finishDate
         obj.state = coupon.state
+
+        if (coupon.expirationDate.length && coupon.expirationTime.length != 0) {
+          let yf = coupon.expirationDate[0]['year'];
+          let mf = coupon.expirationDate[0]['month'];
+          let df = coupon.expirationDate[0]['day'];
+
+          let finishDate = [`${df}/${mf}/${yf}`]
+          obj.expirationDate = finishDate
+        }else{
+          let msg= ["30 días despues de activarlo"]
+          obj.expirationDate = msg
+        }
 
         this.couponsGettting.push(obj)
 
@@ -127,7 +139,8 @@ export class CuponManagerComponent implements OnInit {
     this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
     this._router.navigate(['/main', 'editCoupon', i])
   }
-  goToUserManger(i){
+  goToUserManger(idCoupon: string, i) {
+    this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
     this._router.navigate(['/main', 'userManager', i])
   }
   //method to convert the modification date
@@ -171,7 +184,7 @@ export class CuponManagerComponent implements OnInit {
   search(termino?: string, id?: string) {
 
     let objsearch = {
-      codeToRedeem: "",
+      name: "",
       nameAllies: ""
     };
 
@@ -188,27 +201,27 @@ export class CuponManagerComponent implements OnInit {
     this.newArray = this.couponsGettting.
       filter(function (coupon) {
         if (coupon["nameAllies"].toLowerCase().indexOf(this.nameAllies) >= 0) {
-          return coupon; 
-        } 
+          return coupon;
+        }
       }, objsearch).
       filter(function (coupon) {
-        if (coupon["codeToRedeem"].toLowerCase().indexOf(this.codeToRedeem) >= 0) {
+        if (coupon["name"].toLowerCase().indexOf(this.name) >= 0) {
           return coupon;
         }
       }, objsearch).
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.codeToRedeem) || myRegex.test(item.nameAllies) ||
+        return (myRegex.test(item.name) || myRegex.test(item.nameAllies) ||
           myRegex.test(item.nameTypeOfCoupon) || myRegex.test(item.createDate.toString()) ||
           myRegex.test(item.expirationDate.toString()))
       })
-       // condition by when don't exit results in the table
-       if (this.newArray.length == 0) {
-        this.noResults = true;
+    // condition by when don't exit results in the table
+    if (this.newArray.length == 0) {
+      this.noResults = true;
 
-      } else {
-        this.noResults = false;
-      }
+    } else {
+      this.noResults = false;
+    }
 
   }
 
@@ -222,18 +235,18 @@ export class CuponManagerComponent implements OnInit {
     const checked = event.target.checked;
     this.newdateArray.forEach(item => item.selected = checked)
   }
-  
+
   selectedOne(event, pos: number) {
     const checked = event.target.checked;
     event.target.checked = checked;
     this.newdateArray[pos].selected = checked;
   }
-  
+
   // selectforsend() {
   //   // this.userSelected = []
   //   // this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
   // }
-  
+
 
   //sweets alerts
   swallUpdateState() {

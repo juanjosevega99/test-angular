@@ -69,12 +69,12 @@
   <div class=" filterDateGen">
 
     <div class="filterGen">
-      <input  class="form-control text-center " id="general" type="text" placeholder="Buscar.."
-        #general (keyup)="search(general.value)" [(ngModel)]="generalsearch">
+      <input class="form-control text-center " id="general" type="text" placeholder="Buscar.." #general
+        (keyup)="search(general.value)" [(ngModel)]="generalsearch">
     </div>
 
     <div class="filterDate">
-      <form class="form-inline d-flex justify-content-end "  #formadate>
+      <form class="form-inline d-flex justify-content-end " #formadate>
         <div class="form-group hidden">
           <div class="input-group">
             <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
@@ -153,13 +153,13 @@
           <td>{{user.purchaseAmount}}</td>
           <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
         </tr>
-        <tr *ngIf=" !newdateArray.length " >
+        <tr *ngIf=" !newdateArray.length ">
           <td></td>
           <td></td>
           <td></td>
           <td></td>
           <td>No hay Resultados</td>
-      </tr>
+        </tr>
       </tbody>
 
     </table>
@@ -167,8 +167,9 @@
 
   <div style="margin-top: 2rem; " class=" container-fluid d-flex btnInfos justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btnForInforms mr-5 " style="background-color: #92d050;" (click)="sendCupons()">Enviar
-        cupones</button>
+      <button type="button" class="btnForInforms mr-5 " style="background-color: #92d050;" (click)="sendCupons()"
+        data-toggle="modal" data-target="#exampleModalCenter">Enviar cupones
+      </button>
       <button type="button" class="btnForInforms" style="background-color: #f4b081" (click)="sendPromos()">Enviar
         promociones</button>
     </div>
@@ -191,7 +192,7 @@
     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
-        <div *ngIf="!typepdf" class="modal-header" style="background-color: #1f6f43;">
+        <div *ngIf="typeExcel" class="modal-header" style="background-color: #1f6f43;">
           <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar Excel</h5>
           <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()"> Descargar</button>
           <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print"
@@ -203,6 +204,13 @@
         <div *ngIf="typepdf" class="modal-header" style="background-color: #f71f20;">
           <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar PDF</h5>
           <button type="button" class="btn btn-outline-light ml-3" (click)="generatePdf()"> Descargar</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngIf="typeCoupon" class="modal-header" style="background-color: #572483; text-align: center;">
+          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white; ">Enviar cupones</h5>
+          <button type="button" class="btn btn-outline-light ml-3" (click)="sendCouponToUsers()"> Enviar</button>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -240,9 +248,18 @@
             </table>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <div *ngIf="!typeCoupon" class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
+        <div *ngIf="typeCoupon" class="modal-footer2">
+          <div class="">
+            <label> Cupones disponibles: {{numberOfCoupons}} </label>
+          </div>
+          <div class="">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>

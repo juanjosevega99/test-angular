@@ -37,6 +37,7 @@ export class CouponsAvailableService {
             id: couponsAvailable._id,
             idUsers : couponsAvailable.idUser,
             idCoupon: couponsAvailable.idCoupon,
+            state : couponsAvailable.state
           };
           return obj;
         })
@@ -52,12 +53,17 @@ export class CouponsAvailableService {
             let obj = {
               id: id,
               idUser: couponsAvailable.idUsers,
-              idCoupon: couponsAvailable.idCoupon
+              idCoupon: couponsAvailable.idCoupon,
+              state : couponsAvailable.state
             };
             return obj;
           }
         )
       );
+  }
+
+  getCouponAvailableByIdCoupon(idCoupon){
+    return this.httpclient.get(environment.UrlBase + "coupons-available/coupon/" + idCoupon)
   }
 
 }

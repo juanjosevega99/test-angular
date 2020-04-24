@@ -1,24 +1,25 @@
 export class Coupons {
     id?:string;
-    name?:string;
-    description?:string;
-    imageCoupon?:string;
-    idtypeOfCoupon?:string;
-    nameTypeOfCoupon?:string;
     state?:string[];
     createDate?:string[];
-    expirationDate?:string[];
-    codeToRedeem?:string;
-    termsAndConditions?:string;
+    creationTime?:string[];
     idAllies?:string;
     nameAllies?:string;
     idHeadquarters?:string;
     nameHeadquarters?:string;
     idDishes?:string;
     nameDishes?:string;
-    numberOfUnits?:number;
+    idtypeOfCoupon?:string;
+    nameTypeOfCoupon?:string;
     discountRate?:number;
-    creationTime?:string[];
+    expirationDate?:string[];
     expirationTime?:string[];
+    name?:string;
+    // idCouponsAvailable:String[];
+    numberOfUnits?:number;
+    numberOfCouponsAvailable?: number;
+    description?:string;
+    imageCoupon?:string;
+    termsAndConditions?:string;
     codeReferred?:string;
 }
