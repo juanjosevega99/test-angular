@@ -42,8 +42,8 @@
                     <i class="fas fa-map-marker-alt imageI " style="color: black"></i>
                 </div>
                 <div class="card-body">
-                    <button [routerLink]="['/main','options']" class="btn btn-lg btn-block buttonstyle" [disabled]="enableInfHeadquarter" >Info de la sede </button>
-                    </div>
+                    <button  (click)="editHeadquarter()" class="btn btn-lg btn-block buttonstyle" [disabled]="enableInfHeadquarter" >Info de la sede </button>  
+                </div>
             </div>
         </div>
 

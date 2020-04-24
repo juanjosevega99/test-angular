@@ -48,7 +48,7 @@ export class CreateHeadquarterComponent implements OnInit {
     emailGeneral: null,
     code: null,
     principarlServices: [],
-    costPerService: [],
+    costPerService: [{ id: "Pídelo", value: "" }, { id: "Resérvalo", value: "" }, { id: "Llévalo", value: "" }],
     aditionalServices: [],
     averageDeliveryTime: null,
     headquartersContact: null,
@@ -75,9 +75,12 @@ export class CreateHeadquarterComponent implements OnInit {
   collectionAddService: any[] = [];
 
   nameAlli: any[] = [];
-   //variables of idAlly
-   idAlly:number;
-   idAllyLocalStorage:string;
+  //variables of idAlly
+  idAlly: number;
+  idAllyLocalStorage: string;
+
+  //flag for edit headquarter
+  edit: boolean
 
   constructor(
     private storage: AngularFireStorage,
@@ -86,18 +89,24 @@ export class CreateHeadquarterComponent implements OnInit {
     private _activateRoute: ActivatedRoute,
     private headquarters: HeadquartersService,
     private additionalServices: AdditionalServicesService,
+    private allyService: AlliesService,
     private locationService: LocationServiceService,
     private _saveLocalStorageService: SaveLocalStorageService) {
 
-      //get Ally's id of LocalStorage
-      this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
-      
-      //get Ally's parameter
-      this._activateRoute.params.subscribe(params => {
-        console.log('Parametro', params['id']);
-        this.idAlly =  params['id']
-      });
+    //get Ally's id of LocalStorage
+    this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
 
+    //method for load the headquarter for edit
+    this.loadIdHeadquarter()
+
+    //get Ally's parameter
+    this._activateRoute.params.subscribe(params => {
+      console.log('Parametro', params['id']);
+      this.idAlly = params['id']
+    });
+
+    //flag
+    this.edit = false
 
     this.locationService.getLocations()
       .subscribe((data: any) => {
@@ -122,8 +131,11 @@ export class CreateHeadquarterComponent implements OnInit {
   ngOnInit() {
 
   }
-  goBackHeadquarterOptions(){
-    this._router.navigate( ['/main','headquarts',this.idAlly] )
+  goBackHeadquarterOptions() {
+    if (localStorage.getItem('idHeadquarter')) {
+      localStorage.removeItem('idHeadquarter');
+    }
+    this._router.navigate(['/main', 'headquarts', this.idAlly])
   }
 
   getNameAlly() {
@@ -131,6 +143,31 @@ export class CreateHeadquarterComponent implements OnInit {
       this.nameAlli = ally
       console.log("imprimiendo aliados", this.nameAlli);
     })
+  }
+
+  //method for load the headquarter id
+  loadIdHeadquarter() {
+    if (localStorage.getItem('idHeadquarter')) {
+      this.headquarters.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(res => {
+        this.edit = true
+        this.preHeadquarters = res;
+        res.principarlServices.forEach((res) => {
+          let service = this.services.find(ser => ser.name === res.value);
+          service.select = res.checked;
+        })
+        res.aditionalServices.forEach((res) => {
+          if (res) {
+            let additional = this.aditionalServices.find(add => add.name == res.value);
+            if (!additional && res) {
+              let obj = { name: res.value, img: res.image, select: res.checked }
+              this.aditionalServices.push(obj)
+            } else {
+              additional.select = res.checked;
+            }
+          }
+        })
+      })
+    }
   }
 
   //method for adding selected additional services in a new array
@@ -171,12 +208,12 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 
   //method for seeing the additional service selected
-  selectedAditionalService(event, pos: number,image) {
+  selectedAditionalService(event, pos: number, image) {
     const checked = event.target.checked;
     event.target.checked = checked;
     const value = event.target.value;
     event.target.value = value;
-    
+
     this.preHeadquarters['aditionalServices'][pos] = { value, checked, image }
   }
 
@@ -197,11 +234,6 @@ export class CreateHeadquarterComponent implements OnInit {
       reader.readAsDataURL(input.files[0]);
     }
     return this.otherImg = input.files[0]
-    /* const file = event.target.files[0];
-    this.readerImg.readAsDataURL(file);
-    this.readerImg.onload = (e: any) => {
-      this.otherImg = e.target.result;
-    }; */
   }
 
   //method for add to the view the new additional service
@@ -231,6 +263,9 @@ export class CreateHeadquarterComponent implements OnInit {
   //method for saving the new headquarter
   saveHq() {
     this.preHeadquarters['idAllies'] = this.idAllyLocalStorage;
+    this.allyService.getAlliesById(this.idAllyLocalStorage).subscribe(allie => {
+      this.preHeadquarters['nameAllies'] = allie.name
+    })
     this.swallSaveHeadquarter(this.preHeadquarters)
   }
 
@@ -238,12 +273,12 @@ export class CreateHeadquarterComponent implements OnInit {
   swallSaveHeadquarter(newHeadquarter: any) {
     Swal.fire({
       title: 'Estás seguro?',
-      text: "de que deseas guardar los cambios!",
+      text: "de que deseas crear esta nueva sede!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, guardar!'
+      confirmButtonText: 'Si, crear!'
     }).then((result) => {
       if (result.value) {
         let agregateAdditionalServices: object = {
@@ -256,19 +291,53 @@ export class CreateHeadquarterComponent implements OnInit {
           })
         })
         console.log("Array FINAL: ", this.preHeadquarters);
-
         this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
+          Swal.fire({
+            title: 'Guardado',
+            text: "Tu nueva sede ha sido creada!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'headquarts', this.idAlly]);
+            }
+          })
         })
-        Swal.fire({
-          title: 'Guardado',
-          text: "Tu nueva sede ha sido creada!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main','headquarts',this.idAlly]);
+      }
+    })
+  }
+
+  //method for updating the headquarter
+  updateHeadquarter() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar los cambios para esta sede!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.preHeadquarters['principarlServices'].forEach((ser, i) => {
+          if (ser.checked == false) {
+            let cost = this.preHeadquarters['costPerService']
+            cost[i].value = ""
           }
+        })
+        this.headquarters.putHeadquarter(localStorage.getItem('idHeadquarter'), this.preHeadquarters).subscribe(res => {
+          Swal.fire({
+            title: 'Guardado',
+            text: "Tu nueva sede ha sido actualizada!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'headquarts', this.idAlly]);
+            }
+          })
         })
       }
     })
@@ -286,24 +355,8 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
-        this._router.navigate(['/main','headquarts',this.idAlly]);
+        this._router.navigate(['/main', 'headquarts', this.idAlly]);
       }
     })
   }
 }
-
-/* preHeadquarters:Object={
-   nameHq:'Galerías',
-   location:'',
-   address:'',
-   floor:'',
-   stall:'',
-   general:'', o null para limpiar todo
-   charge:'',
-   cell:'',
-   tel:'',
-   emailGeneral:'',
-   code:'122212-3'
- }
- [(ngModel)]="preHeadquarters.nameHq"  con[] cambiar el valor inicial de preHeadquarters por el valor que se ingrese nuevo de los inputs
- [ngModel]="preHeadquarters.nameHq" html  sin [] permanece preHeadquarters en el valor fijado inicialmente así se modifiquen los inputs */

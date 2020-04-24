@@ -35,7 +35,8 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: [],
     idAccompaniments: [],
-    idPromotion: []
+    idPromotion: [],
+    idHeadquarter:null
   }
 
   editDish: Dishes = {
@@ -694,6 +695,7 @@ export class CreateDishComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
+        this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter')
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;
