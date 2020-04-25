@@ -186,7 +186,7 @@ export class UserManagerComponent implements OnInit {
 
   async selectPromosSend() {
     this.promosSelected = [];
-    await this.dishPromoArray.forEach(promo => promo['selected'] ? this.promosSelected.push(promo) : this.promosSelected);
+    await this.dishPromoArray.forEach(promo => promo['selected'] ? this.promosSelected.push(promo['id']) : this.promosSelected);
   }
 
   sendCupons() {
@@ -202,6 +202,8 @@ export class UserManagerComponent implements OnInit {
     if (this.promosSelected.length) {
       this.alertPromos = false;
 
+      this.updatePromosUser();
+
     } else {
       this.alertPromos = true;
     }
@@ -210,6 +212,15 @@ export class UserManagerComponent implements OnInit {
 
   }
 
+  updatePromosUser(){
+    this.userSelected.forEach( user=>{
+      if(user['idsPromos'].length){
+
+      }else{
+        
+      }
+    })
+  }
 
   loadAllies(content) {
     this.dishPromoArray = [];
