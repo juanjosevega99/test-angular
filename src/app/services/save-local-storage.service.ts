@@ -33,5 +33,13 @@ export class SaveLocalStorageService {
     return idCoupon;
   }
 
+  saveLocalStorageIdPromotion(idPromotion : string){
+    localStorage.setItem("idPromotion",idPromotion )
+  }
+
+  getLocalStorageIdPromotion(){
+    let idPromotion = localStorage.getItem("idPromotion")
+    return idPromotion;
+  }
 
 }

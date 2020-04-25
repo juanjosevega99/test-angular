@@ -9,4 +9,5 @@ export class Users{
     password?:string;
     promotions?:string[];
     location?:String;
+    idsPromos?:string[]
 }

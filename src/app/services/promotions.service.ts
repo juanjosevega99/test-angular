@@ -56,10 +56,9 @@ export class PromotionsService {
       );
   }
 
-  getPromotionById(id): Observable<any[]> {
-    return this.httpclient
-      .get<Promotions[]>(environment.UrlBase + "promotions/" + id)
-      .pipe(
+  getPromotionById(id): Observable<any> {
+    return this.httpclient.get<Promotions>(environment.UrlBase + "promotions/" + id)
+      /* .pipe(
         map((promotions: any[]) =>
           promotions.map(promotions => {
             let obj = {
@@ -80,6 +79,6 @@ export class PromotionsService {
             return obj;
           })
         )
-      );
+      ); */
   }
 }

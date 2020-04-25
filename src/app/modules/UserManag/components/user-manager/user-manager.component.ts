@@ -15,7 +15,13 @@ import { UsersService } from 'src/app/services/users.service';
 import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+import Swal from 'sweetalert2';
+import { PromotionsService } from 'src/app/services/promotions.service';
+import { Promotions } from 'src/app/models/Promotions';
+import { User } from 'firebase';
 
 
 
@@ -55,7 +61,7 @@ export class UserManagerComponent implements OnInit {
   table: FormGroup;
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
-    private userservice: UsersService, private orderservice: OrdersService) {
+    private userservice: UsersService, private orderservice: OrdersService, private _saveLocalStorageService: SaveLocalStorageService, private promotionService: PromotionsService) {
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -71,6 +77,7 @@ export class UserManagerComponent implements OnInit {
 
     })
 
+
     this.userservice.getUsers().subscribe(res => {
 
       res.forEach((user: Users) => {
@@ -81,6 +88,7 @@ export class UserManagerComponent implements OnInit {
             const obj: OrderByUser = {};
 
             res.forEach((order: Orders) => {
+              obj.id = user.id;
               obj.name = user.name;
               obj.email = user.email;
               obj.phone = user.phone;
@@ -91,6 +99,7 @@ export class UserManagerComponent implements OnInit {
               obj.usability = order.orderValue ? 1 : 0;
               obj.purchaseAmount = order.orderValue;
               obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+              obj.idsPromos = user.idsPromos;
             }
             )
             this.usergetting.push(obj);
@@ -162,10 +171,80 @@ export class UserManagerComponent implements OnInit {
   // Send promos
   // ==========================
   sendPromos() {
+    if (localStorage.getItem('idPromotion')) {
+      this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
+        let name = promo.name
+
+        Swal.fire({
+          html:
+            '¿Estás seguro de que deseas<br>' +
+            ' <b>aplicar la promocion </b>' +
+            `<b>${name}</b><br>` +
+            'a los usuarios filtrados por<br>',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          cancelButtonColor: '#542b81',
+          confirmButtonText: 'Si, enviar!'
+        }).then((result) => {
+          if (result.value) {
+            let idPromo = localStorage.getItem('idPromotion')
+            let nameuser:string[]=[]
+            this.userSelected.forEach((user: Users, i) => {
+              let idUser = user.id
+               
+              this.userservice.getUserById(idUser).subscribe((res: Users) => {
+                let idsP = res.idsPromos
+                idsP.forEach((id, index) => {
+                  if (id == idPromo) {
+                    this.userSelected[i] = this.userSelected[i]
+                    nameuser.push(user.name)
+                    
+                    
+                   
+                  } else {
+                    user.idsPromos.push(idPromo)
+                    this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
+                      Swal.fire({
+                        title: 'Enviado',
+                        text: "La promoción ha sido aplicada a los usuarios filtrados!",
+                        icon: 'success',
+                        confirmButtonColor: '#542b81',
+                        confirmButtonText: 'Ok!'
+                      }).then((result) => {
+                        if (result.value) {
+                          /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
+                        }
+                      })
+                    })
+                  }
+                })
+              })
+              
+            })
+            Swal.fire(JSON.stringify(nameuser))
+           /*  Swal.fire({
+              html: '<b>El usuario: </b>' +
+              `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
+              +
+                  
+                '<b>ya tiene la promoción asociada</b>',
+              icon: 'error',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }) */
+            /* console.log(nameuser); */
+            
+            
+          }
+        })
+      })
+    } else {
+      console.log(this.userSelected);
+    }
     this.selectforsend();
     // console.log("users", this.usergetting);
     // console.log(this.table);
-
   }
 
   //get data to export
@@ -265,15 +344,15 @@ export class UserManagerComponent implements OnInit {
     };
     // let for date search
     let objdate = {
-      fromdate: this.fromDate != null ?  [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-') : '',
+      fromdate: this.fromDate != null ? [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-') : '',
       todate: this.toDate != null ? [this.toDate.year, this.toDate.month, this.toDate.day].join('-') : ''
     }
 
     for (var i in this.table.value) {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
-
         objsearch[i] = this.table.value[i];
+        /* console.log(this.table.controls[i].parent.value); *//* this.table.controls['generalsearch'].value */
       }
     }
 
@@ -336,21 +415,21 @@ export class UserManagerComponent implements OnInit {
 
       }).
       filter(function (item) {
-        
-        if (this.fromdate != '' && this.todate != '' ){
-          
+
+        if (this.fromdate != '' && this.todate != '') {
+
           const mydateFrom = new Date(this.fromdate);
           const mydateTo = new Date(this.todate);
-  
+
           let datetransform = item.registerDate.split("/");
           let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
           const userdate = new Date(newdatetransform);
           if (userdate >= mydateFrom && userdate <= mydateTo) {
             return item;
-          }else{
+          } else {
             return null
           }
-        }else{
+        } else {
           return item;
         }
       }, objdate)
