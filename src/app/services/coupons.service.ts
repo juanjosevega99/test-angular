@@ -9,7 +9,7 @@ import { Coupons } from 'src/app/models/Coupons';
   providedIn: "root"
 })
 export class CouponsService {
-  constructor(private httpclient: HttpClient) {}
+  constructor(private httpclient: HttpClient) { }
 
   postCoupon(coupon): Observable<Coupons> {
     return this.httpclient.post<Coupons>(
@@ -35,26 +35,27 @@ export class CouponsService {
         coupons.map(coupons => {
           let obj = {
             id: coupons._id,
-            name: coupons.name,
-            description: coupons.description,
-            imageCoupon: coupons.imageCoupon,
-            idtypeOfCoupon: coupons.idtypeOfCoupon,
-            nameTypeOfCoupon: coupons.nameTypeOfCoupon,
             state: coupons.state,
             createDate: coupons.createDate,
-            expirationDate: coupons.expirationDate,
-            codeToRedeem: coupons.codeToRedeem,
-            termsAndConditions: coupons.termsAndConditions,
+            creationTime: coupons.creationTime,
             idAllies: coupons.idAllies,
             nameAllies: coupons.nameAllies,
             idHeadquarters: coupons.idHeadquarters,
             nameHeadquarters: coupons.nameHeadquarters,
             idDishes: coupons.idDishes,
             nameDishes: coupons.nameDishes,
-            numberOfUnits: coupons.numberOfUnits,
+            idtypeOfCoupon: coupons.idtypeOfCoupon,
+            nameTypeOfCoupon: coupons.nameTypeOfCoupon,
             discountRate: coupons.discountRate,
-            creationTime: coupons.creationTime,
+            expirationDate: coupons.expirationDate,
             expirationTime: coupons.expirationTime,
+            name: coupons.name,
+            // idCouponsAvailable: coupons.idCouponsAvailable,
+            numberOfUnits: coupons.numberOfUnits,
+            numberOfCouponsAvailable: coupons.numberOfCouponsAvailable,
+            description: coupons.description,
+            imageCoupon: coupons.imageCoupon,
+            termsAndConditions: coupons.termsAndConditions,
             codeReferred: coupons.codeReferred
           };
           return obj;
@@ -67,33 +68,34 @@ export class CouponsService {
     return this.httpclient
       .get<Coupons>(environment.UrlBase + "coupons/" + id)
       .pipe(
-        map((coupons: Coupons) =>{
-            let obj = {
-              id: id,
-              name: coupons.name,
-              description: coupons.description,
-              imageCoupon: coupons.imageCoupon,
-              idtypeOfCoupon: coupons.idtypeOfCoupon,
-              nameTypeOfCoupon: coupons.nameTypeOfCoupon,
-              state: coupons.state,
-              createDate: coupons.createDate,
-              expirationDate: coupons.expirationDate,
-              codeToRedeem: coupons.codeToRedeem,
-              termsAndConditions: coupons.termsAndConditions,
-              idAllies: coupons.idAllies,
-              nameAllies: coupons.nameAllies,
-              idHeadquarters: coupons.idHeadquarters,
-              nameHeadquarters: coupons.nameHeadquarters,
-              idDishes: coupons.idDishes,
-              nameDishes: coupons.nameDishes,
-              numberOfUnits: coupons.numberOfUnits,
-              discountRate: coupons.discountRate,
-              creationTime: coupons.creationTime,
-              expirationTime: coupons.expirationTime,
-              codeReferred: coupons.codeReferred
-            };
-            return obj;
-          }
+        map((coupons: Coupons) => {
+          let obj = {
+            id: id,
+            state: coupons.state,
+            createDate: coupons.createDate,
+            creationTime: coupons.creationTime,
+            idAllies: coupons.idAllies,
+            nameAllies: coupons.nameAllies,
+            idHeadquarters: coupons.idHeadquarters,
+            nameHeadquarters: coupons.nameHeadquarters,
+            idDishes: coupons.idDishes,
+            nameDishes: coupons.nameDishes,
+            idtypeOfCoupon: coupons.idtypeOfCoupon,
+            nameTypeOfCoupon: coupons.nameTypeOfCoupon,
+            discountRate: coupons.discountRate,
+            expirationDate: coupons.expirationDate,
+            expirationTime: coupons.expirationTime,
+            name: coupons.name,
+            // idCouponsAvailable: coupons.idCouponsAvailable,
+            numberOfUnits: coupons.numberOfUnits,
+            numberOfCouponsAvailable: coupons.numberOfCouponsAvailable,
+            description: coupons.description,
+            imageCoupon: coupons.imageCoupon,
+            termsAndConditions: coupons.termsAndConditions,
+            codeReferred: coupons.codeReferred
+          };
+          return obj;
+        }
         )
       );
   }

@@ -1,27 +1,4 @@
-// styles for form with grid
-// styles flex for form 
-// .flex-outer{
-//   display: flex;
-//   // flex-wrap: wrap;
-//   flex-direction: row;
-//   // align-items: center;
-//   justify-content: space-around;
-// }
-// .flex-outer div label{
-//   flex: 1 0 120px;
-//   max-width:220px;
-//   // margin-right: 4rem;  
-// }
-// .flex-outer  div  label + * {
-//   flex: 1 0 220px;
-// }
-// .flex-outer div input {
-//   // padding: 15px;
-//   border-radius: 5px;
-// }
 
-//style reponsive 
-//paddin of container father
 .margin-container {
   padding-top: 7rem;
   padding-left: 1rem;
@@ -145,6 +122,12 @@
   padding: 5px;
   border-radius: .5rem;
 }
+.btn2 {
+  margin-left: 5px;
+  background-color: white;
+  padding: 5px;
+  border-radius: .5rem;
+}
 
 .upload-btn-wrapper input[type="file"] {
   font-size: 100px;
@@ -177,4 +160,14 @@ was-validated textarea.form-control:valid, textarea.form-control.is-valid {
 .col-3 {
   flex: 0 0 31%;
   max-width: 100%;
+}
+
+@media only screen and (min-width : 994px) and (max-width : 1167px) {
+  .btn2 {
+    margin-left: 5px;
+    background-color: white;
+    padding: 5px;
+    border-radius: .5rem;
+    margin-top: 0.8rem;
+  }
 }

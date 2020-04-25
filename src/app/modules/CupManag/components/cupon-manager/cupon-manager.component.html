@@ -22,9 +22,9 @@
                                 <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                         <li class="nav-item mr-md-2">
-                                            <input placeholder="Buscar por código..." class="form-control text-center"
+                                            <input placeholder="Buscar por nombre cupón..." class="form-control text-center"
                                                 type="text" (keyup)="search(code.value, code.id)" #code id="code"
-                                                formControlName="codeToRedeem">
+                                                formControlName="name">
                                         </li>
                                         <li class="nav-item">
                                             <input placeholder="Buscar por nombre de establecimiento ..."
@@ -90,10 +90,11 @@
         <table>
             <thead>
                 <tr>
-                    <th class="text-center">Código</th>
+                    <th class="text-center">Nombre del cupón</th>
                     <th class="text-center">Logo</th>
                     <th class="text-center">Nombre del establecimiento</th>
                     <th class="text-center">Tipo de cupon</th>
+                    <th class="text-center" colspan="3">Unidades</th>
                     <th class="text-center" colspan="2">Fecha de Promoción</th>
                     <th class="text-center" colspan="2">Estado</th>
                     <th class="text-center"> </th>
@@ -101,17 +102,18 @@
             </thead>
             <tbody class="mt-5">
                 <tr *ngFor="let coupon of newArray; let i = index " class="text-center">
-                    <td>{{coupon.codeToRedeem}}</td>
+                    <td>{{coupon.name}}</td>
                     <td> <img src={{coupon.imageCoupon}} alt="" class="sizeLogo mx-2"></td>
                     <td>{{coupon.nameAllies}}</td>
                     <td>
-                        <button type="button" class="btn btn-link" (click)="datafor_Users()" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                            {{coupon.nameTypeOfCoupon}}</button>
-                       
+                        <button type="button" class="btn btn-link" (click)="goToUserManger( coupon.id, i)" >
+                        {{coupon.nameTypeOfCoupon}}</button>    
                     </td>
-                    <td>{{coupon.createDate[0]}}</td>
-                    <!-- <td>{{coupon.expirationDate[0]}}</td> -->
+                    <td>{{coupon.numberOfCouponsAvailable}}</td>
+                    <td>de </td>
+                    <td>{{coupon.numberOfUnits}}</td>
+                    <td>{{coupon.createDate}}</td>
+                    <td>{{coupon.expirationDate}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
                             <input [checked]="coupon.state[0].check" value="{{coupon.id}}" type="radio" name={{i}}

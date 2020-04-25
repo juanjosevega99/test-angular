@@ -6,7 +6,6 @@ import * as XLSX from 'xlsx';
 //export pdf
 import 'jspdf-autotable';
 
-
 //service modal
 import { SwallServicesService } from 'src/app/services/swall-services.service';
 import * as jsPDF from 'jspdf';
@@ -17,12 +16,13 @@ import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import Swal from 'sweetalert2';
 import { PromotionsService } from 'src/app/services/promotions.service';
 import { Promotions } from 'src/app/models/Promotions';
 import { User } from 'firebase';
-
+import { CouponsService } from "src/app/services/coupons.service";
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
 
 
 @Component({
@@ -36,8 +36,10 @@ export class UserManagerComponent implements OnInit {
   fileName = 'ExcelSheet.xlsx';
 
   //var to know if pdf or excel
-  typepdf = true;
-
+  typepdf = false;
+  typeExcel = false;
+  //variable to know if coupon 
+  typeCoupon = false
   //vars to date filter
   hoveredDate: NgbDate;
   fromDate: NgbDate;
@@ -48,20 +50,33 @@ export class UserManagerComponent implements OnInit {
 
   generalsearch: string = '';
 
-
   usergetting: OrderByUser[] = [];
   //newdateArray: OrderByUser[] = this.users;
   newdateArray = this.usergetting;
-
   filteredArray: OrderByUser[] = [];
-
   userSelected: {}[] = [];
-
   //variable para formatear los campos de la tabla
   table: FormGroup;
 
-  constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
-    private userservice: UsersService, private orderservice: OrdersService, private _saveLocalStorageService: SaveLocalStorageService, private promotionService: PromotionsService) {
+  //variables for send coupons
+  idCoupon: string;
+  numberOfCoupons: number;
+  //variable to know couponsAvailable by idCoupon
+  couponsAvailableByIdCoupon: any;
+  arrayCoupon : any [] = []
+  numberOfUnits: number;
+
+
+  constructor(private calendar: NgbCalendar,
+    public formatter: NgbDateParserFormatter,
+    private userservice: UsersService,
+    private orderservice: OrdersService,
+    private couponsService: CouponsService,
+    private saveLocalStorageService: SaveLocalStorageService,
+    private promotionService: PromotionsService,
+    private couponsAvailableService: CouponsAvailableService) {
+
+    this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -108,6 +123,11 @@ export class UserManagerComponent implements OnInit {
         })
 
       })
+    })
+
+    this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+      this.numberOfCoupons = coupon.numberOfCouponsAvailable
+      this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
     })
 
   }
@@ -164,6 +184,9 @@ export class UserManagerComponent implements OnInit {
   }
 
   sendCupons() {
+    this.typeCoupon = true
+    this.typeExcel = false;
+    this.typepdf = false;
     this.selectforsend();
   }
 
@@ -249,13 +272,89 @@ export class UserManagerComponent implements OnInit {
 
   //get data to export
   datafor_Excel() {
+    this.typeExcel = true;
+    this.typeCoupon = false;
     this.typepdf = false;
     this.selectforsend();
   }
   datafor_pdf() {
     this.typepdf = true;
+    this.typeExcel = false;
+    this.typeCoupon = false;
     this.selectforsend();
   }
+
+  // ==========================
+  // methods for send Coupons
+  // ==========================
+
+  sendCouponToUsers() {
+    if (this.userSelected.length > this.numberOfCoupons) {
+      alert("no se puede mandar todos estos usuarios")
+    } else {
+      console.log(this.userSelected)
+      this.swallSendCouponToUsersSelected();
+    }
+  }
+
+  swallSendCouponToUsersSelected() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas enviar estos cupones!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, enviar!'
+    }).then((result) => {
+      if (result.value) {
+
+        this.couponsAvailableService.getCouponAvailableByIdCoupon(this.idCoupon)
+          .subscribe(coupons => {
+            this.couponsAvailableByIdCoupon = coupons
+            for (let i = 0; i < this.userSelected.length; i++) {
+              let cont = 1
+              const coupon = this.couponsAvailableByIdCoupon[i];
+              for (let j = 0; j < this.userSelected.length; j++) {
+                const user = this.userSelected[i];
+                //todo
+                if (coupon.state != true) {
+                  let iduser = user['id']
+                  let obj: object = {
+                    id: coupon._id,
+                    idUser: iduser,
+                    idCoupon: coupon.idCoupon,
+                    state: true
+                  }
+                  console.log(obj)
+                  this.couponsAvailableService.putCouponAvailable(obj).subscribe(() => alert('update cuponsAvailable'))
+                  this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+                    coupon['numberOfCouponsAvailable'] = this.numberOfCoupons - cont
+                    this.numberOfCoupons = coupon['numberOfCouponsAvailable']
+
+                  })
+                  break;
+                } else {
+                  alert('los cupones ya estan en uso')
+                  break;
+                }
+              }
+            }
+            this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+              coupon['numberOfCouponsAvailable'] = this.numberOfCoupons
+              this.couponsService.putCoupon(coupon).subscribe(() => alert('update units cupons'))
+  
+            })
+          })
+
+        Swal.fire(
+          'Enviado!',
+          'success',
+        )
+      }
+    })
+  }
+
 
   //generate excel file
   generateExcel() {
