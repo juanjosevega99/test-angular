@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
 import * as XLSX from 'xlsx';
 
@@ -23,6 +23,8 @@ import { User } from 'firebase';
 import { CouponsService } from "src/app/services/coupons.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
+import { AlliesService } from 'src/app/services/allies.service';
+import { DishPromotion } from 'src/app/models/DishPromotion';
 
 
 @Component({
@@ -61,10 +63,17 @@ export class UserManagerComponent implements OnInit {
   //variables for send coupons
   idCoupon: string;
   numberOfCoupons: number;
+
   //variable to know couponsAvailable by idCoupon
   couponsAvailableByIdCoupon: any;
   arrayCoupon : any [] = []
   numberOfUnits: number;
+
+  //promotions
+  dishgetting: DishPromotion[] = [];
+  dishPromoArray= this.dishgetting;
+  allies = [];
+  isIdPromotion=false;
 
 
   constructor(private calendar: NgbCalendar,
@@ -74,7 +83,9 @@ export class UserManagerComponent implements OnInit {
     private couponsService: CouponsService,
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
-    private couponsAvailableService: CouponsAvailableService) {
+    private couponsAvailableService: CouponsAvailableService,
+    private modalpromo: NgbModal,
+    private allyservice: AlliesService) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -129,6 +140,10 @@ export class UserManagerComponent implements OnInit {
       this.numberOfCoupons = coupon.numberOfCouponsAvailable
       this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
     })
+
+    if (localStorage.getItem('idPromotion')) {
+      this.isIdPromotion=true;
+    }
 
   }
 
@@ -194,7 +209,20 @@ export class UserManagerComponent implements OnInit {
   // Send promos
   // ==========================
   sendPromos() {
+    // this.selectPromosSend();
+
+    // if (this.promosSelected.length) {
+    //   this.alertPromos = false;
+
+    //   this.updatePromosUser();
+
+    // } else {
+    //   this.alertPromos = true;
+    // }
+    // console.log(this.promosSelected);
+    // console.log("usuarios para enviar", this.userSelected);
     if (localStorage.getItem('idPromotion')) {
+      
       this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
         let name = promo.name
 
@@ -261,6 +289,35 @@ export class UserManagerComponent implements OnInit {
     } else {
       console.log(this.userSelected);
     }
+  }
+
+  updatePromosUser(){
+    this.userSelected.forEach( user=>{
+      if(user['idsPromos'].length){
+
+      }else{
+        
+      }
+    })
+  }
+
+  loadAllies(content) {
+    this.dishPromoArray = [];
+    this.selectforsend();
+
+    if (this.userSelected.length) {
+
+      this.modalpromo.open(content, { size: 'xl', scrollable: true, centered: true });
+      this.allyservice.getAllies().subscribe((allies: []) => {
+        this.allies = allies; 
+      })
+
+    } else {
+      Swal.fire(
+        'seleccione almenos un usuario'
+      )
+    }
+    
     this.selectforsend();
     // console.log("users", this.usergetting);
     // console.log(this.table);
