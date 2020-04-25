@@ -8,5 +8,6 @@ export class Users{
     phone?:string;
     password?:string;
     promotions?:string[];
-    location?:String;
+    location?:string;
+    idsPromos?:string[];
 }

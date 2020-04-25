@@ -36,4 +36,5 @@ export class OrderByUser{
     idHeadquarter?:string;
     usability?:number;
     selected?:boolean = false;
+    idsPromos?:string[];
 }

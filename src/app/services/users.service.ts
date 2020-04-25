@@ -25,7 +25,7 @@ export class UsersService {
             birthday: users.birthday,
             phone: users.phone,
             password: users.password,
-            promotions: users.promotions
+            idsPromos: users.idsPromos
           };
           return obj;
         })
