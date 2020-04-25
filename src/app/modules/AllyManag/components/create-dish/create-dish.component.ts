@@ -13,6 +13,7 @@ import { DishList } from 'src/app/models/DishList';
 import { Promotions } from 'src/app/models/Promotions';
 import { PromotionsCategoriesService } from 'src/app/services/promotions-categories.service';
 import { PromotionsService } from 'src/app/services/promotions.service';
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 
 
 @Component({
@@ -35,7 +36,8 @@ export class CreateDishComponent implements OnInit {
     description: null,
     preparationTime: [],
     idAccompaniments: [],
-    idPromotion: []
+    idPromotion: [],
+    idHeadquarter:null
   }
 
   editDish: Dishes = {
@@ -109,7 +111,7 @@ export class CreateDishComponent implements OnInit {
   idroute: string[] = [];
   selectuser: boolean;
 
-  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService, private promotionService: PromotionsService) {
+  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService, private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService) {
 
     //flags
     this.loading = true;
@@ -129,6 +131,12 @@ export class CreateDishComponent implements OnInit {
     this.preDish['state'] = this.State;
     this.promotionArray['state'] = this.State;
     this.time = ['segundos', 'minutos', 'horas']
+
+
+    //inicialization local storage 
+    this.saveLocalStorageService.saveLocalStorageIdAlly;
+    this.saveLocalStorageService.saveLocalStorageIdHeadquarter;
+    this.saveLocalStorageService.saveLocalStorageIdPromotion;
 
     //inicialization for charging the data of a dish to edit
     this.activatedRoute.params.subscribe(params => {
@@ -241,6 +249,7 @@ export class CreateDishComponent implements OnInit {
                 if (x.id == element) {
                   this.editDish = y;
                   this.preDish = this.editDish
+                  this.saveLocalStorageService.saveLocalStorageIdPromotion(x.id)
                 }
               }
             })
@@ -695,6 +704,7 @@ export class CreateDishComponent implements OnInit {
       if (result.value) {
         console.log("Array FINAL: ", this.preDish);
         this.preDish['idAlly'] = localStorage.getItem('idAlly');
+        this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter')
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;

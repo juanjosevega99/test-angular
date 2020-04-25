@@ -100,10 +100,16 @@ export class HeadquartersOptionsComponent implements OnInit {
   //   })
   // }
   createHeadquart() {
+    if(localStorage.getItem('idHeadquarter')){
+      localStorage.removeItem('idHeadquarter');
+    }
     this._router.navigate(['/main', 'createHeadquarter', this.identificador])
   }
   editAlly() {
     this._router.navigate(['/main', 'editAlly', this.identificador])
+  }
+  editHeadquarter() {
+    this._router.navigate(['/main', 'editHeadquarter',this.identificador])
   }
   editMenu() {
     this._router.navigate(['/main', 'editmenu', this.identificador])

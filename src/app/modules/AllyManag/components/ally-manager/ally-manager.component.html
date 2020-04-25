@@ -58,6 +58,7 @@
                     <th class="text-center">Logo </th>
                     <th class="text-center">Nombre del establecimiento</th>
                     <th class="text-center">Número de sedes</th>
+                    <th *ngIf="manageProm" class="text-center">Sedes</th>
                     <th class="text-center">Servicios</th>
                     <th class="text-center">Tipo de aliado</th>
                     <th class="text-center">Tipo de comida</th>
@@ -76,6 +77,11 @@
                     <!-- <td> <a (click)="getInHeadquarts(ally.idAlly, i)"> {{ally.nameEstablishment}} </a></td> -->
                     <!-- [routerLink]="['/main', 'headquarts']" -->
                     <td> {{ally.numberHeadquarters}} </td>
+                    <td *ngIf="manageProm"><select class="form-control mr-2" name="headquarters">
+                        <option *ngFor="let hq of ally.nameHq" [ngValue]="hq.id">
+                            {{hq.name}}
+                        </option>
+                    </select> </td>
                     <td>
                         <img *ngIf="ally.services ? ally.services[0]? true :false  : ''" [src]="ally.url1" alt=""
                             class="iconService mx-2">

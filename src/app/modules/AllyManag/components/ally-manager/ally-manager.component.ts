@@ -36,6 +36,11 @@ export class AllyManagerComponent implements OnInit {
   noResults = false
   //variable for the loading
   // loading: boolean;
+
+   // array for search headquuarters
+   arrayHeadquarter: any;
+ /*   headquartersByIdAlly: any[] = []; */
+
   
   constructor(
     private _alliesService: AlliesService,
@@ -83,18 +88,31 @@ export class AllyManagerComponent implements OnInit {
 
       allies.forEach((ally: Allies) => {
         let attentionSchedule: any = "";
+        let headquartersByIdAlly = [];
+
         this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
           .subscribe((schedule) => {
-            
             console.log('fecha',day);
             let dayDb = schedule.attentionSchedule.find(e => e.day == day)
             let msgSchedule = `${dayDb.from} - ${dayDb.to} `
             attentionSchedule = msgSchedule
-
           })
 
-        this._headquartService.getHeadquarterByIdAlly(ally.id).subscribe((services: any[]) => {
+          this._headquartService.getHeadquarterByAllIdAlly(ally.id).subscribe(headquarter => {
+            console.log(headquarter)
+              this.arrayHeadquarter = headquarter
+              this.arrayHeadquarter.forEach(element => {
+                console.log('elem', element);
+                let obj = {
+                  id: element._id,
+                  name: element.name
+                }
+                headquartersByIdAlly.push(obj)
+              });
+           })
 
+        this._headquartService.getHeadquarterByIdAlly(ally.id).subscribe((services: any[]) => {
+          
           let obj: any = {}
           
           obj = {
@@ -105,9 +123,10 @@ export class AllyManagerComponent implements OnInit {
             numberHeadquarters: ally.NumberOfLocations,
             allyType: ally.typeAlly,
             mealType: ally.nameMealsCategories,
-            schedules : attentionSchedule
-
+            schedules : attentionSchedule,
+            nameHq : headquartersByIdAlly
           }
+          
           if (services) {
             obj.services = services
             obj.url1 = services[0] ? "assets/icons/" + services[0].value + ".png" : ""
@@ -118,7 +137,8 @@ export class AllyManagerComponent implements OnInit {
           }
           this.arrayAllyManager.push(obj);
         })
-      })
+       
+       })
 
     })
   }

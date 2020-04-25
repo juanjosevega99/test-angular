@@ -18,9 +18,8 @@ export class HeadquartersService {
     );
   }
 
-  putHeadquarter(headquarter): Observable<Headquarters> {
-    return this.httpclient.put<Headquarters>(
-      environment.UrlBase + "headquarters" + headquarter.id,
+  putHeadquarter(id,headquarter) {
+    return this.httpclient.put(environment.UrlBase + "headquarters/" + id,
       headquarter
     );
   }
@@ -48,6 +47,8 @@ export class HeadquartersService {
               chargeGC: headquarters.chargeGC,
               mobileGC: headquarters.mobileGC,
               telephoneGC: headquarters.telephoneGC,
+              emailGeneral: headquarters.emailGeneral,
+              code: headquarters.code,
               principarlServices: headquarters.principarlServices,
               costPerService: headquarters.costPerService,
               aditionalServices: headquarters.aditionalServices,

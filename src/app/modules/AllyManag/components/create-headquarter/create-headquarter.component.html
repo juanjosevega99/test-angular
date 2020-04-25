@@ -190,7 +190,7 @@
                                 <img src={{x.img}} height="30px" width="30px">
                             </label>
                             <input class="reserva form-control" type="text" (change)="writeCost($event,position)"
-                                [id]=x.name name="{{x.name}}" ngModel required #cost="ngModel" min="0"
+                                [id]=x.name name="{{x.name}}" [(ngModel)]="preHeadquarters.costPerService[position].value" required #cost="ngModel" min="0"
                                 placeholder="$2500" pattern="[0-9]{3,6}"
                                 [ngClass]="{'is-invalid': (!cost.valid && cost.touched || cost.errors?.pattern ),'is-valid':(cost.valid) }">
                         </div>
@@ -329,10 +329,12 @@
             <div class="d-flex flex-column ">
                 <div class="form-group row" style="margin-bottom: 5rem;">
                     <label class="">&nbsp;</label>
-                    <div class="input-group  ">
-                        <!-- [disabled]="!shape.valid" -->
-                        <button  type="submit" class="btn btn-outline-primary" id="btnguardar">
+                    <div class="input-group">
+                        <button *ngIf="!edit" [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary" id="btnguardar">
                             Guardar
+                        </button>
+                        <button *ngIf="edit" (click)="updateHeadquarter()" [disabled]="!shape.valid" type="button" class="btn btn-outline-primary" id="btnguardar">
+                            Actualizar
                         </button>
                     </div>
                 </div>
@@ -350,8 +352,8 @@
 
     </form>
 
-   <!--  <pre>
+    <pre>
         {{ preHeadquarters | json }}
-    </pre> -->
+    </pre>
 
 </div>

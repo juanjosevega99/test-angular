@@ -169,7 +169,7 @@
                                                         </button>
                                                         <button *ngIf="!otherEstablishmentInput"
                                                                 (click)=" deleteCategory()" type="button"
-                                                                class="btn1 btn btn-outline-primary">
+                                                                class="btn2 btn btn-outline-primary ">
                                                                 Borrar
                                                         </button>
                                                         <div *ngIf="forma.get('idTypeOfEstablishment').errors?.required "
@@ -230,7 +230,7 @@
                                                                 Otro
                                                         </button>
                                                         <button *ngIf="!otherMealInput" (click)=" deleteMealCategory()"
-                                                                type="button" class="btn1 btn btn-outline-primary">
+                                                                type="button" class="btn2 btn btn-outline-primary">
                                                                 Borrar
                                                         </button>
                                                         <div *ngIf="forma.get('idMealsCategories').errors?.required "
@@ -434,7 +434,7 @@
                                 </div>
                         </div>
                 </div>
-                {{forma.valid}}
+                
         </form>
 
 </div>

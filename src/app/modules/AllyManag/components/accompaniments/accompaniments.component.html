@@ -40,9 +40,10 @@
                     <nav class="navbar navbar-expand-sm navbar-light bg-light">
                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
                             <li class="nav-item container-fluid d-flex">
-                                <input class="form-control text-center" id="general" type="text"
-                                    placeholder="Buscar acompañamiento ..." #general>
-                            </li><!-- (keyup)="searchbyterm(general.value)" -->
+                                <input (keyup)="searchbyterm(general.value)" name="general"
+                                    class="form-control text-center" id="general" type="text"
+                                    placeholder="Buscar acompañamiento ..." #general [(ngModel)]="generalsearch">
+                            </li>
                         </ul>
                     </nav>
                     <div class="form-group">
@@ -59,12 +60,6 @@
                                     Inactivo
                                 </label>
                             </div>
-                            <!-- <div class="radio m-2 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="radio2" id="radio5">
-                                <label for="radio5">
-                                    Eliminar
-                                </label>
-                            </div> -->
                         </div>
                     </div>
                 </section>
@@ -108,16 +103,9 @@
     <form class="col-12 " (ngSubmit)="saveAccompaniments()" novalidate="">
         <div id="table" class="table-editable">
 
-            <div class="form-group tableFixHead mt-5">
+            <div *ngIf="promoAccompaniments" class="form-group tableFixHead mt-5">
                 <table class="table table-bordered  table-responsive-md table-striped text-center">
                     <tr>
-                        <!-- <th class="text-center">Person Name</th>
-                        <th class="text-center">Age</th>
-                        <th class="text-center">Company Name</th>
-                        <th class="text-center">Country</th>
-                        <th class="text-center">City</th>
-                        <th class="text-center">Sort</th>
-                        <th class="text-center">Remove</th> -->
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Acompañamiento</th>
@@ -127,98 +115,139 @@
                         <th class="text-center">Precio</th>
                         <th class="text-center">F. creación</th>
                         <th class="text-center">F. modificación</th>
+                        <th class="text-center"># modificaciones</th>
                         <th class="text-center" colspan="2">Estado</th>
+                        <th class="text-center">Eliminar</th>
+                    </tr>
+                    <tr *ngFor="let accompPromo of accompanimetsOfPromo; let id = index">
+                        <td>{{accompPromo.quantity}}</td>
+                        <td>{{accompPromo.unitMeasurement}}</td>
+                        <td>{{accompPromo.name}}</td>
+                        <td>{{accompPromo.nameTypeSection}}</td>
+                        <td><input disabled [checked]="accompPromo.typeOfAccompaniment" type="checkbox"></td>
+                        <td>{{accompPromo.preparationTimeNumber}}</td>
+                        <td>{{accompPromo.preparationTimeUnity}}</td>
+                        <td>{{accompPromo.accompanimentValue}}</td>
+                        <td>{{accompPromo.creationDate}}</td>
+                        <td>{{accompPromo.modificationDate}}</td>
+                        <td>{{accompPromo.numberOfModifications}}</td>
+                        <td>
+                            <div class="radio radio-success m-2  form-check-inline">
+                                <input [checked]="accompPromo.state[0].check" value="active" type="radio" name={{index}}
+                                    disabled id="stateAI">
+                                <label style="font-size: 15px;"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="radio radio-danger m-2 form-check-inline">
+                                <input [checked]="!accompPromo.state[0].check" value="inactive" type="radio"
+                                     name={{index}} id="stateAI">
+                                <label style="font-size: 15px;"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="table-remove">
+                                <a (click)="removeAccompanimentOfPromo(id)"><i class="fas fa-trash"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf=" !accompanimetsOfPromo.length " >
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>No has añadido acompañamientos!!</td>
+                    </tr>
+                </table>
+            </div>
+            <div *ngIf="!promoAccompaniments" class="form-group tableFixHead mt-5">
+                <table *ngIf="!flag" class="table table-bordered  table-responsive-md table-striped text-center">
+                    <tr>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Acompañamiento</th>
+                        <th class="text-center">Sección</th>
+                        <th class="text-center">Costo Adicional?</th>
+                        <th class="text-center" colspan="2">T. de preparación</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">F. creación</th>
+                        <th class="text-center">F. modificación</th>
+                        <th class="text-center"># modificaciones</th>
+                        <th class="text-center" colspan="2">Estado</th>
+                        <th class="text-center">Añadir</th>
+                        <th class="text-center">Actualizar</th>
                         <th class="text-center">Eliminar</th>
                     </tr>
                     <tr *ngFor="let person of personList; let id = index">
                         <td>
-                            <span (keyup)="changeValue(id, 'quantity', $event)" 
-                                contenteditable="true">{{person.quantity}}</span><!-- (blur)="updateList(id, 'quantity', $event)" -->
+                            <span contenteditable="true"
+                                (keyup)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'unitMeasurement', $event)"
-                                (blur)="updateList(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
+                            <span contenteditable="true"
+                                (keyup)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'name', $event)"
-                                (blur)="updateList(id, 'name', $event)">{{person.name}}</span>
+                            <span contenteditable="true"
+                                (keyup)="changeValue(id, 'name', $event)">{{person.name}}</span>
                         </td>
                         <td>
-                            <select  class="input-group-text"> <!-- [formControl]="row.get('nameTypeSection')" #sec (change)="seeid(sec.value)" -->
+                            <select #nameSection contenteditable="true"
+                                (click)="changeValueSelect1(id, 'nameTypeSection',nameSection.value)"
+                                class="input-group-text">
                                 <option selected>{{person.nameTypeSection}}</option>
-                                <option  *ngFor="let section of sections" >
+                                <option *ngFor="let section of sections">
                                     {{section.name}}
                                 </option>
                             </select>
-                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'nameTypeSection', $event)"
-                                (blur)="updateList(id, 'nameTypeSection', $event)">{{person.nameTypeSection}}</span> -->
                         </td>
                         <td>
-                            <span contenteditable="true" (click)="changeValue(id, 'typeOfAccompaniment', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">
-                                <input [checked]="person.typeOfAccompaniment" type="checkbox">
-                            </span>
-                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'accompanimentValue', $event)"
-                                (blur)="updateList(id, 'accompanimentValue', $event)"></span> -->
+                            <input contenteditable="true" (click)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
+                                type="checkbox" [checked]="person.typeOfAccompaniment">
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'preparationTimeNumber', $event)"
-                                (blur)="updateList(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
+                            <span contenteditable="true"
+                                (keyup)="changeValue(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
                         </td>
                         <td>
-                            <select  #unity class="input-group-text " value="unity" >
+                            <select #unityTime contenteditable="true"
+                                (click)="changeValueSelect1(id, 'preparationTimeUnity',unityTime.value)"
+                                class="input-group-text ">
                                 <option selected>{{person.preparationTimeUnity}}</option>
-                              <option *ngFor="let time of time">
-                                  {{time}}
-                              </option>
-                          </select>
-                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'preparationTimeUnity', $event)"
-                                (blur)="updateList(id, 'preparationTimeNumber', $event)">{{person.preparationTimeUnity}}</span> -->
+                                <option *ngFor="let time of time">
+                                    {{time}}
+                                </option>
+                            </select>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'accompanimentValue', $event)"
-                                (blur)="updateList(id, 'preparationTimeUnity', $event)">{{person.accompanimentValue}}</span>
+                            <span *ngIf="additionalCost" contenteditable="true"
+                                (keyup)="changeValue(id, 'accompanimentValue', $event)">{{person.accompanimentValue}}</span>
                         </td>
+                        <td>{{person.creationDate}}</td>
+                        <td>{{person.modificationDate}}</td>
+                        <td>{{person.numberOfModifications}}</td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'creationDate', $event)"
-                                (blur)="updateList(id, 'accompanimentValue', $event)">{{person.creationDate}}</span>
-                        </td>
-                        <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'modificationDate', $event)"
-                                (blur)="updateList(id, 'creationDate', $event)">{{person.modificationDate}}</span>
-                        </td>
-                        <td>
-                            <span contenteditable="true" (click)="changeValue(id, 'state', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">
-                            <div class="radio radio-success m-2  form-check-inline"><!-- (change)="checkActive($event,active.value)" [value]="stateA"
-                                [formControl]="row.get('state')"
-                                #active -->
-                            <input [checked]="person.state[0].check" value="active" type="radio" name={{index}} id="stateAI">
-                            <label  style="font-size: 15px;">
-                               
-                            </label>
-                        </div>
-                    </span>
-                            <!-- <span contenteditable="true" (click)="changeValue(id, 'state', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">  -->
-                                <!-- <div class="radio radio-success m-2  form-check-inline"> -->
-                                    <!-- <input [checked]="person.state[0].check" type="radio" >  -->
-                                    <!-- <input [checked]="person.state[0].check" type="radio">
-                                </div> -->
-                            <!-- </span> --><!--  <input (change)="checkActive($event,active.value)" [value]="stateA"
-                                [formControl]="row.get('state')"
-                                #active value="active" type="radio" name={{index}} id="state"> (blur)="updateList(id, 'modificationDate', $event)" -->
-                        </td>
-                        <td>
-                            <span contenteditable="true" (click)="changeValue(id, 'state', $event)" (blur)="updateList(id, 'typeOfAccompaniment', $event)">
-                            <div class="radio radio-danger m-2 form-check-inline"><!-- (change)="checkInactive($event,inactive.value)" [value]="stateI"
-                                [formControl]="row.get('state')"
-                                #inactive -->
-                                <input [checked]="person.state[1].check" value="inactive" type="radio" name={{index}} id="stateAI" >
-                                <label style="font-size: 15px;" >
-                                   
+                            <div class="radio radio-success m-2  form-check-inline">
+                                <input [checked]="person.state[0].check" value="active" type="radio" name={{index}}
+                                    (click)="changeStateI(id,'state',$event)" id="stateAI">
+                                <label style="font-size: 15px;">
+
                                 </label>
                             </div>
-                        </span>
-                            <!-- <span contenteditable="true" (keyup)="changeValue(id, 'state', $event)"
-                                (blur)="updateList(id, 'modificationDate', $event)"> </span> -->
+                        </td>
+                        <td>
+                            <div class="radio radio-danger m-2 form-check-inline">
+                                <input [checked]="!person.state[0].check" value="inactive" type="radio"
+                                    (click)="changeStateI(id,'state',$event)" name={{index}} id="stateAI">
+                                <label style="font-size: 15px;">
+
+                                </label>
+                            </div>
+                        </td>
+                        <td><input type="checkbox" class="m-1" (change)="selectedOne($event, id)"></td>
+                        <td>
+                            <a (click)="update(id)"><i class="fas fa-save"></i></a>
                         </td>
                         <td>
                             <span class="table-remove">
@@ -226,144 +255,124 @@
                             </span>
                         </td>
                     </tr>
-                </table>
-            </div>
-            <section class="col-12 d-flex mt-4 form-group">
-                <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button type="button"  class="btn btn-outline-primary btn-lg">No hay acompañamientos</button>
-                </div>
-                <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button (click)="add()" type="button" class="btn btn-outline-primary btn-lg">
-                        Nuevo acompañamiento</button>
-                </div>
-                <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-                    <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-                </div>
-            </section>
-            <!-- <section class="col-12 d-flex mt-4 form-group">
-            <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                <button type="button"  class="btn btn-outline-primary btn-lg">No hay acompañamientos</button> -->
-<!-- (click)="removeRows()" -->
-<!-- </div>
-            <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                <button (click)="onAddRow()" type="button" class="btn btn-outline-primary btn-lg"> -->
-<!--  *ngIf="addForm.get('rows')" -->
-<!--          Nuevo acompañamiento</button>
-            </div>
-            <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-                <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-            </div>
-        </section> -->
-            
-        </div>
-    </form>
-    <!-- <pre>{{personList|json}}</pre> -->
-</div>
 
-<!--  <form class="col-12 " [formGroup]="addForm" (ngSubmit)="saveAccompaniments()" novalidate="">
-        <div class="form-group tableFixHead mt-5">
-            <table>
-                <thead>
+                </table>
+                <table *ngIf="flag" class="table table-bordered  table-responsive-md table-striped text-center">
                     <tr>
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Acompañamiento</th>
                         <th class="text-center">Sección</th>
-                        <th class="text-center">Costo</th>
+                        <th class="text-center">Costo Adicional?</th>
                         <th class="text-center" colspan="2">T. de preparación</th>
                         <th class="text-center">Precio</th>
-                        <th class="text-center">F. creación</th>
+                        <th class="text-center">F. ingreso</th>
                         <th class="text-center">F. modificación</th>
                         <th class="text-center" colspan="2">Estado</th>
-                        <th class="text-center">Eliminar</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let row of addForm.get('rows')?.controls;let index = index;">
-                        <td><input class="text-center" [formControl]="row.get('quantity')" [value]="hola"> -->
-<!--  [ngClass]="{ 'is-invalid': (!addForm.get('quantity').valid && 
-                             addForm.get('quantity').touched ),'is-valid':(addForm.get('quantity').valid )}"
-                                <div *ngIf="addForm.get('quantity').errors?.required " class="invalid-feedback">
-                                Este campo es requerido
-                            </div>
-                            <div *ngIf="addForm.get('quantity').errors?.minlength " class="invalid-feedback">
-                                Como mínimo 2 caracteres
-                            </div>
-                            <div class="valid-feedback">Ok!</div> -->
-<!-- </td>
-                        <td><input class="text-center" [formControl]="row.get('unitMeasurement')"></td>
-                        <td><input class="text-center" [formControl]="row.get('name')"></td>
-                        <td> -->
-<!-- [value]="section.id" [formControl]="row.get('idTypeSection')" -->
-<!-- <select [formControl]="row.get('nameTypeSection')" #sec (change)="seeid(sec.value)"  class="input-group-text">
-                                <option  *ngFor="let section of sections" >
+                    <tr *ngFor="let dish of newAccompanimentList; let id = index">
+                        <td>
+                            <span (keyup)="changeValue2(id, 'quantity', $event)" contenteditable="true"></span>
+                        </td>
+                        <td>
+                            <span contenteditable="true" (keyup)="changeValue2(id, 'unitMeasurement', $event)"></span>
+                        </td>
+                        <td>
+                            <span contenteditable="true" (keyup)="changeValue2(id, 'name', $event)"></span>
+                        </td>
+                        <td>
+                            <select #nameSection contenteditable="true"
+                                (click)="changeValueSelect(id, 'nameTypeSection',nameSection.value)"
+                                class="input-group-text">
+                                <option *ngFor="let section of sections">
                                     {{section.name}}
                                 </option>
                             </select>
                         </td>
-                        <td><input class="text-center" [formControl]="row.get('typeOfAccompaniment')" type="checkbox" [value]="withCost"
-                                (change)="check($event)" ></td>
-                        <td><input #num class="text-center" [formControl]="row.get('preparationTimeNumber')"></td>
-                        <td> <select  #unity [formControl]="row.get('preparationTimeUnity')"
-                              class="input-group-text " value="unity" >
+                        <td>
+                            <input contenteditable="true" (click)="changeValuecheck(id, 'typeOfAccompaniment',$event)"
+                                type="checkbox">
+                        </td>
+                        <td>
+                            <span contenteditable="true"
+                                (keyup)="changeValue2(id, 'preparationTimeNumber', $event)"></span>
+                        </td>
+                        <td>
+                            <select #unityTime contenteditable="true"
+                                (click)="changeValueSelect(id, 'preparationTimeUnity',unityTime.value)"
+                                class="input-group-text ">
                                 <option *ngFor="let time of time">
                                     {{time}}
                                 </option>
-                            </select> </td>
-                        <td><input class="text-center" [formControl]="row.get('accompanimentValue')"></td>
-                        <td><input disabled class="text-center" value={{date}}></td>
-                        <td><input disabled class="text-center" value={{date}}></td>
-                        <td><div class="radio radio-success m-2  form-check-inline">
-                            <input (change)="checkActive($event,active.value)" [value]="stateA"
-                            [formControl]="row.get('state')"
-                            #active value="active" type="radio" name={{index}} id="state">
-                            <label  style="font-size: 15px;">
-                                Activo
-                            </label>
-                        </div>
-                        <td><div class="radio radio-danger m-2 form-check-inline">
-                            <input (change)="checkInactive($event,inactive.value)" [value]="stateI"
-                            [formControl]="row.get('state')"
-                            #inactive value="inactive" type="radio" name={{index}} id="state" >
-                            <label style="font-size: 15px;" >
-                                Inactivo
-                            </label>
-                        </div></td>
-                        <td> <a (click)="onRemoveRow(index)"><i class="fas fa-trash"></i></a></td>
+                            </select>
+                        </td>
+                        <td>
+                            <span *ngIf="additionalCost" contenteditable="true"
+                                (keyup)="changeValue2(id, 'accompanimentValue', $event)"></span>
+                        </td>
+                        <td>
+                            <p class="text-center">
+                                {{date}}
+                            </p>
+                        </td>
+                        <td>
+                            <p class="text-center">
+                                {{date}}
+                            </p>
+                        </td>
+                        <td>
+                            <div class="radio radio-success m-2  form-check-inline">
+                                <input contenteditable="true" (click)="changeStateA(id, 'state', $event)"
+                                    [checked]="dish.state[0].check" type="radio" name={{index}} id="stateAI">
+                                <label style="font-size: 15px;"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="radio radio-danger m-2 form-check-inline">
+                                <input contenteditable="true" (click)="changeStateA(id, 'state', $event)"
+                                    [checked]="!dish.state[0].check" type="radio" name={{index}} id="stateAI">
+                                <label style="font-size: 15px;"> </label>
+                            </div>
+                        </td>
                     </tr>
-                </tbody>
-            </table> -->
-
-<!-- <label class="label-control">Items</label>
-            <br>
-            <label class="switch">
-                <input type="checkbox" class="form-control" formControlName="items">
-                <span class="slider round">
-                    <span class="on">
-                        {{addForm.value.items_value}}
-                    </span>
-                    <span class="off">
-                        {{addForm.value.items_value}}
-                    </span>
-                </span>
-            </label> -->
-<!-- </div> -->
-
-<!-- <section class="col-12 d-flex mt-4 form-group">
-            <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                <button type="button"  class="btn btn-outline-primary btn-lg">No hay acompañamientos</button> -->
-<!-- (click)="removeRows()" -->
-<!-- </div>
-            <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                <button (click)="onAddRow()" type="button" class="btn btn-outline-primary btn-lg"> -->
-<!--  *ngIf="addForm.get('rows')" -->
-<!--          Nuevo acompañamiento</button>
+                </table>
             </div>
-            <div class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-                <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-            </div>
-        </section> -->
-<!-- </form> -->
 
+            <section class="col-12 d-flex mt-4 justify-content form-group">
+                <div *ngIf="!flag" class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+                    <button *ngIf="promoAccompaniments" (click)="removeAllAccompanimentOfPromo()" type="button" class="btn btn-outline-primary btn-lg">No hay
+                        acompañamientos</button>
+                    <button *ngIf="!promoAccompaniments" type="button" (click)="back()"
+                        class="btn btn-outline-primary btn-lg">Volver</button>
+                </div>
+                <div *ngIf="flag" class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+                    <button type="button" (click)="cancelAdd()" class="btn btn-outline-primary btn-lg">Cancelar</button>
+                </div>
+                <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
+                    <button *ngIf="!promoAccompaniments" (click)="add()" type="button"
+                        class="btn btn-outline-primary btn-lg">
+                        Nuevo acompañamiento</button>
+                    <button *ngIf="promoAccompaniments" (click)="seeList()" type="button"
+                        class="btn btn-outline-primary btn-lg">
+                        Ver todos</button>
+                </div>
+                <!-- <div *ngIf="!flag" class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
+                    <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
+                </div> -->
+                <div *ngIf="flag" class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
+                    <button type="button" (click)="addNewAcc()" class="btn btn-outline-primary btn-lg">Añadir</button>
+                </div>
+            </section>
 
-<!-- <pre>{{rows.value | json}}</pre> -->
+        </div>
+    </form>
+
+    <!-- <section class="col-12 row">
+        <div class="col-6">
+            <pre>{{personList|json}}</pre>
+        </div>
+        <div class="col-6">
+            <pre>{{newAccompanimentList|json}}</pre>
+        </div>
+    </section> -->
+</div>

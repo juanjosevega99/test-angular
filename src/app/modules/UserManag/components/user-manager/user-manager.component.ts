@@ -7,7 +7,6 @@ import * as XLSX from 'xlsx';
 //export pdf
 import 'jspdf-autotable';
 
-
 //service modal
 import { SwallServicesService } from 'src/app/services/swall-services.service';
 import * as jsPDF from 'jspdf';
@@ -18,14 +17,18 @@ import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Promotions } from 'src/app/models/Promotions';
 import { DishPromotion } from 'src/app/models/DishPromotion';
 import { DishesService } from 'src/app/services/dishes.service';
 import { Dishes } from 'src/app/models/Dishes';
-import { PromotionsService } from 'src/app/services/promotions.service';
 import { AlliesService } from 'src/app/services/allies.service';
-import Swal from 'sweetalert2';
 
+import Swal from 'sweetalert2';
+import { PromotionsService } from 'src/app/services/promotions.service';
+import { Promotions } from 'src/app/models/Promotions';
+import { User } from 'firebase';
+import { CouponsService } from "src/app/services/coupons.service";
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
 
 
 @Component({
@@ -39,8 +42,10 @@ export class UserManagerComponent implements OnInit {
   fileName = 'ExcelSheet.xlsx';
 
   //var to know if pdf or excel
-  typepdf = true;
-
+  typepdf = false;
+  typeExcel = false;
+  //variable to know if coupon 
+  typeCoupon = false
   //vars to date filter
   hoveredDate: NgbDate;
   fromDate: NgbDate;
@@ -61,22 +66,36 @@ export class UserManagerComponent implements OnInit {
 
   generalsearch: string = '';
 
-
   usergetting: OrderByUser[] = [];
   //newdateArray: OrderByUser[] = this.users;
   newdateArray = this.usergetting;
-
   filteredArray: OrderByUser[] = [];
   loadingUsers = false;
 
   userSelected: {}[] = [];
-
   //variable para formatear los campos de la tabla
   table: FormGroup;
 
-  constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private swal: SwallServicesService,
-    private userservice: UsersService, private orderservice: OrdersService, private dishesService: DishesService, private promoService: PromotionsService,
-    private allyservice: AlliesService, private modalpromo: NgbModal) {
+  //variables for send coupons
+  idCoupon: string;
+  numberOfCoupons: number;
+  //variable to know couponsAvailable by idCoupon
+  couponsAvailableByIdCoupon: any;
+  arrayCoupon : any [] = []
+  numberOfUnits: number;
+
+
+  constructor(private calendar: NgbCalendar,
+    public formatter: NgbDateParserFormatter,
+    private userservice: UsersService,
+    private orderservice: OrdersService,
+    private couponsService: CouponsService,
+    private saveLocalStorageService: SaveLocalStorageService,
+    private promotionService: PromotionsService,
+    private couponsAvailableService: CouponsAvailableService, private modalpromo:NgbModal, private allyservice:AlliesService,
+    private dishesService:DishesService, private promoService: PromotionsService) {
+
+    this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -93,6 +112,7 @@ export class UserManagerComponent implements OnInit {
     })
 
     this.loadingUsers = true;
+
     this.userservice.getUsers().subscribe(res => {
 
       res.forEach((user: Users) => {
@@ -125,6 +145,11 @@ export class UserManagerComponent implements OnInit {
         })
 
       })
+    })
+
+    this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+      this.numberOfCoupons = coupon.numberOfCouponsAvailable
+      this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
     })
 
   }
@@ -191,6 +216,9 @@ export class UserManagerComponent implements OnInit {
   }
 
   sendCupons() {
+    this.typeCoupon = true
+    this.typeExcel = false;
+    this.typepdf = false;
     this.selectforsend();
   }
 
@@ -239,17 +267,167 @@ export class UserManagerComponent implements OnInit {
         'seleccione almenos un usuario'
       )
     }
+    if (localStorage.getItem('idPromotion')) {
+      this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
+        let name = promo.name
+
+        Swal.fire({
+          html:
+            '¿Estás seguro de que deseas<br>' +
+            ' <b>aplicar la promocion </b>' +
+            `<b>${name}</b><br>` +
+            'a los usuarios filtrados por<br>',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          cancelButtonColor: '#542b81',
+          confirmButtonText: 'Si, enviar!'
+        }).then((result) => {
+          if (result.value) {
+            let idPromo = localStorage.getItem('idPromotion')
+            let nameuser:string[]=[]
+            this.userSelected.forEach((user: Users, i) => {
+              let idUser = user.id
+               
+              this.userservice.getUserById(idUser).subscribe((res: Users) => {
+                let idsP = res.idsPromos
+                idsP.forEach((id, index) => {
+                  if (id == idPromo) {
+                    this.userSelected[i] = this.userSelected[i]
+                    nameuser.push(user.name)
+                    
+                    
+                   
+                  } else {
+                    user.idsPromos.push(idPromo)
+                    this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
+                      Swal.fire({
+                        title: 'Enviado',
+                        text: "La promoción ha sido aplicada a los usuarios filtrados!",
+                        icon: 'success',
+                        confirmButtonColor: '#542b81',
+                        confirmButtonText: 'Ok!'
+                      }).then((result) => {
+                        if (result.value) {
+                          /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
+                        }
+                      })
+                    })
+                  }
+                })
+              })
+              
+            })
+            Swal.fire(JSON.stringify(nameuser))
+           /*  Swal.fire({
+              html: '<b>El usuario: </b>' +
+              `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
+              +
+                  
+                '<b>ya tiene la promoción asociada</b>',
+              icon: 'error',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }) */
+            /* console.log(nameuser); */
+            
+            
+          }
+        })
+      })
+    } else {
+      console.log(this.userSelected);
+    }
+    this.selectforsend();
+    // console.log("users", this.usergetting);
+    // console.log(this.table);
   }
 
   //get data to export
   datafor_Excel() {
+    this.typeExcel = true;
+    this.typeCoupon = false;
     this.typepdf = false;
     this.selectforsend();
   }
   datafor_pdf() {
     this.typepdf = true;
+    this.typeExcel = false;
+    this.typeCoupon = false;
     this.selectforsend();
   }
+
+  // ==========================
+  // methods for send Coupons
+  // ==========================
+
+  sendCouponToUsers() {
+    if (this.userSelected.length > this.numberOfCoupons) {
+      alert("no se puede mandar todos estos usuarios")
+    } else {
+      console.log(this.userSelected)
+      this.swallSendCouponToUsersSelected();
+    }
+  }
+
+  swallSendCouponToUsersSelected() {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas enviar estos cupones!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, enviar!'
+    }).then((result) => {
+      if (result.value) {
+
+        this.couponsAvailableService.getCouponAvailableByIdCoupon(this.idCoupon)
+          .subscribe(coupons => {
+            this.couponsAvailableByIdCoupon = coupons
+            for (let i = 0; i < this.userSelected.length; i++) {
+              let cont = 1
+              const coupon = this.couponsAvailableByIdCoupon[i];
+              for (let j = 0; j < this.userSelected.length; j++) {
+                const user = this.userSelected[i];
+                //todo
+                if (coupon.state != true) {
+                  let iduser = user['id']
+                  let obj: object = {
+                    id: coupon._id,
+                    idUser: iduser,
+                    idCoupon: coupon.idCoupon,
+                    state: true
+                  }
+                  console.log(obj)
+                  this.couponsAvailableService.putCouponAvailable(obj).subscribe(() => alert('update cuponsAvailable'))
+                  this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+                    coupon['numberOfCouponsAvailable'] = this.numberOfCoupons - cont
+                    this.numberOfCoupons = coupon['numberOfCouponsAvailable']
+
+                  })
+                  break;
+                } else {
+                  alert('los cupones ya estan en uso')
+                  break;
+                }
+              }
+            }
+            this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+              coupon['numberOfCouponsAvailable'] = this.numberOfCoupons
+              this.couponsService.putCoupon(coupon).subscribe(() => alert('update units cupons'))
+  
+            })
+          })
+
+        Swal.fire(
+          'Enviado!',
+          'success',
+        )
+      }
+    })
+  }
+
 
   //generate excel file
   generateExcel() {
@@ -345,8 +523,8 @@ export class UserManagerComponent implements OnInit {
     for (var i in this.table.value) {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
-
         objsearch[i] = this.table.value[i];
+        /* console.log(this.table.controls[i].parent.value); *//* this.table.controls['generalsearch'].value */
       }
     }
 

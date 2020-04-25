@@ -25,6 +25,7 @@ export class UsersService {
             birthday: users.birthday,
             phone: users.phone,
             password: users.password,
+            promotions: users.promotions,
             idsPromos: users.idsPromos
           };
           return obj;
@@ -35,6 +36,12 @@ export class UsersService {
 
   getUserById( id:string ){
     return this.httpclient.get( environment.UrlBase + "users/" + id );
+  }
+
+  putUsers(id , users) {
+    return this.httpclient.put(environment.UrlBase + "users/" + id,
+      users
+    );
   }
 
 }

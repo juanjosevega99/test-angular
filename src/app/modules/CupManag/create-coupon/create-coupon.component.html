@@ -85,7 +85,7 @@
                     <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
                         nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.idAllies"
                         (change)="seeNameAlly(nameAllies.value)">
-                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                        
                         <option *ngFor="let ally of arrayAllies" [ngValue]=ally.id>
                             {{ally.name}}
                         </option>
@@ -100,7 +100,7 @@
                         [ngClass]="{'is-invalid': (!nameHeadquarters.valid ) && 
                         nameHeadquarters.touched ,'is-valid':(nameHeadquarters.valid) }"
                         [(ngModel)]="preCoupon.idHeadquarters" (change)="seeNameHeadquarter(nameHeadquarters.value)">
-                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                       
                         <option *ngFor="let headquarter of headquartersByIdAlly;" [ngValue]=" headquarter.id">
                             {{headquarter.name}}
                         </option>
@@ -114,7 +114,7 @@
                         [ngClass]="{'is-invalid': (!idDish.valid ) && 
                         idDish.touched ,'is-valid':(idDish.valid) }"
                         [(ngModel)]="preCoupon.idDishes" (change)="seeNameDish(idDish.value)">
-                        <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                       
                         <option *ngFor="let dish of dishesByIdHeadquarter;" [ngValue]=" dish.id">
                             {{dish.name}}
                         </option>
@@ -131,7 +131,7 @@
                             #nameTypeOfCoupon="ngModel" required [ngClass]="{'is-invalid': (!nameTypeOfCoupon.valid ) && 
                             nameTypeOfCoupon.touched ,'is-valid':(nameTypeOfCoupon.valid) }"
                             [(ngModel)]="preCoupon.idtypeOfCoupon" (change)="seeNameTypeCoupon(nameTypeOfCoupon.value)">
-                            <!-- <option selected>{{preCoupon.nameTypeOfCoupon}}</option> -->
+                           
                             <option *ngFor="let coupon of typeCoupon" 
                                 [ngValue]="coupon.id">
                                 {{coupon.name}}
@@ -239,8 +239,9 @@
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"
                         pattern="[0123456789,.'-]{1,10}"
-                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
-                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles">
+                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || 
+                        numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
+                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles" >
                     <div *ngIf="numberOfUnits.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
                     <div *ngIf="numberOfUnits.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
                     <div class="valid-feedback">Ok!</div>
@@ -287,7 +288,7 @@
                 <div class="col-md-7">
 
                     <div class="row justify-content-center container-fluid">
-                        <button class="btn1 btn btn-outline-primary">Terminos y condiciones </button>
+                        <button class="btn1 btn btn-outline-primary" type="button" >Terminos y condiciones </button>
                     </div>
 
                 </div>
