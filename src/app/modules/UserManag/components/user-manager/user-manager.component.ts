@@ -226,18 +226,18 @@ export class UserManagerComponent implements OnInit {
   // Send promos
   // ==========================
   sendPromos() {
-    this.selectPromosSend();
+    // this.selectPromosSend();
 
-    if (this.promosSelected.length) {
-      this.alertPromos = false;
+    // if (this.promosSelected.length) {
+    //   this.alertPromos = false;
 
-      this.updatePromosUser();
+    //   this.updatePromosUser();
 
-    } else {
-      this.alertPromos = true;
-    }
-    console.log(this.promosSelected);
-    console.log("usuarios para enviar", this.userSelected);
+    // } else {
+    //   this.alertPromos = true;
+    // }
+    // console.log(this.promosSelected);
+    // console.log("usuarios para enviar", this.userSelected);
 
   }
 
