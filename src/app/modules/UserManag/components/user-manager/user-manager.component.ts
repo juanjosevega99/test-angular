@@ -81,7 +81,7 @@ export class UserManagerComponent implements OnInit {
   numberOfCoupons: number;
   //variable to know couponsAvailable by idCoupon
   couponsAvailableByIdCoupon: any;
-  arrayCoupon : any [] = []
+  arrayCoupon: any[] = []
   numberOfUnits: number;
 
 
@@ -92,8 +92,8 @@ export class UserManagerComponent implements OnInit {
     private couponsService: CouponsService,
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
-    private couponsAvailableService: CouponsAvailableService, private modalpromo:NgbModal, private allyservice:AlliesService,
-    private dishesService:DishesService, private promoService: PromotionsService) {
+    private couponsAvailableService: CouponsAvailableService, private modalpromo: NgbModal, private allyservice: AlliesService,
+    private dishesService: DishesService, private promoService: PromotionsService) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -111,41 +111,8 @@ export class UserManagerComponent implements OnInit {
 
     })
 
-    this.loadingUsers = true;
-
-    this.userservice.getUsers().subscribe(res => {
-
-      res.forEach((user: Users) => {
-
-        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
-          if (res.length > 0) {
-
-            const obj: OrderByUser = {};
-
-            res.forEach((order: Orders) => {
-              obj.idUser = user.id;
-              obj.name = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
-              obj.nameAllie = order.nameAllies;
-              obj.nameHeadquarter = order.nameHeadquartes;
-              obj.usability = order.orderValue ? 1 : 0;
-              obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-              obj.idsPromos = user.idsPromos;
-            })
-            this.usergetting.push(obj);
-            this.loadingUsers = false;
-
-          } else {
-            this.loadingUsers = false;
-          }
-        })
-
-      })
-    })
+    // loading users
+    this.loadUsers();
 
     this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
       this.numberOfCoupons = coupon.numberOfCouponsAvailable
@@ -186,6 +153,49 @@ export class UserManagerComponent implements OnInit {
 
   }
 
+  loadUsers() {
+
+    this.usergetting = [];
+
+    this.loadingUsers = true;
+
+    this.userservice.getUsers().subscribe(res => {
+
+      res.forEach((user: Users) => {
+
+        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
+          if (res.length > 0) {
+
+            const obj: OrderByUser = {};
+
+            res.forEach((order: Orders) => {
+              obj.idUser = user.id;
+              obj.name = user.name;
+              obj.email = user.email;
+              obj.phone = user.phone;
+              obj.birthday = this.convertDate(user.birthday);
+              obj.gender = user.gender;
+              obj.nameAllie = order.nameAllies;
+              obj.nameHeadquarter = order.nameHeadquartes;
+              obj.usability = order.orderValue ? 1 : 0;
+              obj.purchaseAmount = order.orderValue;
+              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+              obj.idsPromos = user.idsPromos;
+            })
+            this.usergetting.push(obj);
+            this.loadingUsers = false;
+
+          } else {
+            this.loadingUsers = false;
+          }
+        })
+
+      })
+    })
+
+    this.newdateArray = this.usergetting;
+  }
+
 
   //selected All items
   selectedAll(event) {
@@ -200,7 +210,7 @@ export class UserManagerComponent implements OnInit {
   }
 
   selectforsend() {
-    this.userSelected = []
+    this.userSelected = [];
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
   }
 
@@ -226,47 +236,7 @@ export class UserManagerComponent implements OnInit {
   // Send promos
   // ==========================
   sendPromos() {
-    // this.selectPromosSend();
 
-    // if (this.promosSelected.length) {
-    //   this.alertPromos = false;
-
-    //   this.updatePromosUser();
-
-    // } else {
-    //   this.alertPromos = true;
-    // }
-    // console.log(this.promosSelected);
-    // console.log("usuarios para enviar", this.userSelected);
-
-  }
-
-  updatePromosUser(){
-    this.userSelected.forEach( user=>{
-      if(user['idsPromos'].length){
-
-      }else{
-        
-      }
-    })
-  }
-
-  loadAllies(content) {
-    this.dishPromoArray = [];
-    this.selectforsend();
-
-    if (this.userSelected.length) {
-
-      this.modalpromo.open(content, { size: 'xl', scrollable: true, centered: true });
-      this.allyservice.getAllies().subscribe((allies: []) => {
-        this.allies = allies;
-      })
-
-    } else {
-      Swal.fire(
-        'seleccione almenos un usuario'
-      )
-    }
     if (localStorage.getItem('idPromotion')) {
       this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
         let name = promo.name
@@ -285,59 +255,159 @@ export class UserManagerComponent implements OnInit {
         }).then((result) => {
           if (result.value) {
             let idPromo = localStorage.getItem('idPromotion')
-            let nameuser:string[]=[]
+            let nameuser: string[] = []
             this.userSelected.forEach((user: Users, i) => {
               let idUser = user.id
-               
-              this.userservice.getUserById(idUser).subscribe((res: Users) => {
-                let idsP = res.idsPromos
-                idsP.forEach((id, index) => {
-                  if (id == idPromo) {
-                    this.userSelected[i] = this.userSelected[i]
-                    nameuser.push(user.name)
-                    
-                    
-                   
-                  } else {
-                    user.idsPromos.push(idPromo)
-                    this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
-                      Swal.fire({
-                        title: 'Enviado',
-                        text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                        icon: 'success',
-                        confirmButtonColor: '#542b81',
-                        confirmButtonText: 'Ok!'
-                      }).then((result) => {
-                        if (result.value) {
-                          /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
-                        }
-                      })
+
+              let idsP = user.idsPromos;
+              idsP.forEach((id, index) => {
+                if (id == idPromo) {
+                  this.userSelected[i] = this.userSelected[i]
+                  nameuser.push(user.name)
+
+
+
+                } else {
+                  user.idsPromos.push(idPromo)
+                  this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
+                    Swal.fire({
+                      title: 'Enviado',
+                      text: "La promoción ha sido aplicada a los usuarios filtrados!",
+                      icon: 'success',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    }).then((result) => {
+                      if (result.value) {
+                        /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
+                      }
                     })
-                  }
-                })
+                  })
+                }
               })
-              
+
+
             })
             Swal.fire(JSON.stringify(nameuser))
-           /*  Swal.fire({
-              html: '<b>El usuario: </b>' +
-              `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
-              +
-                  
-                '<b>ya tiene la promoción asociada</b>',
-              icon: 'error',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }) */
+            /*  Swal.fire({
+               html: '<b>El usuario: </b>' +
+               `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
+               +
+                   
+                 '<b>ya tiene la promoción asociada</b>',
+               icon: 'error',
+               confirmButtonColor: '#542b81',
+               confirmButtonText: 'Ok!'
+             }) */
             /* console.log(nameuser); */
-            
-            
+
+
           }
         })
       })
     } else {
+
       console.log(this.userSelected);
+      this.selectPromosSend();
+
+      if (this.promosSelected.length) {
+        this.alertPromos = false;
+        this.updatePromosUser();
+
+      } else {
+        this.alertPromos = true;
+      }
     }
+
+  }
+
+  updatePromosUser() {
+    console.log("actualizando");
+
+    Swal.fire({
+      title: '¿Enviar promociones a los usuarios seleccioandos?',
+      // text: `"de que deseas enviar estos cupones!"`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'enviar!'
+    }).then(res => {
+
+      if (res) {
+        this.userSelected.forEach((user: OrderByUser) => {
+
+          if (user.idsPromos.length) {
+
+            let promosToSend = [];
+
+            this.promosSelected.forEach(promoToSend => {
+
+              user.idsPromos.forEach(promoUser => {
+
+                if (promoToSend !== promoUser) {
+                  console.log("promocion no existe", promoToSend);
+                  promosToSend.push(promoToSend);
+                } else {
+                  console.log("promo ya existe", promoToSend);
+
+                }
+              })
+            })
+
+            if (promosToSend.length) {
+              this.promoToUser(user, promosToSend);
+            } else {
+              Swal.fire({
+                title: '¿promociones enviadas?',
+                // text: `"de que deseas enviar estos cupones!"`,
+                icon: 'success'
+              })
+            }
+
+          } else {
+            // usuario sin promociones se le pasa las promociones
+            this.promoToUser(user, this.promosSelected);
+          }
+        })
+        this.loadUsers();
+      }
+    })
+
+
+  }
+
+  promoToUser(user: OrderByUser, promos: string[]) {
+    const promosend = {
+      idsPromos: promos
+    }
+
+    this.userservice.putUsers(user.idUser, promosend).subscribe((userUpdate: Users) => {
+      console.log("se actualizo el usuario", userUpdate.name);
+      Swal.fire(
+        `promociones enviadas ${userUpdate.name}`
+      )
+
+    })
+  }
+
+  loadAllies(content) {
+
+    this.dishPromoArray = [];
+    this.selectforsend();
+
+    if (this.userSelected.length) {
+
+      this.modalpromo.open(content, { size: 'xl', scrollable: true, centered: true });
+      this.allyservice.getAllies().subscribe((allies: []) => {
+        this.allies = allies;
+      })
+
+    } else {
+      Swal.fire(
+        'seleccione almenos un usuario'
+      )
+    }
+
     this.selectforsend();
     // console.log("users", this.usergetting);
     // console.log(this.table);
@@ -416,7 +486,7 @@ export class UserManagerComponent implements OnInit {
             this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
               coupon['numberOfCouponsAvailable'] = this.numberOfCoupons
               this.couponsService.putCoupon(coupon).subscribe(() => alert('update units cupons'))
-  
+
             })
           })
 
@@ -617,7 +687,7 @@ export class UserManagerComponent implements OnInit {
 
   // load promotions
   loadPromos(event) {
-    
+
     this.loadingPromos = true;
     this.dishPromoArray = [];
     const idAlly = event.target.value;
@@ -700,7 +770,7 @@ export class UserManagerComponent implements OnInit {
                       obj.selected = false;
                     }
 
-                    if (obj.state[0].check){
+                    if (obj.state[0].check) {
 
                       this.dishPromoArray.push(obj)
                     }
