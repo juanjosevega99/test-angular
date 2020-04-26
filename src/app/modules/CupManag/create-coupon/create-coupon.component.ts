@@ -354,6 +354,7 @@ export class CreateCouponComponent implements OnInit {
       // const element = array[i];
       let obj = {
         idCoupon: idCoupon,
+        state: false
       }
       this.couponsAvilableService.postCouponAvailable(obj).subscribe()
       // (couponAvailable:any) => {
