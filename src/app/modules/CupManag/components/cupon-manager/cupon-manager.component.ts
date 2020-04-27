@@ -86,7 +86,7 @@ export class CuponManagerComponent implements OnInit {
             couponAvailable.forEach((element) => {
               let obj: object = {
                 id: element._id,
-                idUser: null,
+                idUser: '',
                 idCoupon: element.idCoupon,
                 state: false
               }

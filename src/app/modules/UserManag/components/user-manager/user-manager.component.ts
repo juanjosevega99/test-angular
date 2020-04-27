@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
@@ -36,7 +36,7 @@ import { CouponsAvailableService } from 'src/app/services/coupons-available.serv
   templateUrl: './user-manager.component.html',
   styleUrls: ['./user-manager.component.scss']
 })
-export class UserManagerComponent implements OnInit {
+export class UserManagerComponent implements OnInit, OnDestroy {
 
   /*name of the excel-file which will be downloaded. */
   fileName = 'ExcelSheet.xlsx';
@@ -159,6 +159,9 @@ export class UserManagerComponent implements OnInit {
   ngOnInit() {
 
   }
+  ngOnDestroy(){
+    this.deleteFromLocal();
+  }
 
   loadUsers() {
 
@@ -256,6 +259,7 @@ export class UserManagerComponent implements OnInit {
 
   deleteFromLocal(){
     localStorage.removeItem('idPromotion');
+    localStorage.removeItem('idCoupon')
   }
 
   // ==========================
