@@ -63,6 +63,7 @@ export class UserManagerComponent implements OnInit {
   allies = [];
   alertPromos = false;
   loadingPromos = false;
+  isIdPromotion = false;
   // =======================
 
 
@@ -157,6 +158,10 @@ export class UserManagerComponent implements OnInit {
 
   loadUsers() {
 
+    if ( localStorage.getItem('idPromotion') ){
+      this.isIdPromotion = true;
+    }
+
     this.usergetting = [];
 
     this.loadingUsers = true;
@@ -240,6 +245,8 @@ export class UserManagerComponent implements OnInit {
   // ==========================
   sendPromos() {
 
+    this.selectforsend();
+
     if (localStorage.getItem('idPromotion')) {
       this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
         let name = promo.name
@@ -249,60 +256,61 @@ export class UserManagerComponent implements OnInit {
             '¿Estás seguro de que deseas<br>' +
             ' <b>aplicar la promocion </b>' +
             `<b>${name}</b><br>` +
-            'a los usuarios filtrados por<br>',
+            'a los usuarios seleccionados<br>',
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#542b81',
           cancelButtonColor: '#542b81',
           confirmButtonText: 'Si, enviar!'
         }).then((result) => {
+
           if (result.value) {
-            let idPromo = localStorage.getItem('idPromotion')
+            let idPromo = localStorage.getItem('idPromotion');
+            
             let nameuser: string[] = []
-            this.userSelected.forEach((user: Users, i) => {
+
+            this.userSelected.forEach((user: OrderByUser, i) => {
+
               let idUser = user.id
-
               let idsP = user.idsPromos;
-              idsP.forEach((id, index) => {
-                if (id == idPromo) {
-                  this.userSelected[i] = this.userSelected[i]
-                  nameuser.push(user.name)
+              let promosTosend  = [];
 
+              if ( idsP.length ){
 
+                idsP.forEach((id, index) => {
+  
+                  if (id !== idPromo) {
 
-                } else {
-                  user.idsPromos.push(idPromo)
-                  this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
-                    Swal.fire({
-                      title: 'Enviado',
-                      text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                      icon: 'success',
-                      confirmButtonColor: '#542b81',
-                      confirmButtonText: 'Ok!'
-                    }).then((result) => {
-                      if (result.value) {
-                        /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
-                      }
-                    })
-                  })
+                    promosTosend.push(idPromo);
+  
+                  }
+
+                })
+
+                if(promosTosend.length){
+
+                  this.promoToUser(user , promosTosend  );
+                  promosTosend = [];  
+                  // this.userservice.putUsers(idUser, promosTosend).subscribe(res => {
+                  //   Swal.fire({
+                  //     title: 'Enviado',
+                  //     text: "La promoción ha sido aplicada a los usuarios filtrados!",
+                  //     icon: 'success',
+                  //     confirmButtonColor: '#542b81',
+                  //     confirmButtonText: 'Ok!'
+                  //   }).then((result) => {
+                  //     if (result.value) {
+                  //       /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
+                  //     }
+                  //   })
+                  // })
                 }
-              })
-
+              }else{
+                // enviar promociones
+                this.promoToUser(user , [idPromo]  );
+              }
 
             })
-            Swal.fire(JSON.stringify(nameuser))
-            /*  Swal.fire({
-               html: '<b>El usuario: </b>' +
-               `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
-               +
-                   
-                 '<b>ya tiene la promoción asociada</b>',
-               icon: 'error',
-               confirmButtonColor: '#542b81',
-               confirmButtonText: 'Ok!'
-             }) */
-            /* console.log(nameuser); */
-
 
           }
         })
