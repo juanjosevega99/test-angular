@@ -111,6 +111,10 @@ export class CuponManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.makeCoupons();
+  }
+  
+  makeCoupons(){
     this.couponsServices.getCoupons().subscribe(res => {
       res.forEach((coupon: Coupons) => {
         let ys = coupon.createDate[0]['year'];
