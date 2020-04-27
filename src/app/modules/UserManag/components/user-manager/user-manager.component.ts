@@ -95,8 +95,12 @@ export class UserManagerComponent implements OnInit {
     private couponsService: CouponsService,
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
-    private couponsAvailableService: CouponsAvailableService, private modalpromo: NgbModal, private allyservice: AlliesService,
-    private dishesService: DishesService, private promoService: PromotionsService) {
+    private couponsAvailableService: CouponsAvailableService,
+    private modalpromo: NgbModal,
+    private allyservice: AlliesService,
+    private dishesService: DishesService,
+    private promoService: PromotionsService,
+    private _router: Router) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -158,7 +162,7 @@ export class UserManagerComponent implements OnInit {
 
   loadUsers() {
 
-    if ( localStorage.getItem('idPromotion') ){
+    if (localStorage.getItem('idPromotion')) {
       this.isIdPromotion = true;
     }
 
@@ -250,7 +254,7 @@ export class UserManagerComponent implements OnInit {
     if (localStorage.getItem('idPromotion')) {
       this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
         let name = promo.name
-
+        let reference = promo.reference
         Swal.fire({
           html:
             '¿Estás seguro de que deseas<br>' +
@@ -266,48 +270,57 @@ export class UserManagerComponent implements OnInit {
 
           if (result.value) {
             let idPromo = localStorage.getItem('idPromotion');
-            
-            let nameuser: string[] = []
 
             this.userSelected.forEach((user: OrderByUser, i) => {
 
-              let idUser = user.id
               let idsP = user.idsPromos;
-              let promosTosend  = [];
+              let count = 0;
 
-              if ( idsP.length ){
+              if (idsP.length) {
 
-                idsP.forEach((id, index) => {
-  
+                idsP.forEach(id => {
+
                   if (id !== idPromo) {
 
-                    promosTosend.push(idPromo);
-  
+                    count += 1
+
                   }
 
                 })
 
-                if(promosTosend.length){
-
-                  this.promoToUser(user , promosTosend  );
-                  promosTosend = [];  
-                  // this.userservice.putUsers(idUser, promosTosend).subscribe(res => {
-                  //   Swal.fire({
-                  //     title: 'Enviado',
-                  //     text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                  //     icon: 'success',
-                  //     confirmButtonColor: '#542b81',
-                  //     confirmButtonText: 'Ok!'
-                  //   }).then((result) => {
-                  //     if (result.value) {
-                  //       /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
-                  //     }
-                  //   })
-                  // })
+                if (!count) {
+                  user.idsPromos.push(idPromo)
+                  /* this.promoToUser(user); */
+                  
+                  
+                  Swal.fire({
+                    title: 'Enviado',
+                    text: "La promoción ha sido aplicada a los usuarios seleccionados!",
+                    icon: 'success',
+                    confirmButtonColor: '#542b81',
+                    confirmButtonText: 'Ok!'
+                  }).then((result) => {
+                    if (result.value) {
+                      this._router.navigate(['/main', 'createDish', reference]);
+                      localStorage.removeItem('idPromotion');
+                    }
+                  })
                 }
-              }else{
+              } else {
                 // enviar promociones
-                this.promoToUser(user , [idPromo]  );
+                this.promoToUser(user, [idPromo]);
+                Swal.fire({
+                  title: 'Enviado',
+                  text: "La promoción ha sido aplicada a los usuarios seleccionados!",
+                  icon: 'success',
+                  confirmButtonColor: '#542b81',
+                  confirmButtonText: 'Ok!'
+                }).then((result) => {
+                  if (result.value) {
+                    this._router.navigate(['/main', 'createDish', reference]);
+                    localStorage.removeItem('idPromotion');
+                  }
+                })
               }
 
             })

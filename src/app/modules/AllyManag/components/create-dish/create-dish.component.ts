@@ -37,7 +37,7 @@ export class CreateDishComponent implements OnInit {
     preparationTime: [],
     idAccompaniments: [],
     idPromotion: [],
-    idHeadquarter:null
+    idHeadquarter: null
   }
 
   editDish: Dishes = {
@@ -110,6 +110,7 @@ export class CreateDishComponent implements OnInit {
   idPromotion: string;
   idroute: string[] = [];
   selectuser: boolean;
+  stateInactive: boolean;
 
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService, private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService) {
 
@@ -119,6 +120,7 @@ export class CreateDishComponent implements OnInit {
     this.seeNewPhoto = false;
     this.promotion = false;
     this.selectuser = false;
+    this.stateInactive = false;
 
     this.State = [{
       state: "active",
@@ -241,6 +243,7 @@ export class CreateDishComponent implements OnInit {
       promos.forEach(x => {
         if (reference == x.reference) {
           promo = x
+          if (x.state[1].check) { this.stateInactive = true }
           this.promotionArray = promo;
           this.chargeDishes.getDishes().subscribe(dishes => {
             dishes.forEach(y => {
@@ -249,7 +252,6 @@ export class CreateDishComponent implements OnInit {
                 if (x.id == element) {
                   this.editDish = y;
                   this.preDish = this.editDish
-                  this.saveLocalStorageService.saveLocalStorageIdPromotion(x.id)
                 }
               }
             })
@@ -258,6 +260,22 @@ export class CreateDishComponent implements OnInit {
         }
       })
     })
+  }
+
+  //select state true
+  correctState() {
+    Swal.fire({
+      text: "El estado de la promoción debe estar en activo para poder seleccionar usuarios!",
+      icon: 'warning',
+      confirmButtonColor: '#542b81',
+      confirmButtonText: 'Ok!'
+    })
+  }
+
+  //redirect to select users
+  goSelectUsers() {
+    this.saveLocalStorageService.saveLocalStorageIdPromotion(this.editDish.id)
+    this._router.navigate(['/main', 'userManager', -1])
   }
 
   //Method for showing new view in the categories field
