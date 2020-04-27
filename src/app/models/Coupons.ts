@@ -15,7 +15,6 @@ export class Coupons {
     expirationDate?:string[];
     expirationTime?:string[];
     name?:string;
-    // idCouponsAvailable:String[];
     numberOfUnits?:number;
     numberOfCouponsAvailable?: number;
     description?:string;

@@ -15,7 +15,7 @@
                     <div class="radio radio-success m-2 form-check form-check-inline">
                         <input class="form-check-input " type="radio" name="radio2" id="radio3"
                             [checked]="State[0].check" #active
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)"
+                            disabled="true"
                             [value]="State[0].state" [checked]="preCoupon.state[0].check">
                         <label for="radio3">
                             Activo
@@ -25,7 +25,6 @@
                     <div class="radio radio-danger m-2 form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="radio2" id="radio4"
                             [checked]="State[1].check" #inactive
-                            (change)="selectedState(active.value,active.checked,inactive.value,inactive.checked)"
                             [value]="State[1].state" [checked]="preCoupon.state[1].check">
                         <label for="radio4">
                             Inactivo
@@ -55,13 +54,6 @@
                             </a>
                         </div>
 
-                        <!-- <ngb-timepicker name="start" [(ngModel)]="preCoupon.createDate[1]" #it="ngModel"
-                            required [ngClass]="{'is-invalid': (!it.valid && it.touched),'is-valid':(it.valid)}"
-                            [meridian]="meridian"></ngb-timepicker> -->
-                        <!-- <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
-                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
-                        [meridian]="meridian">
-                    </ngb-timepicker> -->
                         <div class="col-md-4" *ngIf="i.errors?.required" class="invalid-feedback">*Campo fecha y hora es
                             requerido</div>
                     </div>
