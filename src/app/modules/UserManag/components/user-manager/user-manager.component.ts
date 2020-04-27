@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
 import * as XLSX from 'xlsx';
 
@@ -16,11 +15,6 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { DishPromotion } from 'src/app/models/DishPromotion';
-import { DishesService } from 'src/app/services/dishes.service';
-import { Dishes } from 'src/app/models/Dishes';
-import { AlliesService } from 'src/app/services/allies.service';
 
 import Swal from 'sweetalert2';
 import { PromotionsService } from 'src/app/services/promotions.service';
@@ -29,6 +23,11 @@ import { User } from 'firebase';
 import { CouponsService } from "src/app/services/coupons.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
+import { Router } from '@angular/router';
+import { AlliesService } from 'src/app/services/allies.service';
+import { DishPromotion } from 'src/app/models/DishPromotion';
+import { DishesService } from 'src/app/services/dishes.service';
+import { Dishes } from 'src/app/models/Dishes';
 
 
 @Component({
@@ -54,35 +53,33 @@ export class UserManagerComponent implements OnInit {
   from: string;
   to: string;
 
-  // promotions
-  dishgetting: DishPromotion[] = [];
-  dishPromoArray = this.dishgetting;
-  today: Date;
-  promosSelected = [];
-  allies = [];
-  alertPromos = false;
-  loadingPromos = false;
-
-
   generalsearch: string = '';
 
   usergetting: OrderByUser[] = [];
   //newdateArray: OrderByUser[] = this.users;
   newdateArray = this.usergetting;
   filteredArray: OrderByUser[] = [];
-  loadingUsers = false;
-
   userSelected: {}[] = [];
   //variable para formatear los campos de la tabla
   table: FormGroup;
+  loadingUsers = false;
+  loadingPromos = false;
+  today : Date;
 
   //variables for send coupons
   idCoupon: string;
   numberOfCoupons: number;
+
   //variable to know couponsAvailable by idCoupon
   couponsAvailableByIdCoupon: any;
   arrayCoupon: any[] = []
   numberOfUnits: number;
+
+  //promotions
+  dishgetting: DishPromotion[] = [];
+  dishPromoArray = this.dishgetting;
+  allies = [];
+  isIdPromotion = false;
 
 
   constructor(private calendar: NgbCalendar,
@@ -93,7 +90,8 @@ export class UserManagerComponent implements OnInit {
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
     private couponsAvailableService: CouponsAvailableService, private modalpromo: NgbModal, private allyservice: AlliesService,
-    private dishesService: DishesService, private promoService: PromotionsService) {
+    private dishesService: DishesService, private promoService: PromotionsService,
+    private _router: Router) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -118,6 +116,10 @@ export class UserManagerComponent implements OnInit {
       this.numberOfCoupons = coupon.numberOfCouponsAvailable
       this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
     })
+
+    if (localStorage.getItem('idPromotion')) {
+      this.isIdPromotion = true;
+    }
 
   }
 
@@ -207,22 +209,12 @@ export class UserManagerComponent implements OnInit {
     const checked = event.target.checked;
     event.target.checked = checked;
     this.newdateArray[pos].selected = checked;
+
   }
 
   selectforsend() {
     this.userSelected = [];
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
-  }
-
-  selectedPromo(event, pos: number) {
-    const checked = event.target.checked;
-    event.target.checked = checked;
-    this.dishPromoArray[pos]['selected'] = checked;
-  }
-
-  async selectPromosSend() {
-    this.promosSelected = [];
-    await this.dishPromoArray.forEach(promo => promo['selected'] ? this.promosSelected.push(promo['id']) : this.promosSelected);
   }
 
   sendCupons() {
@@ -237,74 +229,34 @@ export class UserManagerComponent implements OnInit {
   // ==========================
   sendPromos() {
 
+    this.selectforsend();
     if (localStorage.getItem('idPromotion')) {
-      this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
-        let name = promo.name
-
-        Swal.fire({
-          html:
-            '¿Estás seguro de que deseas<br>' +
-            ' <b>aplicar la promocion </b>' +
-            `<b>${name}</b><br>` +
-            'a los usuarios filtrados por<br>',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#542b81',
-          cancelButtonColor: '#542b81',
-          confirmButtonText: 'Si, enviar!'
-        }).then((result) => {
-          if (result.value) {
-            let idPromo = localStorage.getItem('idPromotion')
-            let nameuser: string[] = []
-            this.userSelected.forEach((user: Users, i) => {
-              let idUser = user.id
-
-              let idsP = user.idsPromos;
-              idsP.forEach((id, index) => {
-                if (id == idPromo) {
-                  this.userSelected[i] = this.userSelected[i]
-                  nameuser.push(user.name)
-
-
-
-                } else {
-                  user.idsPromos.push(idPromo)
-                  this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
-                    Swal.fire({
-                      title: 'Enviado',
-                      text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                      icon: 'success',
-                      confirmButtonColor: '#542b81',
-                      confirmButtonText: 'Ok!'
-                    }).then((result) => {
-                      if (result.value) {
-                        /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
-                      }
-                    })
-                  })
-                }
-              })
-
-
+      if (this.userSelected.length) {
+        this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
+          let name = promo.name
+          let reference = promo.reference
+          Swal.fire({
+            html:
+              '¿Estás seguro de que deseas<br>' +
+              ' <b>aplicar la promocion </b>' +
+              `<b>${name}</b><br>` +
+              'a los usuarios filtrados<br>',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#542b81',
+            cancelButtonColor: '#542b81',
+            confirmButtonText: 'Si, enviar!'
+          }).then((result) => {
+            if (result.value) {
+              let newUserSelectedforPut: {}[] = [];
+              let noSendUserSelectedforPut: {}[] = [];
+              this.userSelected.forEach((user: Users) => {
             })
-            Swal.fire(JSON.stringify(nameuser))
-            /*  Swal.fire({
-               html: '<b>El usuario: </b>' +
-               `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
-               +
-                   
-                 '<b>ya tiene la promoción asociada</b>',
-               icon: 'error',
-               confirmButtonColor: '#542b81',
-               confirmButtonText: 'Ok!'
-             }) */
-            /* console.log(nameuser); */
-
-
           }
         })
       })
-    } else {
+    }
+  } else {
 
       console.log(this.userSelected);
       this.selectPromosSend();
@@ -407,7 +359,6 @@ export class UserManagerComponent implements OnInit {
         'seleccione almenos un usuario'
       )
     }
-
     this.selectforsend();
     // console.log("users", this.usergetting);
     // console.log(this.table);
@@ -678,6 +629,83 @@ export class UserManagerComponent implements OnInit {
 
   }
 
+
+  // searchbyterm(termino: string) {
+
+  //   termino = termino.toLowerCase();
+  //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+  //   if (this.newdateArray.length == this.usergetting.length) {
+
+  //     this.newdateArray = this.usergetting.filter(function (item) {
+  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //     });
+
+  //   } else {
+
+  //     let aux = this.newdateArray;
+  //     this.newdateArray = aux.filter(function (item) {
+  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //     });
+
+  //   }
+
+  //   // if (termino) {
+  //   //   termino = termino.toLowerCase();
+  //   //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
+
+  //   //   if (this.filteredArray.length) {
+
+  //   //     this.newdateArray = this.filteredArray.filter(function (item) {
+  //   //       //We test each element of the object to see if one string matches the regexp.
+  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //   //     });
+  //   //   } else {
+
+  //   //     this.newdateArray = this.usergetting.filter(function (item) {
+  //   //       //We test each element of the object to see if one string matches the regexp.
+  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //   //     });
+  //   //     this.filteredArray = this.usergetting.filter(function (item) {
+  //   //       //We test each element of the object to see if one string matches the regexp.
+  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
+  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
+
+  //   //     });
+
+  //   //   }
+
+  //   // } else {
+
+  //   //   let count = 0;
+  //   //   for (var i in this.table.value) {
+  //   //     if (this.table.value[i] == null || this.table.value[i] == "") {
+  //   //       count += 1;
+  //   //     }
+  //   //   }
+
+  //   //   if (count > 9 && !this.generalsearch) {
+
+  //   //     this.newdateArray = this.usergetting;
+  //   //     this.filteredArray = []
+  //   //     count = 0;
+
+  //   //   } else {
+
+  //   //     this.newdateArray = this.filteredArray;
+  //   //     count = 0;
+  //   //   }
+  //   // }
+
+  // }
 
   convertDate(date: Date): string {
     const d = new Date(date);
