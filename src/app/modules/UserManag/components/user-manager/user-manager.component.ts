@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
 import * as XLSX from 'xlsx';
 
@@ -15,6 +16,11 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { OrderByUser } from '../../../../models/OrderByUser';
 import { Orders } from '../../../../models/Orders';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { DishPromotion } from 'src/app/models/DishPromotion';
+import { DishesService } from 'src/app/services/dishes.service';
+import { Dishes } from 'src/app/models/Dishes';
+import { AlliesService } from 'src/app/services/allies.service';
 
 import Swal from 'sweetalert2';
 import { PromotionsService } from 'src/app/services/promotions.service';
@@ -23,8 +29,6 @@ import { User } from 'firebase';
 import { CouponsService } from "src/app/services/coupons.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
-import { AlliesService } from 'src/app/services/allies.service';
-import { DishPromotion } from 'src/app/models/DishPromotion';
 
 
 @Component({
@@ -50,12 +54,27 @@ export class UserManagerComponent implements OnInit {
   from: string;
   to: string;
 
+  // =======================
+  // promotions
+  dishgetting: DishPromotion[] = [];
+  dishPromoArray = this.dishgetting;
+  today: Date;
+  promosSelected = [];
+  allies = [];
+  alertPromos = false;
+  loadingPromos = false;
+  isIdPromotion = false;
+  // =======================
+
+
   generalsearch: string = '';
 
   usergetting: OrderByUser[] = [];
   //newdateArray: OrderByUser[] = this.users;
   newdateArray = this.usergetting;
   filteredArray: OrderByUser[] = [];
+  loadingUsers = false;
+
   userSelected: {}[] = [];
   //variable para formatear los campos de la tabla
   table: FormGroup;
@@ -63,17 +82,10 @@ export class UserManagerComponent implements OnInit {
   //variables for send coupons
   idCoupon: string;
   numberOfCoupons: number;
-
   //variable to know couponsAvailable by idCoupon
   couponsAvailableByIdCoupon: any;
   arrayCoupon: any[] = []
   numberOfUnits: number;
-
-  //promotions
-  dishgetting: DishPromotion[] = [];
-  dishPromoArray = this.dishgetting;
-  allies = [];
-  isIdPromotion = false;
 
 
   constructor(private calendar: NgbCalendar,
@@ -83,9 +95,8 @@ export class UserManagerComponent implements OnInit {
     private couponsService: CouponsService,
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
-    private couponsAvailableService: CouponsAvailableService,
-    private modalpromo: NgbModal,
-    private allyservice: AlliesService) {
+    private couponsAvailableService: CouponsAvailableService, private modalpromo: NgbModal, private allyservice: AlliesService,
+    private dishesService: DishesService, private promoService: PromotionsService) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -103,38 +114,8 @@ export class UserManagerComponent implements OnInit {
 
     })
 
-
-    this.userservice.getUsers().subscribe(res => {
-
-      res.forEach((user: Users) => {
-
-        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
-          if (res.length > 0) {
-
-            const obj: OrderByUser = {};
-
-            res.forEach((order: Orders) => {
-              obj.id = user.id;
-              obj.name = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
-              obj.nameAllie = order.nameAllies;
-              obj.nameHeadquarter = order.nameHeadquartes;
-              obj.usability = order.orderValue ? 1 : 0;
-              obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-              obj.idsPromos = user.idsPromos;
-            }
-            )
-            this.usergetting.push(obj);
-
-          }
-        })
-
-      })
-    })
+    // loading users
+    this.loadUsers();
 
     this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
       this.numberOfCoupons = coupon.numberOfCouponsAvailable
@@ -179,6 +160,53 @@ export class UserManagerComponent implements OnInit {
 
   }
 
+  loadUsers() {
+
+    if (localStorage.getItem('idPromotion')) {
+      this.isIdPromotion = true;
+    }
+
+    this.usergetting = [];
+
+    this.loadingUsers = true;
+
+    this.userservice.getUsers().subscribe(res => {
+
+      res.forEach((user: Users) => {
+
+        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
+          if (res.length > 0) {
+
+            const obj: OrderByUser = {};
+
+            res.forEach((order: Orders) => {
+              obj.idUser = user.id;
+              obj.name = user.name;
+              obj.email = user.email;
+              obj.phone = user.phone;
+              obj.birthday = this.convertDate(user.birthday);
+              obj.gender = user.gender;
+              obj.nameAllie = order.nameAllies;
+              obj.nameHeadquarter = order.nameHeadquartes;
+              obj.usability = order.orderValue ? 1 : 0;
+              obj.purchaseAmount = order.orderValue;
+              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+              obj.idsPromos = user.idsPromos;
+            })
+            this.usergetting.push(obj);
+            this.loadingUsers = false;
+
+          } else {
+            this.loadingUsers = false;
+          }
+        })
+
+      })
+    })
+
+    this.newdateArray = this.usergetting;
+  }
+
 
   //selected All items
   selectedAll(event) {
@@ -190,11 +218,10 @@ export class UserManagerComponent implements OnInit {
     const checked = event.target.checked;
     event.target.checked = checked;
     this.newdateArray[pos].selected = checked;
-
   }
 
   selectforsend() {
-    this.userSelected = []
+    this.userSelected = [];
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
   }
 
@@ -203,6 +230,17 @@ export class UserManagerComponent implements OnInit {
     return fecha;
   }
 
+  selectedPromo(event, pos: number) {
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    this.dishPromoArray[pos]['selected'] = checked;
+  }
+  // =====================================
+
+  async selectPromosSend() {
+    this.promosSelected = [];
+    await this.dishPromoArray.forEach(promo => promo['selected'] ? this.promosSelected.push(promo['id']) : this.promosSelected);
+  }
 
   sendCupons() {
 
@@ -212,25 +250,22 @@ export class UserManagerComponent implements OnInit {
     this.typepdf = false;
 
   }
+  // ==========================
+  // delete idpromo from localstorage
+  // ==========================
+
+  deleteFromLocal(){
+    localStorage.removeItem('idPromotion');
+  }
 
   // ==========================
   // Send promos
   // ==========================
   sendPromos() {
-    // this.selectPromosSend();
 
-    // if (this.promosSelected.length) {
-    //   this.alertPromos = false;
+    this.selectforsend();
 
-    //   this.updatePromosUser();
-
-    // } else {
-    //   this.alertPromos = true;
-    // }
-    // console.log(this.promosSelected);
-    // console.log("usuarios para enviar", this.userSelected);
     if (localStorage.getItem('idPromotion')) {
-
       this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
         let name = promo.name
 
@@ -239,76 +274,137 @@ export class UserManagerComponent implements OnInit {
             '¿Estás seguro de que deseas<br>' +
             ' <b>aplicar la promocion </b>' +
             `<b>${name}</b><br>` +
-            'a los usuarios filtrados por<br>',
+            'a los usuarios seleccionados<br>',
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#542b81',
           cancelButtonColor: '#542b81',
           confirmButtonText: 'Si, enviar!'
         }).then((result) => {
+
           if (result.value) {
-            let idPromo = localStorage.getItem('idPromotion')
-            let nameuser: string[] = []
-            this.userSelected.forEach((user: Users, i) => {
-              let idUser = user.id
-              this.userservice.getUserById(idUser).subscribe((res: Users) => {
-                let idsP = res.idsPromos
-                idsP.forEach((id, index) => {
-                  if (id == idPromo) {
-                    this.userSelected[i] = this.userSelected[i]
-                    nameuser.push(user.name)
-                  } else {
-                    user.idsPromos.push(idPromo)
-                    this.userservice.putUsers(idUser, this.userSelected[i]).subscribe(res => {
-                      Swal.fire({
-                        title: 'Enviado',
-                        text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                        icon: 'success',
-                        confirmButtonColor: '#542b81',
-                        confirmButtonText: 'Ok!'
-                      }).then((result) => {
-                        if (result.value) {
-                          /* this._router.navigate(['/main', 'createDish', this.identificatorbyRoot]); */
-                        }
-                      })
-                    })
-                  }
-                })
-              })
+            let idPromo = localStorage.getItem('idPromotion');
+
+            this.userSelected.forEach((user: OrderByUser, i) => {
+
+              const idsP = user.idsPromos;
+
+              if (idsP.length) {
+
+                let promoexist = idsP.indexOf(idPromo); // it's -1 if not exist
+                
+                if ( promoexist < 0 ) {
+                  user.idsPromos.push(idPromo);
+                  this.promoToUser(user);
+
+                } else {
+                  Swal.fire({
+                    title: 'promociones enviadas satisfactoriamente',
+                    // text: `"de que deseas enviar estos cupones!"`,
+                    icon: 'success'
+                  })
+                }
+              } else {
+                // enviar promociones
+                user.idsPromos.push(idPromo);
+                this.promoToUser(user);
+              }
 
             })
-            /* Swal.fire(JSON.stringify(nameuser)) */
-            /*  Swal.fire({
-               html: '<b>El usuario: </b>' +
-               `<ul><li *ngFor="let nameu of nameuser"> {{nameu}} </li></ul>`
-               +
-                   
-                 '<b>ya tiene la promoción asociada</b>',
-               icon: 'error',
-               confirmButtonColor: '#542b81',
-               confirmButtonText: 'Ok!'
-             }) */
-            /* console.log(nameuser); */
 
           }
         })
       })
     } else {
+
       console.log(this.userSelected);
+      this.selectPromosSend();
+
+      if (this.promosSelected.length) {
+        this.alertPromos = false;
+        this.updatePromosUser();
+
+      } else {
+        this.alertPromos = true;
+      }
     }
+
   }
 
   updatePromosUser() {
-    this.userSelected.forEach(user => {
-      if (user['idsPromos'].length) {
 
-      } else {
+    Swal.fire({
+      title: '¿Enviar promociones a los usuarios seleccioandos?',
+      // text: `"de que deseas enviar estos cupones!"`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'enviar!'
+    }).then(res => {
 
+      if (res) {
+        this.userSelected.forEach((user: OrderByUser) => {
+
+          if (user.idsPromos.length) {
+
+            let promosToSend = [];
+            let count = 0;
+            this.promosSelected.forEach(promoToSend => {
+
+              count += 1;
+              let promoexits = user.idsPromos.indexOf(promoToSend); // it's -1 if not exist
+
+              if (promoexits < 0) {
+                // promocion no existe
+                promosToSend.push(promoToSend);
+              }
+
+            })
+
+            if (promosToSend.length && count === this.promosSelected.length) {
+              user.idsPromos = user.idsPromos.concat(promosToSend);
+              this.promoToUser(user);
+            } else {
+              Swal.fire({
+                title: 'promociones enviadas satisfactoriamente',
+                // text: `"de que deseas enviar estos cupones!"`,
+                icon: 'success'
+              })
+            }
+
+          } else {
+            // usuario sin promociones se le pasa las promociones
+            user.idsPromos = this.promosSelected;
+            this.promoToUser(user);
+          }
+        })
+        this.loadUsers();
       }
+    })
+
+
+  }
+
+  promoToUser(user: OrderByUser) {
+    const promosend = {
+      idsPromos: user.idsPromos
+    }
+
+    this.userservice.putUsers(user.idUser, promosend).subscribe((userUpdate: Users) => {
+      console.log("promociones enviadas satisfactoriamente");
+      Swal.fire({
+        title: 'promociones enviadas satisfactoriamente',
+        // text: `"de que deseas enviar estos cupones!"`,
+        icon: 'success'
+      })
+
+
     })
   }
 
   loadAllies(content) {
+
     this.dishPromoArray = [];
     this.selectforsend();
 
@@ -669,87 +765,115 @@ export class UserManagerComponent implements OnInit {
   }
 
 
-  // searchbyterm(termino: string) {
-
-  //   termino = termino.toLowerCase();
-  //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-  //   if (this.newdateArray.length == this.usergetting.length) {
-
-  //     this.newdateArray = this.usergetting.filter(function (item) {
-  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //     });
-
-  //   } else {
-
-  //     let aux = this.newdateArray;
-  //     this.newdateArray = aux.filter(function (item) {
-  //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //     });
-
-  //   }
-
-  //   // if (termino) {
-  //   //   termino = termino.toLowerCase();
-  //   //   var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-  //   //   if (this.filteredArray.length) {
-
-  //   //     this.newdateArray = this.filteredArray.filter(function (item) {
-  //   //       //We test each element of the object to see if one string matches the regexp.
-  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //   //     });
-  //   //   } else {
-
-  //   //     this.newdateArray = this.usergetting.filter(function (item) {
-  //   //       //We test each element of the object to see if one string matches the regexp.
-  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //   //     });
-  //   //     this.filteredArray = this.usergetting.filter(function (item) {
-  //   //       //We test each element of the object to see if one string matches the regexp.
-  //   //       return (myRegex.test(item.registerDate) || myRegex.test(item.name) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-  //   //         myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.usability.toString()) || myRegex.test(item.purchaseAmount.toString()))
-
-  //   //     });
-
-  //   //   }
-
-  //   // } else {
-
-  //   //   let count = 0;
-  //   //   for (var i in this.table.value) {
-  //   //     if (this.table.value[i] == null || this.table.value[i] == "") {
-  //   //       count += 1;
-  //   //     }
-  //   //   }
-
-  //   //   if (count > 9 && !this.generalsearch) {
-
-  //   //     this.newdateArray = this.usergetting;
-  //   //     this.filteredArray = []
-  //   //     count = 0;
-
-  //   //   } else {
-
-  //   //     this.newdateArray = this.filteredArray;
-  //   //     count = 0;
-  //   //   }
-  //   // }
-
-  // }
-
   convertDate(date: Date): string {
     const d = new Date(date);
     const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
     return n;
+  }
+
+  // load promotions
+  loadPromos(event) {
+
+    this.loadingPromos = true;
+    this.dishPromoArray = [];
+    const idAlly = event.target.value;
+
+    this.dishesService.getDishesByIdAlly(idAlly).subscribe(res => {
+      if (res.length > 0) {
+        res.forEach((dish: Dishes) => {
+          if (dish.idPromotion != null) {
+            for (let item = 0; item < dish.idPromotion.length; item++) {
+              let iditem = dish.idPromotion[item];
+
+              this.promoService.getPromotions().subscribe(res => {
+                res.forEach((promo: Promotions) => {
+                  if (iditem == promo.id) {
+                    let yf = promo.endDatePromotion[0]['year'];
+                    let mf = promo.endDatePromotion[0]['month'];
+                    let df = promo.endDatePromotion[0]['day'];
+                    let hf = promo.endDatePromotion[1]['hour'];
+                    let minf = promo.endDatePromotion[1]['minute'];
+
+                    let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
+                    let datee = new Date(yf, mf, df, hf, minf)
+                    let timee = datee.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+
+                    let ys = promo.promotionStartDate[0]['year'];
+                    let ms = promo.promotionStartDate[0]['month'];
+                    let ds = promo.promotionStartDate[0]['day'];
+                    let hs = promo.promotionStartDate[1]['hour'];
+                    let mins = promo.promotionStartDate[1]['minute'];
+
+                    let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
+                    let datei = new Date(ys, ms, ds, hs, mins)
+                    let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+                    let diff = dateF - dateS;
+
+                    this.today = new Date()
+                    let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                    let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+
+                    const obj: any = {};
+
+                    obj.id = promo.id;
+                    obj.reference = `${dish.reference}-${item + 1}`;
+                    obj.nameDishesCategories = dish.nameDishesCategories;
+                    obj.name = dish.name;
+                    obj.photo = promo.photo;
+                    obj.price = dish.price;
+                    obj.namepromo = promo.name;
+                    obj.pricepromo = promo.price;
+                    obj.daysPromo = diff / (1000 * 60 * 60 * 24);
+                    obj.promotionStartDate = promo.promotionStartDate;
+                    obj.timestart = timei;
+                    obj.endDatePromotion = promo.endDatePromotion;
+                    obj.timeend = timee;
+                    /* obj.state = promo.state; */
+
+
+                    if (datetoday >= datestart && datetoday <= datefinish) {
+                      /* obj.state = promo.state */
+                      let stateDate: any = [{
+                        state: "active",
+                        check: true
+                      }, {
+                        state: "inactive",
+                        check: false
+                      }]
+                      obj.state = stateDate
+                    } else if (datetoday > datefinish || datetoday < datestart) {
+                      let stateDate: any = [{
+                        state: "active",
+                        check: false
+                      }, {
+                        state: "inactive",
+                        check: true
+                      }]
+                      obj.state = stateDate
+                      obj.selected = false;
+                    }
+
+                    if (obj.state[0].check) {
+
+                      this.dishPromoArray.push(obj)
+                    }
+                    // const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
+                    // this.promoService.putPromotion(iditem, promee).subscribe(res => { })
+
+                  }
+                })
+              })
+            }
+            this.loadingPromos = false;
+          }
+        })
+      } else {
+        this.loadingPromos = false;
+      }
+    })
   }
 
 }
