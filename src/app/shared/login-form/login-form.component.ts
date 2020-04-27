@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProfilesService } from '../../services/profiles.service';
-import { Profiles } from 'src/app/models/Profiles';
 import Swal from 'sweetalert2';
 
 
@@ -17,7 +15,7 @@ export class LoginFormComponent implements OnInit {
 
   email: string;
   pass: string;
-  signError: boolean;
+  signError= false;
 
   seepass: boolean = false;
   Typetext = 'password';
@@ -28,7 +26,7 @@ export class LoginFormComponent implements OnInit {
     private serviceProfile: ProfilesService) { }
 
   ngOnInit() {
-    this.signError = true;
+    // this.signError = true;
 
     if( localStorage.getItem('profile')){
       let profile = JSON.parse(localStorage.getItem('profile'));
@@ -76,7 +74,7 @@ export class LoginFormComponent implements OnInit {
       }).catch(err => {
 
         this.spinner.hide();
-        this.signError = false;
+        this.signError = true;
 
       }
       );
