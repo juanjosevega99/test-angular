@@ -1,20 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 //services
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service"
 import { CouponsService } from 'src/app/services/coupons.service';
-import { UsersService } from 'src/app/services/users.service';
-import { OrdersService } from 'src/app/services/orders.service';
+import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
 //models
 import { Coupons } from 'src/app/models/Coupons';
-import { CouponList } from 'src/app/models/CouponList';
-import { OrderByUser } from 'src/app/models/OrderByUser';
-import { Orders } from 'src/app/models/Orders';
-import { Users } from 'src/app/models/Users';
-
-
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cupon-manager',
@@ -39,47 +31,72 @@ export class CuponManagerComponent implements OnInit {
   //variable of don't results
   noResults = false
 
-  //variables for users
-  usergetting: OrderByUser[] = []; //tofo
-  newdateArray = this.usergetting;
   constructor(
     private couponsServices: CouponsService,
     private saveLocalStorageServices: SaveLocalStorageService,
-    private _router: Router, private userservice: UsersService,
-    private orderservice: OrdersService
-
+    private _router: Router,
+    private couponsAvailableService: CouponsAvailableService,
+  
   ) {
-
-    //inicialization users by ally 
-    this.userservice.getUsers().subscribe(res => {
-
-      res.forEach((user: Users) => {
-
-        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
-          if (res.length > 0) {
-
-            const obj: OrderByUser = {};
-
-            res.forEach((order: Orders) => {
-              obj.name = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
-              obj.nameAllie = order.nameAllies;
-              obj.nameHeadquarter = order.nameHeadquartes;
-              obj.usability = order.orderValue ? 1 : 0;
-              obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-            }
-            )
-            this.usergetting.push(obj);
-
+    // inicilization current date 
+    let currentDate: any;
+    currentDate = new Date();
+    let formatDate = currentDate.toLocaleString('es-ES', {year: 'numeric' , month: 'numeric', day: '2-digit' });
+    let arrayDate = formatDate.split('/').map(x=>+x);
+    let objtDate: any = {};
+    let arrayObjDate: any[] = []
+    objtDate.day = arrayDate[0];
+    objtDate.month = arrayDate[1];
+    objtDate.year = arrayDate[2];
+    arrayObjDate = objtDate
+  // function for compare of expiration date with current date
+    function compareObj(a, b) {
+      var aKeys = Object.keys(a).sort();
+      var bKeys = Object.keys(b).sort();
+      if (aKeys.length !== bKeys.length) {
+          return false;
+      }
+      if (aKeys.join('') !== bKeys.join('')) {
+          return false;
+      }
+      for (var i = 0; i < aKeys.length; i++) {
+          if ( a[aKeys[i]]  !== b[bKeys[i]]) {
+              return false;
           }
-        })
-
+      }
+      return true;
+  }
+    this.couponsServices.getCoupons().subscribe(res => {
+      res.forEach((coupon: Coupons) =>   {
+        let endDate = coupon.expirationDate[0]
+        //Validation for expiration cupón
+        let resulEndDate = compareObj(endDate,objtDate)
+        if ( resulEndDate == true){
+          let state: any = [{
+            state: "active",
+            check: false
+          }, {
+            state: "inactive",
+            check: true
+          }]
+          coupon['state'] = state
+          coupon['numberOfCouponsAvailable'] = coupon['numberOfUnits']
+          this.couponsServices.putCoupon(coupon).subscribe()
+          this.couponsAvailableService.getCouponAvailableByIdCoupon(coupon.id).subscribe((couponAvailable:any) => {
+            couponAvailable.forEach((element) => {
+              let obj: object = {
+                id: element._id,
+                idUser: null,
+                idCoupon: element.idCoupon,
+                state: false
+              }
+              this.couponsAvailableService.putCouponAvailable(obj).subscribe()
+            });
+          })
+        }
       })
     })
+    //inicialization users by ally 
     //clean local storage  for ally and headquarter
     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
 
@@ -88,6 +105,12 @@ export class CuponManagerComponent implements OnInit {
       "nameAllies": new FormControl(),
       "general": new FormControl()
     })
+    
+
+
+  }
+
+  ngOnInit() {
     this.couponsServices.getCoupons().subscribe(res => {
       res.forEach((coupon: Coupons) => {
         let ys = coupon.createDate[0]['year'];
@@ -96,11 +119,6 @@ export class CuponManagerComponent implements OnInit {
 
         let createDate = [`${ds}/${ms}/${ys}`]
 
-        // let yf = coupon.expirationDate[0]['year'];
-        // let mf = coupon.expirationDate[0]['month'];
-        // let df = coupon.expirationDate[0]['day'];
-
-        // let finishDate = [`${df}/${mf}/${yf}`]
         const obj: Coupons = {};
         obj.id = coupon.id;
         obj.name = coupon.name;
@@ -110,7 +128,6 @@ export class CuponManagerComponent implements OnInit {
         obj.numberOfUnits = coupon.numberOfUnits;
         obj.numberOfCouponsAvailable = coupon.numberOfCouponsAvailable
         obj.createDate = createDate;
-        // obj.expirationDate = finishDate
         obj.state = coupon.state
 
         if (coupon.expirationDate.length && coupon.expirationTime.length != 0) {
@@ -120,8 +137,8 @@ export class CuponManagerComponent implements OnInit {
 
           let finishDate = [`${df}/${mf}/${yf}`]
           obj.expirationDate = finishDate
-        }else{
-          let msg= ["30 días despues de activarlo"]
+        } else {
+          let msg = ["30 días despues de activarlo"]
           obj.expirationDate = msg
         }
 
@@ -129,10 +146,6 @@ export class CuponManagerComponent implements OnInit {
 
       })
     })
-  }
-
-  ngOnInit() {
-
   }
   goToEditCoupon(idCoupon: string, i) {
 
@@ -143,42 +156,7 @@ export class CuponManagerComponent implements OnInit {
     this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
     this._router.navigate(['/main', 'userManager', i])
   }
-  //method to convert the modification date
-  convertDate(date: Date): string {
-    const d = new Date(date);
-    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-    return n;
-  }
-  //method for updating the state to active
-  changeStateA(idCoupon) {
-    this.couponsServices.getCouponById(idCoupon).subscribe(coupon => {
-      this.getCuponById = coupon
-      let state: any = [{
-        state: "active",
-        check: true
-      }, {
-        state: "inactive",
-        check: false
-      }]
-      this.getCuponById['state'] = state
-      this.swallUpdateState()
-    })
-  }
-  //method for updating the state to inactive
-  changeStateI(idCoupon) {
-    this.couponsServices.getCouponById(idCoupon).subscribe(coupon => {
-      this.getCuponById = coupon
-      let state: any = [{
-        state: "active",
-        check: false
-      }, {
-        state: "inactive",
-        check: true
-      }]
-      this.getCuponById['state'] = state
-      this.swallUpdateState()
-    })
-  }
+
 
   //method for a specific search
   search(termino?: string, id?: string) {
@@ -225,52 +203,5 @@ export class CuponManagerComponent implements OnInit {
 
   }
 
-  //get data to export
-  // datafor_Users(){
-  //   // this.typepdf = false;
-  //   this.selectforsend();
-  // }
-  //selected All items
-  selectedAll(event) {
-    const checked = event.target.checked;
-    this.newdateArray.forEach(item => item.selected = checked)
-  }
-
-  selectedOne(event, pos: number) {
-    const checked = event.target.checked;
-    event.target.checked = checked;
-    this.newdateArray[pos].selected = checked;
-  }
-
-  // selectforsend() {
-  //   // this.userSelected = []
-  //   // this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
-  // }
-
-
-  //sweets alerts
-  swallUpdateState() {
-    Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas actualizar el estado de este cupón!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, actualizar!'
-    }).then((result) => {
-      if (result.value) {
-        this.couponsServices.putCoupon(this.getCuponById).subscribe(res => {
-          this.couponsServices.getCoupons().subscribe(profile => {
-            this.couponsGettting = profile
-          })
-        })
-        Swal.fire(
-          'Actualizado!',
-          'success',
-        )
-      }
-    })
-  }
-
+ 
 }

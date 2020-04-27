@@ -33,7 +33,6 @@ export class CreateCouponComponent implements OnInit {
     expirationDate: [],
     expirationTime: [],
     name: null,
-    // idCouponsAvailable: null, //new propertie
     numberOfUnits: null,
     numberOfCouponsAvailable: null,
     description: null,
@@ -119,7 +118,7 @@ export class CreateCouponComponent implements OnInit {
       check: false
     }, {
       state: "inactive",
-      check: false
+      check: true
     }]
 
     this.preCoupon['state'] = this.State;
@@ -351,17 +350,11 @@ export class CreateCouponComponent implements OnInit {
   //method for create coupon units
   generateCoupons(idCoupon: string) {
     for (let i = 0; i < this.preCoupon['numberOfUnits']; i++) {
-      // const element = array[i];
       let obj = {
         idCoupon: idCoupon,
         state: false
       }
       this.couponsAvilableService.postCouponAvailable(obj).subscribe()
-      // (couponAvailable:any) => {
-        //   let idCouponsAvailable = couponAvailable._id
-        //   this.preCoupon['idCouponsAvailable'] = idCouponsAvailable
-        //   this.couponsServices.putCoupon(this.preCoupon).subscribe()
-        // }
     }
   }
 
@@ -525,7 +518,7 @@ export class CreateCouponComponent implements OnInit {
   }
   // delete coupon selected 
   swallDeleteCoupon() {
-    if (this.identificatorbyRoot == -1) {
+    if (this.idParams == -1) {
       Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
     } else {
       Swal.fire({

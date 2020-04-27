@@ -198,11 +198,19 @@ export class UserManagerComponent implements OnInit {
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
   }
 
+  sumarDias(fecha, dias) {
+    fecha.setDate(fecha.getDate() + dias);
+    return fecha;
+  }
+
+
   sendCupons() {
+
+    this.selectforsend();
     this.typeCoupon = true
     this.typeExcel = false;
     this.typepdf = false;
-    this.selectforsend();
+
   }
 
   // ==========================
@@ -282,7 +290,6 @@ export class UserManagerComponent implements OnInit {
              }) */
             /* console.log(nameuser); */
 
-
           }
         })
       })
@@ -342,11 +349,27 @@ export class UserManagerComponent implements OnInit {
   // ==========================
 
   sendCouponToUsers() {
-    if (this.userSelected.length > this.numberOfCoupons) {
-      alert("no puede entregar más cupones de los que tiene disponibles")
+    if (this.userSelected.length) {
+      if (this.userSelected.length > this.numberOfCoupons) {
+        // alert("")
+        Swal.fire({
+          text: "no puede entregar más cupones de los que tiene disponibles",
+          icon: 'warning',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
+      } else {
+        console.log(this.userSelected)
+        this.swallSendCouponToUsersSelected();
+      }
+
     } else {
-      console.log(this.userSelected)
-      this.swallSendCouponToUsersSelected();
+      Swal.fire({
+        text: "seleccione al menos un usuario",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
     }
   }
 
@@ -361,11 +384,12 @@ export class UserManagerComponent implements OnInit {
       confirmButtonText: 'Si, enviar!'
     }).then((result) => {
       if (result.value) {
-
+        let flagThereIsNoUser: boolean;
+        let currentDate: any;
+        let contCouponsSend : number = 0
         this.couponsAvailableService.getCouponAvailableByIdCoupon(this.idCoupon)
           .subscribe(coupons => {
             this.couponsAvailableByIdCoupon = coupons
-            let idUser: ''
             for (let i = 0; i < this.userSelected.length; i++) {
               let cont = 1
               for (let j = 0; j < this.userSelected.length; j++) {
@@ -375,9 +399,15 @@ export class UserManagerComponent implements OnInit {
                 let arrayCuponByIdUser = this.couponsAvailableByIdCoupon.filter(coupon => coupon.idUser == iduser)
                 if (arrayCuponByIdUser.length != 0) {
                   alert(`al usuario ${userName} no se le puede asignar un cupón`)
+                  // Swal.fire({
+                  //   text: `al usuario ${userName} no se le puede asignar un cupón`,
+                  //   icon: 'warning',
+                  //   confirmButtonColor: '#542b81',
+                  //   confirmButtonText: 'Ok!'
+                  // })
                   break;
                 } else {
-                  let couponsAvailable = this.couponsAvailableByIdCoupon.filter( coupon => coupon.state == false )
+                  let couponsAvailable = this.couponsAvailableByIdCoupon.filter(coupon => coupon.state == false)
                   let couponByIdUser = couponsAvailable[i]
                   let obj: object = {
                     id: couponByIdUser._id,
@@ -386,29 +416,73 @@ export class UserManagerComponent implements OnInit {
                     state: true
                   }
                   console.log(obj)
-                  this.couponsAvailableService.putCouponAvailable(obj).subscribe(() => alert('update cuponsAvailable'))
+                  this.couponsAvailableService.putCouponAvailable(obj).subscribe(() => {
+                    contCouponsSend = contCouponsSend + 1 
+                    flagThereIsNoUser = true
+                  })
                   this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
                     coupon['numberOfCouponsAvailable'] = this.numberOfCoupons - cont
                     this.numberOfCoupons = coupon['numberOfCouponsAvailable']
 
                   })
                   break;
-
                 }
-                
+
               }
             }
+
             this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
               coupon['numberOfCouponsAvailable'] = this.numberOfCoupons
-              this.couponsService.putCoupon(coupon).subscribe(() => alert('update units cupons'))
+              let state: any = [{
+                state: "active",
+                check: true
+              }, {
+                state: "inactive",
+                check: false
+              }]
+              coupon['state'] = state
+
+              currentDate = new Date();
+              let formatDate = currentDate.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+              let arrayDate = formatDate.split('/').map(x => +x);
+              let objStartDate: any = {};
+              let arrayObjDate: any[] = []
+              objStartDate.day = arrayDate[0];
+              objStartDate.month = arrayDate[1];
+              objStartDate.year = arrayDate[2];
+              arrayObjDate = objStartDate
+              coupon['createDate'] = arrayObjDate
+
+              if (coupon.nameTypeOfCoupon == 'Descuentos') {
+
+                let currentEndDate: Date;
+                currentEndDate = new Date();
+                this.sumarDias(currentEndDate, 30)
+                let formatEndDate = currentEndDate.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+                let arrayEndDate = formatEndDate.split('/').map(x => +x);
+                let objEndDate: any = {};
+                let arrayObjEndDate: any[] = []
+                objEndDate.day = arrayEndDate[0];
+                objEndDate.month = arrayEndDate[1];
+                objEndDate.year = arrayEndDate[2];
+                arrayObjEndDate = objEndDate
+                console.log(arrayObjEndDate)
+                coupon['expirationDate'] = arrayObjEndDate
+
+              }
+              if (flagThereIsNoUser == true) {
+                Swal.fire({
+                  title: 'Enviado',
+                  text: `Cupones enviados: ${contCouponsSend} `,
+                  icon: 'warning',
+                  confirmButtonColor: '#542b81',
+                  confirmButtonText: 'Ok!'
+                })
+              }
+              this.couponsService.putCoupon(coupon).subscribe()
 
             })
           })
-
-        Swal.fire(
-          'Enviado!',
-          'success',
-        )
       }
     })
   }
@@ -456,6 +530,7 @@ export class UserManagerComponent implements OnInit {
     //build the pdf file
     doc.autoTable(col, rows);
     doc.save('Test.pdf');
+
   }
 
 

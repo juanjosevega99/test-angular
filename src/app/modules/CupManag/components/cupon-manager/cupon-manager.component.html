@@ -116,8 +116,7 @@
                     <td>{{coupon.expirationDate}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
-                            <input [checked]="coupon.state[0].check" value="{{coupon.id}}" type="radio" name={{i}}
-                                id="state" #active (click)="changeStateA(active.value)">
+                            <input [checked]="coupon.state[0].check" type="radio" disabled="true" >
                             <label style="font-size: 15px;">
                                 Activo
                             </label>
@@ -125,8 +124,7 @@
                     </td>
                     <td>
                         <div class="radio radio-danger m-2 form-check-inline">
-                            <input [checked]="coupon.state[1].check" value="{{coupon.id}}" type="radio" name={{i}}
-                                id="state" #inactive (click)="changeStateI(inactive.value)">
+                            <input [checked]="coupon.state[1].check" type="radio" disabled="true"  >
                             <label style="font-size: 15px;">
                                 Inactivo
                             </label>
@@ -148,61 +146,5 @@
             </tbody>
         </table>
     </div>
-
-  <!-- Modal Enviar cupones a usuarios-->
-    <div class="modal fade bd-example-modal-xl" id="exampleModalCenter" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" style="background-color: #572483; text-align: center;">
-          <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white; ">Usuarios seleccionados</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="table-content">
-          <div id="table-print">
-
-            <table class="table table-responsive" id="users-table">
-              <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Fecha</th>
-                <th class="text-center">Nombre</th>
-                <th class="text-center">Coreo</th>
-                <th class="text-center">Celular</th>
-                <th class="text-center">F.Nacimiento</th>
-                <th class="text-center">Genero</th>
-                <th class="text-center">Establecimiento</th>
-                <th class="text-center">Sede</th>
-                <th class="text-center">Usabilidad</th>
-                <th class="text-center">Monto Compra</th>
-                <th class="text-center">Seleccionar<input type="checkbox" class="m-2" [value]="newdateArray" name="selectall"
-                    (change)="selectedAll($event)"> </th>
-              </tr>
-              <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
-                <td>{{i+1}}</td>
-                <td>{{user.registerDate}}</td>
-                <td>{{user.name}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.phone}}</td>
-                <td>{{user.birthday}}</td>
-                <td>{{user.gender}}</td>
-                <td>{{user.nameAllie}}</td>
-                <td>{{user.nameHeadquarter}}</td>
-                <td>{{user.usability}}</td>
-                <td>{{user.purchaseAmount}}</td>
-                <td><input type="checkbox" class="m-1" [checked]="user.selected" (change)="selectedOne($event, i)"></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="selectforsend()" >Enviar cupones</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 
 </div>
