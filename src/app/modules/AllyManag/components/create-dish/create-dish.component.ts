@@ -57,6 +57,7 @@ export class CreateDishComponent implements OnInit {
   }
 
   promotionArray: Object = {
+    id: null,
     state: [],
     idname: null,
     name: null,
@@ -274,7 +275,7 @@ export class CreateDishComponent implements OnInit {
 
   //redirect to select users
   goSelectUsers() {
-    this.saveLocalStorageService.saveLocalStorageIdPromotion(this.editDish.id)
+    this.saveLocalStorageService.saveLocalStorageIdPromotion(this.promotionArray['id'])
     this._router.navigate(['/main', 'userManager', -1])
   }
 
