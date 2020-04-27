@@ -216,11 +216,11 @@ export class UserManagerComponent implements OnInit {
     this.newdateArray.forEach(user => user.selected ? this.userSelected.push(user) : this.userSelected);
   }
 
-  // selectedPromo(event, pos: number) {
-  //   const checked = event.target.checked;
-  //   event.target.checked = checked;
-  //   this.dishPromoArray[pos]['selected'] = checked;
-  // }
+  selectedPromo(event, pos: number) {
+    const checked = event.target.checked;
+    event.target.checked = checked;
+    this.dishPromoArray[pos]['selected'] = checked;
+  }
   // =====================================
 
   async selectPromosSend() {
