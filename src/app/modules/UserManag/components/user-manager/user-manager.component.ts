@@ -243,6 +243,13 @@ export class UserManagerComponent implements OnInit {
     this.typepdf = false;
     this.selectforsend();
   }
+  // ==========================
+  // delete idpromo from localstorage
+  // ==========================
+
+  deleteFromLocal(){
+    localStorage.removeItem('idPromotion');
+  }
 
   // ==========================
   // Send promos
@@ -273,54 +280,27 @@ export class UserManagerComponent implements OnInit {
 
             this.userSelected.forEach((user: OrderByUser, i) => {
 
-              let idsP = user.idsPromos;
-              let count = 0;
+              const idsP = user.idsPromos;
 
               if (idsP.length) {
 
-                idsP.forEach(id => {
+                let promoexist = idsP.indexOf(idPromo); // it's -1 if not exist
+                
+                if ( promoexist < 0 ) {
+                  user.idsPromos.push(idPromo);
+                  this.promoToUser(user);
 
-                  if (id !== idPromo) {
-
-                    count += 1
-
-                  }
-
-                })
-
-                if (!count) {
-                  user.idsPromos.push(idPromo)
-                  /* this.promoToUser(user); */
-                  
-                  
+                } else {
                   Swal.fire({
-                    title: 'Enviado',
-                    text: "La promoción ha sido aplicada a los usuarios seleccionados!",
-                    icon: 'success',
-                    confirmButtonColor: '#542b81',
-                    confirmButtonText: 'Ok!'
-                  }).then((result) => {
-                    if (result.value) {
-                      this._router.navigate(['/main', 'createDish', reference]);
-                      localStorage.removeItem('idPromotion');
-                    }
+                    title: 'promociones enviadas satisfactoriamente',
+                    // text: `"de que deseas enviar estos cupones!"`,
+                    icon: 'success'
                   })
                 }
               } else {
                 // enviar promociones
-                this.promoToUser(user, [idPromo]);
-                Swal.fire({
-                  title: 'Enviado',
-                  text: "La promoción ha sido aplicada a los usuarios seleccionados!",
-                  icon: 'success',
-                  confirmButtonColor: '#542b81',
-                  confirmButtonText: 'Ok!'
-                }).then((result) => {
-                  if (result.value) {
-                    this._router.navigate(['/main', 'createDish', reference]);
-                    localStorage.removeItem('idPromotion');
-                  }
-                })
+                user.idsPromos.push(idPromo);
+                this.promoToUser(user);
               }
 
             })
@@ -345,7 +325,6 @@ export class UserManagerComponent implements OnInit {
   }
 
   updatePromosUser() {
-    console.log("actualizando");
 
     Swal.fire({
       title: '¿Enviar promociones a los usuarios seleccioandos?',
@@ -363,26 +342,25 @@ export class UserManagerComponent implements OnInit {
           if (user.idsPromos.length) {
 
             let promosToSend = [];
-
+            let count = 0;
             this.promosSelected.forEach(promoToSend => {
 
-              user.idsPromos.forEach(promoUser => {
+              count += 1;
+              let promoexits = user.idsPromos.indexOf(promoToSend); // it's -1 if not exist
 
-                if (promoToSend !== promoUser) {
-                  console.log("promocion no existe", promoToSend);
-                  promosToSend.push(promoToSend);
-                } else {
-                  console.log("promo ya existe", promoToSend);
+              if (promoexits < 0) {
+                // promocion no existe
+                promosToSend.push(promoToSend);
+              }
 
-                }
-              })
             })
 
-            if (promosToSend.length) {
-              this.promoToUser(user, promosToSend);
+            if (promosToSend.length && count === this.promosSelected.length) {
+              user.idsPromos = user.idsPromos.concat(promosToSend);
+              this.promoToUser(user);
             } else {
               Swal.fire({
-                title: '¿promociones enviadas?',
+                title: 'promociones enviadas satisfactoriamente',
                 // text: `"de que deseas enviar estos cupones!"`,
                 icon: 'success'
               })
@@ -390,7 +368,8 @@ export class UserManagerComponent implements OnInit {
 
           } else {
             // usuario sin promociones se le pasa las promociones
-            this.promoToUser(user, this.promosSelected);
+            user.idsPromos = this.promosSelected;
+            this.promoToUser(user);
           }
         })
         this.loadUsers();
@@ -400,16 +379,19 @@ export class UserManagerComponent implements OnInit {
 
   }
 
-  promoToUser(user: OrderByUser, promos: string[]) {
+  promoToUser(user: OrderByUser) {
     const promosend = {
-      idsPromos: promos
+      idsPromos: user.idsPromos
     }
 
     this.userservice.putUsers(user.idUser, promosend).subscribe((userUpdate: Users) => {
-      console.log("se actualizo el usuario", userUpdate.name);
-      Swal.fire(
-        `promociones enviadas ${userUpdate.name}`
-      )
+      console.log("promociones enviadas satisfactoriamente");
+      Swal.fire({
+        title: 'promociones enviadas satisfactoriamente',
+        // text: `"de que deseas enviar estos cupones!"`,
+        icon: 'success'
+      })
+
 
     })
   }
