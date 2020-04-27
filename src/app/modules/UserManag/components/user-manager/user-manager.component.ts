@@ -54,6 +54,7 @@ export class UserManagerComponent implements OnInit {
   from: string;
   to: string;
 
+  // =======================
   // promotions
   dishgetting: DishPromotion[] = [];
   dishPromoArray = this.dishgetting;
@@ -62,6 +63,7 @@ export class UserManagerComponent implements OnInit {
   allies = [];
   alertPromos = false;
   loadingPromos = false;
+  // =======================
 
 
   generalsearch: string = '';
