@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
 import * as XLSX from 'xlsx';
 
@@ -24,6 +24,8 @@ import { CouponsService } from "src/app/services/coupons.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
 import { Router } from '@angular/router';
+import { AlliesService } from 'src/app/services/allies.service';
+import { DishPromotion } from 'src/app/models/DishPromotion';
 
 
 @Component({
@@ -62,10 +64,17 @@ export class UserManagerComponent implements OnInit {
   //variables for send coupons
   idCoupon: string;
   numberOfCoupons: number;
+
   //variable to know couponsAvailable by idCoupon
   couponsAvailableByIdCoupon: any;
   arrayCoupon: any[] = []
   numberOfUnits: number;
+
+  //promotions
+  dishgetting: DishPromotion[] = [];
+  dishPromoArray= this.dishgetting;
+  allies = [];
+  isIdPromotion=false;
 
 
   constructor(private calendar: NgbCalendar,
@@ -76,7 +85,9 @@ export class UserManagerComponent implements OnInit {
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
     private couponsAvailableService: CouponsAvailableService,
-    private _router: Router) {
+    private _router: Router,
+    private modalpromo: NgbModal,
+    private allyservice: AlliesService) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -131,6 +142,10 @@ export class UserManagerComponent implements OnInit {
       this.numberOfCoupons = coupon.numberOfCouponsAvailable
       this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
     })
+
+    if (localStorage.getItem('idPromotion')) {
+      this.isIdPromotion=true;
+    }
 
   }
 
@@ -217,258 +232,52 @@ export class UserManagerComponent implements OnInit {
             if (result.value) {
               let newUserSelectedforPut: {}[] = [];
               let noSendUserSelectedforPut: {}[] = [];
-              /* this.userSelected.forEach((user: Users) => { */
-                /* user.idsPromos.forEach(id =>{
-                  if(id==localStorage.getItem('idPromotion')){
-                    console.log("NO SE HACE PUT DE",user.name);
-                    break
-                  }else if(id!==localStorage.getItem('idPromotion')){
-                    console.log("SE HACE PUT DE",user.name);
-                    
-                  }else if(id==""){
-                    console.log("SE HACE PUT DE",user.name);
-                  }
-                }) */
-                
-                /* if (!user.idsPromos.length) {
-                  user.idsPromos.push(localStorage.getItem('idPromotion'))
-                  newUserSelectedforPut.push(user)
-                } else {
-                  for (let index = 0; index < user.idsPromos.length; index++) {
-                    const elementId = user.idsPromos[index];
-                    if (elementId === localStorage.getItem('idPromotion')) {
-                      noSendUserSelectedforPut.push(user)
-                      break;
-                     }  */
-                     /* else{
-                      newUserSelectedforPut.push(user)
-                       if (noSendUserSelectedforPut[index] == newUserSelectedforPut[index] ) {
-                         console.log("se elimina:",newUserSelectedforPut[index]);
-                         
-                        newUserSelectedforPut.splice(index, 1)
-                       }
-                      
-                     }  */
-                     /* else if (elementId !== localStorage.getItem('idPromotion')) {
-
-                      user.idsPromos.push(localStorage.getItem('idPromotion'))
-                      newUserSelectedforPut.push(user)
-                      break;
-                    } */
-                /*   }
-                } */
-
-                /* else{
-                  newUserSelectedforPut.push(user)
-                   if (noSendUserSelectedforPut[index] == newUserSelectedforPut[index] ) {
-                     console.log("se elimina:",newUserSelectedforPut[index]);
-                     
-                    newUserSelectedforPut.splice(index, 1)
-                   }
-                  
-                 }  */
-                
-                 
-              /* }) */
               this.userSelected.forEach((user: Users) => {
-                let flag=false
-                if (user.idsPromos.length) {
-                  for (let index = 0; index < user.idsPromos.length; index++) {
-                    const elementId = user.idsPromos[index];
-                    if (elementId !== localStorage.getItem('idPromotion')) {
-                      flag=true
-                      
-                     } else{
-                       flag=false
-                       user.idsPromos.push(localStorage.getItem('idPromotion'))
-                     }
-               }
-              if(flag==true){
-                
-                newUserSelectedforPut.push(user)
-              } else {
-                noSendUserSelectedforPut.push(user)
-              }
-              } else {
-                newUserSelectedforPut.push(user)
-              }
             })
-              /* if(noSendUserSelectedforPut.length){
-              noSendUserSelectedforPut.forEach(userselected=>{
-               for (let index = 0; index < this.userSelected.length; index++) {
-                 const element = this.userSelected[index];
-                    if(element !== userselected){
-                      console.log(element);
-                    }
-                }
-              })
-            
-            } else{
-              newUserSelectedforPut.push(this.userSelected)
-            } */
-
-              console.log("usuarios seleccionados:",this.userSelected);
-              console.log("no se envia:",noSendUserSelectedforPut);
-              console.log("se envia:",newUserSelectedforPut);
-
-              let stringNames: string = ''
-              noSendUserSelectedforPut.forEach((user: Users, i) => {
-                stringNames += user.name + ", "
-              })
-              
-              
-              
-              /* if (this.userSelected.length === newUserSelectedforPut.length) {
-                console.log(newUserSelectedforPut); */
-               /*  newUserSelectedforPut.forEach((user: Users, i) => {
-                  this.userservice.putUsers(user.id, user).subscribe(res => {
-                    Swal.fire({
-                      title: 'Enviado',
-                      text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                      icon: 'success',
-                      confirmButtonColor: '#542b81',
-                      confirmButtonText: 'Ok!'
-                    }).then((result) => {
-                      if (result.value) {
-                        this._router.navigate(['/main', 'createDish', reference]);
-                        localStorage.removeItem('idPromotion')
-                      }
-                    })
-                  })
-                }) */
-              /* } else {
-                if (noSendUserSelectedforPut.length && newUserSelectedforPut.length) {
-                  console.log(noSendUserSelectedforPut);
-                  console.log(newUserSelectedforPut);
-                  newUserSelectedforPut.forEach((user: Users, i) => { */
-                    /* this.userservice.putUsers(user.id, user).subscribe(res => {
-                      Swal.fire({
-                        title: 'Enviado',
-                        text: "La promoción ha sido aplicada algunos de los usuarios filtrados!",
-                        icon: 'success',
-                        confirmButtonColor: '#542b81',
-                        confirmButtonText: 'Ok!'
-                      })
-                    }) */
-                  /* }) */
-                  /* Swal.fire({
-                    html: '<b>Para algunos usuarios como: </b>' +
-                      `<b>${stringNames}</b>` +
-                      '<b>la promoción no ha sido aplicada porque ya estaba asociada</b>',
-                    icon: 'info',
-                    confirmButtonColor: '#542b81',
-                    confirmButtonText: 'Ok!'
-                  }) *//* .then((result) => {
-                    if (result.value) {
-                      this._router.navigate(['/main', 'createDish', reference]);
-                      localStorage.removeItem('idPromotion')
-                    }
-                  }) */
-                /* } else if (noSendUserSelectedforPut.length && !newUserSelectedforPut.length) {
-                  console.log(noSendUserSelectedforPut);
-                } 
-              }*/
-
-
-            }
-          })
+          }
         })
-      } else {
-        Swal.fire({
-          text: "Por favor, seleccione usuarios!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        })
-      }
+      })
     }
   }
+}
+  
 
+    
+      
+    
+  
 
-  /* this.selectforsend(); 
-  if (localStorage.getItem('idPromotion')) {
-     this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
-       let name = promo.name
-       let reference = promo.reference
-       Swal.fire({
-         html:
-           '¿Estás seguro de que deseas<br>' +
-           ' <b>aplicar la promocion </b>' +
-           `<b>${name}</b><br>` +
-           'a los usuarios filtrados<br>',
-         icon: 'question',
-         showCancelButton: true,
-         confirmButtonColor: '#542b81',
-         cancelButtonColor: '#542b81',
-         confirmButtonText: 'Si, enviar!'
-       }).then((result) => {
-         if (result.value) {
-           let idPromo = localStorage.getItem('idPromotion')
-           let nameuser: string[] = []
-           let count = 0;
-           this.userSelected.forEach((user: Users, i) => {
-             count += 1
-             let updateidPromo = {
-               idsPromos: []
-             }
-             let idUser = user.id
-             let idsP = user.idsPromos
-             idsP.forEach((id, index) => {
-               if (id === idPromo) {
-                 this.userSelected[i] = this.userSelected[i]
-                 nameuser.push(user.name)
-                 Swal.fire({
-                   html: '<b>El usuario: </b>' +
-                     `${user.name}` +
-                     '<b>ya tiene la promoción asociada</b>',
-                   icon: 'error',
-                   confirmButtonColor: '#542b81',
-                   confirmButtonText: 'Ok!'
-                 })
-               } else {
-                 updateidPromo.idsPromos.push(idPromo)
-               }
-             })
-             if (updateidPromo.idsPromos.length) {
-               this.userservice.putUsers(idUser, updateidPromo).subscribe(res => {
+  updatePromosUser(){
+    this.userSelected.forEach( user=>{
+      if(user['idsPromos'].length){
 
-                 Swal.fire({
-                   title: 'Enviado',
-                   text: "La promoción ha sido aplicada a los usuarios filtrados!",
-                   icon: 'success',
-                   confirmButtonColor: '#542b81',
-                   confirmButtonText: 'Ok!'
-                 })
-               })
-             } else {
+      }else{
+        
+      }
+    })
+  }
 
-               Swal.fire({
-                 title: '',
-                 text: "Los usuarios ya tienen aplicada la promoción!",
-                 icon: 'success',
-                 confirmButtonColor: '#542b81',
-                 confirmButtonText: 'Ok!'
-               })
+  loadAllies(content) {
+    this.dishPromoArray = [];
+    this.selectforsend();
 
-             }
+    if (this.userSelected.length) {
 
-           })
-           if (count == this.userSelected.length) {
-             this._router.navigate(['/main', 'createDish', reference]);
-             localStorage.removeItem('idPromotion')
-           }
+      this.modalpromo.open(content, { size: 'xl', scrollable: true, centered: true });
+      this.allyservice.getAllies().subscribe((allies: []) => {
+        this.allies = allies; 
+      })
 
-
-         }
-       })
-     })
-   } else {
-     console.log(this.userSelected);
-   } */
-
-  // console.log("users", this.usergetting);
-  // console.log(this.table);
-
+    } else {
+      Swal.fire(
+        'seleccione almenos un usuario'
+      )
+    }
+    
+    this.selectforsend();
+    // console.log("users", this.usergetting);
+    // console.log(this.table);
+  }
 
   //get data to export
   datafor_Excel() {

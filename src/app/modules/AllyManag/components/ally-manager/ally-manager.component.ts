@@ -18,8 +18,8 @@ export class AllyManagerComponent implements OnInit {
   table: FormGroup;
 
   //flags to redirect: headquarters and promotions
-  manageHq: boolean;
-  manageProm: boolean;
+  manageHq= false;
+  manageProm= true;
 
   //variable to get headquaerters
 
@@ -54,8 +54,8 @@ export class AllyManagerComponent implements OnInit {
       this._saveLocalStorageService.saveLocalStorageIdAlly("");
       this._saveLocalStorageService.saveLocalStorageIdHeadquarter("");
       
-      this.manageHq = false;
-      this.manageProm = false;
+      // this.manageHq = false;
+      // this.manageProm = false;
       
       //inicialization for charging the data of a profile to edit
       this.activatedRoute.params.subscribe(params => {

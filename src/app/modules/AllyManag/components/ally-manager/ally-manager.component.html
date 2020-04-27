@@ -72,6 +72,7 @@
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
                     <td> <button type="button" class="btn btn-link" *ngIf="manageHq" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </button>
                         <button type="button" class="btn btn-link" *ngIf="manageProm" [routerLink]="['/main', 'promoManager']"> {{ally.nameEstablishment}} </button>
+                        <button type="button" class="btn btn-link" *ngIf="managePromfromUser" [routerLink]="['/main','userManager','promoManager']"> {{ally.nameEstablishment}} </button>
                     </td>
                     <!-- <td> <a (click)="getInHeadquarts(ally.idAlly, i)"> {{ally.nameEstablishment}} </a></td> -->
                     <!-- [routerLink]="['/main', 'headquarts']" -->

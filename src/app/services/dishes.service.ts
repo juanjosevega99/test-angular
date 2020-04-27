@@ -57,6 +57,34 @@ export class DishesService {
     return this.httpclient.get<Dishes>(environment.UrlBase + "dishes/" + id)
   }
   getDishesByIdHeadquarter(idHeadquarter){
-    return this.httpclient.get(environment.UrlBase + "dishes/headquarter/" + idHeadquarter)
+    return this.httpclient.get(environment.UrlBase + "dishes/headquarter/" + idHeadquarter);
+  }
+
+  getDishesByIdAlly(idAlly):Observable<any[]>{
+    return this.httpclient.get<Dishes[]>(environment.UrlBase + "dishes/ally/" + idAlly).pipe(
+      map((dishes: any[]) =>
+        dishes.map(dishes => {
+          let obj = {
+            id: dishes._id,
+            idDishesCategories: dishes.idDishesCategories,
+            nameDishesCategories: dishes.nameDishesCategories,
+            reference: dishes.reference,
+            name: dishes.name,
+            creationDate: dishes.creationDate,
+            modificationDate: dishes.modificationDate,
+            numberOfModifications: dishes.numberOfModifications,
+            state: dishes.state,
+            price: dishes.price,
+            imageDishe: dishes.imageDishe,
+            description: dishes.description,
+            preparationTime: dishes.preparationTime,
+            idAccompaniments: dishes.idAccompaniments,
+            idPromotion: dishes.idPromotion,
+            idHeadquarter : dishes.idHeadquarter
+          };
+          return obj;
+        })
+      )
+    );
   }
 }
