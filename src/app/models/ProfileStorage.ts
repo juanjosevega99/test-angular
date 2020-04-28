@@ -6,6 +6,7 @@ export class profileStorage {
     idHeadquarter?: string = '';
     nameHeadquarter?: string = '';
     nameCharge?: string = '';
+    photo?:string = '';
     showContent?: content = {
         options: false,
         principal: false,

@@ -17,10 +17,10 @@
 }
 
 .img-logotifi {
-    width: 105px;
-    height: 50px;
-    margin-left: 20%;
-    margin-right: 5%;
+    width: 7.5rem;
+    height: 3.5rem;
+    // margin-left: 20%;
+    // margin-right: 5%;
 }
 
 .textLyrics1 {
@@ -58,4 +58,20 @@
     border-radius: 50%;
     background:#00ffcc;
     color: #49307d;
+  }
+
+  @media( max-width:414px ){
+    .display-none-sm{
+        display: none;
+    }
+
+    .navbar{
+        padding: 0;
+        justify-content: center;
+    }
+
+    .navbar-brand{
+        margin:0;
+    }
+    
   }

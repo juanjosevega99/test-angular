@@ -14,10 +14,13 @@ export class ShowContentService {
 
     let profilest = JSON.parse(localStorage.getItem('profile'));
 
-      profile.nameAllie = profilest['nameAllie'];
+      profile.nameAllie = profilest.nameAllie;
       profile.nameHeadquarter = profilest['nameHeadquarter'];
       profile.idHeadquarter = profilest['idHeadquarter'];
       profile.id = profilest['id'];
+      profile.nameCharge = profilest.nameCharge;
+      profile.idAllies = profilest.idAllies;
+      profile.photo = profilest.photo;
 
       let showContent = {
         options: false,
