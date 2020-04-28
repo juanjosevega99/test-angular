@@ -4,21 +4,25 @@
 
 $principal-color: #572483;
 
-// .text-center{
-//     text-align: center;
-//     vertical-align: middle;
-// }
 
-html,
-body {
+html,body {
   height: 100%;
   width: 100%;
   font-size: 15px;
 }
+
 body {
   margin: 0;
   color: #572483;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+//style for loading
+.animated{
+  -webkit-animation-duration: 4s;
+  animation-duration: 4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
 
 .margin-padding-tifi {
@@ -101,15 +105,10 @@ td {
   }
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-//style for loading
-.animated{
-  -webkit-animation-duration: 4s;
-  animation-duration: 4s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+@media ( max-width : 414px ){
+  .filerControl{
+    padding-top: 3rem !important;
+  }
 }
 
 @keyframes fadeIn{
