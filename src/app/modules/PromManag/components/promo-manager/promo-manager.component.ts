@@ -338,10 +338,12 @@ export class PromoManagerComponent implements OnInit {
       if (result.value) {
         this.promoService.putPromotion(idDish, newstate).subscribe(res => {
           this.promoService.getPromotions().subscribe(dish => {
-            Swal.fire(
-              'Actualizado!',
-              'success',
-            )
+            Swal.fire({
+              text: "Estado actualizado!!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
           })
         })
       }

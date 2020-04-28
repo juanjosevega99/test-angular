@@ -12,6 +12,8 @@ import { ProfileList } from 'src/app/models/ProfileList';
 import { Profiles } from 'src/app/models/Profiles';
 import { async } from '@angular/core/testing';
 import { AuthFireServiceService } from 'src/app/services/providers/auth-fire-service.service';
+import { AlliesService } from 'src/app/services/allies.service';
+import { HeadquartersService } from 'src/app/services/headquarters.service';
 
 @Component({
   selector: 'app-create-profile',
@@ -23,7 +25,7 @@ export class CreateProfileComponent implements OnInit {
     state: [],
     numberOfModifications: 0,
     idAllies: null,
-    nameAllie: "kfc",
+    nameAllie: null,
     idHeadquarter: null,
     nameHeadquarter: null,
     idCharge: null,
@@ -38,11 +40,12 @@ export class CreateProfileComponent implements OnInit {
 
   editProfile: Profiles = {
     state: [],
+    ratings:[],
     entryDate: null,
     modificationDate: null,
     numberOfModifications: 0,
     idAllies: null,
-    nameAllie: "kfc",
+    nameAllie: null,
     idHeadquarter: null,
     nameHeadquarter: null,
     idCharge: null,
@@ -52,7 +55,8 @@ export class CreateProfileComponent implements OnInit {
     identification: null,
     name: null,
     email: null,
-    photo: null
+    photo: null,
+    idFirebase : null,
   }
 
   //variables for receiving the profile that will be edited
@@ -86,7 +90,7 @@ export class CreateProfileComponent implements OnInit {
   //variable for upload images
   fileImagedish: any;
   urlPorfile: Observable<string>;
-  
+
   //variable for the loading
   loading: boolean;
 
@@ -95,9 +99,11 @@ export class CreateProfileComponent implements OnInit {
     private _router: Router, private firebaseservice: AuthFireServiceService,
     private activatedRoute: ActivatedRoute,
     private chargeProfiles: ProfilesService,
-     private profiles: ProfilesService, 
-    private storage: AngularFireStorage, 
-    private profileCategory: ProfilesCategoriesService) {
+    private profiles: ProfilesService,
+    private storage: AngularFireStorage,
+    private profileCategory: ProfilesCategoriesService,
+    private allyService: AlliesService,
+    private headquarterService: HeadquartersService) {
     //flags
     this.loading = true;
     this.buttonPut = true;
@@ -123,6 +129,20 @@ export class CreateProfileComponent implements OnInit {
       } else if (identificator == -1) {
         this.loading = false
         this.buttonPut = false
+        //Load name of Ally and Headquarter
+        if (localStorage.getItem('idAlly') && localStorage.getItem('idHeadquarter')) {
+
+          this.preProfile["idAllies"] = localStorage.getItem('idAlly');
+          this.allyService.getAlliesById(localStorage.getItem('idAlly')).subscribe(ally => {
+            this.preProfile["nameAllie"] = ally.name;
+          })
+
+          this.preProfile["idHeadquarter"] = localStorage.getItem('idHeadquarter');
+          this.headquarterService.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(hq => {
+            this.preProfile["nameHeadquarter"] = hq.name;
+          })
+
+        }
       }
       this.identificatorbyRoot = identificator
     })
@@ -131,6 +151,8 @@ export class CreateProfileComponent implements OnInit {
     this.profileCategory.getProfileCategory().subscribe(profileCat => {
       this.Categories = profileCat;
     })
+
+
   }
 
   ngOnInit() {
@@ -153,10 +175,22 @@ export class CreateProfileComponent implements OnInit {
   //charge a profile with the id
   getProfile(id: string) {
     this.loading;
-    this.chargeProfiles.getProfiles().subscribe(profiles => {
+    /* this.chargeProfiles.getProfiles().subscribe(profiles => {
       let profile: Profiles = {}
       let obj: Profiles = {}
       profile = profiles[id]
+      console.log(profile);
+      
+      this.editProfile = profile;
+      this.preProfile = this.editProfile;
+      this.loading = false;
+    }) */
+    this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles =>{
+      let profile: Profiles = {}
+      let obj: Profiles = {}
+      profile = profiles[id]
+      console.log(profile);
+      
       this.editProfile = profile;
       this.preProfile = this.editProfile;
       this.loading = false;
@@ -168,10 +202,10 @@ export class CreateProfileComponent implements OnInit {
     if (this.identificatorbyRoot == -1) {
       Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
     } else {
-      this.chargeProfiles.getProfiles().subscribe(profiles => {
+      this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
         let profile: ProfileList = {}
         profile = profiles[this.identificatorbyRoot]
-        let realId = profile.id
+        let realId = profile._id 
         this.swallDelete(realId)
       })
     }
@@ -292,10 +326,10 @@ export class CreateProfileComponent implements OnInit {
 
   //putProfile
   putProfile() {
-    this.chargeProfiles.getProfiles().subscribe(profiles => {
+    this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
       let profile: Profiles = {};
       profile = profiles[this.identificatorbyRoot];
-      let realId = profile.id;
+      let realId = profile._id;
       this.editProfile.state = this.preProfile['state'];
       this.editProfile.entryDate = profile.entryDate;
       this.editProfile.modificationDate = this.today;
@@ -310,7 +344,7 @@ export class CreateProfileComponent implements OnInit {
       this.editProfile.identification = this.preProfile['identification'];
       this.editProfile.name = this.preProfile['name'];
       this.editProfile.email = this.preProfile['email'];
-      this.swallUpdate(realId)
+      this.swallUpdate(realId) 
     })
   }
 
@@ -387,7 +421,7 @@ export class CreateProfileComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-
+        this.loading= true;
         // console.log("Array FINAL: ", this.preProfile);
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
@@ -398,7 +432,7 @@ export class CreateProfileComponent implements OnInit {
 
           const task = this.storage.upload(filePath, file);
           // console.log(response.user.uid);
-          
+
           task.snapshotChanges().pipe(
 
             finalize(() => {
@@ -410,9 +444,9 @@ export class CreateProfileComponent implements OnInit {
                 this.preProfile['photo'] = this.urlPorfile
                 this.preProfile['idFirebase'] = response.user.uid;
                 this.preProfile['_id'] = response.user.uid;
-                
-                this.profiles.postProfile(this.preProfile).subscribe(message => {
 
+                this.profiles.postProfile(this.preProfile).subscribe(message => {
+                  this.loading= false;
                   Swal.fire({
                     title: 'Guardado',
                     text: "Tu nuevo perfil ha sido creado!",
@@ -453,24 +487,27 @@ export class CreateProfileComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-        this.chargeProfiles.deleteProfile(realId).subscribe()
-        Swal.fire({
-          title: 'Eliminado',
-          text: "Tu perfil ha sido eliminado!",
-          icon: 'warning',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
-          }
+        this.loading=true;
+        this.chargeProfiles.deleteProfile(realId).subscribe(message => {
+          this.loading=false;
+          Swal.fire({
+            title: 'Eliminado',
+            text: "Tu perfil ha sido eliminado!",
+            icon: 'success',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+            }
+          })
         })
       }
     })
   }
-    
 
- async swallUpdate(realId) {
+
+  async swallUpdate(realId) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -480,49 +517,58 @@ export class CreateProfileComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
-    if (result.value) {
-      console.log("Array FINAL: ", this.editProfile);
-      await  this.chargeProfiles.getProfiles().subscribe(profiles => {
+      if (result.value) {
+        console.log("Array FINAL: ", this.editProfile);
+        this.loading = true;
+        this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
           let profile: Profiles = {};
           profile = profiles[this.identificatorbyRoot];
           this.editProfile.numberOfModifications = this.preProfile['numberOfModifications'] + 1;
           if (this.seeNewPhoto == false) {
             this.editProfile.photo = profile.photo;
-          } else if (this.seeNewPhoto == true) {
+            this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
+              this.loading = false;
+              Swal.fire({
+                title: 'Guardado',
+                text: "Tu perfil ha sido actualizado!",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+                }
+              });
+            });
+          }
+          else if (this.seeNewPhoto == true) {
             const id: Guid = Guid.create();
             const file = this.fileImagedish;
             const filePath = `assets/allies/profiles/${id}`;
             const ref = this.storage.ref(filePath);
             const task = this.storage.upload(filePath, file);
             task.snapshotChanges()
-              .pipe( 
-                finalize(() => {
-                  ref.getDownloadURL().subscribe(urlImage => {
-                    this.urlPorfile = urlImage;
-                    console.log(this.urlPorfile);
-                    this.preProfile['photo'] = this.urlPorfile
-                    this.chargeProfiles.putProfile(realId, this.editProfile).subscribe()
-                  })
-                }
-                )
-              ).subscribe()
+              .pipe(finalize(() => {
+                ref.getDownloadURL().subscribe(urlImage => {
+                  this.urlPorfile = urlImage;
+                  console.log(this.urlPorfile);
+                  this.preProfile['photo'] = this.urlPorfile;
+                  this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
+                    Swal.fire({
+                      title: 'Guardado',
+                      text: "Tu perfil ha sido actualizado!",
+                      icon: 'warning',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    }).then((result) => {
+                      if (result.value) {
+                        this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+                      }
+                    });
+                  });
+                });
+              })).subscribe();
           }
-          this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
-
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu perfil ha sido actualizado!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
-              }
-            })
-
-          })
-
         })
       }
     })

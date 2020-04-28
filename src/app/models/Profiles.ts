@@ -18,4 +18,5 @@ export class Profiles {
   email?:string;
   photo?:string;
   ratings?:number[];
+  idFirebase?:string;
 }
