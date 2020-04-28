@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+//services
+import Swal from 'sweetalert2';
+import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service";
+import { SaveLocalStorageService } from "src/app/services/save-local-storage.service"
+//models
+import { TermsAndConditions } from '../../../../models/TermsAndConditions';
 
 @Component({
   selector: 'app-tyc-manager',
@@ -8,13 +16,100 @@ import { Component, OnInit } from '@angular/core';
 
 export class TycManagerComponent implements OnInit {
 
+  //varibales to obtain data
+  tycGettting: TermsAndConditions[] = [];
+  newArray = this.tycGettting;
 
 
-  constructor() { 
+  //variables for general search
+  generalsearch: string = "";
 
+  //variable of don't results
+  noResults = false
+
+
+  constructor(
+    private saveLocalStorageServices: SaveLocalStorageService,
+    private _router: Router,
+    private tycManegerService: TermsAndConditionsService) {
+
+    //clean local storage  for ally and headquarter
+    this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
+    this.makeObjTycManager();
   }
 
   ngOnInit() { }
+
+  goToEditTyc(idTyc: string, i) {
+    this.saveLocalStorageServices.saveLocalStorageIdTyc(idTyc)
+    this._router.navigate(['/main', 'editTycManager', i])
+  }
+  //delete Tyc
+  deleteTyc(idTyc) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminarlo!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.tycManegerService.deleteTermAndCondition(idTyc).subscribe(() => {
+          this.tycGettting = []
+          this.newArray = []
+          this.makeObjTycManager();
+        })
+        Swal.fire({
+          title: 'Eliminado',
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'tycManager',]);
+          }
+        })
+      }
+    })
+
+    
+  }
+
+  // obtained array tyc of collection
+  makeObjTycManager() {
+    this.tycManegerService.getTermsAndConditions().subscribe(tyc => {
+      tyc.forEach((tyc: TermsAndConditions) => {
+        const obj: TermsAndConditions = {};
+        obj.id = tyc.id
+        obj.name = tyc.name
+        obj.description = tyc.description
+
+        this.tycGettting.push(obj)
+      });
+    })
+  }
+
+  //method for a specific search
+  search() {
+
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
+
+    this.newArray = this.tycGettting.
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.name) || myRegex.test(item.description))
+      })
+    // condition by when don't exit results in the table
+    if (this.newArray.length == 0) {
+      this.noResults = true;
+
+    } else {
+      this.noResults = false;
+    }
+
+  }
 
 
 }

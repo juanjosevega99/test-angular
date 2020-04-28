@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProfilesService } from '../../services/profiles.service';
-import { Profiles } from 'src/app/models/Profiles';
 import Swal from 'sweetalert2';
 
 
@@ -17,7 +15,7 @@ export class LoginFormComponent implements OnInit {
 
   email: string;
   pass: string;
-  signError: boolean;
+  signError = false;
 
   seepass: boolean = false;
   Typetext = 'password';
@@ -28,9 +26,9 @@ export class LoginFormComponent implements OnInit {
     private serviceProfile: ProfilesService) { }
 
   ngOnInit() {
-    this.signError = true;
+    // this.signError = true;
 
-    if( localStorage.getItem('profile')){
+    if (localStorage.getItem('profile')) {
       let profile = JSON.parse(localStorage.getItem('profile'));
       this.navigateProfile(profile);
     }
@@ -47,26 +45,34 @@ export class LoginFormComponent implements OnInit {
         this.serviceProfile.getProfileById(userlogged.uid).subscribe((profileservice) => {
 
           // console.log("en el login", profileservice);          
+          if (profileservice) {
 
-          let profile = {
-            id: profileservice['_id'],
-            idAllies: profileservice.idAllies,
-            nameAllie: profileservice.nameAllie,
-            idHeadquarter: profileservice.idHeadquarter,
-            nameHeadquarter: profileservice.nameHeadquarter,
-            nameCharge: profileservice.nameCharge,
-            permis: profileservice.permis
+            let profile = {
+              id: profileservice['_id'],
+              idAllies: profileservice.idAllies,
+              nameAllie: profileservice.nameAllie,
+              idHeadquarter: profileservice.idHeadquarter,
+              nameHeadquarter: profileservice.nameHeadquarter,
+              nameCharge: profileservice.nameCharge,
+              permis: profileservice.permis
 
+            }
+
+            localStorage.setItem('profile', JSON.stringify(profile));
+
+            this.spinner.hide();
+
+            // console.log(profileservice.nameCharge.toLocaleLowerCase());
+            this.navigateProfile(profileservice);
+
+          } else {
+            this.spinner.hide();
+            Swal.fire({ title: "No es posible iniciar sesión, por favor comunicate con soporte",
+            icon:'warning'
+          })
           }
 
-          localStorage.setItem('profile', JSON.stringify( profile ));
-
-          this.spinner.hide();
-
-          // console.log(profileservice.nameCharge.toLocaleLowerCase());
-          this.navigateProfile(profileservice);
-
-        }, err =>{
+        }, err => {
           this.spinner.hide();
           Swal.fire(
             "Comprueba tu conexión a internet"
@@ -76,7 +82,7 @@ export class LoginFormComponent implements OnInit {
       }).catch(err => {
 
         this.spinner.hide();
-        this.signError = false;
+        this.signError = true;
 
       }
       );
@@ -86,11 +92,11 @@ export class LoginFormComponent implements OnInit {
 
   }
 
-  navigateProfile(profileservice){
+  navigateProfile(profileservice) {
     switch (profileservice.nameCharge.toLocaleLowerCase()) {
-            
-      case 'cajero': 
-      case 'administradorpdv': 
+
+      case 'cajero':
+      case 'administradorpdv':
       case 'gerentegeneral':
         this.route.navigate(['main/principal-orders']);
         break;
@@ -100,7 +106,7 @@ export class LoginFormComponent implements OnInit {
         break;
 
       case 'contador':
-        this.route.navigate([ '/main', 'reportGenerator' ]);
+        this.route.navigate(['/main', 'reportGenerator']);
         break;
 
       default:

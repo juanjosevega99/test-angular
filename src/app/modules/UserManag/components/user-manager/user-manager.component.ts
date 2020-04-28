@@ -546,13 +546,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
                 let userName = user['name']
                 let arrayCuponByIdUser = this.couponsAvailableByIdCoupon.filter(coupon => coupon.idUser == iduser)
                 if (arrayCuponByIdUser.length != 0) {
-                  alert(`al usuario ${userName} no se le puede asignar un cupón`)
-                  // Swal.fire({
-                  //   text: `al usuario ${userName} no se le puede asignar un cupón`,
-                  //   icon: 'warning',
-                  //   confirmButtonColor: '#542b81',
-                  //   confirmButtonText: 'Ok!'
-                  // })
                   break;
                 } else {
                   let couponsAvailable = this.couponsAvailableByIdCoupon.filter(coupon => coupon.state == false)
@@ -620,9 +613,9 @@ export class UserManagerComponent implements OnInit, OnDestroy {
               }
               if (flagThereIsNoUser == true) {
                 Swal.fire({
-                  title: 'Enviado',
-                  text: `Cupones enviados: ${contCouponsSend} `,
-                  icon: 'warning',
+                  title: 'Cupones enviados',
+                  // text: `Cupones enviados: ${contCouponsSend} `,
+                  icon: 'success',
                   confirmButtonColor: '#542b81',
                   confirmButtonText: 'Ok!'
                 })

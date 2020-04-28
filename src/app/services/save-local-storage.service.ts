@@ -41,5 +41,13 @@ export class SaveLocalStorageService {
     let idPromotion = localStorage.getItem("idPromotion")
     return idPromotion;
   }
+  saveLocalStorageIdTyc(idTyc: string) {
+    localStorage.setItem("idTyc", idTyc)
+  }
+
+  getLocalStorageIdTyc() {
+    let idTyc = localStorage.getItem("idTyc")
+    return idTyc;
+  }
 
 }

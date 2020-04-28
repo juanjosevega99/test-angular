@@ -45,6 +45,7 @@ export class PqrListComponent implements OnInit {
   generalsearch: string = '';
   table: FormGroup;
 
+  loadingPqrs = false;
   // profile
   profile: profileStorage;
 
@@ -65,41 +66,46 @@ export class PqrListComponent implements OnInit {
 
     })
 
-    if(this.profile.nameCharge.toLocaleLowerCase() == "administradortifi"){
+    this.loadingPqrs = true;
+
+    if (this.profile.nameCharge.toLocaleLowerCase() == "administradortifi") {
       this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
 
         if (res.length > 0) {
-  
-          res.forEach((order: any) => {
-  
+
+          res.forEach((order: any, index) => {
+
             if (order.idUser) {
-  
               this.formaterPqr(order);
-  
-            } else {
-              console.log("problem with order.userid", order.userid);
             }
-          },
-          )
+            
+            if (index === (res.length-1)) {
+              this.loadingPqrs = false;
+            }
+
+          })
+        }else{
+          this.loadingPqrs=false;
         }
       })
-    }else{
+    } else {
 
       this.pqrlistservice.getPqrs().subscribe(res => {
-  
+
         if (res.length > 0) {
-  
-          res.forEach((order: any) => {
-  
+
+          res.forEach((order: any, index) => {
+
             if (order.idUser) {
-  
               this.formaterPqr(order);
-  
-            } else {
-              console.log("problem with order.userid", order.userid);
             }
-          },
-          )
+
+            if (index === (res.length-1)) {
+              this.loadingPqrs = false;
+            }
+          })
+        } else {
+          this.loadingPqrs = false;
         }
       })
     }
@@ -232,7 +238,7 @@ export class PqrListComponent implements OnInit {
       const obj: Pqrs = {};
 
       obj.id = order.id,
-      obj.date = this.convertDate(order.date);
+        obj.date = this.convertDate(order.date);
       obj.nameUser = user.name;
       obj.email = user.email;
       obj.phone = user.phone;
@@ -287,7 +293,7 @@ export class PqrListComponent implements OnInit {
       nameUser: "",
       email: "",
       phone: "",
-      birthday: "", 
+      birthday: "",
       gender: "",
       nameAllie: "",
       nameHeadquarter: ""
@@ -349,7 +355,7 @@ export class PqrListComponent implements OnInit {
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.date) || myRegex.test(item.nameUser) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService))
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) || myRegex.test(item.id) )
 
       }).
       filter(function (item) {
@@ -483,13 +489,13 @@ export class PqrListComponent implements OnInit {
       case 'pidelo':
         this.servicepidelo = !this.servicepidelo;
         this.servicellevalo = false;
-        this.servicereservalo=false;
+        this.servicereservalo = false;
         service = this.servicepidelo ? service : "";
         break;
       case 'llevalo':
         this.servicellevalo = !this.servicellevalo;
         this.servicepidelo = false;
-        this.servicereservalo=false;
+        this.servicereservalo = false;
         service = this.servicellevalo ? service : "";
         break;
       case 'reservalo':

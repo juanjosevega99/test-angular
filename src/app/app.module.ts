@@ -69,6 +69,7 @@ import { CreateCouponComponent } from './modules/CupManag/create-coupon/create-c
 // full calendar
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CreateBannerComponent } from './modules/BannerManag/components/create-banner/create-banner.component';
+import { CreateTycComponent } from './modules/TycManag/create-tyc/create-tyc.component';
 
 @NgModule({
   declarations: [
@@ -117,7 +118,8 @@ import { CreateBannerComponent } from './modules/BannerManag/components/create-b
     TypeServiceImgDirective,
     CronometerStateDirective,
     CreateCouponComponent,
-    CreateBannerComponent
+    CreateBannerComponent,
+    CreateTycComponent
 
   ],
   imports: [
