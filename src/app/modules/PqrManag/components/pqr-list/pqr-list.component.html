@@ -159,12 +159,15 @@
                         </a>
                     </td>
                 </tr>
-                <tr *ngIf=" !newdateArray.length " >
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>No hay Resultados</td>
+                <tr>
+                    <td colspan="10">
+                        <div *ngIf="loadingPqrs" class="fa-3x text-center">
+                            <i class="fas fa-spinner fa-pulse"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf=" !newdateArray.length && !loadingPqrs ">
+                    <td colspan="10">No hay Resultados</td>
                 </tr>
             </tbody>
 
@@ -248,5 +251,3 @@
     </div>
 
 </div>
-
-{{newdateArray.length }}

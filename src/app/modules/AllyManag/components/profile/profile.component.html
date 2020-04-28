@@ -62,7 +62,7 @@
     </div>
     <div class="tableFixHead mt-5">
         <table>
-            <thead>
+            <thead >
                 <tr>
                     <th class="text-center">Perfil</th>
                     <th class="text-center">Cédula</th>
@@ -95,8 +95,8 @@
                             </label>
                         </div>
                     </td>
-                    <td>
-                        <div class="radio radio-danger m-2 form-check-inline">
+                    <td >
+                        <div class="radio radio-danger m-2 form-check-inline" >
                             <input [checked]="prof.state[1].check" value="{{prof.id}}" type="radio" name={{i}}
                                 id="state" #inactive (click)="changeStateI(inactive.value)">
                             <label style="font-size: 15px;">

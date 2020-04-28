@@ -1,4 +1,4 @@
-<div class="compenetsstyle px-5">
+<div class="compenetsstyle px-5" style="background-color: #e9e7e7;">
 
     <div class="container-fluid">
         <div class="m-3 d-flex flex-row ">
@@ -54,7 +54,7 @@
     </div>
     <div *ngIf="profile.reportPermissions.reportComplete" class="container-fluid">
         <div class="tableFixHead">
-            <table id="excel-table-general" >
+            <table id="excel-table-general">
 
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@
                         <th class="text-center">valor T. con-reserva</th>
                         <th class="text-center">valor T. sin-reserva</th>
                         <th class="text-center">Costo reserva sin IVA</th>
-                        <th class="text-center">% Intermediación</th> 
+                        <th class="text-center">% Intermediación</th>
                         <th class="text-center">Valor Intermediación sin IVA</th>
                         <th class="text-center">Valor Intermediación IVA</th>
                         <th class="text-center">Valor T. Intermediación y Reserva</th>
@@ -101,24 +101,35 @@
                             <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
                         </td> -->
                         <td>
-                            <tr *ngFor=" let dish of order.nameDishe; let i = index">
-                             {{ order.quantity[i] + "-" + dish }}
-                            </tr>
-                        </td>
-                        <td>
-                            <tr *ngFor="let valueDishe of order.valueDishe" >{{valueDishe}}</tr>
-                        </td>
-                        <td>{{"$ " + order.costReservationIva }}</td>
-                        <td>{{"$ " + order.purchaseAmount }}</td>
-                        <td>{{"$ " + order.valueTotalWithoutRes }}</td>
-                        <td>{{"$ " + order.costReservation }}</td>
-                        <td>{{ order.percent + "%" }}</td>
-                        <td>{{"$ " + order.valueIntermediation  }}</td>
-                        <td>{{"$ " + order.valueIntermediationIva  }}</td>
-                        <td>{{"$ " + order.valueTotalIntRes }}</td>
-                        <td>{{"$ " + order.valueForAlly }}</td>
+                    <tr *ngFor=" let dish of order.nameDishe; let i = index">
+                        {{ order.quantity[i] + "-" + dish }}
+                    </tr>
+                    </td>
+                    <td>
+                        <tr *ngFor="let valueDishe of order.valueDishe">{{valueDishe}}</tr>
+                    </td>
+                    <td>{{"$ " + order.costReservationIva }}</td>
+                    <td>{{"$ " + order.purchaseAmount }}</td>
+                    <td>{{"$ " + order.valueTotalWithoutRes }}</td>
+                    <td>{{"$ " + order.costReservation }}</td>
+                    <td>{{ order.percent + "%" }}</td>
+                    <td>{{"$ " + order.valueIntermediation  }}</td>
+                    <td>{{"$ " + order.valueIntermediationIva  }}</td>
+                    <td>{{"$ " + order.valueTotalIntRes }}</td>
+                    <td>{{"$ " + order.valueForAlly }}</td>
 
                     </tr>
+                    <tr>
+                        <td colspan="21">
+                            <div *ngIf="loadingUsers" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!newdateArray.length && !loadingUsers">
+                        <td colspan="21"> No existen registros para este rango de fechas </td>
+                    </tr>
+
                 </tbody>
 
             </table>
@@ -128,7 +139,7 @@
 
     <div *ngIf="profile.reportPermissions.reportadminpdv" class="container-fluid">
         <div class="tableFixHead">
-            <table id="excel-table-general" >
+            <table id="excel-table-general">
 
                 <thead>
                     <tr>
@@ -175,23 +186,33 @@
                             <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
                         </td> -->
                         <td>
-                            <tr *ngFor=" let dish of order.nameDishe; let i = index">
-                             {{ order.quantity[i] + "-" + dish }}
-                            </tr>
-                        </td>
-                        <td>
-                            <tr *ngFor="let valueDishe of order.valueDishe" >{{valueDishe}}</tr>
-                        </td>
-                        <td>{{"$ " + order.costReservationIva }}</td>
-                        <td>{{"$ " + order.purchaseAmount }}</td>
-                        <td>{{"$ " + order.valueTotalWithoutRes }}</td>
-                        <!-- <td>{{"$ " + order.costReservation }}</td>
+                    <tr *ngFor=" let dish of order.nameDishe; let i = index">
+                        {{ order.quantity[i] + "-" + dish }}
+                    </tr>
+                    </td>
+                    <td>
+                        <tr *ngFor="let valueDishe of order.valueDishe">{{valueDishe}}</tr>
+                    </td>
+                    <td>{{"$ " + order.costReservationIva }}</td>
+                    <td>{{"$ " + order.purchaseAmount }}</td>
+                    <td>{{"$ " + order.valueTotalWithoutRes }}</td>
+                    <!-- <td>{{"$ " + order.costReservation }}</td>
                         <td>{{ order.percent + "%" }}</td>
                         <td>{{"$ " + order.valueIntermediation  }}</td>
                         <td>{{"$ " + order.valueIntermediationIva  }}</td>
                         <td>{{"$ " + order.valueTotalIntRes }}</td>
                         <td>{{"$ " + order.valueForAlly }}</td> -->
 
+                    </tr>
+                    <tr>
+                        <td colspan="21">
+                            <div *ngIf="loadingUsers" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!newdateArray.length && !loadingUsers">
+                        <td colspan="21"> No existen registros para este rango de fechas </td>
                     </tr>
                 </tbody>
 
@@ -201,7 +222,7 @@
 
     <div *ngIf="profile.reportPermissions.reportsummary" class="container-fluid">
         <div class="tableFixHead">
-            <table id="excel-table-cajero" >
+            <table id="excel-table-cajero">
 
                 <thead>
                     <tr>
@@ -217,7 +238,7 @@
                         <th class="text-center">Control Pedidos</th>
                         <!-- <th class="text-center">Catidad</th> -->
                         <th class="text-center">Cantidad/Plato</th>
-   
+
                     </tr>
 
                 </thead>
@@ -239,12 +260,22 @@
                             <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
                         </td> -->
                         <td>
-                            <tr *ngFor=" let dish of order.nameDishe; let i = index">
-                             {{ order.quantity[i] + "-" + dish }}
-                            </tr>
-                        </td>
-
+                    <tr *ngFor=" let dish of order.nameDishe; let i = index">
+                        {{ order.quantity[i] + "-" + dish }}
                     </tr>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td colspan="21">
+                            <div *ngIf="loadingUsers" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!newdateArray.length && !loadingUsers">
+                        <td colspan="21"> No existen registros para este rango de fechas </td>
+                    </tr>
+
                 </tbody>
 
             </table>
@@ -252,15 +283,18 @@
     </div>
     <div class="container-fluid text-center mt-3">
 
-        <button *ngIf="profile.reportPermissions.reportSummary" type="button" (click)="generatePdf()" class="btnForInforms" data-toggle="modal"
-            data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png" class="tifi-icon-back">
+        <button *ngIf="profile.reportPermissions.reportSummary" type="button" (click)="generatePdf()"
+            class="btnForInforms" data-toggle="modal" data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png"
+                class="tifi-icon-back">
             Descargar PDF</button>
 
-        <button *ngIf="profile.reportPermissions.reportadminpdv" type="button" (click)="generateReportPDVPdf()" class="btnForInforms" data-toggle="modal"
-            data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png" class="tifi-icon-back">
+        <button *ngIf="profile.reportPermissions.reportadminpdv" type="button" (click)="generateReportPDVPdf()"
+            class="btnForInforms" data-toggle="modal" data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png"
+                class="tifi-icon-back">
             Descargar PDF</button>
 
-        <button *ngIf="profile.reportPermissions.reportComplete" type="button" (click)="generateExcel()" class="btnForInforms" data-toggle="modal"
-            data-target="#exampleModalCenter"><img src="assets/icons/excel.png" class="tifi-icon-back">Descargar excel</button>
+        <button *ngIf="profile.reportPermissions.reportComplete" type="button" (click)="generateExcel()"
+            class="btnForInforms" data-toggle="modal" data-target="#exampleModalCenter"><img
+                src="assets/icons/excel.png" class="tifi-icon-back">Descargar excel</button>
     </div>
 </div>

@@ -23,14 +23,12 @@
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                         <li class="nav-item mr-md-2">
                                             <input placeholder="Buscar por código..." class="form-control text-center"
-                                                type="text" (keyup)="search()" #code id="code"
-                                                formControlName="code">
+                                                type="text" (keyup)="search()" #code id="code" formControlName="code">
                                         </li>
                                         <li class="nav-item">
                                             <input placeholder="Buscar por nombre de establecimiento ..."
-                                                class="form-control text-center" type="text"
-                                                (keyup)="search()" id="name"
-                                                formControlName="nameAllies">
+                                                class="form-control text-center" type="text" (keyup)="search()"
+                                                id="name" formControlName="nameAllies">
                                         </li>
                                     </ul>
                                 </div>
@@ -63,8 +61,9 @@
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
                                     <li class="nav-item container-fluid d-flex">
-                                        <input (keyup)="search()" class="form-control text-center" [(ngModel)]="generalsearch"
-                                            id="general" type="text" placeholder="Buscar cupon ...">
+                                        <input (keyup)="search()" class="form-control text-center"
+                                            [(ngModel)]="generalsearch" id="general" type="text"
+                                            placeholder="Buscar cupon ...">
                                     </li>
                                 </ul>
                             </nav>
@@ -131,12 +130,20 @@
                         </div>
                     </td>
                     <td>
-                        <button [routerLink]="['/main', 'createBanner', coupon.id]" class="btn"> <i class="far fa-edit"></i>
+                        <button [routerLink]="['/main', 'createBanner', coupon.id]" class="btn"> <i
+                                class="far fa-edit"></i>
                         </button>
                     </td>
                 </tr>
                 <tr>
-                    <td *ngIf="!bannerArray.length" colspan="8">
+                    <td colspan="9">
+                        <div *ngIf="loadingBanners" class="fa-3x text-center">
+                            <i class="fas fa-spinner fa-pulse"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td *ngIf="!bannerArray.length && !loadingBanners" colspan="9">
                         <a> No se encontraron resultados </a>
                     </td>
                 </tr>
