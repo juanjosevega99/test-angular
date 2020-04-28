@@ -28,6 +28,8 @@ export class ProfileComponent implements OnInit {
   //variables of idAlly
   idAlly: number;
 
+  //flag loading
+  loading: boolean;
 
   constructor(private profilesService: ProfilesService,
     private _router: Router,
@@ -43,22 +45,28 @@ export class ProfileComponent implements OnInit {
       this.idAlly = params['id']
     });
 
-    
-  }
-
-  ngOnInit() {
+    this.loading = true;
     this.loadProfiles();
 
   }
 
-  loadProfiles(){
+  ngOnInit() {
+
+  }
+
+  loadProfiles() {
+    this.profilesgetting=[];
+    this.newArray = this.profilesgetting;
+
     //inicialization of profiles
-    this.profilesService.getProfiles().subscribe(res => {
-      res.forEach((profile: Profiles) => {
-        if (res.length > 0) {
+    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
+      for (let x in res) {
+        let profile: Profiles
+        if (res != []) {
+          profile = res[x]
 
           const obj: ProfileList = {};
-          obj.id = profile.id;
+          obj._id = profile._id;
           obj.nameCharge = profile.nameCharge;
           obj.identification = profile.identification;
           obj.name = profile.name;
@@ -70,11 +78,14 @@ export class ProfileComponent implements OnInit {
           obj.state = profile.state
 
           this.profilesgetting.push(obj)
-        }
-      })
-    })
+          this.loading = false;
 
+        }
+      }
+    })
   }
+
+
   goBackHeadquarterOptions() {
     this._router.navigate(['/main', 'headquarts', this.idAlly])
   }
@@ -164,15 +175,19 @@ export class ProfileComponent implements OnInit {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
-        this.profilesService.putProfile(idProfile, newState).subscribe(res => {
-          this.profilesService.getProfiles().subscribe(profile => {
-            this.profilesgetting = profile
-          })
+        this.loading = true
+        this.profilesService.putProfile(idProfile, newState).subscribe(res => {   
+          this.loadProfiles()
         })
-        Swal.fire(
-          'Actualizado!',
-          'success',
-        )
+        Swal.fire({
+          text: "Estado actualizado!!",
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
+      } else {
+        this.loading = true;
+        this.loadProfiles();
       }
     })
   }

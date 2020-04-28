@@ -225,7 +225,7 @@ export class AccompanimentsComponent implements OnInit {
 
   //method fot the button "No hay acompañamientos", remove all the accompaniments of the promo
   removeAllAccompanimentOfPromo() {
-  /*   if(this.promotion.idAccompaniments == []){
+    if(!this.promotion.idAccompaniments.length){
       Swal.fire({
         title: 'Error',
         text: "Esta promoción no tiene acompañamientos!",
@@ -233,7 +233,7 @@ export class AccompanimentsComponent implements OnInit {
         confirmButtonColor: '#542b81',
         confirmButtonText: 'ok!'
       })
-    }else{ */
+    }else{
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
@@ -262,7 +262,7 @@ export class AccompanimentsComponent implements OnInit {
         })
       }
     })
-  /* } */ 
+  } 
   }
 
   //see accompaniments of the promotion

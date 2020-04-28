@@ -1,5 +1,6 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
-    <div class="row">
+    <app-loading *ngIf="loading"></app-loading>
+    <div  *ngIf="!loading" class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
             <a (click)="goBackHeadquarterOptions()" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
@@ -60,7 +61,7 @@
             </div>
         </section>
     </div>
-    <div class="tableFixHead mt-5">
+    <div  *ngIf="!loading" class="tableFixHead mt-5">
         <table>
             <thead>
                 <tr>
@@ -88,7 +89,7 @@
                     <td>{{prof.numberOfModifications}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
-                            <input [checked]="prof.state[0].check" value="{{prof.id}}" type="radio" name={{i}}
+                            <input [checked]="prof.state[0].check" value="{{prof._id}}" type="radio" name={{i}}
                                 id="state" #active (click)="changeStateA(active.value)">
                             <label style="font-size: 15px;">
                                 Activo
@@ -97,7 +98,7 @@
                     </td>
                     <td>
                         <div class="radio radio-danger m-2 form-check-inline">
-                            <input [checked]="prof.state[1].check" value="{{prof.id}}" type="radio" name={{i}}
+                            <input [checked]="prof.state[1].check" value="{{prof._id}}" type="radio" name={{i}}
                                 id="state" #inactive (click)="changeStateI(inactive.value)">
                             <label style="font-size: 15px;">
                                 Inactivo
@@ -105,7 +106,7 @@
                         </div>
                     </td>
                     <td>
-                        <a [routerLink]="[ '/main/createProfile', i ]" class="btn"> <i class="far fa-edit"></i> </a>
+                        <a [routerLink]="[ '/main/createProfile', i ]"  class="btn"> <i class="far fa-edit"></i> </a><!--(click)="seeI(prof.id)" [routerLink]="[ '/main/createProfile', prof.id ]" -->
                     </td>
                 </tr>
             </tbody>

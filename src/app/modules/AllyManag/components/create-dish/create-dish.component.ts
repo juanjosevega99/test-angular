@@ -772,7 +772,7 @@ export class CreateDishComponent implements OnInit {
           Swal.fire({
             title: 'Eliminado',
             text: "Tu plato ha sido eliminado!",
-            icon: 'warning',
+            icon: 'success',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
           }).then((result) => {
