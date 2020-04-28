@@ -93,8 +93,7 @@ export class CouponsService {
             codeReferred: coupons.codeReferred
           };
           return obj;
-        }
-        )
+        })
       );
   }
 }

@@ -1,0 +1,49 @@
+<div class="compenetsstyle">
+    <app-loading *ngIf="loading"></app-loading>
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveTyc(shape)" #shape="ngForm" *ngIf="!loading">
+        
+        <a  class="d-flex mr-2">
+            <img (click)="goBackTycManger()" src="assets/icons/Back.png " class="tifi-icon-back">
+        </a>
+
+        <section class="col-9">
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Nombre de los términos y condiciones</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="nameTyc" #nameTyc="ngModel" id="id" placeholder="Nombre TyC"
+                        [ngClass]="{'is-invalid': (!nameTyc.valid && nameTyc.touched),'is-valid':(nameTyc.valid) }"
+                        [(ngModel)]="preTyc.name" required>
+                    <div *ngIf="nameTyc.errors?.required" class="invalid-feedback">*Este campo es requerido
+                    </div>
+                    <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Descripción</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 20rem;" name="description" #description="ngModel" id="id" placeholder="Descripción"
+                        [ngClass]="{'is-invalid': (!description.valid && description.touched),'is-valid':(description.valid) }"
+                        [(ngModel)]="preTyc.description" rows="2" required></textarea>
+                        <div *ngIf="description.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="col-12 d-flex" style="justify-content: center;">
+
+            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit"
+                class="btn btn-outline-primary btn-lg">Guardar</button>
+            <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="swallUpdateTyc()"
+                class="btn btn-outline-primary btn-lg">Actualizar</button>
+        </section>
+
+    </form>
+
+
+</div>

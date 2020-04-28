@@ -14,28 +14,29 @@ export class TermsAndConditionsService {
 
   postTermAndCondition(termandcondition): Observable<TermsAndConditions> {
     return this.httpclient.post<TermsAndConditions>(
-      environment.UrlBase + "termsandconditions",
+      environment.UrlBase + "terms-and-conditions",
       termandcondition
     );
   }
 
   putTermAndCondition(termandcondition): Observable<TermsAndConditions> {
     return this.httpclient.put<TermsAndConditions>(
-      environment.UrlBase + "termsandconditions" + termandcondition.id,
+      environment.UrlBase + "terms-and-conditions/" + termandcondition.id,
       termandcondition
     );
   }
 
   deleteTermAndCondition(id): Observable<{}> {
-    return this.httpclient.delete(environment.UrlBase + "termsandconditions/" + id);
+    return this.httpclient.delete(environment.UrlBase + "terms-and-conditions/" + id);
   }
 
   getTermsAndConditions(): Observable<any[]> {
-    return this.httpclient.get<TermsAndConditions[]>(environment.UrlBase + "termsandconditions").pipe(
+    return this.httpclient.get<TermsAndConditions[]>(environment.UrlBase + "terms-and-conditions").pipe(
       map((termsandconditions: any[]) =>
         termsandconditions.map(termsandconditions => {
           let obj = {
-            id: termsandconditions.id,
+            id: termsandconditions._id,
+            name: termsandconditions.name,
             description: termsandconditions.description
           };
           return obj;
@@ -44,19 +45,18 @@ export class TermsAndConditionsService {
     );
   }
 
-  getTermAndConditionById(id): Observable<any[]> {
+  getTermAndConditionById(id): Observable<TermsAndConditions> {
     return this.httpclient
-      .get<TermsAndConditions[]>(environment.UrlBase + "termsandconditions/" + id)
+      .get<TermsAndConditions>(environment.UrlBase + "terms-and-conditions/" + id)
       .pipe(
-        map((termsandconditions: any[]) =>
-          termsandconditions.map(termsandconditions => {
+        map((termsandconditions: TermsAndConditions) => {
             let obj = {
               id: termsandconditions.id,
+              name: termsandconditions.name,
               description: termsandconditions.description
             };
             return obj;
           })
-        )
       );
   }
 }
