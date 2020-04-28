@@ -34,6 +34,7 @@ export class AllyManagerComponent implements OnInit {
   dateDay: any[] = [];
   //variable of don't results
   noResults = false
+  loadingAllies = false;
   //variable for the loading
   // loading: boolean;
 
@@ -84,25 +85,26 @@ export class AllyManagerComponent implements OnInit {
       "generalsearch": new FormControl(),
     })
 
+    this.loadingAllies = true;
     this._alliesService.getAllies().subscribe(allies => {
 
-      allies.forEach((ally: Allies) => {
+      allies.forEach((ally: Allies, index) => {
         let attentionSchedule: any = "";
         let headquartersByIdAlly = [];
 
         this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
           .subscribe((schedule) => {
-            console.log('fecha',day);
+            // console.log('fecha',day);
             let dayDb = schedule.attentionSchedule.find(e => e.day == day)
             let msgSchedule = `${dayDb.from} - ${dayDb.to} `
             attentionSchedule = msgSchedule
           })
 
           this._headquartService.getHeadquarterByAllIdAlly(ally.id).subscribe(headquarter => {
-            console.log(headquarter)
+            // console.log(headquarter)
               this.arrayHeadquarter = headquarter
               this.arrayHeadquarter.forEach(element => {
-                console.log('elem', element);
+                // console.log('elem', element);
                 let obj = {
                   id: element._id,
                   name: element.name
@@ -137,6 +139,10 @@ export class AllyManagerComponent implements OnInit {
           }
           this.arrayAllyManager.push(obj);
         })
+
+        if( index === (allies.length - 1) ){
+          this.loadingAllies = false;
+        }
        
        })
 
@@ -161,7 +167,7 @@ export class AllyManagerComponent implements OnInit {
         idsearch = i;
       }
     }
-    console.log('espacios', count);
+    // console.log('espacios', count);
 
     if (count > 0 && count < 2 && !this.table.controls['generalsearch'].value) {
 

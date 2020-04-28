@@ -8,6 +8,10 @@
     flex-direction: row-reverse;
 } */
 
+.compenetsstyle{
+  height: 100%;
+}
+
 .form-group.hidden {
   width: 0;
   margin: 0;
@@ -35,7 +39,7 @@
 
 .tableFixHead {
   overflow-y: auto;
-  height: 22rem;
+  height: 28rem;
 }
 .tableFixHead thead th {
   position: sticky;

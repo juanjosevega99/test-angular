@@ -95,8 +95,12 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     private couponsService: CouponsService,
     private saveLocalStorageService: SaveLocalStorageService,
     private promotionService: PromotionsService,
-    private couponsAvailableService: CouponsAvailableService, private modalpromo: NgbModal, private allyservice: AlliesService,
-    private dishesService: DishesService, private promoService: PromotionsService) {
+    private couponsAvailableService: CouponsAvailableService,
+    private modalpromo: NgbModal,
+    private allyservice: AlliesService,
+    private dishesService: DishesService,
+    private promoService: PromotionsService,
+    private _router: Router) {
 
     this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
@@ -257,7 +261,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   // delete idpromo from localstorage
   // ==========================
 
-  deleteFromLocal(){
+  deleteFromLocal() {
     localStorage.removeItem('idPromotion');
     localStorage.removeItem('idCoupon')
   }
@@ -270,55 +274,73 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     this.selectforsend();
 
     if (localStorage.getItem('idPromotion')) {
-      this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
-        let name = promo.name
+      if (this.userSelected.length) {
+        this.promotionService.getPromotionById(localStorage.getItem('idPromotion')).subscribe(promo => {
+          let name = promo.name
+          let reference = promo.reference
+          Swal.fire({
+            html:
+              '¿Estás seguro de que deseas<br>' +
+              ' <b>aplicar la promocion </b>' +
+              `<b>${name}</b><br>` +
+              'a los usuarios seleccionados<br>',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#542b81',
+            cancelButtonColor: '#542b81',
+            confirmButtonText: 'Si, enviar!'
+          }).then((result) => {
 
-        Swal.fire({
-          html:
-            '¿Estás seguro de que deseas<br>' +
-            ' <b>aplicar la promocion </b>' +
-            `<b>${name}</b><br>` +
-            'a los usuarios seleccionados<br>',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#542b81',
-          cancelButtonColor: '#542b81',
-          confirmButtonText: 'Si, enviar!'
-        }).then((result) => {
+            if (result.value) {
+              let idPromo = localStorage.getItem('idPromotion');
 
-          if (result.value) {
-            let idPromo = localStorage.getItem('idPromotion');
+              this.userSelected.forEach((user: OrderByUser, i) => {
 
-            this.userSelected.forEach((user: OrderByUser, i) => {
+                const idsP = user.idsPromos;
 
-              const idsP = user.idsPromos;
+                if (idsP.length) {
 
-              if (idsP.length) {
+                  let promoexist = idsP.indexOf(idPromo); // it's -1 if not exist
 
-                let promoexist = idsP.indexOf(idPromo); // it's -1 if not exist
-                
-                if ( promoexist < 0 ) {
-                  user.idsPromos.push(idPromo);
-                  this.promoToUser(user);
+                  if (promoexist < 0) {
+                    user.idsPromos.push(idPromo);
+                    this.promoSelectedToUsers(user, reference);
 
+                  } else {
+                    Swal.fire({
+                      text: "La promoción ha sido aplicada satisfactoriamente a los usuarios seleccionados!",
+                      icon: 'success',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    }).then((result) => {
+                      if (result.value) {
+                        localStorage.removeItem('idPromotion');
+                        this._router.navigate(['/main', 'createDish', reference]);
+                      }
+                    })
+                  }
                 } else {
-                  Swal.fire({
-                    title: 'promociones enviadas satisfactoriamente',
-                    // text: `"de que deseas enviar estos cupones!"`,
-                    icon: 'success'
-                  })
+                  // enviar promociones
+                  user.idsPromos.push(idPromo);
+                  this.promoSelectedToUsers(user, reference);
                 }
-              } else {
-                // enviar promociones
-                user.idsPromos.push(idPromo);
-                this.promoToUser(user);
-              }
 
-            })
+              })
+            }
 
-          }
+          })
+
         })
-      })
+
+      } else {
+        Swal.fire({
+          text: "Por favor, seleccione al menos un usuario!",
+          icon: 'warning',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
+      }
+
     } else {
 
       console.log(this.userSelected);
@@ -334,6 +356,28 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     }
 
   }
+
+  promoSelectedToUsers(user: OrderByUser, reference: string) {
+    const promosend = {
+      idsPromos: user.idsPromos
+    }
+
+    this.userservice.putUsers(user.idUser, promosend).subscribe((userUpdate: Users) => {
+      console.log("promociones enviadas satisfactoriamente");
+      Swal.fire({
+        text: "La promoción ha sido aplicada satisfactoriamente a los usuarios seleccionados!",
+        icon: 'success',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      }).then((result) => {
+        if (result.value) {
+          localStorage.removeItem('idPromotion');
+          this._router.navigate(['/main', 'createDish', reference]);
+        }
+      })
+    })
+  }
+
 
   updatePromosUser() {
 
@@ -371,9 +415,10 @@ export class UserManagerComponent implements OnInit, OnDestroy {
               this.promoToUser(user);
             } else {
               Swal.fire({
-                title: 'promociones enviadas satisfactoriamente',
-                // text: `"de que deseas enviar estos cupones!"`,
-                icon: 'success'
+                text: "Promociones enviadas satisfactoriamente!",
+                icon: 'success',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
               })
             }
 
@@ -420,9 +465,12 @@ export class UserManagerComponent implements OnInit, OnDestroy {
       })
 
     } else {
-      Swal.fire(
-        'seleccione al menos un usuario'
-      )
+      Swal.fire({
+        text: "Por favor, seleccione al menos un usuario!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
     }
 
     this.selectforsend();

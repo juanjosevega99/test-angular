@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 
@@ -8,16 +8,14 @@ import { AuthFireServiceService } from '../../services/providers/auth-fire-servi
   templateUrl: './login-forget.component.html',
   styleUrls: ['./login-forget.component.scss', '../login/login.component.scss']
 })
-export class LoginForgetComponent implements OnInit {
+export class LoginForgetComponent{
 
   // elemento para manejar la forma del componente
   forma:FormGroup;
-  emailinvalid:boolean;
-  emailsuccess:boolean;
+  emailinvalid=false;
+  emailsuccess=false;
 
   constructor( public firebaseservice: AuthFireServiceService ) {
-    this.emailinvalid = false;
-    this.emailsuccess=false;
 
     this.forma = new FormGroup({
       //parametros
@@ -26,25 +24,15 @@ export class LoginForgetComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
-  }
-
-  send(){ 
-    console.log(this.forma)
-    console.log(this.forma.value)
-  }
-
   forgetPass(){
-      console.log(this.forma.get('email').value );
       
       this.firebaseservice.forgetPassword(this.forma.get('email').value)
       .then(res => {
-        console.log(res);
         this.emailsuccess = true;
+        this.emailinvalid = false;
       }
       ).catch(err =>{
 
-        console.log(err.code)
         if(err.code == 'auth/user-not-found'){
           this.emailinvalid = true;
         }

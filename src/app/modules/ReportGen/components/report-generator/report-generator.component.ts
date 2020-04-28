@@ -48,6 +48,7 @@ export class ReportGeneratorComponent implements OnInit {
 
   //array for users of service
   usergetting: ReportGenerate[] = [];
+  loadingUsers = false;
 
   //Array for filter
   newdateArray = this.usergetting;
@@ -62,86 +63,7 @@ export class ReportGeneratorComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getToday();
 
-    this.userservice.getUsers().subscribe(res => {
-
-      res.forEach((user: Users) => {
-
-        this.orderservice.getChargeByUserId(user.id).subscribe((order: Orders[]) => {
-          if (order.length > 0) {
-
-            order.forEach((order: Orders) => {
-              const obj: ReportGenerate = {};
-
-              // in this place get headquarts by id
-              this.headquartsservice.getHeadquarterById(order.idHeadquartes).subscribe(
-
-                (headq: any) => {
-                  if (headq) {
-
-                    obj.idHeadquarter = order.idHeadquartes;
-                    obj.location = headq.ubication;
-                    obj.codeOrder = order.code;
-                    obj.client = user.name + " " + user.lastname;
-                    obj.typeOfService = order.typeOfService['type'];
-                    obj.purchaseAmount = order.orderValue;
-                    obj.registerDate = this.convertDate(order.dateAndHourReservation);
-                    obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
-                    obj.controlOrder = order.deliveryStatus;
-                    obj.valueTotalWithRes = order.orderValue;
-
-                    headq.costPerService.map(service => {
-                      if (service.id == order.typeOfService) {
-                        obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
-                        obj.costReservationIva = parseFloat(service.value);
-                        obj.valueTotalWithoutRes = (order.orderValue - service.value);
-                      }
-                    })
-
-                    // ally
-                    this.allyservice.getAlliesById(order.idAllies).subscribe((ally: any) => {
-                      obj.ally = ally.name;
-                      obj.percent = ally.intermediationPercentage;
-                      obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
-                      let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
-                      obj.valueIntermediationIva = auxvalue;
-                      obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
-                      obj.valueForAlly = (order.orderValue - (auxvalue + obj.costReservationIva));
-                    })
-
-                    // dish
-                    let namedsh = [];
-                    let valueDish = []
-                    let quanty = []
-                    order.idDishe.forEach((object: any) => {
-
-                      quanty.push(object.quantity);
-
-                      this.dishService.getDisheById(object.id).subscribe((dish: any) => {
-                        if (dish) {
-
-                          namedsh.push(dish.name);
-                          valueDish.push(dish.price * object.quantity);
-                        }
-
-                      })
-                      obj.nameDishe = namedsh;
-                      obj.valueDishe = valueDish;
-                      obj.quantity = quanty;
-
-                    })
-                  }
-                }
-              )
-
-              this.usergetting.push(obj);
-            })
-            console.log("buscando");
-
-            this.SeachingRange();
-          }
-        })
-      })
-    })
+    this.loadUserAndOrders();
 
     this.profile = this.showcontent.showMenus();
 
@@ -176,6 +98,7 @@ export class ReportGeneratorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.SeachingRange();
 
   }
 
@@ -183,6 +106,96 @@ export class ReportGeneratorComponent implements OnInit {
     const d = new Date(date);
     const n = d.toISOString().split("T")[0];
     return n;
+  }
+
+  loadUserAndOrders() {
+    this.loadingUsers = true;
+
+    this.userservice.getUsers().subscribe(res => {
+
+      res.forEach((user: Users, index) => {
+
+        this.orderservice.getChargeByUserId(user.id).subscribe((orders: Orders[]) => {
+
+          if (orders.length > 0) {
+
+            orders.forEach((order: Orders) => {
+              const obj: ReportGenerate = {};
+
+              // in this place get headquarts by id
+              this.headquartsservice.getHeadquarterById(order.idHeadquartes).subscribe((headq: any) => {
+                console.log("traendo las heads", headq);
+                
+                  if (headq) {
+
+                    obj.idHeadquarter = order.idHeadquartes;
+                    obj.location = headq.ubication;
+                    obj.codeOrder = order.code;
+                    obj.client = user.name + " " + user.lastname;
+                    obj.typeOfService = order.typeOfService['type'];
+                    obj.purchaseAmount = order.orderValue;
+                    obj.registerDate = this.convertDate(order.dateAndHourReservation);
+                    obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
+                    obj.controlOrder = order.deliveryStatus;
+                    obj.valueTotalWithRes = order.orderValue;
+
+                    headq.costPerService.map(service => {
+                      if (service.id == order.typeOfService) {
+                        obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
+                        obj.costReservationIva = parseFloat(service.value);
+                        obj.valueTotalWithoutRes = (order.orderValue - service.value);
+                      }
+                    })
+
+                    // ally
+                    this.allyservice.getAlliesById(order.idAllies).subscribe((ally: any) => {
+                      obj.ally = ally.name;
+                      obj.percent = ally.intermediationPercentage;
+                      obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
+                      let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
+                      obj.valueIntermediationIva = auxvalue;
+                      obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
+                      obj.valueForAlly = (order.orderValue - (auxvalue + obj.costReservationIva));
+
+                      this.loadingUsers = false;
+                    })
+
+                    // dish
+                    let namedsh = [];
+                    let valueDish = []
+                    let quanty = []
+                    order.idDishe.forEach((object: any) => {
+
+                      quanty.push(object.quantity);
+
+                      this.dishService.getDisheById(object.id).subscribe((dish: any) => {
+                        if (dish) {
+
+                          namedsh.push(dish.name);
+                          valueDish.push(dish.price * object.quantity);
+                        }
+
+                      })
+                      obj.nameDishe = namedsh;
+                      obj.valueDishe = valueDish;
+                      obj.quantity = quanty;
+
+                    })
+                  }
+                  if (index === orders.length) {
+                    this.loadingUsers = false;
+                  }
+                }
+              )
+
+              this.usergetting.push(obj);
+            })
+
+
+          }
+        })
+      })
+    })
   }
 
   // ==================================
@@ -353,6 +366,7 @@ export class ReportGeneratorComponent implements OnInit {
 
 
   SeachingRange() {
+    console.log("buscando");
 
     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
     const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');

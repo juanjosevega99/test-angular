@@ -8,6 +8,10 @@
     flex-direction: row-reverse;
 } */
 
+.compenetsstyle{
+  height: 100%;
+}
+
 .form-group.hidden {
   width: 0;
   margin: 0;
@@ -40,6 +44,11 @@
 .tableFixHead thead th {
   position: sticky;
   top: 0;
+}
+
+thead{
+  position: relative; 
+  z-index: 1;
 }
 
 /* Just common table stuff. Really. */

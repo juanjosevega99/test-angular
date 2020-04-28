@@ -19,6 +19,7 @@ export class BannerManagerComponent implements OnInit {
 
   bannergetting = [];
   bannerArray = this.bannergetting;
+  loadingBanners = false;
 
   constructor(private bannerservice: BannersService, private spinner: NgxSpinnerService) {
 
@@ -36,10 +37,15 @@ export class BannerManagerComponent implements OnInit {
   }
 
   loadBanners() {
-    this.bannerservice.getBanners().subscribe((banners:Banners[]) => {
-      banners.forEach( banner=>{
-        this.bannergetting.push(banner);  
-      } )});
+    this.loadingBanners = true;
+    this.bannerservice.getBanners().subscribe((banners: Banners[]) => {
+      banners.forEach((banner, index) => {
+        this.bannergetting.push(banner);
+        if(index === (banners.length -1)){
+          this.loadingBanners = false;
+        }
+      })
+    });
   }
 
   convertDate(date: Date): string {
@@ -48,7 +54,7 @@ export class BannerManagerComponent implements OnInit {
     return n;
   }
 
-  UpdateBanner(banner:Banners) {
+  UpdateBanner(banner: Banners) {
 
     Swal.fire({
       title: '¿Actualizar Banner?',
@@ -75,10 +81,10 @@ export class BannerManagerComponent implements OnInit {
     })
   }
 
-  changestate(idcupon:string){
+  changestate(idcupon: string) {
     let Banner = this.bannerArray.find(banner => banner.id === idcupon);
     Banner.state = !Banner.state;
-    this.UpdateBanner(Banner);    
+    this.UpdateBanner(Banner);
   }
 
   search() {
