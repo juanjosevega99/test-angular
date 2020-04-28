@@ -42,6 +42,11 @@
   top: 0;
 }
 
+thead{
+  position: relative;
+  z-index: 1;
+}
+
 /* Just common table stuff. Really. */
 table {
   border-collapse: collapse;
