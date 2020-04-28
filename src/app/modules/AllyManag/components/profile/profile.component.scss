@@ -37,17 +37,10 @@
   background-color: rgba(2, 117, 216, 0.5);
 }
 
-.tableFixHead {
-  overflow-y: auto;
-  height: 22rem;
-}
+
 .tableFixHead thead th {
   position: sticky;
   top: 0;
-}
-
-thead{
-  position: relative; 
   z-index: 1;
 }
 
@@ -121,6 +114,7 @@ button:focus {
   border: 1px solid #d2d2d2;
   // box-shadow: 2px 2px 5px;
   border-radius: 1rem;
+  z-index: 1;
 }
 
 th {

@@ -34,14 +34,10 @@
     background-color: rgba(2, 117, 216, 0.5);
   }
   
-  thead{
-    position: relative;
-    z-index: 1;
-  }
-
   .tableFixHead thead th {
     position: sticky;
     top: 0;
+    z-index: 1;
   }
   
   /* Just common table stuff. Really. */
