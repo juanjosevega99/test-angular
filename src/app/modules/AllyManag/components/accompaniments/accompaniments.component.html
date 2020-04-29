@@ -101,7 +101,7 @@
         </section>
     </form>
     <form class="col-12 " (ngSubmit)="saveAccompaniments()" novalidate="">
-        <div id="table" class="table-editable">
+        <div id="table" class="table-editable container-fluid style="overflow: auto;">
 
             <div *ngIf="promoAccompaniments" class="form-group tableFixHead mt-5">
                 <table class="table table-bordered  table-responsive-md table-striped text-center">
@@ -152,12 +152,7 @@
                         </td>
                     </tr>
                     <tr *ngIf=" !accompanimetsOfPromo.length " >
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>No has añadido acompañamientos!!</td>
+                        <td colspan="14">No has añadido acompañamientos!!</td>
                     </tr>
                 </table>
             </div>
