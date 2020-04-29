@@ -1,13 +1,14 @@
-<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+<div class="compenetsstyle" style="background-color: #e9e7e7;">
 
     <form novalidate="" class="row">
-        <div style="width: 5%;" class="d-flex align-items-center">
+
+        <div style="width: 5%;" class="d-flex align-items-center justify-content-center">
             <a (click)="goBackCreateDish()" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
 
-        <section class="col-11">
+        <section style="width: 90%;">
             <div class="filerControl px-1">
 
                 <section class="col-4 overflow-auto mr-1" style="flex-direction: column;">
@@ -100,7 +101,7 @@
             </div>
         </section>
     </form>
-    <form class="col-12 " (ngSubmit)="saveAccompaniments()" novalidate="">
+    <form (ngSubmit)="saveAccompaniments()" novalidate="">
         <div id="table" class="table-editable">
 
             <div *ngIf="promoAccompaniments" class="form-group tableFixHead mt-5">
@@ -141,7 +142,7 @@
                         <td>
                             <div class="radio radio-danger m-2 form-check-inline">
                                 <input [checked]="!accompPromo.state[0].check" value="inactive" type="radio"
-                                     name={{index}} id="stateAI">
+                                    name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"></label>
                             </div>
                         </td>
@@ -151,17 +152,13 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngIf=" !accompanimetsOfPromo.length " >
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>No has añadido acompañamientos!!</td>
+                    <tr *ngIf=" !accompanimetsOfPromo.length ">
+                        <td colspan="14">No has añadido acompañamientos!!</td>
                     </tr>
                 </table>
             </div>
             <div *ngIf="!promoAccompaniments" class="form-group tableFixHead mt-5">
+
                 <table *ngIf="!flag" class="table table-bordered  table-responsive-md table-striped text-center">
                     <tr>
                         <th class="text-center">Cantidad</th>
@@ -245,7 +242,7 @@
                                 </label>
                             </div>
                         </td>
-                        <td><input type="checkbox" class="m-1"  (change)="selectedOne($event, id)"></td>
+                        <td><input type="checkbox" class="m-1" (change)="selectedOne($event, id)"></td>
                         <td>
                             <a (click)="update(id)"><i class="fas fa-save"></i></a>
                         </td>
@@ -340,7 +337,8 @@
 
             <section class="col-12 d-flex mt-4 justify-content form-group">
                 <div *ngIf="!flag" class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button *ngIf="promoAccompaniments" (click)="removeAllAccompanimentOfPromo()" type="button" class="btn btn-outline-primary btn-lg">No hay
+                    <button *ngIf="promoAccompaniments" (click)="removeAllAccompanimentOfPromo()" type="button"
+                        class="btn btn-outline-primary btn-lg">No hay
                         acompañamientos</button>
                     <button *ngIf="!promoAccompaniments" type="button" (click)="back()"
                         class="btn btn-outline-primary btn-lg">Volver</button>
@@ -366,13 +364,4 @@
 
         </div>
     </form>
-
-    <!-- <section class="col-12 row">
-        <div class="col-6">
-            <pre>{{personList|json}}</pre>
-        </div>
-        <div class="col-6">
-            <pre>{{newAccompanimentList|json}}</pre>
-        </div>
-    </section> -->
 </div>
