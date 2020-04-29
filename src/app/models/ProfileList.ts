@@ -1,5 +1,5 @@
 export class ProfileList {
-    id?:string;
+    _id?:string;
     state?:string[];
     entryDate?:string;
     modificationDate?:string;

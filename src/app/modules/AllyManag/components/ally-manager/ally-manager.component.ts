@@ -317,6 +317,12 @@ export class AllyManagerComponent implements OnInit {
     this._router.navigate( ['/main','headquarts',i] )
   }
 
+  //method for charging promotions by Ally
+  promosByAlly(idAlly:string, i){
+    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+    this._router.navigate(['/main', 'promoManager'])
+  }
+
   //method edit ally
   editAlly(idAlly: string, i) {
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)

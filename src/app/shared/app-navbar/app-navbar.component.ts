@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import { profileStorage } from 'src/app/models/ProfileStorage';
 
 @Component({
   selector: 'app-app-navbar',
@@ -10,7 +12,10 @@ export class AppNavbarComponent implements OnInit {
   date:String;
   time:String;
   today:Date;
-  constructor() { }
+  profile : profileStorage = new profileStorage();
+  constructor( private showcontentservice: ShowContentService ) { 
+    this.profile =  this.showcontentservice.showMenus();
+  }
 
   ngOnInit() {
     setInterval( ()=>this.tick(), 1000 );

@@ -72,11 +72,17 @@ export class AccompanimentsComponent implements OnInit {
     });
 
     //inicialization of accompaniments
-    this.accompanimentService.getAccompaniments().subscribe(res => {
-      res.forEach(accompaniment => {
+    this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
+      console.log("rta:",res);
+      
+      for (let x in res) {
+        let accompaniment;
+        if (res != []) {
+          accompaniment = res[x]
+      /* res.forEach(accompaniment => { */
         let obj: any = {}
 
-        obj.id = accompaniment.id
+        obj.id = accompaniment._id
         obj.quantity = accompaniment.quantity
         obj.unitMeasurement = accompaniment.unitMeasurement
         obj.name = accompaniment.name
@@ -91,7 +97,8 @@ export class AccompanimentsComponent implements OnInit {
         obj.state = accompaniment.state
 
         this.personList.push(obj)
-      })
+      }
+    }
     })
 
     this.flag = false
@@ -151,6 +158,8 @@ export class AccompanimentsComponent implements OnInit {
 
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
+    console.log(pos);
+    
     const checked = event.target.checked;
     event.target.checked = checked;
     Swal.fire({
@@ -225,7 +234,7 @@ export class AccompanimentsComponent implements OnInit {
 
   //method fot the button "No hay acompañamientos", remove all the accompaniments of the promo
   removeAllAccompanimentOfPromo() {
-  /*   if(this.promotion.idAccompaniments == []){
+    if(!this.promotion.idAccompaniments.length){
       Swal.fire({
         title: 'Error',
         text: "Esta promoción no tiene acompañamientos!",
@@ -233,7 +242,7 @@ export class AccompanimentsComponent implements OnInit {
         confirmButtonColor: '#542b81',
         confirmButtonText: 'ok!'
       })
-    }else{ */
+    }else{
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
@@ -262,7 +271,7 @@ export class AccompanimentsComponent implements OnInit {
         })
       }
     })
-  /* } */ 
+  } 
   }
 
   //see accompaniments of the promotion
@@ -382,6 +391,7 @@ export class AccompanimentsComponent implements OnInit {
       if (result.value) {
         console.log(this.newAccompanimentList);
         this.newAccompanimentList.forEach(res => {
+          res.idAllies = localStorage.getItem("idAlly")
           this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
             accomp.creationDate = this.convertDate(accomp.creationDate)
             accomp.modificationDate = this.convertDate(accomp.modificationDate)
@@ -409,7 +419,7 @@ export class AccompanimentsComponent implements OnInit {
       preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
         state: "active",
         check: false
-      }]
+      }], idAllies:''
     };
     this.newAccompanimentList.push(obj)
   }

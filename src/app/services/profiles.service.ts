@@ -120,4 +120,9 @@ export class ProfilesService {
         )
       );
   }
+
+  getAllUsersbyIdHeadquarter(idHeadquarter){
+    return this.httpclient.get(environment.UrlBase + "profiles/profilesbyhq/" + idHeadquarter)
+  }
+
 }

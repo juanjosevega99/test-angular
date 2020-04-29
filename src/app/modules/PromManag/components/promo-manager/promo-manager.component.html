@@ -88,7 +88,7 @@
                     <td>{{menuPromo.timestart}}</td>
                     <td>{{menuPromo.endDatePromotion[0].day}}/{{menuPromo.endDatePromotion[0].month}}/{{menuPromo.endDatePromotion[0].year}}
                     </td>
-                    <td>{{menuPromo.timeend}}</td>
+                    <td>{{menuPromo.timeend}}</td> 
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
                             <input [checked]="menuPromo.state[0].check" value="{{menuPromo.id}}" type="radio" name={{i}}
@@ -111,6 +111,14 @@
                         <a [routerLink]="[ '/main/createDish', menuPromo.reference]" class="btn"> <i
                                 class="far fa-edit"></i> </a>
                     </td>
+                </tr>
+                <tr *ngIf=" !dishPromoArray.length " >
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>No has añadido promociones!!</td>
                 </tr>
             </tbody>
         </table>

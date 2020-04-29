@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
@@ -8,7 +8,6 @@ import * as XLSX from 'xlsx';
 import 'jspdf-autotable';
 
 //service modal
-import { SwallServicesService } from 'src/app/services/swall-services.service';
 import * as jsPDF from 'jspdf';
 import { Users } from 'src/app/models/Users';
 import { UsersService } from 'src/app/services/users.service';
@@ -29,6 +28,8 @@ import { User } from 'firebase';
 import { CouponsService } from "src/app/services/coupons.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
+
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -100,9 +101,9 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     private allyservice: AlliesService,
     private dishesService: DishesService,
     private promoService: PromotionsService,
-    private _router: Router) {
+    private _router: Router,
+    private _location: Location) {
 
-    this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -121,10 +122,14 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     // loading users
     this.loadUsers();
 
-    this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
-      this.numberOfCoupons = coupon.numberOfCouponsAvailable
-      this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
-    })
+    if (localStorage.getItem("idCoupon")) {
+
+      this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon();
+      this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+        this.numberOfCoupons = coupon.numberOfCouponsAvailable
+        this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
+      })
+    }
 
     if (localStorage.getItem('idPromotion')) {
       this.isIdPromotion = true;
@@ -167,6 +172,10 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     this.deleteFromLocal();
   }
 
+  back() {
+    this._location.back();
+  }
+
   loadUsers() {
 
     if (localStorage.getItem('idPromotion')) {
@@ -177,37 +186,41 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
     this.loadingUsers = true;
 
-    this.userservice.getUsers().subscribe(res => {
+    this.userservice.getUsers().subscribe((users) => {
 
-      res.forEach((user: Users) => {
+      users.forEach((user: Users, index) => {
 
         this.orderservice.getChargeByUserId(user.id).subscribe(res => {
+
+          const obj: OrderByUser = new OrderByUser();
+          obj.idUser = user.id;
+          obj.name = user.name;
+          obj.email = user.email;
+          obj.phone = user.phone;
+          obj.birthday = this.convertDate(user.birthday);
+          obj.gender = user.gender;
+          obj.idsPromos = user.idsPromos;
+
           if (res.length > 0) {
 
-            const obj: OrderByUser = {};
-
             res.forEach((order: Orders) => {
-              obj.idUser = user.id;
-              obj.name = user.name;
-              obj.email = user.email;
-              obj.phone = user.phone;
-              obj.birthday = this.convertDate(user.birthday);
-              obj.gender = user.gender;
               obj.nameAllie = order.nameAllies;
               obj.nameHeadquarter = order.nameHeadquartes;
               obj.usability = order.orderValue ? 1 : 0;
               obj.purchaseAmount = order.orderValue;
               obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-              obj.idsPromos = user.idsPromos;
             })
-            this.usergetting.push(obj);
-            this.loadingUsers = false;
 
           } else {
+            obj.registerDate = '-';            
+          }
+          this.usergetting.push(obj);
+
+          if (index == (users.length - 1)) {
             this.loadingUsers = false;
           }
-        })
 
+        })
       })
     })
 
@@ -662,30 +675,33 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
   //generate pdf file
 
-  generatePdf(content: any) {
-    console.log(content);
+  generatePdf() {
     //'p', 'mm', 'a4'
+    console.log(this.userSelected);    
 
     let doc = new jsPDF('landscape');
     let col = ["#", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
-      "Sede", "Usabilidad", "Monto"];
+      "Sede", "Usabilidad", "Monto compras"];
+    const coltopdf = ['registerDate', 'name', 'email', 'phone','birthday', 'gender', 'nameAllie', 'nameHeadquarter', 'usability', 'purchaseAmount'];
+
     let rows = [];
     let auxrow = [];
     this.userSelected.map((user, i) => {
       auxrow = [];
       auxrow[0] = i + 1;
-      for (const key in user) {
+       coltopdf.forEach( key =>{
+        
         if (user.hasOwnProperty(key)) {
-          // Mostrando en pantalla la clave junto a su valor
           auxrow.push(user[key]);
         }
-      }
+      })
       rows.push(auxrow);
     });
 
-    //build the pdf file
+    // //build the pdf file
     doc.autoTable(col, rows);
-    doc.save('Test.pdf');
+    const date = new Date().toLocaleDateString();
+    doc.save( 'reporte ' + date  + '.pdf');
 
   }
 
@@ -809,14 +825,21 @@ export class UserManagerComponent implements OnInit, OnDestroy {
           const mydateFrom = new Date(this.fromdate);
           const mydateTo = new Date(this.todate);
 
-          let datetransform = item.registerDate.split("/");
-          let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
-          const userdate = new Date(newdatetransform);
-          if (userdate >= mydateFrom && userdate <= mydateTo) {
-            return item;
-          } else {
-            return null
+          if(item.registerDate){
+
+            let datetransform = item.registerDate.split("/");
+            let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
+            const userdate = new Date(newdatetransform);
+            if (userdate >= mydateFrom && userdate <= mydateTo) {
+              return item;
+            } else {
+              return null
+            }
+            
+          }else{
+            return null;
           }
+
         } else {
           return item;
         }

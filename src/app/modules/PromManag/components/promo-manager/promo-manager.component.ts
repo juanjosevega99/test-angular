@@ -38,7 +38,6 @@ export class PromoManagerComponent implements OnInit {
     })
 
 
-
     //inicialization of dishes
     this.dishesService.getDishes().subscribe(res => {
       res.forEach((dish: Dishes) => {
@@ -47,9 +46,11 @@ export class PromoManagerComponent implements OnInit {
             for (let item = 0; item < dish.idPromotion.length; item++) {
               let iditem = dish.idPromotion[item];
 
-              this.promoService.getPromotions().subscribe(res => {
+              this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(res => {
+                
                 res.forEach((promo: Promotions) => {
                   if (iditem == promo.id) {
+                    console.log("id de promocion:",promo.id);
                     let yf = promo.endDatePromotion[0]['year'];
                     let mf = promo.endDatePromotion[0]['month'];
                     let df = promo.endDatePromotion[0]['day'];
@@ -120,10 +121,10 @@ export class PromoManagerComponent implements OnInit {
                     this.dishPromoArray.push(obj)
                     const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
                     this.promoService.putPromotion(iditem, promee).subscribe(res => { })
-
-                  }
+                  } 
                 })
               })
+
             }
           }
         }
@@ -180,7 +181,7 @@ export class PromoManagerComponent implements OnInit {
       this.today = new Date()
       let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
       let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-      
+
       if (datetoday > datefinish) {
         Swal.fire({
           title: 'Actualizar',
@@ -194,7 +195,7 @@ export class PromoManagerComponent implements OnInit {
           if (result.value) {
             this._router.navigate(['/main', 'createDish', promo.reference])
           }
-        })  
+        })
       }
       else {
         this.changeStateA(idDish)
@@ -338,15 +339,17 @@ export class PromoManagerComponent implements OnInit {
       if (result.value) {
         this.promoService.putPromotion(idDish, newstate).subscribe(res => {
           this.promoService.getPromotions().subscribe(dish => {
-            Swal.fire(
-              'Actualizado!',
-              'success',
-            )
+            Swal.fire({
+              text: "Estado actualizado!!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
           })
         })
       }
     })
   }
 
- 
+
 }

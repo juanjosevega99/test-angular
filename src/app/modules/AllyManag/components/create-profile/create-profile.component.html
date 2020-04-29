@@ -99,8 +99,8 @@
                 <label class="col-md-5 col-form-label">Perfil</label>
                 <div class="col-md-7">
                     <div class="input-group">
-
-                        <select *ngIf="arrayCategorySelect" class="form-control mr-2" name="nameCharge" #nameCharge="ngModel"
+                        <!-- *ngIf="arrayCategorySelect" -->
+                        <select class="form-control mr-2" name="nameCharge" #nameCharge="ngModel"
                             required [ngClass]="{'is-invalid': (!nameCharge.valid ),'is-valid':(nameCharge.valid) }"
                             [(ngModel)]="preProfile.nameCharge" #select (change)="seeId(select.value)" >
                             <option selected> {{preProfile.nameCharge}}  </option>
@@ -109,7 +109,7 @@
                             </option>
                         </select>
 
-                        <input *ngIf="otherCategoryInput" placeholder="Otro perfil" required #category="ngModel"
+                        <!-- <input *ngIf="otherCategoryInput" placeholder="Otro perfil" required #category="ngModel"
                             [ngClass]="{'is-invalid': (!category.valid && category.touched ),'is-valid':(category.valid)}"
                             class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherCategory" type="text"
                             name="otherCategory">
@@ -128,7 +128,7 @@
                         <button *ngIf="addcategoryButton" (click)=" deleteCategory()" type="button"
                             class="btn1 btn btn-outline-primary">
                             Borrar
-                        </button>
+                        </button> -->
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
                         <div class="valid-feedback">Ok!</div>
