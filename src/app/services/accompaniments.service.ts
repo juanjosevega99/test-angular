@@ -31,7 +31,8 @@ export class AccompanimentsService {
             idTypeSection: accompaniments.idTypeSection,
             nameTypeSection: accompaniments.nameTypeSection,
             preparationTimeNumber: accompaniments.preparationTimeNumber,
-            preparationTimeUnity: accompaniments.preparationTimeUnity
+            preparationTimeUnity: accompaniments.preparationTimeUnity,
+            idAllies : accompaniments.idAllies,
           };
           return obj;
         }
@@ -69,18 +70,19 @@ export class AccompanimentsService {
               idTypeSection: accompaniments.idTypeSection,
               nameTypeSection: accompaniments.nameTypeSection,
               preparationTimeNumber: accompaniments.preparationTimeNumber,
-              preparationTimeUnity: accompaniments.preparationTimeUnity
+              preparationTimeUnity: accompaniments.preparationTimeUnity,
+              idAllies : accompaniments.idAllies,
             };
             return obj;
           })
         )
       );
   }
-
-  getAccompanimentsById(id): Observable<any[]> {
-    return this.httpclient
-      .get<Accompaniments[]>(environment.UrlBase + "accompaniments/" + id)
-      .pipe(
+/*  getProfileById(id): Observable<any> {
+    return this.httpclient.get<any>(environment.UrlBase + "profiles/" + id); */
+  getAccompanimentsById(id): Observable<any> {
+    return this.httpclient.get<any>(environment.UrlBase + "accompaniments/" + id);
+      /* .pipe(
         map((accompaniments: any[]) =>
           accompaniments.map(accompaniments => {
             let obj = {
@@ -97,11 +99,16 @@ export class AccompanimentsService {
               idTypeSection: accompaniments.idTypeSection,
               nameTypeSection: accompaniments.nameTypeSection,
               preparationTimeNumber: accompaniments.preparationTimeNumber,
-              preparationTimeUnity: accompaniments.preparationTimeUnity
+              preparationTimeUnity: accompaniments.preparationTimeUnity,
+              idAllies : accompaniments.idAllies,
             };
             return obj;
           })
         )
-      );
+      ); */
+  }
+
+  getAllAccompanimentsByAlly(idAllies){
+    return this.httpclient.get(environment.UrlBase + "accompaniments/accompanimentsbyally/" + idAllies)
   }
 }

@@ -81,4 +81,8 @@ export class PromotionsService {
         )
       ); */
   }
+  
+  getAllPromotionsByAlly(idAllies){
+    return this.httpclient.get(environment.UrlBase + "promotions/promotionsbyally/" + idAllies)
+  }
 }

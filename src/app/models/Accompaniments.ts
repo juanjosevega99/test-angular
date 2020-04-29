@@ -13,5 +13,5 @@ export class Accompaniments {
     accompanimentValue?: number;
     idTypeSection?:string;
     nameTypeSection?:string;
-    
+    idAllies?:string;
 }

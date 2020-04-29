@@ -40,6 +40,11 @@ export class PromoManagerComponent implements OnInit {
 
 
     //inicialization of dishes
+    /* this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(res=>{
+                    for (let x in res) {
+                      let promo: Promotions
+                      if (res != []) {
+                        promo = res[x] */
     this.dishesService.getDishes().subscribe(res => {
       res.forEach((dish: Dishes) => {
         if (res.length > 0) {
