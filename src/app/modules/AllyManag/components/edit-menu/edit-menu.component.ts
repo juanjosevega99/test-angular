@@ -49,7 +49,7 @@ export class EditMenuComponent {
 
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
+      // console.log('Parametro', params['id']);
       this.idAlly = params['id']
     });
 

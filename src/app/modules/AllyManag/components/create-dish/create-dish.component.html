@@ -5,13 +5,14 @@
     <app-loading *ngIf="loading"></app-loading>
     <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveDish(shape)" #shape="ngForm" *ngIf="!loading">
 
-        <a *ngIf="!promotion" (click)="goBackEditMenu()" class="d-flex mr-2">
+        <a *ngIf="!linkEditMenu" (click)="goBackEditMenu()" class="d-flex mr-2">
+            <img src="assets/icons/Back.png" class="tifi-icon-back">            
+        </a>
+
+        <a *ngIf="linkEditMenu" [routerLink]="['/main','promoManager']" class="d-flex mr-2">
             <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 
-        <a *ngIf="promotion" [routerLink]="['/main','promoManager']" class="d-flex mr-2">
-            <img src="assets/icons/Back.png" class="tifi-icon-back">
-        </a>
 
         <section class="col-6">
 
@@ -465,9 +466,10 @@
             </section>
             <section *ngIf="!selectuser" class="col-6 d-flex" style="justify-content: center;">
                 <div class="col-6 d-flex" style="padding: 1rem;">
-                    <a [routerLink]="['/main/createDish',-2]" class="btn btn-outline-primary btn-lg">Ingresar
+                    <a  (click)="gotopromotion()" class="btn btn-outline-primary btn-lg">Ingresar
                         promoción</a>
                 </div>
+                <!-- [routerLink]="['/main/createDish',-2]" -->
             </section>
             <section *ngIf="selectuser" class="col-6 d-flex" style="justify-content: center;">
                 <div *ngIf="!stateInactive" class="col-6 d-flex" style="padding: 1rem;">

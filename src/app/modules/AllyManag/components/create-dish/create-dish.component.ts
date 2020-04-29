@@ -73,7 +73,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     numberOfModifications: 0
   }
 
-  tickFunction:any;
+  tickFunction: any;
 
   //variables for receiving the profile that will be edited
   identificatorbyRoot: any;
@@ -109,7 +109,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   loading: boolean;
 
   //varibles for dishes with promotion
-  promotion: boolean;
+  linkEditMenu = false;
+  promotion = false;
   meridian = true;
   promotionsCategories: any[] = [];
   idPromotion: string;
@@ -121,13 +122,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     private storage: AngularFireStorage,
     private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService,
     private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService,
-    private spinner: NgxSpinnerService, private _location:Location) {
+    private spinner: NgxSpinnerService, private _location: Location) {
 
     //flags
     this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
-    this.promotion = false;
     this.selectuser = false;
     this.stateInactive = false;
 
@@ -151,21 +151,25 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
     //inicialization for charging the data of a dish to edit
     this.activatedRoute.params.subscribe(params => {
+
       let identificator = params['id']
       if (identificator >= 0) {
-        this.getDish(identificator)
+        this.getDish(identificator);
+
       } else if (identificator == -1) {
-        this.loading = false
-        this.buttonPut = false
+        this.loading = false;
+        this.buttonPut = false;
         this.tick();
       } else if (identificator == -2) {
-        this.loading = false
-        this.buttonPut = false
-        this.selectuser = false
-        this.promotion = true
+        this.loading = false;
+        this.buttonPut = false;
+        this.selectuser = false;
+        this.promotion = true;
+        // this.linkEditMenu = true;
       } else if (identificator != "") {
         this.buttonPut = true
         this.promotion = true
+        this.linkEditMenu = true;
         this.selectuser = true
         this.getDishwithPromo(identificator)
       }
@@ -186,22 +190,39 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     if (this.identificatorbyRoot == -1) {
-      this.tickFunction =  setInterval(() => this.tick(), 30000);
+      this.tickFunction = setInterval(() => this.tick(), 30000);
       this.tick();
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     clearTimeout(this.tickFunction);
   }
 
-  back(){
-    this._location.back();
+  back() {
+    console.log(this.promotion);
+  }
+
+  gotopromotion() {
+    const url = this._location.path();
+    console.log(url);
+
+    this._router.navigate([url + '/-2']);
   }
 
   goBackEditMenu() {
-    this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot])
+    
+    let url = this._location.path().split('/');
+
+    if (url.length >= 5) {
+      this._location.back();
+      
+    }else{
+      this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+    }
+
   }
+
   routeAccompaniments() {
     this._router.navigate(['/main', 'accompaniments', this.identificatorbyRoot])
   }
@@ -251,7 +272,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
       let dish: Dishes = {}
       dish = dishes[id]
-      console.log(dish);
 
       this.editDish = dish;
       this.preDish = this.editDish;
@@ -418,7 +438,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
     }
-    
+
   }
 
   tickEdit() {
