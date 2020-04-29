@@ -12,4 +12,5 @@ export class Promotions {
     reference?:string;
     numberOfModifications?:number;
     idAccompaniments?:string[];
+    idAllies?:string;
 }
