@@ -48,7 +48,8 @@ export class PromotionsService {
               preparationTime: promotions.preparationTime,
               reference: promotions.reference,
               numberOfModifications : promotions.numberOfModifications,
-              idAccompaniments: promotions.idAccompaniments
+              idAccompaniments: promotions.idAccompaniments,
+              idAllies : promotions.idAllies
             };
             return obj;
           })
@@ -82,7 +83,30 @@ export class PromotionsService {
       ); */
   }
   
-  getAllPromotionsByAlly(idAllies){
-    return this.httpclient.get(environment.UrlBase + "promotions/promotionsbyally/" + idAllies)
+  getAllPromotionsByAlly(idAllies) : Observable<Promotions[]>{
+    return this.httpclient.get<Promotions[]>(environment.UrlBase + "promotions/promotionsbyally/" + idAllies)
+    .pipe(
+      map((promotions: any[]) =>
+        promotions.map(promotions => {
+          let obj = {
+            id: promotions._id,
+            state: promotions.state,
+            promotionStartDate: promotions.promotionStartDate,
+            endDatePromotion: promotions.endDatePromotion,
+            name: promotions.name,
+            idname: promotions.idname,
+            price: promotions.price,
+            photo: promotions.photo,
+            description: promotions.description,
+            preparationTime: promotions.preparationTime,
+            reference: promotions.reference,
+            numberOfModifications : promotions.numberOfModifications,
+            idAccompaniments: promotions.idAccompaniments,
+            idAllies : promotions.idAllies
+          };
+          return obj;
+        })
+      )
+    );
   }
 }

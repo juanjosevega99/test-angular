@@ -70,7 +70,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     description: null,
     preparationTime: [],
     reference: null,
-    numberOfModifications: 0
+    numberOfModifications: 0,
+    idAllies:null
   }
 
   tickFunction: any;
@@ -923,6 +924,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 console.log(this.urlDish);
                 this.promotionArray['photo'] = this.urlDish
                 /* this.promotionArray['reference'] = this.editDish.reference */
+                this.promotionArray['idAllies'] = localStorage.getItem('idAlly')
                 this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
                   this.editDish.idPromotion.push(message._id)
                   this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {
