@@ -155,12 +155,17 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       let identificator = params['id']
       if (identificator >= 0) {
         this.getDish(identificator);
+        console.log('cargar predish');
+        
 
       } else if (identificator == -1) {
         this.loading = false;
         this.buttonPut = false;
         this.tick();
       } else if (identificator == -2) {
+        
+        let url = this._location.path().split('/');
+        this.getDish(url[3]);
         this.loading = false;
         this.buttonPut = false;
         this.selectuser = false;
