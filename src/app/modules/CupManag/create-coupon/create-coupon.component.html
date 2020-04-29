@@ -62,7 +62,7 @@
             <div  class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de creación </label>
                 <div class="col-md-7">
-                    <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
+                    <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime[0]" #timeCreate="ngModel" required
                         [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
                         [meridian]="meridian">
                     </ngb-timepicker>
@@ -201,7 +201,7 @@
             <div *ngIf="timeCreation" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de caducidad </label>
                 <div class="col-md-7">
-                    <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime" #expirationTime="ngModel" required
+                    <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime[0]" #expirationTime="ngModel" required
                         [ngClass]="{'is-invalid': (!expirationTime.valid && expirationTime.touched),'is-valid':(expirationTime.valid)}"
                         [meridian]="meridian">
                     </ngb-timepicker>
