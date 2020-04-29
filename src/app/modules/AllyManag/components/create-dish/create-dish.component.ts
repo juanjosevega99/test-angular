@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,6 +14,8 @@ import { Promotions } from 'src/app/models/Promotions';
 import { PromotionsCategoriesService } from 'src/app/services/promotions-categories.service';
 import { PromotionsService } from 'src/app/services/promotions.service';
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -21,7 +23,7 @@ import { SaveLocalStorageService } from "src/app/services/save-local-storage.ser
   templateUrl: './create-dish.component.html',
   styleUrls: ['./create-dish.component.scss']
 })
-export class CreateDishComponent implements OnInit {
+export class CreateDishComponent implements OnInit, OnDestroy {
 
   //Object to save the dates of the form
   preDish: Object = {
@@ -71,6 +73,8 @@ export class CreateDishComponent implements OnInit {
     numberOfModifications: 0
   }
 
+  tickFunction:any;
+
   //variables for receiving the profile that will be edited
   identificatorbyRoot: any;
   buttonPut: boolean;
@@ -113,7 +117,11 @@ export class CreateDishComponent implements OnInit {
   selectuser: boolean;
   stateInactive: boolean;
 
-  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService, private dishes: DishesService, private storage: AngularFireStorage, private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService, private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService) {
+  constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService,
+    private storage: AngularFireStorage,
+    private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService,
+    private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService,
+    private spinner: NgxSpinnerService, private _location:Location) {
 
     //flags
     this.loading = true;
@@ -149,6 +157,7 @@ export class CreateDishComponent implements OnInit {
       } else if (identificator == -1) {
         this.loading = false
         this.buttonPut = false
+        this.tick();
       } else if (identificator == -2) {
         this.loading = false
         this.buttonPut = false
@@ -175,7 +184,19 @@ export class CreateDishComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => this.tick(), 1000);
+
+    if (this.identificatorbyRoot == -1) {
+      this.tickFunction =  setInterval(() => this.tick(), 30000);
+      this.tick();
+    }
+  }
+
+  ngOnDestroy(){
+    clearTimeout(this.tickFunction);
+  }
+
+  back(){
+    this._location.back();
   }
 
   goBackEditMenu() {
@@ -225,15 +246,18 @@ export class CreateDishComponent implements OnInit {
 
   //charge a dish with the id
   getDish(id: string) {
-    this.loading;
+    this.loading = true;
     this.chargeDishes.getDishes().subscribe(dishes => {
-      this.loading;
+
       let dish: Dishes = {}
       dish = dishes[id]
+      console.log(dish);
+
       this.editDish = dish;
       this.preDish = this.editDish;
+      this.loading = false;
+      this.tickEdit();
     })
-    this.loading = false;
   }
 
   //charge a promotion with the id
@@ -275,8 +299,8 @@ export class CreateDishComponent implements OnInit {
 
   //redirect to select users
   goSelectUsers() {
-    this.saveLocalStorageService.saveLocalStorageIdPromotion(this.promotionArray['id'])
-    this._router.navigate(['/main', 'userManager', -1])
+    this.saveLocalStorageService.saveLocalStorageIdPromotion(this.promotionArray['id']);
+    this._router.navigate(['/main', 'userManager', -1]);
   }
 
   //Method for showing new view in the categories field
@@ -327,7 +351,7 @@ export class CreateDishComponent implements OnInit {
 
     }
     console.log(this.fileImagedish);
-    return this.fileImagedish = input.files[0]
+    return this.fileImagedish = input.files[0];
   }
 
   //Method for selecting the state of a promotion
@@ -370,7 +394,7 @@ export class CreateDishComponent implements OnInit {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas colocar este estado al plato!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -394,16 +418,17 @@ export class CreateDishComponent implements OnInit {
       this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
     }
-    else {
-      this.today = new Date();
-      this.newDate = this.editDish['creationDate']
-      const d = new Date(this.newDate);
-      this.timesEntry = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-      this.dateEntry = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
-      this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-      this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    
+  }
 
-    }
+  tickEdit() {
+    this.today = new Date();
+    this.newDate = this.editDish.creationDate;
+    const d = new Date(this.newDate);
+    this.timesEntry = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    this.dateEntry = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
+    this.timesModification = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    this.dateModication = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
   }
 
   //CRUD PROMOTION
@@ -567,24 +592,7 @@ export class CreateDishComponent implements OnInit {
 
   //put the dish
   putDish() {
-    this.chargeDishes.getDishes().subscribe(dishes => {
-      let dish: Dishes = {};
-      dish = dishes[this.identificatorbyRoot];
-      let realId = dish.id;
-      this.editDish.state = this.preDish['state'];
-      this.editDish.creationDate = dish.creationDate;
-      this.editDish.modificationDate = this.today;
-      this.editDish.idAccompaniments = dish.idAccompaniments;
-      this.editDish.idPromotion = dish.idPromotion;
-      this.editDish.nameDishesCategories = this.preDish['nameDishesCategories'];
-      this.editDish.idDishesCategories = this.preDish['idDishesCategories'];
-      this.editDish.reference = this.preDish['reference'];
-      this.editDish.name = this.preDish['name'];
-      this.editDish.price = this.preDish['price'];
-      this.editDish.description = this.preDish['description'];
-      this.editDish.preparationTime = this.preDish['preparationTime'];
-      this.swallUpdate(realId)
-    })
+    this.swallUpdate();
   }
 
 
@@ -714,16 +722,17 @@ export class CreateDishComponent implements OnInit {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log("Array FINAL: ", this.preDish);
+
+        this.spinner.show();
         this.preDish['idAlly'] = localStorage.getItem('idAlly');
-        this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter')
+        this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter');
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/menu/${id}`;
@@ -734,13 +743,15 @@ export class CreateDishComponent implements OnInit {
             finalize(() => {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlDish = urlImage;
-                console.log(this.urlDish);
-                this.preDish['imageDishe'] = this.urlDish
-                this.dishes.postDishe(this.preDish).subscribe(message => {
+
+                this.preDish['imageDishe'] = this.urlDish;
+                this.chargeDishes.postDishe(this.preDish).subscribe(message => {
+                  this.spinner.hide();
+
                   Swal.fire({
                     title: 'Guardado',
                     text: "Tu nuevo plato ha sido creado!",
-                    icon: 'warning',
+                    icon: 'success',
                     confirmButtonColor: '#542b81',
                     confirmButtonText: 'Ok!'
                   }).then((result) => {
@@ -785,7 +796,7 @@ export class CreateDishComponent implements OnInit {
     })
   }
 
-  async swallUpdate(realId) {
+  async swallUpdate() {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -795,21 +806,26 @@ export class CreateDishComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
+
       if (result.value) {
-        console.log("Array FINAL: ", this.editDish);
+        this.spinner.show();
+
         await this.chargeDishes.getDishes().subscribe(dishes => {
+
           let dish: Dishes = {};
           dish = dishes[this.identificatorbyRoot];
+
+          let realId = dish.id;
           this.editDish.numberOfModifications = this.editDish['numberOfModifications'] + 1;
+
           if (this.seeNewPhoto == false) {
-            this.editDish.imageDishe = dish.imageDishe;
 
             this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
-
+              this.spinner.hide();
               Swal.fire({
                 title: 'Guardado',
                 text: "Tu plato ha sido actualizado!",
-                icon: 'warning',
+                icon: 'success',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
               }).then((result) => {
@@ -833,10 +849,12 @@ export class CreateDishComponent implements OnInit {
                     console.log(this.urlDish);
                     this.preDish['imageDishe'] = this.urlDish
                     this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
+                      this.spinner.hide();
+
                       Swal.fire({
                         title: 'Guardado',
                         text: "Tu plato ha sido actualizado!",
-                        icon: 'warning',
+                        icon: 'success',
                         confirmButtonColor: '#542b81',
                         confirmButtonText: 'Ok!'
                       }).then((result) => {

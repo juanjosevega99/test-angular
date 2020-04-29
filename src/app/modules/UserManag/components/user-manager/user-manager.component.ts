@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //export table excel
@@ -8,7 +8,6 @@ import * as XLSX from 'xlsx';
 import 'jspdf-autotable';
 
 //service modal
-import { SwallServicesService } from 'src/app/services/swall-services.service';
 import * as jsPDF from 'jspdf';
 import { Users } from 'src/app/models/Users';
 import { UsersService } from 'src/app/services/users.service';
@@ -29,6 +28,8 @@ import { User } from 'firebase';
 import { CouponsService } from "src/app/services/coupons.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from 'src/app/services/coupons-available.service';
+
+import {Location} from '@angular/common';
 
 
 @Component({
@@ -100,9 +101,9 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     private allyservice: AlliesService,
     private dishesService: DishesService,
     private promoService: PromotionsService,
-    private _router: Router) {
+    private _router: Router,
+    private _location:Location) {
 
-    this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon()
 
     this.table = new FormGroup({
       "date": new FormControl(),
@@ -121,10 +122,16 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     // loading users
     this.loadUsers();
 
-    this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
-      this.numberOfCoupons = coupon.numberOfCouponsAvailable
-      this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
-    })
+    if( localStorage.getItem("idCoupon") ){
+
+    this.idCoupon = this.saveLocalStorageService.getLocalStorageIdCoupon();
+      this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
+        this.numberOfCoupons = coupon.numberOfCouponsAvailable
+        this.numberOfUnits = coupon.numberOfUnits// don't working with identificator
+      })
+
+    }
+
 
     if (localStorage.getItem('idPromotion')) {
       this.isIdPromotion = true;
@@ -165,6 +172,10 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(){
     this.deleteFromLocal();
+  }
+
+  back(){
+    this._location.back();    
   }
 
   loadUsers() {

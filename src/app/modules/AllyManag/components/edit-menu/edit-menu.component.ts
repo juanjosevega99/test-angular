@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, NgModel } from '@angular/forms';
 import { DishesService } from 'src/app/services/dishes.service';
 import { Dishes } from 'src/app/models/Dishes';
@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './edit-menu.component.html',
   styleUrls: ['./edit-menu.component.scss']
 })
-export class EditMenuComponent implements OnInit {
+export class EditMenuComponent {
 
   //object that saves the values of the table
   table: FormGroup;
@@ -38,14 +38,15 @@ export class EditMenuComponent implements OnInit {
   modification: Date;
 
   state: any[] = [];
-  
+
   //variables of idAlly
   idAlly: number;
+  loadingDishes = false;
 
   constructor(private dishesService: DishesService,
     private _router: Router,
     private _activateRoute: ActivatedRoute, ) {
-    
+
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
       console.log('Parametro', params['id']);
@@ -59,33 +60,14 @@ export class EditMenuComponent implements OnInit {
     })
 
     //inicialization of dishes
-    this.dishesService.getDishes().subscribe(res => {
-      res.forEach((dish: Dishes) => {
-        if (res.length > 0) {
-          const obj: DishList = {};
-          obj.id = dish.id;
-          obj.reference = dish.reference;
-          obj.nameDishesCategories = dish.nameDishesCategories;
-          obj.name = dish.name;
-          obj.imageDishe = dish.imageDishe;
-          obj.price = dish.price;
-          obj.modificationDateDay = this.convertDateday(dish.modificationDate);
-          obj.modificationDateTime = this.convertDatetime(dish.modificationDate)
-          obj.numberOfModifications = dish.numberOfModifications;
-          obj.state = dish.state;
+    this.loadDishes();
 
-          this.dishesgetting.push(obj);
-        }
-      })
-    })
 
     this.state = [{ name: 'active', selected: false }, { name: 'inactive', selected: false }]
 
   }
 
 
-  ngOnInit() {
-  }
   goBackHeadquarterOptions() {
     this._router.navigate(['/main', 'headquarts', this.idAlly])
   }
@@ -103,6 +85,39 @@ export class EditMenuComponent implements OnInit {
     return n;
   }
 
+  loadDishes() {
+    this.loadingDishes = true;
+    this.dishesgetting = [];
+    this.newdateArray = this.dishesgetting;
+
+
+    this.dishesService.getDishes().subscribe(res => {
+      if (res.length ) {
+        res.forEach((dish: Dishes, index) => {
+          const obj: DishList = {};
+          obj.id = dish.id;
+          obj.reference = dish.reference;
+          obj.nameDishesCategories = dish.nameDishesCategories;
+          obj.name = dish.name;
+          obj.imageDishe = dish.imageDishe;
+          obj.price = dish.price;
+          obj.modificationDateDay = this.convertDateday(dish.modificationDate);
+          obj.modificationDateTime = this.convertDatetime(dish.modificationDate)
+          obj.numberOfModifications = dish.numberOfModifications;
+          obj.state = dish.state;
+
+          this.dishesgetting.push(obj);
+
+          if(index == (res.length - 1)){
+            this.loadingDishes = false;
+          }
+        })
+      }else{
+        this.loadingDishes = false;
+      }
+    })
+  }
+
   //method for updating the state to active
   changeStateA(idDish) {
     let newstate: object = {
@@ -114,7 +129,7 @@ export class EditMenuComponent implements OnInit {
         check: false
       }]
     }
-    this.swallUpdateState(idDish, newstate)
+    this.swallUpdateState(idDish, newstate);
   }
 
   //method for updating the state to inactive
@@ -128,133 +143,48 @@ export class EditMenuComponent implements OnInit {
         check: true
       }]
     }
-    this.swallUpdateState(idDish, newstate)
+    this.swallUpdateState(idDish, newstate);
   }
 
   //method for seaching specific values by name and code
-  search(termino?: string, id?: string) {
+  search() {
 
-    let count = 0;
-    let termsearch = '';
-    let idsearch = '';
+    // vars to filter table
+    let objsearch = {
+      reference: "",
+      name: ""
+    };
 
     for (var i in this.table.value) {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
-        count += 1;
-        termsearch = this.table.value[i];
-        idsearch = i;
+
+        objsearch[i] = this.table.value[i];
       }
     }
 
-    console.log("campos llenos: ", count);
-    console.log('valueGenerate', this.generalsearch);
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
 
-    if (count > 0 && count < 2 && !this.generalsearch) {
 
-      //  un campo lleno
-      this.newdateArray = this.dishesgetting.filter(function (dish: Dishes) {
-        //We test each element of the object to see if one string matches the regexp.
-        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
-          return dish;
-        }
-      });
-
-      this.filteredArray = this.newdateArray;
-
-    } else if (count == 2 && this.generalsearch) {
-
-      let aux = this.newdateArray;
-
-      this.newdateArray = aux.filter(function (dish: Dishes) {
-        //We test each element of the object to see if one string matches the regexp.
-        if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
-          return dish;
-        }
-      });
-
-    }
-    else {
-
-      if (this.generalsearch) {
-
+    this.newdateArray = this.dishesgetting.
+    filter(function (dish) {
+      if (dish["reference"].toLowerCase().indexOf(this.reference) >= 0) {
+        return dish;
       }
-
-      if (count == 0) {
-        // campos vacios
-        // existe general search?
-        this.newdateArray = this.dishesgetting;
-
-        if (this.generalsearch) {
-          console.log("buscando general searhc");
-          this.searchbyterm(this.generalsearch);
-
-        }
-      } else {
-
-        // campos llenos
-        // existe general search?
-
-        this.newdateArray = this.filteredArray.filter(function (dish: Dishes) {
-          //We test each element of the object to see if one string matches the regexp.
-          if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
-            return dish;
-          }
-        });
-
-        if (this.generalsearch) {
-
-          console.log("buscando general searhc");
-          this.searchbyterm(this.generalsearch);
-
-        }
+    }, objsearch).
+    filter(function (dish) {
+      if (dish["name"].toLowerCase().indexOf(this.name) >= 0) {
+        return dish;
       }
-    }
+    }, objsearch).
+    filter(function (item) {
+      //We test each element of the object to see if one string matches the regexp.
+      return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+          myRegex.test(item.numberOfModifications.toString()))
+    })
+
   }
 
-
-  //method for general searching 
-  searchbyterm(termino: string) {
-
-    termino = termino.toLowerCase();
-    var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-    // campos de la tabla
-    let count = 0;
-    let termsearch = '';
-    let idsearch = '';
-
-    for (var i in this.table.value) {
-      // search empty fields
-      if (this.table.value[i] == null || this.table.value[i] == "") {
-        // campo vacio
-        count += 1;
-      } else {
-        termsearch = this.table.value[i];
-        idsearch = i;
-      }
-    }
-    console.log("campos vacios: ", count);
-    if (count > 1) {
-      // campos vacios
-
-      this.newdateArray = this.dishesgetting.filter(function (item) {
-        //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
-          myRegex.test(item.numberOfModifications.toString()))
-      });
-      this.filteredArray = this.newdateArray;
-
-    } else {
-      // un campo lleno
-
-      this.newdateArray = this.filteredArray.filter(function (item) {
-        //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
-          myRegex.test(item.numberOfModifications.toString()))
-      });
-    }
-  }
 
 
   convertDate(date: Date): string {
@@ -293,7 +223,7 @@ export class EditMenuComponent implements OnInit {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas actualizar el estado de este plato!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -309,6 +239,8 @@ export class EditMenuComponent implements OnInit {
             )
           })
         })
+      } else {
+        this.loadDishes();
       }
     })
   }
