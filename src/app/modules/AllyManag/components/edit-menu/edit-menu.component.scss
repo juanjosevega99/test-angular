@@ -36,15 +36,11 @@
 .tableFixHead {
   overflow-y: auto;
   height: 22rem;
+  z-index: 1;
 }
 .tableFixHead thead th {
   position: sticky;
   top: 0;
-}
-
-
-thead{
-  position: relative;
   z-index: 1;
 }
 

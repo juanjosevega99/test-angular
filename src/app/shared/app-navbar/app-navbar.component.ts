@@ -15,8 +15,6 @@ export class AppNavbarComponent implements OnInit {
   profile : profileStorage = new profileStorage();
   constructor( private showcontentservice: ShowContentService ) { 
     this.profile =  this.showcontentservice.showMenus();
-    console.log(this.profile);
-    
   }
 
   ngOnInit() {

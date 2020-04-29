@@ -3,14 +3,14 @@ export class OrderByUser{
     code?:string;
     idUser?:String;
     idHeadquartes?:string;
-    nameAllie?:string;
-    nameHeadquarter?:string;
+    nameAllie?:string ='-';
+    nameHeadquarter?:string = '-';
     name?:string;
     typeOfService?:string;
     typeOfServiceobj?:object;
-    purchaseAmount?:number;
+    purchaseAmount?:number = 0;
     registerDate?:string;
-    dateAndHourDelivery?:string;
+    dateAndHourDelivery?:string='-';
     DateDelivery?: Date;
     quantity?:number[];
     nameDishe?:string[];
@@ -34,7 +34,7 @@ export class OrderByUser{
     password?:string;
     idAllie?:string;
     idHeadquarter?:string;
-    usability?:number;
+    usability?:number = 0;
     selected?:boolean = false;
     idsPromos?:string[];
 }

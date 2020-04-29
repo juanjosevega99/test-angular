@@ -93,6 +93,7 @@ const routes: Routes = [
       { path: "editHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "editmenu/:id", component: EditMenuComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createDish/:id", component: CreateDishComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "createDish/:iddish/:id", component: CreateDishComponent, canActivate: [ GuardAdminTifiService ] },
       { path : "accompaniments/:id", component: AccompanimentsComponent, canActivate: [ GuardAdminTifiService ]},
       { path : "profiles/:id", component: ProfileComponent, canActivate: [ GuardAdminTifiService ]},
       { path : "createProfile/:id", component: CreateProfileComponent, canActivate: [ GuardAdminTifiService ]},
