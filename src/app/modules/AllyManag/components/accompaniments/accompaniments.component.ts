@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SectionsService } from "src/app/services/sections.service";
 import Swal from 'sweetalert2';
 import { FormBuilder, } from '@angular/forms'
@@ -14,7 +14,7 @@ import { Promotions } from 'src/app/models/Promotions';
   templateUrl: './accompaniments.component.html',
   styleUrls: ['./accompaniments.component.scss']
 })
-export class AccompanimentsComponent implements OnInit {
+export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   withCost: boolean;
   idSec: string;
@@ -60,6 +60,7 @@ export class AccompanimentsComponent implements OnInit {
   accompanimetsOfPromo = this.accgetting
   promoAccompaniments: boolean;
 
+  timetick : any;
   constructor(private sectionService: SectionsService, private promoService: PromotionsService,
     private accompanimentService: AccompanimentsService, private _router: Router,
     private _activateRoute: ActivatedRoute) {
@@ -117,7 +118,12 @@ export class AccompanimentsComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => this.tick(), 1000);
+  //  this.timetick = setInterval(() => this.tick(), 1000);
+   this.tick();
+  }
+
+  ngOnDestroy(){
+    // clearTimeout(this.timetick);
   }
 
   //method to convert date from type Date to string
@@ -358,7 +364,7 @@ export class AccompanimentsComponent implements OnInit {
           preparationTimeUnity: dish.preparationTimeUnity,
           accompanimentValue: dish.accompanimentValue,
           numberOfModifications: dish.numberOfModifications + 1,
-          modificationDate: this.today
+          modificationDate: new Date()
         }
         this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res =>
           Swal.fire({
@@ -517,6 +523,8 @@ export class AccompanimentsComponent implements OnInit {
 
   //Method for the admission date
   tick(): void {
+    console.log("funtion tick");
+    
     this.today = new Date();
     this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
