@@ -60,7 +60,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   accompanimetsOfPromo = this.accgetting
   promoAccompaniments: boolean;
 
-  timetick : any;
+  timetick: any;
   constructor(private sectionService: SectionsService, private promoService: PromotionsService,
     private accompanimentService: AccompanimentsService, private _router: Router,
     private _activateRoute: ActivatedRoute) {
@@ -74,32 +74,32 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     //inicialization of accompaniments
     this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
-      console.log("rta:",res);
-      
+      console.log("rta:", res);
+
       for (let x in res) {
         let accompaniment;
         if (res != []) {
           accompaniment = res[x]
-      /* res.forEach(accompaniment => { */
-        let obj: any = {}
+          /* res.forEach(accompaniment => { */
+          let obj: any = {}
 
-        obj.id = accompaniment._id
-        obj.quantity = accompaniment.quantity
-        obj.unitMeasurement = accompaniment.unitMeasurement
-        obj.name = accompaniment.name
-        obj.nameTypeSection = accompaniment.nameTypeSection
-        obj.typeOfAccompaniment = accompaniment.typeOfAccompaniment
-        obj.preparationTimeNumber = accompaniment.preparationTimeNumber
-        obj.preparationTimeUnity = accompaniment.preparationTimeUnity
-        obj.accompanimentValue = accompaniment.accompanimentValue
-        obj.numberOfModifications = accompaniment.numberOfModifications
-        obj.creationDate = this.convertDate(accompaniment.creationDate);
-        obj.modificationDate = this.convertDate(accompaniment.modificationDate)
-        obj.state = accompaniment.state
+          obj.id = accompaniment._id
+          obj.quantity = accompaniment.quantity
+          obj.unitMeasurement = accompaniment.unitMeasurement
+          obj.name = accompaniment.name
+          obj.nameTypeSection = accompaniment.nameTypeSection
+          obj.typeOfAccompaniment = accompaniment.typeOfAccompaniment
+          obj.preparationTimeNumber = accompaniment.preparationTimeNumber
+          obj.preparationTimeUnity = accompaniment.preparationTimeUnity
+          obj.accompanimentValue = accompaniment.accompanimentValue
+          obj.numberOfModifications = accompaniment.numberOfModifications
+          obj.creationDate = this.convertDate(accompaniment.creationDate);
+          obj.modificationDate = this.convertDate(accompaniment.modificationDate)
+          obj.state = accompaniment.state
 
-        this.personList.push(obj)
+          this.personList.push(obj)
+        }
       }
-    }
     })
 
     this.flag = false
@@ -118,11 +118,11 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-  //  this.timetick = setInterval(() => this.tick(), 1000);
-   this.tick();
+    //  this.timetick = setInterval(() => this.tick(), 1000);
+    this.tick();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     // clearTimeout(this.timetick);
   }
 
@@ -165,7 +165,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
     console.log(pos);
-    
+
     const checked = event.target.checked;
     event.target.checked = checked;
     Swal.fire({
@@ -240,7 +240,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //method fot the button "No hay acompañamientos", remove all the accompaniments of the promo
   removeAllAccompanimentOfPromo() {
-    if(!this.promotion.idAccompaniments.length){
+    if (!this.promotion.idAccompaniments.length) {
       Swal.fire({
         title: 'Error',
         text: "Esta promoción no tiene acompañamientos!",
@@ -248,36 +248,36 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         confirmButtonColor: '#542b81',
         confirmButtonText: 'ok!'
       })
-    }else{
-    Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, eliminar!'
-    }).then((result) => {
-      if (result.value) {
-        let clearids: any = {
-          idAccompaniments: this.promotion.idAccompaniments = []
-        }
-        this.promoService.putPromotion(this.promotion.id,clearids).subscribe(res=>{
-          Swal.fire({
-            title: 'Eliminado',
-            text: "Tus acompañamientos han sido eliminados de la promoción!",
-            icon: 'warning',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          }).then((result) => {
-            if (result.value) {
-              this.promoAccompaniments = true
-            }
+    } else {
+      Swal.fire({
+        title: 'Estás seguro?',
+        text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#542b81',
+        cancelButtonColor: '#542b81',
+        confirmButtonText: 'Si, eliminar!'
+      }).then((result) => {
+        if (result.value) {
+          let clearids: any = {
+            idAccompaniments: this.promotion.idAccompaniments = []
+          }
+          this.promoService.putPromotion(this.promotion.id, clearids).subscribe(res => {
+            Swal.fire({
+              title: 'Eliminado',
+              text: "Tus acompañamientos han sido eliminados de la promoción!",
+              icon: 'warning',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }).then((result) => {
+              if (result.value) {
+                this.promoAccompaniments = true
+              }
+            })
           })
-        })
-      }
-    })
-  } 
+        }
+      })
+    }
   }
 
   //see accompaniments of the promotion
@@ -425,7 +425,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
         state: "active",
         check: false
-      }], idAllies:''
+      }], idAllies: ''
     };
     this.newAccompanimentList.push(obj)
   }
@@ -436,23 +436,37 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValue(id: number, property: string, event: any) {
+    console.log(event.target.textContent);
     let editField = event.target.textContent;
-    this.personList[id][property] = editField;
+
+    const newtext = editField;
+
+    // if(event.target.textContent){
+    // this.personList[id][property] = this.personList[id][property] + editField;
+    // }else{
+
+    this.personList[id][property] = newtext;
+    editField = '';
+
+    // }
+
   }
 
   changeValueSelect1(id: number, property: string, value: string) {
-    console.log(value);
     this.personList[id][property] = value;
   }
 
   changeValuecheck1(id: number, property: string, event: any) {
+
     let editField = event.target.checked;
     this.personList[id][property] = editField;
-    if (editField == true) {
-      this.additionalCost = true
-    } else if (editField == false) {
-      this.additionalCost = false
-    }
+
+    // if (editField == true) {
+    //   this.additionalCost = true
+    // } else if (editField == false) {
+    //   this.additionalCost = false
+    // }
+
   }
 
   changeValue2(id: number, property: string, event: any) {
@@ -524,7 +538,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //Method for the admission date
   tick(): void {
     console.log("funtion tick");
-    
+
     this.today = new Date();
     this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     this.date = this.today.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });

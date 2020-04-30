@@ -156,13 +156,10 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       let identificator = params['id']
       if (identificator >= 0) {
         this.getDish(identificator);
-        console.log('cargar predish');
-        
 
       } else if (identificator == -1) {
         this.loading = false;
         this.buttonPut = false;
-        this.tick();
       } else if (identificator == -2) {
         
         let url = this._location.path().split('/');
@@ -177,9 +174,11 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         this.promotion = true
         this.linkEditMenu = true;
         this.selectuser = true
-        this.getDishwithPromo(identificator)
+        this.getDishwithPromo(identificator);
       }
-      this.identificatorbyRoot = identificator
+      this.identificatorbyRoot = identificator;
+      this.tick();
+      this.tickEdit();
     })
 
     //inicialization service with collections dishes-categories

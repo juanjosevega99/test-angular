@@ -178,20 +178,17 @@
                     </tr>
                     <tr *ngFor="let person of personList; let id = index">
                         <td>
-                            <span contenteditable="true"
-                                (keyup)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
+                            <span contenteditable="true" (keyup.enter)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true"
-                                (keyup)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
+                            <span contenteditable="true" (keyup)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
                         </td>
                         <td>
                             <span contenteditable="true"
                                 (keyup)="changeValue(id, 'name', $event)">{{person.name}}</span>
                         </td>
                         <td>
-                            <select #nameSection contenteditable="true"
-                                (click)="changeValueSelect1(id, 'nameTypeSection',nameSection.value)"
+                            <select #nameSection (change)="changeValueSelect1(id, 'nameTypeSection', nameSection.value)"
                                 class="input-group-text">
                                 <option selected>{{person.nameTypeSection}}</option>
                                 <option *ngFor="let section of sections">
@@ -200,16 +197,15 @@
                             </select>
                         </td>
                         <td>
-                            <input contenteditable="true" (click)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
-                                type="checkbox" [checked]="person.typeOfAccompaniment">
+                            <input type="checkbox" class="m-1" (change)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
+                                 [checked]="person.typeOfAccompaniment">
                         </td>
                         <td>
                             <span contenteditable="true"
                                 (keyup)="changeValue(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
                         </td>
                         <td>
-                            <select #unityTime contenteditable="true"
-                                (click)="changeValueSelect1(id, 'preparationTimeUnity',unityTime.value)"
+                            <select #unityTime (click)="changeValueSelect1(id, 'preparationTimeUnity',unityTime.value)"
                                 class="input-group-text ">
                                 <option selected>{{person.preparationTimeUnity}}</option>
                                 <option *ngFor="let time of time">
@@ -218,7 +214,7 @@
                             </select>
                         </td>
                         <td>
-                            <span *ngIf="additionalCost" contenteditable="true"
+                            <span *ngIf="person.typeOfAccompaniment" contenteditable="true"
                                 (keyup)="changeValue(id, 'accompanimentValue', $event)">{{person.accompanimentValue}}</span>
                         </td>
                         <td>{{person.creationDate}}</td>
@@ -227,7 +223,7 @@
                         <td>
                             <div class="radio radio-success m-2  form-check-inline">
                                 <input [checked]="person.state[0].check" value="active" type="radio" name={{index}}
-                                    (click)="changeStateI(id,'state',$event)" id="stateAI">
+                                    (click)="changeStateA(id,'state',$event)" id="stateA">
                                 <label style="font-size: 15px;">
 
                                 </label>
@@ -278,8 +274,7 @@
                             <span contenteditable="true" (keyup)="changeValue2(id, 'name', $event)"></span>
                         </td>
                         <td>
-                            <select #nameSection contenteditable="true"
-                                (click)="changeValueSelect(id, 'nameTypeSection',nameSection.value)"
+                            <select #nameSection (click)="changeValueSelect(id, 'nameTypeSection',nameSection.value)"
                                 class="input-group-text">
                                 <option *ngFor="let section of sections">
                                     {{section.name}}
@@ -287,16 +282,14 @@
                             </select>
                         </td>
                         <td>
-                            <input contenteditable="true" (click)="changeValuecheck(id, 'typeOfAccompaniment',$event)"
-                                type="checkbox">
+                            <input contenteditable="true" (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
                         </td>
                         <td>
                             <span contenteditable="true"
                                 (keyup)="changeValue2(id, 'preparationTimeNumber', $event)"></span>
                         </td>
                         <td>
-                            <select #unityTime contenteditable="true"
-                                (click)="changeValueSelect(id, 'preparationTimeUnity',unityTime.value)"
+                            <select #unityTime (click)="changeValueSelect(id, 'preparationTimeUnity',unityTime.value)"
                                 class="input-group-text ">
                                 <option *ngFor="let time of time">
                                     {{time}}
