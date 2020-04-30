@@ -30,6 +30,8 @@ export class CuponManagerComponent implements OnInit {
   getCuponById: any;
   //variable of don't results
   noResults = false
+   //variable for the loading
+   loading: boolean;
 
   constructor(
     private couponsServices: CouponsService,
@@ -131,10 +133,11 @@ export class CuponManagerComponent implements OnInit {
     return true;
   }
   makeCoupons() {
+    this.loading = true
     this.couponsGettting = [];
     this.newArray = this.couponsGettting;
     this.couponsServices.getCoupons().subscribe(res => {
-      res.forEach((coupon: Coupons) => {
+      res.forEach((coupon: Coupons, index) => {
         let ys = coupon.createDate[0]['year'];
         let ms = coupon.createDate[0]['month'];
         let ds = coupon.createDate[0]['day'];
@@ -165,6 +168,9 @@ export class CuponManagerComponent implements OnInit {
         }
 
         this.couponsGettting.push(obj)
+        if(index === (res.length -1)){
+          this.loading = false;
+        }
 
       })
     })
