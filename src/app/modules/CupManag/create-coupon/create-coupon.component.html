@@ -13,7 +13,7 @@
                 <div class="col-md-7">
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
-                        <input class="form-check-input " type="radio" name="radio2" id="radio3"
+                        <input class="form-check-input " type="radio" name="radio3" id="radio3"
                             [checked]="State[0].check" #active
                             disabled="true"
                             [value]="State[0].state" [checked]="preCoupon.state[0].check">
@@ -25,6 +25,7 @@
                     <div class="radio radio-danger m-2 form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="radio2" id="radio4"
                             [checked]="State[1].check" #inactive
+                            disabled="true"
                             [value]="State[1].state" [checked]="preCoupon.state[1].check">
                         <label for="radio4">
                             Inactivo
@@ -169,18 +170,6 @@
                 </div>
             </div>
 
-            <!-- <div  *ngIf="timeCreation" class="form-group row">
-                <label class="col-md-5 col-form-label">Hora de creación </label>
-                <div class="col-md-7">
-                    <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime" #timeCreate="ngModel" required
-                        [ngClass]="{'is-invalid': (!timeCreate.valid && timeCreate.touched),'is-valid':(timeCreate.valid)}"
-                        [meridian]="meridian">
-                    </ngb-timepicker>
-                    <div class="col-md-4" *ngIf="timeCreate.errors?.required" class="invalid-feedback">*la hora es
-                        requerida</div>
-                    <div class="valid-feedback">Ok!</div>
-                </div>
-            </div> -->
             <div *ngIf="finishDate" class="form-group row">
                 <label class="col-md-5 col-form-label">Fecha de vencimiento</label>
                 <div class="col-md-7">

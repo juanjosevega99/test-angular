@@ -31,11 +31,7 @@ export class CreateCouponComponent implements OnInit {
     nameTypeOfCoupon: null,
     discountRate: null,
     expirationDate: [],
-    expirationTime: [{
-      // hour: 0,
-      // minute :0,
-      // second: 0,
-    }],
+    expirationTime: [],
     name: null,
     numberOfUnits: null,
     numberOfCouponsAvailable: null,
@@ -423,6 +419,7 @@ export class CreateCouponComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.loading = true
         this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
           .then(urlImage => {
             this.upload = true;
@@ -431,7 +428,8 @@ export class CreateCouponComponent implements OnInit {
             this.couponsServices.postCoupon(this.preCoupon).subscribe((coupon: any) => {
               let idCoupon = coupon._id;
               this.generateCoupons(idCoupon)
-
+              this.loading = false
+              
             })
 
             if (this.upload == true) {
@@ -467,25 +465,37 @@ export class CreateCouponComponent implements OnInit {
     objCoupon.id = this.identificatorbyRoot
     objCoupon.numberOfCouponsAvailable = this.preCoupon['numberOfUnits']
     this.couponsServices.putCoupon(objCoupon).subscribe(()=> this.loading=false)
-    this._router.navigate(['/main', 'couponManager',]);
+    // this._router.navigate(['/main', 'couponManager',]);
   }
 
   //swall for update collection Coupon
 
   swallUpdateCoupon() {
     Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas guardar los cambios!",
+      title: '¿Estás seguro?',
+      text: "de que deseas elimar el cupón!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, guardar!'
+      confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
+
       if (result.value) {
         this.loading = true
         if (this.seeNewPhoto == false) {
           this.uploadCouponUpdate()
+          Swal.fire({
+            title: 'Guardado',
+            text: "Tu nuevo cupón ha sido actualizado!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'couponManager',]);
+            }
+          })
         } else if (this.seeNewPhoto == true) {
           this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
             .then(urlImage => {
@@ -536,13 +546,17 @@ export class CreateCouponComponent implements OnInit {
         confirmButtonText: 'Si, eliminar!'
       }).then((result) => {
         if (result.value) {
-          this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
-          this.couponsAvilableService.getCouponAvailableByIdCoupon(this.identificatorbyRoot)
-          .subscribe( couponAvailable => {
-            this.couponsAvailableByIdCoupon = couponAvailable
-            this.couponsAvailableByIdCoupon.forEach(element => {
-              this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
-            });
+          this.loading = true
+          let urlImg = 'assets/adminCoupon/coupon/' + this.preCoupon['imageCoupon'].split("%")[3].split("?")[0].slice(2);
+          this._uploadImages.DeleteImage(urlImg).then(res =>{
+            this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
+            this.couponsAvilableService.getCouponAvailableByIdCoupon(this.identificatorbyRoot)
+            .subscribe( couponAvailable => {
+              this.couponsAvailableByIdCoupon = couponAvailable
+              this.couponsAvailableByIdCoupon.forEach(element => {
+                this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
+              });
+            })          
           })
           Swal.fire({
             title: 'Eliminado',

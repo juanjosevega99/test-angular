@@ -37,6 +37,8 @@ export class TermsAndConditionsService {
           let obj = {
             id: termsandconditions._id,
             name: termsandconditions.name,
+            idTypeTyc: termsandconditions.idTypeTyc,
+            nameTypeTyc: termsandconditions.nameTypeTyc,
             description: termsandconditions.description
           };
           return obj;
@@ -50,13 +52,15 @@ export class TermsAndConditionsService {
       .get<TermsAndConditions>(environment.UrlBase + "terms-and-conditions/" + id)
       .pipe(
         map((termsandconditions: TermsAndConditions) => {
-            let obj = {
-              id: termsandconditions.id,
-              name: termsandconditions.name,
-              description: termsandconditions.description
-            };
-            return obj;
-          })
+          let obj = {
+            id: termsandconditions.id,
+            name: termsandconditions.name,
+            idTypeTyc: termsandconditions.idTypeTyc,
+            nameTypeTyc: termsandconditions.nameTypeTyc,
+            description: termsandconditions.description
+          };
+          return obj;
+        })
       );
   }
 }

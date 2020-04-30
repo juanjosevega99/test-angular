@@ -281,9 +281,9 @@
                                 <div class="form-group row">
                                         <label class="col-3 col-form-label">Descripción del establecimiento</label>
                                         <div class="col-8">
-                                                <textarea class="form-control " formControlName="description" [ngClass]="{ 'is-invalid': (!forma.get('description').valid && 
-                                                forma.get('description').touched ),
-                                                                'is-valid':( forma.get('description').valid )}">
+                                                <textarea class="form-control " formControlName="description" 
+                                                [ngClass]="{ 'is-invalid': (!forma.get('description').valid && 
+                                                forma.get('description').touched ),'is-valid':( forma.get('description').valid )}">
                                                 </textarea>
                                                 <div *ngIf="forma.get('description').errors?.maxlength "
                                                         class="invalid-feedback">
@@ -380,8 +380,7 @@
                                                 </label>
                                         </div>
                                         <div class=" col align-items-center">
-                                                <div
-                                                        class="d-flex flex-column justify-content-center align-items-center mt-5 ">
+                                                <div class="d-flex flex-column justify-content-center align-items-center mt-5 ">
                                                         <div class="d-flex flex-column ">
                                                                 <ng-image-slider
                                                                         *ngIf="imagesUploaded.length>0 appValidationsLoadImages "
@@ -419,7 +418,8 @@
                                 class="col-sm-12 col-md-2 col-lg-1 d-flex flex-column justify-content-center align-items-center ">
                                 <div class="form-group row d-flex flex-column ">
 
-                                        <button *ngIf="!buttonPut" type="submit" class="btn btn-outline-primary mb-5">
+                                        <button *ngIf="!buttonPut" type="submit" class="btn btn-outline-primary mb-5" 
+                                        >
                                                 Guardar
                                         </button>
                                         <button *ngIf="buttonPut" type="button" class="btn btn-outline-primary mb-5"
@@ -438,46 +438,3 @@
         </form>
 
 </div>
-
-<!-- <form>
-
-
-
-                <div class="form-group row">
-                        <label class="col-2 col-form-label">Nombre</label>
-                        <div class="col-8">
-
-                                <input class="form-control" type="text" placeholder="Nombre">
-                        </div>
-                </div>
-
-                <div class="form-group row">
-                        <label class="col-2 col-form-label">Apellido</label>
-                        <div class="col-8">
-
-                                <input class="form-control" type="text" placeholder="Apellido">
-                        </div>
-                </div>
-
-        
-
-        <div class="form-group row">
-                <label class="col-2 col-form-label">Correo</label>
-                <div class="col-md-8">
-
-                        <input class="form-control" type="email" placeholder="Correo electrónico">
-                </div>
-        </div>
-
-
-
-        <div class="form-group row">
-                <label class="col-2 col-form-label">&nbsp;</label>
-                <div class="input-group col-md-8">
-                        <button type="submit" class="btn btn-outline-primary">
-                                Guardar
-                        </button>
-                </div>
-        </div>
-
-</form> -->
