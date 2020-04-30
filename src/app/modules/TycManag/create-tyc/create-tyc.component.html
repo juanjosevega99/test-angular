@@ -19,6 +19,47 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label class="col-md-5 col-form-label">Tipo de términos y condiciones</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+
+                        <select *ngIf="arraytypeTyCSelect" class="form-control mr-2" name="nameTypeTyC"
+                            #nameTypeTyC="ngModel" required [ngClass]="{'is-invalid': (!nameTypeTyC.valid ) && 
+                            nameTypeTyC.touched ,'is-valid':(nameTypeTyC.valid) }"
+                            [(ngModel)]="preTyc.idTypeTyc" (change)="seeNametypeTyC(nameTypeTyC.value)">
+                           
+                            <option *ngFor="let tyC of typeTyC" 
+                                [ngValue]="tyC.id">
+                                {{tyC.name}}
+                            </option>
+                        </select>
+
+                        <input *ngIf="othertypeTyCInput" placeholder="Otro Tyc" #Tyc="ngModel"
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherTyc" 
+                            type="text" name="otherTyc">
+
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="handleBoxtypeTyC()"> Cancelar</button>
+
+                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="addTypeTyc(otherTyc)"> Guardar</button>
+
+                        <button *ngIf="addtypeTyCButton" (click)="handleBoxtypeTyC()"
+                            class="btn1 btn btn-outline-primary">
+                            Otro
+                        </button>
+
+                        <button *ngIf="addtypeTyCButton" (click)=" deleteTypeCoupon()" type="button"
+                            class="btn1 btn btn-outline-primary">
+                            Borrar
+                        </button>
+
+                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-md-5 col-form-label">Descripción</label>
                 <div class="col-md-7">
                     <div class="input-group">

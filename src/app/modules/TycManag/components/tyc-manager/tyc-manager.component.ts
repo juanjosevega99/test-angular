@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormGroup, FormControl } from '@angular/forms';
 
 //services
 import Swal from 'sweetalert2';
@@ -16,6 +17,8 @@ import { TermsAndConditions } from '../../../../models/TermsAndConditions';
 
 export class TycManagerComponent implements OnInit {
 
+  //object that saves the values of the table
+  table: FormGroup;
   //varibales to obtain data
   tycGettting: TermsAndConditions[] = [];
   newArray = this.tycGettting;
@@ -26,13 +29,16 @@ export class TycManagerComponent implements OnInit {
 
   //variable of don't results
   noResults = false
-
+  //variable for the loading
+  loading: boolean;
 
   constructor(
     private saveLocalStorageServices: SaveLocalStorageService,
     private _router: Router,
     private tycManegerService: TermsAndConditionsService) {
-
+    this.table = new FormGroup({
+      "nameTypeTyc": new FormControl(),
+    })
     //clean local storage  for ally and headquarter
     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
     this.makeObjTycManager();
@@ -45,23 +51,29 @@ export class TycManagerComponent implements OnInit {
     this._router.navigate(['/main', 'editTycManager', i])
   }
 
-  
+
   // obtained array tyc of collection
   makeObjTycManager() {
+    this.loading = true
     this.tycGettting = [];
     this.newArray = this.tycGettting;
-    this.tycManegerService.getTermsAndConditions().subscribe(tyc => {
-      tyc.forEach((tyc: TermsAndConditions) => {
+    this.tycManegerService.getTermsAndConditions().subscribe(res => {
+      res.forEach((tyc: TermsAndConditions, index) => {
         const obj: TermsAndConditions = {};
         obj.id = tyc.id
         obj.name = tyc.name
+        obj.nameTypeTyc = tyc.nameTypeTyc
         obj.description = tyc.description
 
         this.tycGettting.push(obj)
+        
+        if(index === (res.length -1)){
+          this.loading = false;
+        }
       });
     })
   }
-  
+
   //delete Tyc
   deleteTyc(idTyc) {
     Swal.fire({
@@ -89,14 +101,30 @@ export class TycManagerComponent implements OnInit {
         })
       }
     })
-  
+
   }
   //method for a specific search
   search() {
-    
+
+    let objsearch = {
+      nameTypeTyc: "",
+    };
+
+    for (var i in this.table.value) {
+      // search full fields
+      if (this.table.value[i] !== null && this.table.value[i] !== "") {
+        objsearch[i] = this.table.value[i];
+      }
+    }
+
     var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
-    
+
     this.newArray = this.tycGettting.
+      filter(function (tyC) {
+        if (tyC["nameTypeTyc"].toLowerCase().indexOf(this.nameTypeTyc) >= 0) {
+          return tyC;
+        }
+      }, objsearch).
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.name) || myRegex.test(item.description))

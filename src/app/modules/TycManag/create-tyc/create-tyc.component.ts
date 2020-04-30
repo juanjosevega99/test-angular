@@ -4,7 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service"
-
+import { TypeTermsAndConditionsService } from "src/app/services/type-terms-and-conditions.service";
+import { TypeTermsAndConditionsService } from '../../../services/type-terms-and-conditions.service';
 @Component({
   selector: 'app-create-tyc',
   templateUrl: './create-tyc.component.html',
@@ -14,8 +15,18 @@ export class CreateTycComponent implements OnInit {
 
   preTyc: Object = {
     name: null,
+    idTypeTyc: null,
+    nameTypeTyc: null,
     description: null
   }
+  //variables for typeTyC
+  arraytypeTyCSelect: boolean = true;
+  othertypeTyCInput: boolean = false;
+  addtypeTyCButton: boolean = true;
+  selectAgainarray: boolean = false;
+  newtypeTyC: String;
+  typeTyC: any[] = [];
+
   //variables for receiving the coupon that will be edited
   identificatorbyRoot: any;
   idParams: number;
@@ -27,7 +38,8 @@ export class CreateTycComponent implements OnInit {
   constructor(private _router: Router,
     private activatedRoute: ActivatedRoute,
     private saveLocalStorageService: SaveLocalStorageService,
-    private tycManagerService: TermsAndConditionsService) {
+    private tycManagerService: TermsAndConditionsService,
+    private typeTycService: TypeTermsAndConditionsService) {
     //flags
     this.loading = true;
     this.buttonPut = true;
@@ -44,14 +56,65 @@ export class CreateTycComponent implements OnInit {
       this.idParams = identificator
       this.identificatorbyRoot = idTyc
     })
+    //inicialization service with collections typeTermsAndConditions
+    this.typeTycService.getTypeTermsAndConditions().subscribe(typeTyC => {
+      this.typeTyC = typeTyC;
+      if (this.preTyc['idTypeTyc']) {
+        var type = this.typeTyC.find(element => element.id === this.preTyc['idTypeTyc'])
+        this.preTyc['idTypeTyc'] = type.id
+      }
+    })
   }
 
   ngOnInit() {
   }
   goBackTycManger() {
     this._router.navigate(['/main', 'tycManager'])
-    
+
   }
+  //Method for showing new view in the typeTyC field
+  handleBoxtypeTyC(): boolean {
+
+    if (this.addtypeTyCButton) {
+      return this.addtypeTyCButton = false,
+        this.othertypeTyCInput = true,
+        this.selectAgainarray = true,
+        this.arraytypeTyCSelect = false
+    } else {
+      return this.addtypeTyCButton = true,
+        this.othertypeTyCInput = false,
+        this.selectAgainarray = false,
+        this.arraytypeTyCSelect = true
+    }
+  }
+  seeNametypeTyC(selected: any) {
+
+    this.typeTyC.forEach(element => {
+      if (selected == element.id) {
+        this.preTyc['nameTypeTyc'] = element.name
+
+      }
+    })
+  }
+  //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
+  addTypeTyc(name: String) {
+    if (name != null) {
+      let newitem = name;
+      let newTypeTyc: object = {
+        name: newitem
+      }
+      this.swallSaveTypeTyc(newTypeTyc)
+
+      this.handleBoxtypeTyC()
+    } else { alert("Ingrese los nuevos términos y condiciones") }
+
+  }
+  deleteTypeCoupon() {
+    let typeTycSelected = this.preTyc['idTypeTyc']
+    this.swallDeleteTypeTyc(typeTycSelected)
+  }
+
+  //method of obtain one tyC for update 
   getTyc(idTyc: string) {
     this.loading
     this.tycManagerService.getTermAndConditionById(idTyc).subscribe(tyc => {
@@ -62,6 +125,54 @@ export class CreateTycComponent implements OnInit {
   //save new Tyc
   saveTyc() {
     this.swallSaveTyc()
+  }
+  //sweet alerts for save and delete typeTyc
+  swallSaveTypeTyc(newTypeTyc: any) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas guardar este nuevo término y condición",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.typeTycService.postTypeTermsAndConditions(newTypeTyc).subscribe(() => {
+          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
+            this.typeTyC = tyC;
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo término y condición ha sido creado',
+          'success',
+        )
+      }
+    })
+  }
+  swallDeleteTypeTyc(typeTycSelected: string) {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "de que deseas eliminar este término y condición!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.typeTycService.deleteTypeTermsAndConditions(typeTycSelected).subscribe(() => {
+          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
+            this.typeTyC = tyC;
+          })
+        })
+        Swal.fire(
+          'Eliminado!',
+          'success',
+        )
+      }
+    })
   }
   swallSaveTyc() {
     Swal.fire({
@@ -117,7 +228,7 @@ export class CreateTycComponent implements OnInit {
             this._router.navigate(['/main', 'tycManager',]);
           }
         })
-      
+
       }
 
     })
