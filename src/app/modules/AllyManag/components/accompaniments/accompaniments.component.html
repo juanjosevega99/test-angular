@@ -135,14 +135,14 @@
                         <td>
                             <div class="radio radio-success m-2  form-check-inline">
                                 <input [checked]="accompPromo.state[0].check" value="active" type="radio" name={{index}}
-                                    disabled id="stateAI">
+                                    disabled id="stateA">
                                 <label style="font-size: 15px;"></label>
                             </div>
                         </td>
                         <td>
                             <div class="radio radio-danger m-2 form-check-inline">
                                 <input [checked]="!accompPromo.state[0].check" value="inactive" type="radio"
-                                    name={{index}} id="stateAI">
+                                disabled name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"></label>
                             </div>
                         </td>
@@ -223,7 +223,7 @@
                         <td>
                             <div class="radio radio-success m-2  form-check-inline">
                                 <input [checked]="person.state[0].check" value="active" type="radio" name={{index}}
-                                    (click)="changeStateA(id,'state',$event)" id="stateA">
+                                    (click)="changeStateI(id,'state',$event)" id="stateA">
                                 <label style="font-size: 15px;">
 
                                 </label>
@@ -282,7 +282,7 @@
                             </select>
                         </td>
                         <td>
-                            <input contenteditable="true" (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
+                            <input (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
                         </td>
                         <td>
                             <span contenteditable="true"
@@ -312,14 +312,14 @@
                         </td>
                         <td>
                             <div class="radio radio-success m-2  form-check-inline">
-                                <input contenteditable="true" (click)="changeStateA(id, 'state', $event)"
+                                <input (click)="changeStateA(id, 'state', $event)"
                                     [checked]="dish.state[0].check" type="radio" name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"></label>
                             </div>
                         </td>
                         <td>
                             <div class="radio radio-danger m-2 form-check-inline">
-                                <input contenteditable="true" (click)="changeStateA(id, 'state', $event)"
+                                <input (click)="changeStateA(id, 'state', $event)"
                                     [checked]="!dish.state[0].check" type="radio" name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"> </label>
                             </div>

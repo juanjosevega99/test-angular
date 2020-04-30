@@ -10,11 +10,11 @@
         </button> -->
         <app-side-bar></app-side-bar>
 
-            <div href="#" class="img-round1 display-none-sm ">
+            <div class="img-round1 display-none-sm ">
                 <img class="img-allyLogo " [src]='profile.photo'>
 
                 <div *ngIf="profile.nameCharge != 'administradorTIFI'" class=" notification">
-                    <span class="badge">2</span>
+                    <span class="badge">{{ ordersNotifications }}</span>
                 </div>
             </div>
 

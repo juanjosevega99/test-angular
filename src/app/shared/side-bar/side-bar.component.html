@@ -7,13 +7,18 @@
         </div>
 
         <div class="sidebar-header ">
-            <img src="https://www.stickpng.com/assets/images/58429977a6515b1e0ad75ade.png" alt="..."
+            <img [src]="profile.photo" alt="..."
                 class="rounded-circle img">
-            <div class="d-flex mt-2 flex-column">
+            <div *ngIf="profile.nameCharge != 'administradorTIFI'" class="d-flex mt-2 flex-column">
                 <p class="text-center text-Margin-botton textStablishment"> {{profile.nameAllie}} </p>
                 <p class="text-Margin-botton">Sede: {{profile.nameHeadquarter}} </p>
+                
             </div>
-            <button type="button" class="btn btn-link colorBackGround" style="margin-top: 15px;">Editar</button>
+            <div *ngIf="profile.nameCharge == 'administradorTIFI'" class="d-flex mt-2 flex-column" >
+                <p  class="text-with-out textLyrics1 "
+                    style="font-size: 1.2rem;"> {{profile.nameCharge | uppercase }} </p>
+            </div>
+            <button [routerLink]="['/main/createProfile/', profile.id]" type="button" class="btn btn-link colorBackGround" style="margin-top: 15px;">Editar</button>
         </div>
         <ul class="list-unstyled components" style="text-align: center; width: 100%; ">
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
@@ -27,7 +32,7 @@
                 </a>
             </div>
             <li  *ngIf="profile.showContent.options" routerLinkActive="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row dropdown-toggle">
                     <div class="col-11 ">
                         Menú
                     </div>
@@ -40,10 +45,10 @@
                         <a [routerLink]="['/main','allyManager']">Admin Aliados</a>
                     </li>
                     <li>
-                        <a [routerLink]="[ '/main', 'userManager' ]">Admin Usuarios</a>
+                        <a [routerLink]="[ '/main', 'userManager', -1]">Admin Usuarios</a>
                     </li>
                     <li>
-                        <a [routerLink]="[ '/main', 'promoManager' ]">Admin Promos</a>
+                        <a [routerLink]="[ '/main', 'allyManager', -2 ]">Admin Promos</a>
                     </li>
                     <li>
                         <a [routerLink]="[ '/main', 'couponManager' ]">Admin de cupones</a>
