@@ -262,14 +262,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     await this.dishPromoArray.forEach(promo => promo['selected'] ? this.promosSelected.push(promo['id']) : this.promosSelected);
   }
 
-  sendCupons() {
-
-    this.selectforsend();
-    this.typeCoupon = true
-    this.typeExcel = false;
-    this.typepdf = false;
-
-  }
   // ==========================
   // delete idpromo from localstorage
   // ==========================
@@ -509,6 +501,16 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   // methods for send Coupons
   // ==========================
 
+  sendCupons() {
+
+    this.selectforsend();
+
+    this.typeCoupon = true
+    this.typeExcel = false;
+    this.typepdf = false;
+
+  }
+
   sendCouponToUsers() {
     if (this.userSelected.length) {
       if (this.userSelected.length > this.numberOfCoupons) {
@@ -545,9 +547,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, enviar!'
     }).then((result) => {
       if (result.value) {
-        let flagThereIsNoUser: boolean;
         let currentDate: any;
-        let contCouponsSend: number = 0
         this.couponsAvailableService.getCouponAvailableByIdCoupon(this.idCoupon)
           .subscribe(coupons => {
             this.couponsAvailableByIdCoupon = coupons
@@ -555,8 +555,8 @@ export class UserManagerComponent implements OnInit, OnDestroy {
               let cont = 1
               for (let j = 0; j < this.userSelected.length; j++) {
                 let user = this.userSelected[i];
-                let iduser = user['id']
-                let userName = user['name']
+                let iduser = user['idUser']
+                // let userName = user['name']
                 let arrayCuponByIdUser = this.couponsAvailableByIdCoupon.filter(coupon => coupon.idUser == iduser)
                 if (arrayCuponByIdUser.length != 0) {
                   break;
@@ -569,11 +569,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
                     idCoupon: couponByIdUser.idCoupon,
                     state: true
                   }
-                  console.log(obj)
-                  this.couponsAvailableService.putCouponAvailable(obj).subscribe(() => {
-                    contCouponsSend = contCouponsSend + 1
-                    flagThereIsNoUser = true
-                  })
+                  this.couponsAvailableService.putCouponAvailable(obj).subscribe()
                   this.couponsService.getCouponById(this.idCoupon).subscribe(coupon => {
                     coupon['numberOfCouponsAvailable'] = this.numberOfCoupons - cont
                     this.numberOfCoupons = coupon['numberOfCouponsAvailable']
@@ -606,6 +602,17 @@ export class UserManagerComponent implements OnInit, OnDestroy {
               objStartDate.year = arrayDate[2];
               arrayObjDate = objStartDate
               coupon['createDate'] = arrayObjDate
+              //obtain hour current 
+              let formatHour = currentDate.toLocaleString('en-ES', { hour: 'numeric', minute: 'numeric', hour12: false });
+              let arrayCreateHour = formatHour.split(':').map(x => +x);
+              let objStartHour: any = {};
+              let arrayObjCreateHour: any[] = []
+              objStartHour.hour = arrayCreateHour[0];
+              objStartHour.minute = arrayCreateHour[1];
+              objStartHour.second = 0;
+              arrayObjCreateHour = objStartHour;
+              coupon['creationTime'] = arrayObjCreateHour;
+
 
               if (coupon.nameTypeOfCoupon == 'Descuentos') {
 
@@ -620,20 +627,28 @@ export class UserManagerComponent implements OnInit, OnDestroy {
                 objEndDate.month = arrayEndDate[1];
                 objEndDate.year = arrayEndDate[2];
                 arrayObjEndDate = objEndDate
-                console.log(arrayObjEndDate)
                 coupon['expirationDate'] = arrayObjEndDate
+                //obtain hour current 
+                let formatHour = currentDate.toLocaleString('en-ES', { hour: 'numeric', minute: 'numeric', hour12: false });
+                let arrayEndHour = formatHour.split(':').map(x => +x);
+                let objEndHour: any = {};
+                let arrayObjCreateHour: any[] = []
+                objEndHour.hour = arrayEndHour[0];
+                objEndHour.minute = arrayEndHour[1];
+                objEndHour.second = 0;
+                arrayObjCreateHour = objEndHour
+                coupon['expirationTime'] = arrayObjCreateHour;
 
               }
-              if (flagThereIsNoUser == true) {
-                Swal.fire({
-                  title: 'Cupones enviados',
-                  // text: `Cupones enviados: ${contCouponsSend} `,
-                  icon: 'success',
-                  confirmButtonColor: '#542b81',
-                  confirmButtonText: 'Ok!'
-                })
-              }
+
               this.couponsService.putCoupon(coupon).subscribe()
+              Swal.fire({
+                title: 'Cupones enviados',
+                // text: `Cupones enviados: ${contCouponsSend} `,
+                icon: 'success',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              })
 
             })
           })

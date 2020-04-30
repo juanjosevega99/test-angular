@@ -23,13 +23,13 @@
                                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                         <li class="nav-item mr-md-2">
                                             <input placeholder="Buscar por nombre cupón..." class="form-control text-center"
-                                                type="text" (keyup)="search(code.value, code.id)" #code id="code"
+                                                type="text" (keyup)="search()" #code id="code"
                                                 formControlName="name">
                                         </li>
                                         <li class="nav-item">
                                             <input placeholder="Buscar por nombre de establecimiento ..."
                                                 class="form-control text-center" type="text"
-                                                (keyup)="search(name.value, name.id)" #name id="name"
+                                                (keyup)="search()" #name id="name"
                                                 formControlName="nameAllies">
                                         </li>
                                     </ul>
@@ -49,12 +49,6 @@
                                             Inactivo
                                         </label>
                                     </div>
-                                    <div class="radio m-2 form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" checked>
-                                        <label style="font-size: 15px;">
-                                            Eliminar
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -63,7 +57,7 @@
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
                                     <li class="nav-item container-fluid d-flex">
-                                        <input (keyup)="search(general.value)" class="form-control text-center"
+                                        <input (keyup)="search()" class="form-control text-center"
                                             id="general" type="text" placeholder="Buscar cupon ..." #general
                                             [(ngModel)]="generalsearch">
                                     </li>
@@ -118,7 +112,7 @@
                         <div class="radio radio-success m-2 form-check-inline">
                             <input [checked]="coupon.state[0].check" type="radio" disabled="true" >
                             <label style="font-size: 15px;">
-                                Activo
+                                
                             </label>
                         </div>
                     </td>
@@ -126,7 +120,7 @@
                         <div class="radio radio-danger m-2 form-check-inline">
                             <input [checked]="coupon.state[1].check" type="radio" disabled="true"  >
                             <label style="font-size: 15px;">
-                                Inactivo
+                                
                             </label>
                         </div>
                     </td>
