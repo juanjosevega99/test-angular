@@ -132,11 +132,7 @@ export class PrincipalOrdersComponent implements OnInit {
     // this.orderList();
     this.orders2 = this.orders;
 
-    // listen websocket
-    this.wesocket.listen('connection').subscribe(res => {
-      console.log(res);
-    })
-
+    
     this.wesocket.listen('newOrder').subscribe((res: Orders) => {
 
       // console.log("desde server", res);

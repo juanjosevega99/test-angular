@@ -14,7 +14,7 @@
                 <img class="img-allyLogo " [src]='profile.photo'>
 
                 <div *ngIf="profile.nameCharge != 'administradorTIFI'" class=" notification">
-                    <span class="badge">{{ ordersNotifications }}</span>
+                    <span class="badge"><app-notifications-orders ></app-notifications-orders></span>
                 </div>
             </div>
 

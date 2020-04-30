@@ -26,9 +26,9 @@
                     <i class="fas fa-envelope icon-style icon"></i>
                     <span class="badge">3</span>
                 </a>
-                <a href="#" class="notification">
+                <a [routerLink]="['/main/principal-orders']" class="notification">
                     <i class="fas fa-bell icon"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"><app-notifications-orders ></app-notifications-orders></span>                
                 </a>
             </div>
             <li  *ngIf="profile.showContent.options" routerLinkActive="active">
