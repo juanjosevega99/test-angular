@@ -178,6 +178,13 @@ export class CreateAllyComponent implements OnInit {
     this.loading;
     this.allieService.getAlliesById(id).subscribe(ally => {
       this.forma.setValue(ally)
+      ally.imagesAllies.forEach(routeImage =>{
+        let obj = {
+          image : routeImage,
+          thumbImage: routeImage, 
+        }
+        this.imagesUploaded.push(obj);
+      }) 
       let idSchedule = this.forma.controls['idAttentionSchedule'].value
       this.scheduleServices.getAttentionSchedulesById(idSchedule).subscribe(schedule => {
         this.days.forEach(element => {

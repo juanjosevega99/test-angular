@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service"
 import { TypeTermsAndConditionsService } from "src/app/services/type-terms-and-conditions.service";
-import { TypeTermsAndConditionsService } from '../../../services/type-terms-and-conditions.service';
 @Component({
   selector: 'app-create-tyc',
   templateUrl: './create-tyc.component.html',
