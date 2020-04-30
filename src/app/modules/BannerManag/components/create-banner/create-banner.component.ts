@@ -9,6 +9,7 @@ import { BannersService } from 'src/app/services/banners.service';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class CreateBannerComponent implements OnInit {
   formulary: FormGroup;
 
   constructor(private allyservice: AlliesService, private headService: HeadquartersService, private uploadimg: UploadImagesService,
-    private bannerService: BannersService, private spinner: NgxSpinnerService, private router: Router, private activate: ActivatedRoute) {
+    private bannerService: BannersService, private spinner: NgxSpinnerService, private router: Router, private activate: ActivatedRoute,
+    private _location: Location) {
 
     this.loadAllies();
     this.loadHeads();
@@ -90,44 +92,57 @@ export class CreateBannerComponent implements OnInit {
 
   saveBanner() {
 
-    let Banner = this.createBanenr();
+    Swal.fire({
+      title: "desea guardar la información",
+      icon: "question",
+      showCancelButton: true,
+      cancelButtonText: "cancelar",
+      confirmButtonColor: '#572483',
+      cancelButtonColor: '#572483',
+      confirmButtonText: 'Guardar'
+    }).then(res => {
+      if (res.value) {
+        let Banner = this.createBanenr();
 
-    if (this.formulary.valid && this.photo) {
-      this.spinner.show();
-      this.uploadimg.uploadImages(this.photo, "allies", "banners").then((result: string) => {
-        Banner.imageBanner = result;
+        if (this.formulary.valid && this.photo) {
+          this.spinner.show();
+          this.uploadimg.uploadImages(this.photo, "allies", "banners").then((result: string) => {
+            Banner.imageBanner = result;
 
-        if (this.editBanner.id) {
-          Banner.id = this.editBanner.id;
-          this.saveEditBanner(Banner);
-        } else {
-          this.saveNewBanner(Banner);
+            if (this.editBanner.id) {
+              Banner.id = this.editBanner.id;
+              this.saveEditBanner(Banner);
+            } else {
+              this.saveNewBanner(Banner);
+            }
+
+          }).catch(err => {
+            this.spinner.hide();
+            console.log(err);
+            Swal.fire(
+              "Problemas con tu connexión a internet"
+            )
+          })
+
+          this.showinfocontent = false;
+
+        } else if (this.formulary.valid && !this.photo) {
+          this.spinner.show();
+          if (this.editBanner.id) {
+            Banner.id = this.editBanner.id;
+            this.saveEditBanner(Banner);
+          } else {
+            this.spinner.hide();
+            this.showinfocontent = true;
+          }
+
         }
-
-      }).catch(err => {
-        this.spinner.hide();
-        console.log(err);
-        Swal.fire(
-          "Problemas con tu connexión a internet"
-        )
-      })
-
-      this.showinfocontent = false;
-
-    } else if (this.formulary.valid && !this.photo) {
-      this.spinner.show();
-      if (this.editBanner.id) {
-        Banner.id = this.editBanner.id;
-        this.saveEditBanner(Banner);
-      } else {
-        this.spinner.hide();
-        this.showinfocontent = true;
+        else {
+          this.showinfocontent = true;
+        }
       }
+    })
 
-    }
-    else {
-      this.showinfocontent = true;
-    }
 
   }
 
@@ -136,10 +151,14 @@ export class CreateBannerComponent implements OnInit {
 
       this.spinner.hide();
       Swal.fire(
-        "Banner Guardado Exitosamente"
+        {
+          title: "Banner Guardado Exitosamente",
+          icon: 'success',
+          confirmButtonColor: '#572483',
+        }
       ).then(res => {
 
-        if (res) {
+        if (res.value) {
           this.router.navigate(["/main", 'bannerManager']);
         }
       })
@@ -152,9 +171,13 @@ export class CreateBannerComponent implements OnInit {
     this.bannerService.putBanner(Banner).subscribe(banner => {
       this.spinner.hide();
       Swal.fire(
-        "Banner Guardado Exitosamente"
+        {
+          title: "Banner Guardado Exitosamente",
+          icon: 'success',
+          confirmButtonColor: '#572483',
+        }
       ).then(res => {
-        if (res) {
+        if (res.value) {
           this.router.navigate(["/main", 'bannerManager']);
         }
       })
@@ -241,7 +264,7 @@ export class CreateBannerComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Eliminar'
     }).then(res => {
-      if (res) {
+      if (res.value) {
         this.spinner.show();
         let urlImg = 'assets/allies/banners/' + this.editBanner.imageBanner.split("%")[3].split("?")[0].slice(2);
 
@@ -252,16 +275,16 @@ export class CreateBannerComponent implements OnInit {
             Swal.fire(
               "Banner Eliminado Exitosamente"
             ).then(res => {
-              if (res) {
-                this.router.navigate(["/main", 'bannerManager']);
+              if (res.value) {
+                this._location.back();
               }
             })
           })
 
-        }).catch(err =>{
+        }).catch(err => {
           this.spinner.hide();
           console.log(err);
-          
+
         })
 
       }

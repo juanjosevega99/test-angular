@@ -155,6 +155,7 @@
                             #permis="ngModel" required
                             [ngClass]="{'is-invalid': (!permis.valid),'is-valid':(permis.valid) }"
                             [(ngModel)]="preProfile.permis">
+                            <option value="ninguno">Ninguno</option>
                             <option *ngFor="let type of permiss">
                                 {{type}}
                             </option>
