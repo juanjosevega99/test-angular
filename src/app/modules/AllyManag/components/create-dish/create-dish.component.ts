@@ -156,9 +156,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       let identificator = params['id']
       if (identificator >= 0) {
         this.getDish(identificator);
-        console.log('cargar predish');
-        
-
       } else if (identificator == -1) {
         this.loading = false;
         this.buttonPut = false;
