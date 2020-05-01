@@ -401,11 +401,13 @@
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
                                                                         <button
-                                                                                class=" container  btn btn-outline-primary">
+                                                                                class=" container  btn btn-outline-primary" [disabled]="disableImagesAlly">
                                                                                 Adjuntar archivos {{contImage}}
+                                                                                
                                                                         </button>
                                                                         <input type="file" name="photo"
-                                                                                (change)="onImagesSelected($event)" />
+                                                                                (change)="onImagesSelected($event)"
+                                                                                [disabled]="disableImagesAlly" />
                                                                 </div>
 
                                                         </div>

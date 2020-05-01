@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { Router, ActivatedRoute } from '@angular/router';
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
@@ -8,9 +9,9 @@ import { AlliesService } from "../../../../services/allies.service";
 import { UploadImagesService } from "../../../../services/providers/uploadImages.service";
 import Swal from 'sweetalert2';
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
+import { HeadquartersService } from 'src/app/services/headquarters.service';
 //other libraris
 import * as $ from 'jquery';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-ally',
@@ -69,6 +70,9 @@ export class CreateAllyComponent implements OnInit {
   alertBadExtensionPhotosAlly = false
    //flag by state swall
    upload = false;
+   //enable of "Fotos del establecimiento" if it have service  reserved
+   disableImagesAlly: boolean;
+   arrayServicesByAlly:any;
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -77,7 +81,8 @@ export class CreateAllyComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private _router: Router,
     private _activateRoute: ActivatedRoute,
-    private _saveLocalStorageService: SaveLocalStorageService) {
+    private _saveLocalStorageService: SaveLocalStorageService,
+    private headquartersService: HeadquartersService) {
 
     //flags
     this.loading = true;
@@ -91,9 +96,11 @@ export class CreateAllyComponent implements OnInit {
       let identificator = params['id']
       if (identificator != -1) {
         this.getAlly(idAlly)
+
       } else {
         this.loading = false
         this.buttonPut = false
+        this.disableImagesAlly= true;
       }
       this.idParams = identificator;
       this.identificatorbyRoot = idAlly;
@@ -168,6 +175,7 @@ export class CreateAllyComponent implements OnInit {
     this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
       this.attentionSchedule = schedule;
     })
+    // contition of headquartes services
 
   }
   ngOnInit() {
@@ -195,6 +203,16 @@ export class CreateAllyComponent implements OnInit {
         this.loading = false;
       })
     })
+    this.headquartersService.getHeadquarterByIdAlly(id).subscribe(services=>{
+      this.arrayServicesByAlly = services;
+      let arrayServicesReserved = this.arrayServicesByAlly.filter(service=> service.value == "Resérvalo")
+      if (arrayServicesReserved.length != 0){
+        this.disableImagesAlly = false
+      } else{
+        this.disableImagesAlly = true
+      }
+    })
+
   }
   getColour(event) {
     this.color = event.target.value
