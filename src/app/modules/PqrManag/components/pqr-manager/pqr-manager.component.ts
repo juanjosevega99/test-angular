@@ -12,6 +12,8 @@ import { HeadquartersService } from 'src/app/services/headquarters.service';
 import { profileStorage } from 'src/app/models/ProfileStorage';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SendmailService } from 'src/app/services/providers/sendmail.service';
+import { sendmail } from 'src/app/models/senmailinterface';
 
 @Component({
   selector: 'app-pqr-manager',
@@ -21,7 +23,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class PqrManagerComponent implements OnInit {
 
   infoUSer: Pqrs = {};
-  response: String = '';
+  response: string = '';
   alertEmpty = false;
 
   location = "bogota";
@@ -31,7 +33,8 @@ export class PqrManagerComponent implements OnInit {
   toPdf = {}
 
   constructor(private activateParams: ActivatedRoute, private pqrservice: PqrsService, private userService: UsersService,
-    private _location: Location, private profileService: ShowContentService, private headService: HeadquartersService, private spinner:NgxSpinnerService) {
+    private _location: Location, private profileService: ShowContentService, private headService: HeadquartersService, private spinner:NgxSpinnerService,
+    private sendmail:SendmailService) {
 
     this.activateParams.params.subscribe(res => {
 
@@ -92,13 +95,26 @@ export class PqrManagerComponent implements OnInit {
       this.infoUSer.state = true;
       this.infoUSer.date = this.dateCreatePqr;
 
+      let infotoemail: sendmail = {
+        username: this.infoUSer.nameUser,
+        email: this.infoUSer.email,
+        question: this.infoUSer.description,
+        reply: this.response
+      }
+
       this.pqrservice.updatePqr(this.infoUSer.id, this.infoUSer).subscribe(res =>{
-        this.spinner.hide();
-        this.alertEmpty = false;
-        Swal.fire({
-          title:"La solicitud fue atendida",
-          icon:"success"
+
+        this.sendmail.sendmail(infotoemail).subscribe( res =>{
+
+          this.spinner.hide();
+          this.alertEmpty = false;
+          Swal.fire({
+            title:"La solicitud fue atendida",
+            icon:"success"
+          })
+          
         })
+
       }, err =>{
         this.spinner.hide();
         Swal.fire({

@@ -109,7 +109,7 @@
                         <a [routerLink]="[ '/main/createProfile', i ]"  class="btn"> <i class="far fa-edit"></i> </a><!--(click)="seeI(prof.id)" [routerLink]="[ '/main/createProfile', prof.id ]" -->
                     </td>
                 </tr>
-                <tr>
+                <tr *ngIf="!newArray.length" >
                     <td colspan="11">No existen Perfiles registrados para esta sede</td>
                 </tr>
             </tbody>
