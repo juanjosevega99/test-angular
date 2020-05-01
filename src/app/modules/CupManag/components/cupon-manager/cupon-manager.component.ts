@@ -36,65 +36,66 @@ export class CuponManagerComponent implements OnInit {
     private saveLocalStorageServices: SaveLocalStorageService,
     private _router: Router,
     private couponsAvailableService: CouponsAvailableService,
-  
+
   ) {
     // inicilization current date 
     let currentDate: any;
     currentDate = new Date();
-    let formatDate = currentDate.toLocaleString('es-ES', {year: 'numeric' , month: 'numeric', day: '2-digit' });
-    let arrayDate = formatDate.split('/').map(x=>+x);
+    let formatDate = currentDate.toLocaleString('es-ES', { year: 'numeric', month: 'numeric', day: '2-digit' });
+    let arrayDate = formatDate.split('/').map(x => +x);
     let objtDate: any = {};
-    let arrayObjDate: any[] = []
+    // let arrayObjDate: any[] = []
     objtDate.day = arrayDate[0];
     objtDate.month = arrayDate[1];
     objtDate.year = arrayDate[2];
-    arrayObjDate = objtDate
-  // function for compare of expiration date with current date
-    function compareObj(a, b) {
-      var aKeys = Object.keys(a).sort();
-      var bKeys = Object.keys(b).sort();
-      if (aKeys.length !== bKeys.length) {
-          return false;
-      }
-      if (aKeys.join('') !== bKeys.join('')) {
-          return false;
-      }
-      for (var i = 0; i < aKeys.length; i++) {
-          if ( a[aKeys[i]]  !== b[bKeys[i]]) {
-              return false;
-          }
-      }
-      return true;
-  }
+    // arrayObjDate = objtDate
+    // inicilization current time 
+    let formatHour = currentDate.toLocaleString('en-ES', { hour: 'numeric', minute: 'numeric', hour12: false });
+    let arrayCurrentHour = formatHour.split(':').map(x => +x);
+    let objCurrentHour: any = {};
+    // let arrayObjCreateHour: any[] = []
+    objCurrentHour.hour = arrayCurrentHour[0];
+    objCurrentHour.minute = arrayCurrentHour[1];
+    objCurrentHour.second = 0;
+    // arrayObjCreateHour = objCurrentHour
+    
     this.couponsServices.getCoupons().subscribe(res => {
-      res.forEach((coupon: Coupons) =>   {
-        let endDate = coupon.expirationDate[0]
-        //Validation for expiration cupón
-        let resulEndDate = compareObj(endDate,objtDate)
-        if ( resulEndDate == true){
-          let state: any = [{
-            state: "active",
-            check: false
-          }, {
-            state: "inactive",
-            check: true
-          }]
-          coupon['state'] = state
-          coupon['numberOfCouponsAvailable'] = coupon['numberOfUnits']
-          this.couponsServices.putCoupon(coupon).subscribe()
-          this.couponsAvailableService.getCouponAvailableByIdCoupon(coupon.id).subscribe((couponAvailable:any) => {
-            couponAvailable.forEach((element) => {
-              let obj: object = {
-                id: element._id,
-                idUser: '',
-                idCoupon: element.idCoupon,
-                state: false
-              }
-              this.couponsAvailableService.putCouponAvailable(obj).subscribe()
-            });
-          })
+      res.forEach((coupon: Coupons, index ) => {
+        if (coupon.expirationDate.length != 0 && coupon.expirationTime.length != 0){
+          let expirarionDate = coupon.expirationDate[0]
+          let expirationTime:any = coupon.expirationTime[0]
+            //Validation for expiration cupón
+            let resultExpirationDate = this.compareObj(expirarionDate, objtDate)
+            // let resultExpirationTime = compareObj(expirationTime,objCurrentHour )
+          if (resultExpirationDate == true && objCurrentHour.hour >= expirationTime.hour ) {
+            let state: any = [{
+              state: "active",
+              check: false
+            }, {
+              state: "inactive",
+              check: true
+            }]
+            coupon['state'] = state
+            coupon['numberOfCouponsAvailable'] = coupon['numberOfUnits']
+            this.couponsServices.putCoupon(coupon).subscribe()
+            this.couponsAvailableService.getCouponAvailableByIdCoupon(coupon.id).subscribe((couponAvailable: any) => {
+              couponAvailable.forEach((element) => {
+                let obj: object = {
+                  id: element._id,
+                  idUser: '',
+                  idCoupon: element.idCoupon,
+                  state: false
+                }
+                this.couponsAvailableService.putCouponAvailable(obj).subscribe()
+              });
+            })
+          } 
+        }
+        if (index == (res.length - 1)) {
+          this.makeCoupons()        
         }
       })
+
     })
     //inicialization users by ally 
     //clean local storage  for ally and headquarter
@@ -103,18 +104,35 @@ export class CuponManagerComponent implements OnInit {
     this.table = new FormGroup({
       "name": new FormControl(),
       "nameAllies": new FormControl(),
-      "general": new FormControl()
     })
-    
+
 
 
   }
 
   ngOnInit() {
-    this.makeCoupons();
+
   }
-  
-  makeCoupons(){
+  // function for compared current date  and expirition date
+  compareObj(a, b) {
+    var aKeys = Object.keys(a).sort();
+    var bKeys = Object.keys(b).sort();
+    if (aKeys.length !== bKeys.length) {
+      return false;
+    }
+    if (aKeys.join('') !== bKeys.join('')) {
+      return false;
+    }
+    for (var i = 0; i < aKeys.length; i++) {
+      if (a[aKeys[i]] !== b[bKeys[i]]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  makeCoupons() {
+    this.couponsGettting = [];
+    this.newArray = this.couponsGettting;
     this.couponsServices.getCoupons().subscribe(res => {
       res.forEach((coupon: Coupons) => {
         let ys = coupon.createDate[0]['year'];
@@ -134,7 +152,7 @@ export class CuponManagerComponent implements OnInit {
         obj.createDate = createDate;
         obj.state = coupon.state
 
-        if (coupon.expirationDate.length && coupon.expirationTime.length != 0) {
+        if (coupon.expirationDate.length != 0 && coupon.expirationTime.length != 0) {
           let yf = coupon.expirationDate[0]['year'];
           let mf = coupon.expirationDate[0]['month'];
           let df = coupon.expirationDate[0]['day'];
@@ -142,7 +160,7 @@ export class CuponManagerComponent implements OnInit {
           let finishDate = [`${df}/${mf}/${yf}`]
           obj.expirationDate = finishDate
         } else {
-          let msg = ["30 días despues de activarlo"]
+          let msg: any = "30 días despues de activarlo"
           obj.expirationDate = msg
         }
 
@@ -163,7 +181,7 @@ export class CuponManagerComponent implements OnInit {
 
 
   //method for a specific search
-  search(termino?: string, id?: string) {
+  search() {
 
     let objsearch = {
       name: "",
@@ -207,5 +225,5 @@ export class CuponManagerComponent implements OnInit {
 
   }
 
- 
+
 }

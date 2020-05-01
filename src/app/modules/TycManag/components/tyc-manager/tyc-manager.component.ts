@@ -44,6 +44,24 @@ export class TycManagerComponent implements OnInit {
     this.saveLocalStorageServices.saveLocalStorageIdTyc(idTyc)
     this._router.navigate(['/main', 'editTycManager', i])
   }
+
+  
+  // obtained array tyc of collection
+  makeObjTycManager() {
+    this.tycGettting = [];
+    this.newArray = this.tycGettting;
+    this.tycManegerService.getTermsAndConditions().subscribe(tyc => {
+      tyc.forEach((tyc: TermsAndConditions) => {
+        const obj: TermsAndConditions = {};
+        obj.id = tyc.id
+        obj.name = tyc.name
+        obj.description = tyc.description
+
+        this.tycGettting.push(obj)
+      });
+    })
+  }
+  
   //delete Tyc
   deleteTyc(idTyc) {
     Swal.fire({
@@ -57,8 +75,6 @@ export class TycManagerComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.tycManegerService.deleteTermAndCondition(idTyc).subscribe(() => {
-          this.tycGettting = []
-          this.newArray = []
           this.makeObjTycManager();
         })
         Swal.fire({
@@ -73,29 +89,13 @@ export class TycManagerComponent implements OnInit {
         })
       }
     })
-
-    
+  
   }
-
-  // obtained array tyc of collection
-  makeObjTycManager() {
-    this.tycManegerService.getTermsAndConditions().subscribe(tyc => {
-      tyc.forEach((tyc: TermsAndConditions) => {
-        const obj: TermsAndConditions = {};
-        obj.id = tyc.id
-        obj.name = tyc.name
-        obj.description = tyc.description
-
-        this.tycGettting.push(obj)
-      });
-    })
-  }
-
   //method for a specific search
   search() {
-
+    
     var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
-
+    
     this.newArray = this.tycGettting.
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.

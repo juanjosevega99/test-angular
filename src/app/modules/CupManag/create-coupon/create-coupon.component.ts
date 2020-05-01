@@ -31,7 +31,11 @@ export class CreateCouponComponent implements OnInit {
     nameTypeOfCoupon: null,
     discountRate: null,
     expirationDate: [],
-    expirationTime: [],
+    expirationTime: [{
+      // hour: 0,
+      // minute :0,
+      // second: 0,
+    }],
     name: null,
     numberOfUnits: null,
     numberOfCouponsAvailable: null,
@@ -462,7 +466,7 @@ export class CreateCouponComponent implements OnInit {
     let objCoupon: any = this.preCoupon
     objCoupon.id = this.identificatorbyRoot
     objCoupon.numberOfCouponsAvailable = this.preCoupon['numberOfUnits']
-    this.couponsServices.putCoupon(objCoupon).subscribe()
+    this.couponsServices.putCoupon(objCoupon).subscribe(()=> this.loading=false)
     this._router.navigate(['/main', 'couponManager',]);
   }
 
@@ -479,6 +483,7 @@ export class CreateCouponComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.loading = true
         if (this.seeNewPhoto == false) {
           this.uploadCouponUpdate()
         } else if (this.seeNewPhoto == true) {
