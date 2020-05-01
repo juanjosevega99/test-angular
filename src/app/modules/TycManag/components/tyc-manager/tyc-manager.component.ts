@@ -58,19 +58,24 @@ export class TycManagerComponent implements OnInit {
     this.tycGettting = [];
     this.newArray = this.tycGettting;
     this.tycManegerService.getTermsAndConditions().subscribe(res => {
-      res.forEach((tyc: TermsAndConditions, index) => {
-        const obj: TermsAndConditions = {};
-        obj.id = tyc.id
-        obj.name = tyc.name
-        obj.nameTypeTyc = tyc.nameTypeTyc
-        obj.description = tyc.description
-
-        this.tycGettting.push(obj)
+      if (res.length != 0) {
+        res.forEach((tyc: TermsAndConditions, index) => {
+          const obj: TermsAndConditions = {};
+          obj.id = tyc.id
+          obj.name = tyc.name
+          obj.nameTypeTyc = tyc.nameTypeTyc
+          obj.description = tyc.description
+  
+          this.tycGettting.push(obj)
+          
+          if(index === (res.length -1)){
+            this.loading = false;
+          }
+        });
         
-        if(index === (res.length -1)){
-          this.loading = false;
-        }
-      });
+      }else{
+        this.loading = false;
+      }
     })
   }
 
@@ -127,7 +132,7 @@ export class TycManagerComponent implements OnInit {
       }, objsearch).
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.name) || myRegex.test(item.description))
+        return (myRegex.test(item.name) || myRegex.test(item.nameTypeTyc) || myRegex.test(item.description))
       })
     // condition by when don't exit results in the table
     if (this.newArray.length == 0) {

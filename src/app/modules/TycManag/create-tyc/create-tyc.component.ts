@@ -19,10 +19,6 @@ export class CreateTycComponent implements OnInit {
     description: null
   }
   //variables for typeTyC
-  arraytypeTyCSelect: boolean = true;
-  othertypeTyCInput: boolean = false;
-  addtypeTyCButton: boolean = true;
-  selectAgainarray: boolean = false;
   newtypeTyC: String;
   typeTyC: any[] = [];
 
@@ -72,20 +68,20 @@ export class CreateTycComponent implements OnInit {
 
   }
   //Method for showing new view in the typeTyC field
-  handleBoxtypeTyC(): boolean {
+  // handleBoxtypeTyC(): boolean {
 
-    if (this.addtypeTyCButton) {
-      return this.addtypeTyCButton = false,
-        this.othertypeTyCInput = true,
-        this.selectAgainarray = true,
-        this.arraytypeTyCSelect = false
-    } else {
-      return this.addtypeTyCButton = true,
-        this.othertypeTyCInput = false,
-        this.selectAgainarray = false,
-        this.arraytypeTyCSelect = true
-    }
-  }
+  //   if (this.addtypeTyCButton) {
+  //     return this.addtypeTyCButton = false,
+  //       this.othertypeTyCInput = true,
+  //       this.selectAgainarray = true,
+  //       this.arraytypeTyCSelect = false
+  //   } else {
+  //     return this.addtypeTyCButton = true,
+  //       this.othertypeTyCInput = false,
+  //       this.selectAgainarray = false,
+  //       this.arraytypeTyCSelect = true
+  //   }
+  // }
   seeNametypeTyC(selected: any) {
 
     this.typeTyC.forEach(element => {
@@ -96,22 +92,22 @@ export class CreateTycComponent implements OnInit {
     })
   }
   //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
-  addTypeTyc(name: String) {
-    if (name != null) {
-      let newitem = name;
-      let newTypeTyc: object = {
-        name: newitem
-      }
-      this.swallSaveTypeTyc(newTypeTyc)
+  // addTypeTyc(name: String) {
+  //   if (name != null) {
+  //     let newitem = name;
+  //     let newTypeTyc: object = {
+  //       name: newitem
+  //     }
+  //     this.swallSaveTypeTyc(newTypeTyc)
 
-      this.handleBoxtypeTyC()
-    } else { alert("Ingrese los nuevos términos y condiciones") }
+  //     this.handleBoxtypeTyC()
+  //   } else { alert("Ingrese los nuevos términos y condiciones") }
 
-  }
-  deleteTypeCoupon() {
-    let typeTycSelected = this.preTyc['idTypeTyc']
-    this.swallDeleteTypeTyc(typeTycSelected)
-  }
+  // }
+  // deleteTypeCoupon() {
+  //   let typeTycSelected = this.preTyc['idTypeTyc']
+    // this.swallDeleteTypeTyc(typeTycSelected)
+  // }
 
   //method of obtain one tyC for update 
   getTyc(idTyc: string) {
@@ -125,54 +121,7 @@ export class CreateTycComponent implements OnInit {
   saveTyc() {
     this.swallSaveTyc()
   }
-  //sweet alerts for save and delete typeTyc
-  swallSaveTypeTyc(newTypeTyc: any) {
-    Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas guardar este nuevo término y condición",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, guardar!'
-    }).then((result) => {
-      if (result.value) {
-        this.typeTycService.postTypeTermsAndConditions(newTypeTyc).subscribe(() => {
-          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
-            this.typeTyC = tyC;
-          })
-        })
-        Swal.fire(
-          'Guardado!',
-          'Tu nuevo término y condición ha sido creado',
-          'success',
-        )
-      }
-    })
-  }
-  swallDeleteTypeTyc(typeTycSelected: string) {
-    Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas eliminar este término y condición!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, eliminar!'
-    }).then((result) => {
-      if (result.value) {
-        this.typeTycService.deleteTypeTermsAndConditions(typeTycSelected).subscribe(() => {
-          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
-            this.typeTyC = tyC;
-          })
-        })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
-      }
-    })
-  }
+  //sweet alerts for save and update Tyc
   swallSaveTyc() {
     Swal.fire({
       title: 'Estás seguro?',
@@ -201,7 +150,7 @@ export class CreateTycComponent implements OnInit {
     })
   }
 
-  //swall for update collection Coupon
+  //swall for update collection tyc
   swallUpdateTyc() {
     Swal.fire({
       title: 'Estás seguro?',
@@ -215,7 +164,7 @@ export class CreateTycComponent implements OnInit {
       if (result.value) {
         let objTyc: any = this.preTyc
         objTyc.id = this.identificatorbyRoot
-        this.tycManagerService.putTermAndCondition(objTyc).subscribe(() => alert('tyc Updated'))
+        this.tycManagerService.putTermAndCondition(objTyc).subscribe()
         Swal.fire({
           title: 'Actualizado',
           text: "Tus nuevos términos y condiciones han sido actualizados!",

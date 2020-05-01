@@ -163,7 +163,7 @@ export class CuponManagerComponent implements OnInit {
           let finishDate = [`${df}/${mf}/${yf}`]
           obj.expirationDate = finishDate
         } else {
-          let msg: any = "30 días despues de activarlo"
+          let msg: any = "30 días después de activarlo"
           obj.expirationDate = msg
         }
 
