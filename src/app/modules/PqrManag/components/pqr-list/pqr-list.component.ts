@@ -68,7 +68,7 @@ export class PqrListComponent implements OnInit {
 
     this.loadingPqrs = true;
 
-    if (this.profile.nameCharge.toLocaleLowerCase() == "administradortifi") {
+    if (this.profile.nameCharge.toLocaleLowerCase() != "administradortifi") {
       this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
 
         if (res.length > 0) {

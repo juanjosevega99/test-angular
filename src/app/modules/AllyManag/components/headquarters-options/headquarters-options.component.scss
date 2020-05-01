@@ -4,3 +4,10 @@
     width: 5rem;
     height: 5rem
   }
+
+@media( max-width:768px ){
+  .compenetsstyle{
+    padding: 0 !important;
+    padding-top: 7rem !important;
+  }
+}

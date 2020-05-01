@@ -71,6 +71,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CreateBannerComponent } from './modules/BannerManag/components/create-banner/create-banner.component';
 import { CreateTycComponent } from './modules/TycManag/create-tyc/create-tyc.component';
 import { NotificationsOrdersComponent } from './components/notifications-orders/notifications-orders.component';
+import { NotificationsPqrsComponent } from './components/notifications-pqrs/notifications-pqrs.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { NotificationsOrdersComponent } from './components/notifications-orders/
     CreateCouponComponent,
     CreateBannerComponent,
     CreateTycComponent,
-    NotificationsOrdersComponent
+    NotificationsOrdersComponent,
+    NotificationsPqrsComponent
 
   ],
   imports: [

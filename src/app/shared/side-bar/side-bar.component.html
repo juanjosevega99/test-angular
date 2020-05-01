@@ -24,15 +24,15 @@
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
                 <a [routerLink]="[ '/main', 'pqrList' ]" class="notification" style="margin-right: 40px;">
                     <i class="fas fa-envelope icon-style icon"></i>
-                    <span class="badge">3</span>
+                    <span class="badge"><app-notifications-pqrs></app-notifications-pqrs></span>
                 </a>
                 <a [routerLink]="['/main/principal-orders']" class="notification">
                     <i class="fas fa-bell icon"></i>
-                    <span class="badge"><app-notifications-orders ></app-notifications-orders></span>                
+                    <span class="badge"><app-notifications-orders></app-notifications-orders></span>                
                 </a>
             </div>
             <li  *ngIf="profile.showContent.options" routerLinkActive="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row dropdown-toggle">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="d-flex flex-row">
                     <div class="col-11 ">
                         Menú
                     </div>
