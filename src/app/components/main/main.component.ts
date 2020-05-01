@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { WebsocketsService } from 'src/app/services/websockets.service';
+
 
 @Component({
   selector: 'app-main',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  constructor(private wesocket: WebsocketsService) { }
 
   ngOnInit() {
+    // listen websocket
+    this.wesocket.listen('connection').subscribe(res => {
+      console.log(res);
+    })
   }
 
 }

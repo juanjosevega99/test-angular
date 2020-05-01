@@ -6,6 +6,12 @@ import { UsersService } from 'src/app/services/users.service';
 import { Users } from 'src/app/models/Users';
 
 import * as jsPDF from 'jspdf';
+import { Location } from '@angular/common';
+import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import { HeadquartersService } from 'src/app/services/headquarters.service';
+import { profileStorage } from 'src/app/models/ProfileStorage';
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-pqr-manager',
@@ -16,18 +22,19 @@ export class PqrManagerComponent implements OnInit {
 
   infoUSer: Pqrs = {};
   response: String = '';
+  alertEmpty = false;
 
-  operator: Users = {
-    email : "email@example.com",
-    location: "bogota"
-  }
+  location = "bogota";
 
-  toPdf = { }
+  profile: profileStorage = new profileStorage();
+  dateCreatePqr= ''; //this is for save the real date of pqr, iss nescesaary to updae pqr
+  toPdf = {}
 
-  constructor( private activateParams: ActivatedRoute, private pqrservice: PqrsService, private userService : UsersService ) {
+  constructor(private activateParams: ActivatedRoute, private pqrservice: PqrsService, private userService: UsersService,
+    private _location: Location, private profileService: ShowContentService, private headService: HeadquartersService, private spinner:NgxSpinnerService) {
 
-    this.activateParams.params.subscribe( res=> {
-      
+    this.activateParams.params.subscribe(res => {
+
       this.pqrservice.getCPqrsById(res.id).subscribe(
         (pqr: any) => {
 
@@ -35,61 +42,90 @@ export class PqrManagerComponent implements OnInit {
             this.infoUSer.id = res.id;
             this.infoUSer.nameUser = user.name;
             this.infoUSer.phone = user.phone;
-            this.infoUSer.birthday = this.convertDate( user.birthday );
+            this.infoUSer.birthday = this.convertDateborn(user.birthday);
             this.infoUSer.gender = user.gender;
             this.infoUSer.nameAllie = pqr.nameAllie;
             this.infoUSer.nameHeadquarter = pqr.nameHeadquarter;
-            this.infoUSer.date = this.convertDate( pqr.date );
+            this.infoUSer.date = this.convertDate(pqr.date);
+            this.dateCreatePqr = pqr.date;
             this.infoUSer.state = pqr.state;
             this.infoUSer.email = user.email;
             this.infoUSer.description = pqr.description;
             this.infoUSer.typeOfService = pqr.typeOfService;
             this.response = pqr.reply;
-            
-          }) 
-        
-        
-      }
+
+          })
+
+          this.headService.getHeadquarterById(pqr.idHeadquarter).subscribe( res =>{
+            if (res){
+              this.location = res.ubication;
+            }
+          })
+
+
+        }
       )
-      
+
     })
-   }
+
+    this.profile = this.profileService.showMenus();
+  }
 
   ngOnInit() {
+  }
+
+  back() {
+    this._location.back();
   }
 
   // =================
   // response
   // =================
-  reply( res ){
-  
-    this.infoUSer['reply'] = this.response.toString();
-    this.infoUSer['emailReply'] = this.operator.email;
-    this.infoUSer.state = true;
-    console.log(this.response, this.infoUSer);
-    this.pqrservice.updatePqr( this.infoUSer.id, this.infoUSer ).subscribe(
-      res => console.log("se hizo la actualizacion", res)
-      
-    )
+  reply(res) {
+
+    if(this.response){
+
+      this.spinner.show();      
+
+      this.infoUSer['reply'] = this.response.toString();
+      this.infoUSer['emailReply'] = this.profile.email;
+      this.infoUSer.state = true;
+      this.infoUSer.date = this.dateCreatePqr;
+
+      this.pqrservice.updatePqr(this.infoUSer.id, this.infoUSer).subscribe(res =>{
+        this.spinner.hide();
+        this.alertEmpty = false;
+        Swal.fire({
+          title:"La solicitud fue atendida",
+          icon:"success"
+        })
+      }, err =>{
+        this.spinner.hide();
+        Swal.fire({
+          title:"ocurio un error enviando la respuesta",
+          icon:"error"
+        })
+      })
+
+    }else{
+      this.alertEmpty = true;
+    }    
   }
 
   // ========================
   // preparing data
-  dataforPdf(){
+  dataforPdf() {
     this.toPdf = {
       id: this.infoUSer.id,
-      de: this.operator.email,
-      para:this.infoUSer.email,
-      location: this.operator.location,
-      ally : this.infoUSer.nameAllie,
+      de: this.profile.email,
+      para: this.infoUSer.email,
+      location: this.location,
+      ally: this.infoUSer.nameAllie,
       service: this.infoUSer.typeOfService,
       pqr: this.infoUSer.description,
       reply: this.response,
       date: this.infoUSer.date,
     }
-
-    console.log(this.toPdf);
-    
 
     this.generatePdf()
 
@@ -98,41 +134,50 @@ export class PqrManagerComponent implements OnInit {
   // ========================
   // generate pdf
   generatePdf() {
-    
+
     //'p', 'mm', 'a4'
     let doc = new jsPDF('landscape');
 
-    let col = ["Radicado", "De", "para",  "zona", "aliado" ,"Servicio", "Petición",  
-    "Respuesta", "Fecha"];
+    let col = ["Radicado", "De", "para", "zona", "aliado", "Servicio", "Petición",
+      "Respuesta", "Fecha"];
 
     let rows = [];
     let auxrow = [];
-      for (const key in this.toPdf) {
+    for (const key in this.toPdf) {
 
-        if (this.toPdf.hasOwnProperty(key)) {
-          // Mostrando en pantalla la clave junto a su valor
-          
-          auxrow.push(this.toPdf[key]);
-        }
+      if (this.toPdf.hasOwnProperty(key)) {
+        // Mostrando en pantalla la clave junto a su valor
+
+        auxrow.push(this.toPdf[key]);
       }
-      rows.push(auxrow);
+    }
+    rows.push(auxrow);
 
     //build the pdf file
     doc.autoTable(col, rows);
     doc.save('Pqr-' + this.infoUSer.id + " -" + this.infoUSer.nameUser + ".pdf");
+    
   }
 
 
-  convertDate(date: Date): string {
-    let n:string;
-    try{
-  
+  convertDateborn(date: Date): string {
+    let n: string;
+    try {
+
       const d = new Date(date);
       n = d.toISOString().split("T")[0];
-    }catch{
+    } catch{
       console.log(date);
-      
+
     }
+    return n;
+  }
+
+  convertDate(date: Date): string {
+    const d = new Date(date);
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' }) + " " +
+      d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    // const n = date.toLocaleString('en-US', { hour12: true });
     return n;
   }
 }

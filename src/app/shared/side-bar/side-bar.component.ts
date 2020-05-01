@@ -61,7 +61,7 @@ export class SideBarComponent implements OnInit {
     Swal.fire({
       
       title: '¿Cerrar Sesión?',
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',

@@ -181,9 +181,11 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
                 const element = this.dishSelected.idAccompaniments[index];
                 if (accomp.id == element) {
+
                   this.accompanimetsOfPromo[index] = accomp
                   this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
                   this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
+
                 }
               }
             }
@@ -481,7 +483,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     termino = termino.toLowerCase();
     var myRegex = new RegExp('.*' + termino + '.*', 'gi');
     if (this.promoAccompaniments == true) {
-      if (termino.length > 1) {
+      if (termino.length >= 1) {
         this.accompanimetsOfPromo = this.accgetting.filter(function (item) {
           return myRegex.test(item.name)
         });
