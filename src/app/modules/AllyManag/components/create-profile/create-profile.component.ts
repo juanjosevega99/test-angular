@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,13 +14,14 @@ import { async } from '@angular/core/testing';
 import { AuthFireServiceService } from 'src/app/services/providers/auth-fire-service.service';
 import { AlliesService } from 'src/app/services/allies.service';
 import { HeadquartersService } from 'src/app/services/headquarters.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-create-profile',
   templateUrl: './create-profile.component.html',
   styleUrls: ['./create-profile.component.scss']
 })
-export class CreateProfileComponent implements OnInit {
+export class CreateProfileComponent implements OnInit, OnDestroy {
   preProfile: Object = {
     state: [],
     numberOfModifications: 0,
@@ -40,7 +41,7 @@ export class CreateProfileComponent implements OnInit {
 
   editProfile: Profiles = {
     state: [],
-    ratings:[],
+    ratings: [],
     entryDate: null,
     modificationDate: null,
     numberOfModifications: 0,
@@ -56,7 +57,7 @@ export class CreateProfileComponent implements OnInit {
     name: null,
     email: null,
     photo: null,
-    idFirebase : null,
+    idFirebase: null,
   }
 
   //variables for receiving the profile that will be edited
@@ -93,7 +94,7 @@ export class CreateProfileComponent implements OnInit {
 
   //variable for the loading
   loading: boolean;
-
+  timeTick: any;
 
   constructor(
     private _router: Router, private firebaseservice: AuthFireServiceService,
@@ -103,12 +104,13 @@ export class CreateProfileComponent implements OnInit {
     private storage: AngularFireStorage,
     private profileCategory: ProfilesCategoriesService,
     private allyService: AlliesService,
-    private headquarterService: HeadquartersService) {
+    private headquarterService: HeadquartersService,
+    private _location: Location) {
     //flags
     this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
-
+    
     this.State = [{
       state: "active",
       check: false
@@ -123,9 +125,12 @@ export class CreateProfileComponent implements OnInit {
 
     //inicialization for charging the data of a profile to edit
     this.activatedRoute.params.subscribe(params => {
-      let identificator = params['id']
+
+      let identificator = params['id'];
+      this.identificatorbyRoot = identificator;
+      
       if (identificator != -1) {
-        this.getProfile(identificator)
+        this.getProfile(identificator);
       } else if (identificator == -1) {
         this.loading = false
         this.buttonPut = false
@@ -144,7 +149,6 @@ export class CreateProfileComponent implements OnInit {
 
         }
       }
-      this.identificatorbyRoot = identificator
     })
 
     //inicialization service with collections dishes-categories
@@ -156,11 +160,16 @@ export class CreateProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => this.tick(), 1000);
+    this.tick();
+    this.timeTick = setInterval(() => this.tick(), 20000);
   }
 
-  goBackProfiles() {
-    this._router.navigate(['/main', 'profiles', this.identificatorbyRoot])
+  ngOnDestroy() {
+    clearTimeout(this.timeTick);
+  }
+
+  goBack(){
+    this._location.back();
   }
 
   //Method to see the id of the category of profile selected
@@ -173,28 +182,29 @@ export class CreateProfileComponent implements OnInit {
   }
 
   //charge a profile with the id
-  getProfile(id: string) {
+  getProfile(id: any) {
     this.loading;
-    /* this.chargeProfiles.getProfiles().subscribe(profiles => {
-      let profile: Profiles = {}
-      let obj: Profiles = {}
-      profile = profiles[id]
-      console.log(profile);
-      
-      this.editProfile = profile;
-      this.preProfile = this.editProfile;
-      this.loading = false;
-    }) */
-    this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles =>{
-      let profile: Profiles = {}
-      let obj: Profiles = {}
-      profile = profiles[id]
-      console.log(profile);
-      
-      this.editProfile = profile;
-      this.preProfile = this.editProfile;
-      this.loading = false;
-    })
+
+    if (Number.isInteger(id/1)) {
+      this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
+        let profile: Profiles = {}
+
+        profile = profiles[id]
+
+        this.editProfile = profile;
+        this.preProfile = this.editProfile;
+        this.tick();
+        this.loading = false;
+      })
+    } else {
+      this.chargeProfiles.getProfileById(id).subscribe( profile =>{
+        this.editProfile = profile;
+        this.preProfile = this.editProfile;
+        this.tick();
+        this.loading = false;
+      })
+    }
+
   }
 
   //method for delete a profile
@@ -205,7 +215,7 @@ export class CreateProfileComponent implements OnInit {
       this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
         let profile: ProfileList = {}
         profile = profiles[this.identificatorbyRoot]
-        let realId = profile._id 
+        let realId = profile._id
         this.swallDelete(realId)
       })
     }
@@ -287,7 +297,7 @@ export class CreateProfileComponent implements OnInit {
     }
     else {
       this.today = new Date();
-      this.newDate = this.editProfile['entryDate']
+      this.newDate = this.editProfile['entryDate'];
       const d = new Date(this.newDate);
       this.timesEntry = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       this.dateEntry = d.toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: 'numeric', year: 'numeric' });
@@ -344,7 +354,7 @@ export class CreateProfileComponent implements OnInit {
       this.editProfile.identification = this.preProfile['identification'];
       this.editProfile.name = this.preProfile['name'];
       this.editProfile.email = this.preProfile['email'];
-      this.swallUpdate(realId) 
+      this.swallUpdate(realId)
     })
   }
 
@@ -421,7 +431,7 @@ export class CreateProfileComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.loading= true;
+        this.loading = true;
         // console.log("Array FINAL: ", this.preProfile);
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
@@ -446,7 +456,7 @@ export class CreateProfileComponent implements OnInit {
                 this.preProfile['_id'] = response.user.uid;
 
                 this.profiles.postProfile(this.preProfile).subscribe(message => {
-                  this.loading= false;
+                  this.loading = false;
                   Swal.fire({
                     title: 'Guardado',
                     text: "Tu nuevo perfil ha sido creado!",
@@ -487,9 +497,9 @@ export class CreateProfileComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-        this.loading=true;
+        this.loading = true;
         this.chargeProfiles.deleteProfile(realId).subscribe(message => {
-          this.loading=false;
+          this.loading = false;
           Swal.fire({
             title: 'Eliminado',
             text: "Tu perfil ha sido eliminado!",
