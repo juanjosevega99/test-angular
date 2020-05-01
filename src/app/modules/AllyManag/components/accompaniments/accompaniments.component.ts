@@ -92,7 +92,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     //inicialization of accompaniments
     this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
-    
+
       for (let x in res) {
         let accompaniment;
         if (res != []) {
@@ -125,7 +125,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     this.acti = false
     this.inacti = false
     this.promoAccompaniments = true
-    
+
 
     //preparation time
     this.time = ['minutos', 'horas']
@@ -346,12 +346,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               })
             }
           }
-        }  
+        }
       }
     })
   }
 
-  swallDelete(){
+  swallDelete() {
 
     let section: string;
     if (this.identificatorDish) {
@@ -375,7 +375,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //method fot the button "No hay acompañamientos", remove all the accompaniments of the promo or dish
   removeAllAccompanimentOfPromo() {
-    if(this.identificatorDish){
+    if (this.identificatorDish) {
       if (!this.dishSelected.idAccompaniments.length) {
         this.swallNoAccomp();
       } else {
@@ -424,14 +424,14 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  swalDeleteAll(){
+  swalDeleteAll() {
 
     let section: string;
     if (this.identificatorDish) {
       section = "este plato!";
     } else {
       section = "esta promoción!";
-    } 
+    }
 
     Swal.fire({
       title: 'Eliminado',
@@ -446,7 +446,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     })
   }
 
-  swallNoAccomp(){
+  swallNoAccomp() {
 
     let section: string;
     if (this.identificatorDish) {
@@ -457,7 +457,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     Swal.fire({
       title: 'Error',
-      text: `${section}`+ " no tiene acompañamientos!",
+      text: `${section}` + " no tiene acompañamientos!",
       icon: 'error',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'ok!'

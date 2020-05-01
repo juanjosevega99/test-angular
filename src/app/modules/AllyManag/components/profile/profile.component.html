@@ -109,6 +109,9 @@
                         <a [routerLink]="[ '/main/createProfile', i ]"  class="btn"> <i class="far fa-edit"></i> </a><!--(click)="seeI(prof.id)" [routerLink]="[ '/main/createProfile', prof.id ]" -->
                     </td>
                 </tr>
+                <tr *ngIf=" !newArray.length ">
+                    <td colspan="14">No has añadido perfiles!!</td>
+                </tr>
             </tbody>
         </table>
     </div>

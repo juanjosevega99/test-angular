@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
       this.idAlly = params['id']
     });
 
-    this.loading = true;
+    this.loading = false;
     this.loadProfiles();
 
   }
@@ -55,14 +55,16 @@ export class ProfileComponent implements OnInit {
   }
 
   loadProfiles() {
-    this.profilesgetting=[];
+    this.loading = true;
+    this.profilesgetting = [];
     this.newArray = this.profilesgetting;
 
     //inicialization of profiles
     this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
-      for (let x in res) {
-        let profile: Profiles
-        if (res != []) {
+      if (Object.keys(res).length) {
+        for (let x in res) {
+          let profile: Profiles
+
           profile = res[x]
 
           const obj: ProfileList = {};
@@ -79,8 +81,9 @@ export class ProfileComponent implements OnInit {
 
           this.profilesgetting.push(obj)
           this.loading = false;
-
         }
+      } else {
+        this.loading = false;
       }
     })
   }
@@ -176,7 +179,7 @@ export class ProfileComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true
-        this.profilesService.putProfile(idProfile, newState).subscribe(res => {   
+        this.profilesService.putProfile(idProfile, newState).subscribe(res => {
           this.loadProfiles()
         })
         Swal.fire({
