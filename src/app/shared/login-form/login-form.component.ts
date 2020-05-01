@@ -55,7 +55,8 @@ export class LoginFormComponent implements OnInit {
               nameHeadquarter: profileservice.nameHeadquarter,
               nameCharge: profileservice.nameCharge,
               permis: profileservice.permis,
-              photo: profileservice.photo
+              photo: profileservice.photo,
+              email: profileservice.email
             }
 
             localStorage.setItem('profile', JSON.stringify(profile));

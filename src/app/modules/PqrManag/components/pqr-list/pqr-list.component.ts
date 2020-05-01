@@ -203,7 +203,6 @@ export class PqrListComponent implements OnInit {
   //generate pdf file
 
   generatePdf(content: any) {
-    console.log(content);
     //'p', 'mm', 'a4'
 
     let doc = new jsPDF('landscape');
@@ -376,106 +375,7 @@ export class PqrListComponent implements OnInit {
         } else {
           return item;
         }
-      }, objdate)
-
-    // if (this.fromDate && this.toDate) {
-
-    //   if (termino) {
-    //     this.filteredArray = [];
-    //     termino = termino.toLowerCase();
-
-    //     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-    //     const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-    //     this.SeachingRange(fromdate, todate);
-
-    //     const aux = this.newdateArray;
-    //     this.newdateArray = [];
-
-    //     aux.forEach(user => {
-    //       if (user[id].toLowerCase().indexOf(termino) >= 0) {
-    //         this.newdateArray.push(user);
-    //         this.filteredArray.push(user);
-    //       }
-
-    //     });
-
-    //   } else {
-
-    //     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
-    //     const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
-    //     this.SeachingRange(fromdate, todate);
-
-    //   }
-
-
-    // } else {
-
-    //   if (termino) {
-
-    //     if (this.filteredArray.length) {
-
-    //       termino = termino.toLowerCase();
-
-    //       this.newdateArray = [];
-
-    //       this.filteredArray.forEach(user => {
-
-    //         user[id] = user[id].toString();
-
-    //         if (user[id].toLowerCase().indexOf(termino) >= 0) {
-    //           this.newdateArray.push(user);
-
-    //         }
-
-    //       });
-    //     }
-    //     else {
-    //       console.log("no filtered array");
-    //       console.log(id);
-
-
-    //       this.newdateArray = [];
-
-    //       this.usergetting.forEach(user => {
-
-    //         user[id] = user[id].toString();
-
-    //         if (user[id].toLowerCase().indexOf(termino) >= 0) {
-    //           this.newdateArray.push(user);
-    //           this.filteredArray.push(user);
-
-    //         }
-
-    //       });
-
-    //     }
-
-
-    //   } else {
-
-    //     this.table.value[id] = null;
-
-    //     let count = 0;
-    //     for (var i in this.table.value) {
-
-    //       if (this.table.value[i] == null || this.table.value[i] == "") {
-    //         count += 1;
-    //       }
-    //     }
-
-    //     if (count > 7 && !this.generalsearch) {
-
-    //       this.newdateArray = this.usergetting;
-    //       this.filteredArray = []
-    //       count = 0;
-
-    //     } else {
-
-    //       this.newdateArray = this.filteredArray;
-    //       count = 0;
-    //     }
-    //   }
-    // }
+      }, objdate)    
   }
 
 

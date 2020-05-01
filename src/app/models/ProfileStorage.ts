@@ -6,7 +6,8 @@ export class profileStorage {
     idHeadquarter?: string = '';
     nameHeadquarter?: string = '';
     nameCharge?: string = '';
-    photo?:string = '';
+    photo?: string = '';
+    email?: string = '';
     showContent?: content = {
         options: false,
         principal: false,
@@ -14,9 +15,9 @@ export class profileStorage {
         pqrs: false
     };
     reportPermissions?: reports = {
-        reportComplete : false,
-        reportadminpdv : false,
-        reportsummary : false,
+        reportComplete: false,
+        reportadminpdv: false,
+        reportsummary: false,
     };
 
 

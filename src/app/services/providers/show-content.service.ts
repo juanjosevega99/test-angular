@@ -21,6 +21,7 @@ export class ShowContentService {
       profile.nameCharge = profilest.nameCharge;
       profile.idAllies = profilest.idAllies;
       profile.photo = profilest.photo;
+      profile.email = profilest.email;
 
       let showContent = {
         options: false,
