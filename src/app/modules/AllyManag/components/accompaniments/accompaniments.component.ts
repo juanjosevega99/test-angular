@@ -99,7 +99,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           /* res.forEach(accompaniment => { */
           let obj: any = {}
 
-          obj.id = accompaniment._id
+          obj.id = accompaniment.id
           obj.quantity = accompaniment.quantity
           obj.unitMeasurement = accompaniment.unitMeasurement
           obj.name = accompaniment.name
@@ -172,10 +172,11 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //get promotion with the param
   getPromo() {
     this.accompanimetsOfPromo = [];
-    if (this.identificatorDish) {
-      this.dishService.getDishes().subscribe(dishes => {
-        this.dishSelected = dishes[this.identificatorDish]
-        this.accompanimentService.getAccompaniments().subscribe(res => {
+    if (this.flagDish) {
+      console.log("estoy en platos");
+      this.dishService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
+        this.dishSelected = dishes[this.identificatorDish];
+        this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
           res.forEach((accomp: Accompaniments) => {
             if (this.dishSelected.idAccompaniments.length) {
               for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
@@ -192,7 +193,10 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           })
         })
       })
-    } else {
+    }
+    else {
+      console.log("estoy en prormos");
+
       this.promoService.getPromotions().subscribe(res => {
         res.forEach((promo: Promotions) => {
           if (this.idPromo == promo.reference) {
@@ -217,7 +221,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
-    
+
     const checked = event.target.checked;
     event.target.checked = checked;
 
@@ -517,14 +521,26 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
+        let accompanimentsDishes: any
+        this.dishService.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(dishes => {
+          dishes.forEach(dish => {
+            accompanimentsDishes = dish.idAccompaniments
+            console.log(accompanimentsDishes);
+
+          })
+        })
+        /* console.log( this.dishSelected.idAccompaniments); */
+
         let dish = this.personList[id];
-        this.accompanimentService.deleteAccompaniment(dish.id).subscribe(res => {
+        console.log(dish.id);
+
+        /* this.accompanimentService.deleteAccompaniment(dish.id).subscribe(res => {
           this.personList.splice(id, 1);
           Swal.fire(
             'Eliminado!',
             'success',
           )
-        })
+        }) */
       }
     })
   }

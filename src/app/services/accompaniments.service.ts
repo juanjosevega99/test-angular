@@ -108,7 +108,31 @@ export class AccompanimentsService {
       ); */
   }
 
-  getAllAccompanimentsByAlly(idAllies){
-    return this.httpclient.get(environment.UrlBase + "accompaniments/accompanimentsbyally/" + idAllies)
+  getAllAccompanimentsByAlly(idAllies):Observable<Accompaniments[]>{
+    return this.httpclient.get<Accompaniments[]>(environment.UrlBase + "accompaniments/accompanimentsbyally/" + idAllies).pipe(
+      map((accompaniments: any[]) =>
+        accompaniments.map(accompaniments => {
+          let obj = {
+            id: accompaniments._id,
+            quantity: accompaniments.quantity,
+            unitMeasurement: accompaniments.unitMeasurement,
+            name: accompaniments.name,
+            creationDate: accompaniments.creationDate,
+            modificationDate: accompaniments.modificationDate,
+            numberOfModifications: accompaniments.numberOfModifications,
+            state: accompaniments.state,
+            typeOfAccompaniment: accompaniments.typeOfAccompaniment,
+            accompanimentValue: accompaniments.accompanimentValue,
+            idTypeSection: accompaniments.idTypeSection,
+            nameTypeSection: accompaniments.nameTypeSection,
+            preparationTimeNumber: accompaniments.preparationTimeNumber,
+            preparationTimeUnity: accompaniments.preparationTimeUnity,
+            idAllies : accompaniments.idAllies,
+          };
+          return obj;
+        })
+      )
+    );
   }
 }
+ 
