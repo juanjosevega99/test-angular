@@ -6,7 +6,7 @@
         <a (click)="goBack()" class="d-flex mr-2">
             <img src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
-
+ 
         <section class="col-6">
 
             <div class="form-group row" style="align-items: center;">
@@ -211,12 +211,30 @@
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
-                        <div class="photo"> 
+                       <!--  <div class="photo"> 
                             <img [src]="preProfile.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
                             <input type="file" name="photo" (change)="onPhotoSelected($event)" />
+                        </div> -->
+                        <div class="photo">
+                            <img  title="*Campo requerido" [tooltip]="HtmlContent" content-type="template" id="photo" width="100px" height="100px"
+                                style="border-radius: 0.5rem" [src]="preProfile.photo">
+                        </div>
+                        <div class="upload-btn-wrapper">
+                            <ng-template #HtmlContent>
+                                <p>Se recomienda subir archivo .png y dimensiones: 
+                                    Ancho -> 300 px, Alto -> 168 px</p>
+                            </ng-template>
+                            <div *ngIf="alertBadExtensionLogo" class="alert alert-danger" role="alert">
+                                Por favor solo subir archivos que tengan como
+                                extensión .jpeg/.jpg/.png/.gif
+                            </div>
+                            <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
+                            <input type="file" name="photo" required 
+                                (change)="onPhotoSelected($event)" />
+                            <span tooltip="Tooltip text"></span>
                         </div>
                     </div>
 

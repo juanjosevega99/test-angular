@@ -29,7 +29,9 @@ export class ProfileComponent implements OnInit {
   idAlly: number;
 
   //flag loading
-  loading: boolean;
+  loading= false;
+  noProfiles: boolean;
+  noResults: boolean;
 
   constructor(private profilesService: ProfilesService,
     private _router: Router,
@@ -41,11 +43,13 @@ export class ProfileComponent implements OnInit {
     })
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
+      //console.log('Parametro', params['id']);
       this.idAlly = params['id']
     });
 
-    this.loading = false;
+    
+    this.noProfiles = false;
+    this.noResults = false;
     this.loadProfiles();
 
   }
@@ -84,6 +88,7 @@ export class ProfileComponent implements OnInit {
         }
       } else {
         this.loading = false;
+        this.noProfiles = true;
       }
     })
   }
@@ -140,6 +145,8 @@ export class ProfileComponent implements OnInit {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
         objsearch[i] = this.table.value[i];
+      } else {
+        this.noResults = true;
       }
     }
 
