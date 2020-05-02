@@ -13,7 +13,7 @@
             <div class="img-round1 display-none-sm ">
                 <img class="img-allyLogo " [src]='profile.photo'>
 
-                <div *ngIf="profile.nameCharge != 'administradorTIFI'" class=" notification">
+                <div *ngIf="profile.showContent.principal" class=" notification" [routerLink]="['/main/principal-orders']">
                     <span class="badge"><app-notifications-orders ></app-notifications-orders></span>
                 </div>
             </div>

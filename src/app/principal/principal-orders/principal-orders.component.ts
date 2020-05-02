@@ -57,13 +57,6 @@ export class PrincipalOrdersComponent implements OnInit {
   // =========================
   // ====== profile ==========
 
-  profilegen = {
-    id: '123',
-    name: 'pepito',
-    idAllies: "5e7b744640e2af2d2f5a6610",
-    idHedquart: "5e7b7cf227d3a60b0fb06494"
-  }
-
   profile: profileStorage;
 
 
@@ -114,7 +107,7 @@ export class PrincipalOrdersComponent implements OnInit {
     // load reservations
     this.loadReservations();
 
-    this.dishService.getDishes().subscribe((dishes: Dishes[]) => {
+    this.dishService.getDishesByIdAlly(this.profile.idAllies).subscribe((dishes: Dishes[]) => {
       let diss = [];
       dishes.forEach(dis => {
 
@@ -135,7 +128,6 @@ export class PrincipalOrdersComponent implements OnInit {
     
     this.wesocket.listen('newOrder').subscribe((res: Orders) => {
 
-      // console.log("desde server", res);
       if (res.idHeadquartes == this.profile.idHeadquarter) {
         this.formatOrderUnit(res);
         this.orderList(this.orders);
@@ -336,7 +328,6 @@ export class PrincipalOrdersComponent implements OnInit {
 
 
   tolast(index: number) {
-    console.log("to Last");
 
     let auxOrder: Orders = this.orders2[index];
     this.orders2.splice(index, 1);
@@ -347,10 +338,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
   orderList(ordersArray) {
 
-    console.log(ordersArray.sort((a, b) => new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime()));
-
     ordersArray.forEach((order: Orders, i) => {
-      console.log(order.orderStatus);
 
       if (order.orderStatus == "Cancelada" || order.orderStatus == "Entregado") {
         this.tolast(i);
@@ -362,7 +350,6 @@ export class PrincipalOrdersComponent implements OnInit {
   // ============================
   // === charge reservation =====
   loadReservations() {
-    console.log("loading reservations");
 
     this.calendarEvents = [];
     this.Reservations = [];
@@ -426,7 +413,6 @@ export class PrincipalOrdersComponent implements OnInit {
   eventClick(event) {
 
     // get id of event, this id is on order.typeOfServiceobj
-    // console.log("from event", event.event._def.extendedProps.publicId);
     this.handleDateClick(event.event._def.extendedProps);
 
   }

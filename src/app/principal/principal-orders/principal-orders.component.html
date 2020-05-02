@@ -39,7 +39,7 @@
         </div>
 
         <div>
-            <div class="chat" style="margin-top: 1.8rem; flex-flow: column;">
+            <div class="chat" style="margin-top: 1.1rem; flex-flow: column;">
                 <app-order (indexOrder)="tolast( $event )" [order]="order" [index]="i"
                     *ngFor="let order of orders2; let i = index" style="width: 100%;"></app-order>
             </div>
@@ -49,16 +49,16 @@
 
         
         <div class="filerControl d-flex justify-content-center px-1 headerTables">
-            <nav class="menu">
+            <nav class="menu" >
                 <ul>
-                    <li style="border: none;">
+                    <li style="border: none; padding: 0.6rem; font-size: 1.5rem;">
                         <a style=" font-weight: bold;">Agenda de Mesas</a>
                     </li>
                 </ul>
             </nav>
         </div>
         
-        <div style="margin-top: 1.8rem;">
+        <div style="margin-top: 1.4rem;">
             <div style="background-color: #fff; border-radius: .7rem;" >
 
                 <div class="calendarTables">
@@ -108,7 +108,7 @@
 
                 </div>
             </div>
-            <div style="flex-direction: row; justify-content: space-evenly;">
+            <div *ngIf="profile.reportPermissions.reportsummary" style="flex-direction: row; justify-content: space-evenly;">
                 <button class="button-order" (click)="setFree()">LIBERAR</button>
                 <button class="button-order" data-toggle="modal" data-target="#exampleModal"
                     (click)="showToReservation()">OCUPAR</button>
@@ -117,6 +117,8 @@
     </div>
 
 </div>
+
+<!-- modal -->
 
 <div *ngIf="showmodal" class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -22,11 +22,11 @@
         </div>
         <ul class="list-unstyled components" style="text-align: center; width: 100%; ">
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
-                <a [routerLink]="[ '/main', 'pqrList' ]" class="notification" style="margin-right: 40px;">
+                <a *ngIf="profile.showContent.pqrs" [routerLink]="[ '/main', 'pqrList' ]" class="notification" style="margin-right: 40px;">
                     <i class="fas fa-envelope icon-style icon"></i>
                     <span class="badge"><app-notifications-pqrs></app-notifications-pqrs></span>
                 </a>
-                <a [routerLink]="['/main/principal-orders']" class="notification">
+                <a *ngIf="profile.showContent.principal" [routerLink]="['/main/principal-orders']" class="notification">
                     <i class="fas fa-bell icon"></i>
                     <span class="badge"><app-notifications-orders></app-notifications-orders></span>                
                 </a>

@@ -74,7 +74,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
       this.changeStatusProgressBar();
 
-    }, 30000)
+    }, 25000)
 
     setTimeout(() => { this.changeStatusProgressBar() }, 2000);
 
@@ -154,10 +154,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   changeStatusOrder(minuts: number) {
-    console.log(this.order.orderStatus);
 
     if (minuts <= 0) {
-
       this.expresionColor.colorFont = "#dfb308";
       this.expresionColor.colorProgress = "success";
       this.expresionColor.backgroundTimer = '#bfd5b2'
@@ -245,7 +243,6 @@ export class OrderComponent implements OnInit, OnDestroy {
       if (minuts >= 0) {
 
         percent = Math.abs(Math.floor((100 - minuts) - (minuts / (minuts + 1))));
-        console.log("minutes", minuts);
 
         if (minuts > 100) {
           this.percent = 1;
@@ -260,16 +257,17 @@ export class OrderComponent implements OnInit, OnDestroy {
         // stop count
         clearTimeout(this.progressbar);
       }
-    } else {
+    }else {
 
+            
       if (this.order.orderStatus === "Entregado" || this.order.orderStatus === "Cancelada") {
-
+        
         clearTimeout(this.progressbar);
-        this.changeStatusOrder(0);
-
-      } else {
-
         this.changeStatusOrder(100);
+        
+      } else {
+        
+        this.changeStatusOrder(0);
       }
     }
 

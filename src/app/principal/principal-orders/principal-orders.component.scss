@@ -28,7 +28,10 @@
 }
 
 .headerTables{
-    padding-top: 7.7rem !important;
+    padding-top: 4.7rem !important;
+}
+.PqrGeneral{
+background-color: #e9e7e7;
 }
 
 .PqrGeneral div {
@@ -37,7 +40,7 @@
     flex-wrap: wrap;
 }
 .filerControl{
-    padding-top: 6rem;
+    padding-top: 5rem;
     border: 1px solid #9f9f9f36;
     padding-left: .5rem;
     padding-right: .5rem;
@@ -176,17 +179,12 @@
         font-size: 1rem;
     }
 
-    // .HoursTable div{
-
-    //     height: 9.5rem; 
+    // .headerTables{
+    //     padding-top: 4.7rem !important;
     // }
 
-    .headerTables{
-        padding-top: 6.7rem !important;
-    }
-
     .filerControl{
-        padding-top: 5rem;
+        padding-top: 4rem;
 
     }
 
@@ -195,6 +193,27 @@
 @media ( max-width: 1040px ){
     .menu li {
         font-size: .8rem !important;
+    }
+
+    .calendarTables{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+}
+
+@media ( max-width: 1600px ){
+
+    .calendarTables{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+}
+
+@media ( max-width: 414px ){
+    .filerControl{
+        padding-top: 6rem !important;
     }
 
 }
@@ -221,6 +240,11 @@
     }
     .calendarTables p{
         font-size: .7rem;
+    }
+
+    .filerControl{
+        padding-top: 4rem;
+
     }
 }
 

@@ -372,7 +372,6 @@ export class ReportGeneratorComponent implements OnInit {
 
 
   SeachingRange() {
-    console.log("buscando");
 
     this.loadingUsers = true;
     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
