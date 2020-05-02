@@ -171,25 +171,32 @@
   <div style="margin-top: 2rem; " class=" container-fluid d-flex btnInfos justify-content-between">
     <div class="d-flex justify-content-center container-fluid">
       <button type="button" class="btnForInforms mr-5 " style="background-color: #92d050;" (click)="sendCupons()"
-      data-toggle="modal" data-target="#exampleModalCenter">Enviar cupones
-    </button>
-    <button *ngIf="!isIdPromotion" type="button" class="btnForInforms" style="background-color: #f4b081"
-      (click)="loadAllies(modalpromos)">Enviar promociones</button>
+        data-toggle="modal" data-target="#exampleModalCenter">Enviar cupones
+      </button>
+      <button *ngIf="!isIdPromotion" type="button" class="btnForInforms" style="background-color: #f4b081"
+        (click)="loadAllies(modalpromos)">Enviar promociones</button>
       <button *ngIf="isIdPromotion" type="button" class="btnForInforms" style="background-color: #f4b081"
-      (click)="sendPromos()">Enviar promociones</button>
+        (click)="sendPromos()">Enviar promociones</button>
     </div>
-    
-    
+
+
+
     <div class="d-flex justify-content-center container-fluid">
-      <button type="button" class="btnForInforms mr-5" (click)="datafor_Excel()" data-toggle="modal"
-        data-target="#exampleModalCenter">
+      <button *ngIf="userSelected.length" type="button" class="btnForInforms mr-5" (click)="datafor_Excel()"
+        data-toggle="modal" data-target="#exampleModalCenter">
         <img src="assets/icons/excel.png" class="tifi-icon-back">
         Generar Excel</button>
 
-      <button type="button" (click)="datafor_pdf()" class="btnForInforms" data-toggle="modal"
-        data-target="#exampleModalCenter">
-        <img src="assets/icons/pdf.png" class="tifi-icon-back">
-        Generar PDF</button>
+      <button *ngIf="!userSelected.length" type="button" class="btnForInforms mr-5" (click)="loadAllies('hola')">
+        <img src="assets/icons/excel.png" class="tifi-icon-back"> Generar Excel</button>
+
+      <button *ngIf="userSelected.length" type="button" (click)="datafor_pdf()" class="btnForInforms"
+        data-toggle="modal" data-target="#exampleModalCenter">
+        <img src="assets/icons/pdf.png" class="tifi-icon-back"> Generar PDF</button>
+
+      <button *ngIf="!userSelected.length" type="button" (click)="loadAllies('hola')" class="btnForInforms">
+        <img src="assets/icons/pdf.png" class="tifi-icon-back"> Generar PDF</button>
+
     </div>
   </div>
 
@@ -202,8 +209,8 @@
         <div *ngIf="typeExcel" class="modal-header" style="background-color: #1f6f43;">
           <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white;">Generar Excel</h5>
           <button type="button" class="btn btn-outline-success ml-3" (click)="generateExcel()"> Descargar</button>
-          <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print"
-            ngxPrint>print</button>
+          <!-- <button class="btn btn-outline-warning ml-3" [useExistingCss]="true" printSectionId="table-print"
+            ngxPrint>Imprimit</button> -->
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -230,7 +237,7 @@
                 <th class="text-center">#</th>
                 <th class="text-center">Fecha</th>
                 <th class="text-center">Nombre</th>
-                <th class="text-center">Coreo</th>
+                <th class="text-center">Correo</th>
                 <th class="text-center">Celular</th>
                 <th class="text-center">F.Nacimiento</th>
                 <th class="text-center">Genero</th>
@@ -256,17 +263,17 @@
           </div>
         </div>
         <div *ngIf="!typeCoupon" class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
         <div *ngIf="typeCoupon" class="modal-footer2">
           <div class="">
             <label> Cupones disponibles: {{numberOfCoupons}} </label>
           </div>
           <div class="">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           </div>
         </div>
-        
+
       </div>
     </div>
   </div>

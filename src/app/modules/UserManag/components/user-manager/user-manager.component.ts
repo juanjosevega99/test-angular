@@ -45,6 +45,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   //var to know if pdf or excel
   typepdf = false;
   typeExcel = false;
+  selecUser = false;
   //variable to know if coupon 
   typeCoupon = false
   //vars to date filter
@@ -212,7 +213,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
             })
 
           } else {
-            obj.registerDate = '-';            
+            obj.registerDate = '-';
           }
           this.usergetting.push(obj);
 
@@ -232,12 +233,14 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   selectedAll(event) {
     const checked = event.target.checked;
     this.newdateArray.forEach(item => item.selected = checked)
+    this.selectforsend();
   }
 
   selectedOne(event, pos: number) {
     const checked = event.target.checked;
     event.target.checked = checked;
     this.newdateArray[pos].selected = checked;
+    this.selectforsend();
   }
 
   selectforsend() {
@@ -485,16 +488,33 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
   //get data to export
   datafor_Excel() {
-    this.typeExcel = true;
-    this.typeCoupon = false;
-    this.typepdf = false;
     this.selectforsend();
+
+    if (this.userSelected.length) {
+
+      this.typeExcel = true;
+      this.typeCoupon = false;
+      this.typepdf = false;
+      this.selecUser = false;
+
+    } else {
+      this.selecUser = true;
+    }
   }
+
   datafor_pdf() {
-    this.typepdf = true;
-    this.typeExcel = false;
-    this.typeCoupon = false;
+
     this.selectforsend();
+    if (this.userSelected.length) {
+
+      this.typepdf = true;
+      this.typeExcel = false;
+      this.typeCoupon = false;
+      this.selecUser = false;
+
+    } else {
+      this.selecUser = true;
+    }
   }
 
   // ==========================
@@ -677,20 +697,20 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
   generatePdf() {
     //'p', 'mm', 'a4'
-    console.log(this.userSelected);    
+    console.log(this.userSelected);
 
     let doc = new jsPDF('landscape');
     let col = ["#", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
       "Sede", "Usabilidad", "Monto compras"];
-    const coltopdf = ['registerDate', 'name', 'email', 'phone','birthday', 'gender', 'nameAllie', 'nameHeadquarter', 'usability', 'purchaseAmount'];
+    const coltopdf = ['registerDate', 'name', 'email', 'phone', 'birthday', 'gender', 'nameAllie', 'nameHeadquarter', 'usability', 'purchaseAmount'];
 
     let rows = [];
     let auxrow = [];
     this.userSelected.map((user, i) => {
       auxrow = [];
       auxrow[0] = i + 1;
-       coltopdf.forEach( key =>{
-        
+      coltopdf.forEach(key => {
+
         if (user.hasOwnProperty(key)) {
           auxrow.push(user[key]);
         }
@@ -701,7 +721,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     // //build the pdf file
     doc.autoTable(col, rows);
     const date = new Date().toLocaleDateString();
-    doc.save( 'reporte ' + date  + '.pdf');
+    doc.save('reporte ' + date + '.pdf');
 
   }
 
@@ -825,7 +845,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
           const mydateFrom = new Date(this.fromdate);
           const mydateTo = new Date(this.todate);
 
-          if(item.registerDate){
+          if (item.registerDate) {
 
             let datetransform = item.registerDate.split("/");
             let newdatetransform = datetransform[2] + "-" + datetransform[1] + "-" + datetransform[0];
@@ -835,8 +855,8 @@ export class UserManagerComponent implements OnInit, OnDestroy {
             } else {
               return null
             }
-            
-          }else{
+
+          } else {
             return null;
           }
 
