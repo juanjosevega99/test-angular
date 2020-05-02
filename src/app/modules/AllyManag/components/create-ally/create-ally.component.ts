@@ -455,6 +455,7 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.loading=true;
         //read promise of upladImages 
         const promesasImages = this.imagesAlly.map(fileImage => {
           return this._uploadImages.uploadImages(fileImage, 'allies','ImagesEstablishment')
@@ -497,6 +498,7 @@ export class CreateAllyComponent implements OnInit {
               let objAllie = this.forma.value
               objAllie.idAttentionSchedule = this.idSchedule
               this.allieService.postAllie(objAllie).subscribe()
+              this.loading=false
             })
             if (this.upload == true) {
               Swal.fire({
@@ -553,6 +555,7 @@ export class CreateAllyComponent implements OnInit {
     let objAllie = this.forma.value
     objAllie._id = this.identificatorbyRoot
     this.allieService.putAllie(objAllie).subscribe()
+    this.loading= false
     this._router.navigate(['/main', 'allyManager','-1'])
   }
   swallPutAllie() {
@@ -566,6 +569,7 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.loading= true
         //read promise of upladImages
         if (this.seeNewPhoto == false && this.seeNewImagesAlly == false) {
           this.uploadFielstoCollectionUpdate()
