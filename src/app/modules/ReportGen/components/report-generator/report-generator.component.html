@@ -254,7 +254,7 @@
                         <td>{{ order.purchaseAmount }}</td>
                         <td>{{ order.registerDate }}</td>
                         <td>{{ order.dateAndHourDelivery }}</td>
-                        <td>{{ order.controlOrder }}</td>
+                        <td>{{ order.controlOrder ? "si" : "No" }}</td>
 
                         <!-- <td>
                             <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
@@ -283,7 +283,7 @@
     </div>
     <div class="container-fluid text-center mt-3">
 
-        <button *ngIf="profile.reportPermissions.reportSummary" type="button" (click)="generatePdf()"
+        <button *ngIf="profile.reportPermissions.reportsummary" type="button" (click)="generatePdf()"
             class="btnForInforms" data-toggle="modal" data-target="#exampleModalCenter"> <img src="assets/icons/pdf.png"
                 class="tifi-icon-back">
             Descargar PDF</button>

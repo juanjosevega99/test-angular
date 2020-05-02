@@ -56,17 +56,16 @@ export class ReportGeneratorComponent implements OnInit {
   table: FormGroup;
 
 
+
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
     private userservice: UsersService, private orderservice: OrdersService, private headquartsservice: HeadquartersService,
     private allyservice: AlliesService, private dishService: DishesService, private showcontent: ShowContentService) {
 
+    this.profile = this.showcontent.showMenus();
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getToday();
 
     this.loadUserAndOrders();
-
-    this.profile = this.showcontent.showMenus();
-
   }
 
   onDateSelection(date: NgbDate) {
@@ -99,7 +98,6 @@ export class ReportGeneratorComponent implements OnInit {
 
   ngOnInit() {
     this.SeachingRange();
-
   }
 
   convertDate(date: Date): string {
@@ -108,99 +106,105 @@ export class ReportGeneratorComponent implements OnInit {
     return n;
   }
 
+  convertDateToShow(date: Date): string {
+    const d = new Date(date);
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' }) + " " +
+      d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    // const n = date.toLocaleString('en-US', { hour12: true });
+    return n;
+  }
+
   loadUserAndOrders() {
     this.loadingUsers = true;
 
-    this.userservice.getUsers().subscribe(res => {
+    this.orderservice.getOrdersByAlly(this.profile.idAllies).subscribe((orders: Orders[]) => {
 
-      res.forEach((user: Users, index) => {
+      if (orders.length > 0) {
 
-        this.orderservice.getChargeByUserId(user.id).subscribe((orders: Orders[]) => {
+        orders.forEach((order: Orders, index) => {
 
-          if (orders.length > 0) {
+          this.headquartsservice.getHeadquarterById(order.idHeadquartes).subscribe((headq: any) => {
 
-            orders.forEach((order: Orders) => {
+            this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
+
               const obj: ReportGenerate = {};
 
-              // in this place get headquarts by id
-              this.headquartsservice.getHeadquarterById(order.idHeadquartes).subscribe((headq: any) => {
-                console.log("traendo las heads", headq);
-                
-                  if (headq) {
+              if (headq) {
 
-                    obj.idHeadquarter = order.idHeadquartes;
-                    obj.location = headq.ubication;
-                    obj.codeOrder = order.code;
-                    obj.client = user.name + " " + user.lastname;
-                    obj.typeOfService = order.typeOfService['type'];
-                    obj.purchaseAmount = order.orderValue;
-                    obj.registerDate = this.convertDate(order.dateAndHourReservation);
-                    obj.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey);
-                    obj.controlOrder = order.deliveryStatus;
-                    obj.valueTotalWithRes = order.orderValue;
+                obj.idHeadquarter = order.idHeadquartes;
+                obj.location = headq.ubication;
+                obj.codeOrder = order.code;
+                obj.client = user.name + " " + user.lastname;
+                obj.typeOfService = order.typeOfService['type'];
+                obj.purchaseAmount = order.orderValue;
+                obj.registerDate = this.convertDateToShow(order.dateAndHourReservation);
+                obj.dateAndHourDelivery =  order.dateAndHourDelivey ? this.convertDateToShow(order.dateAndHourDelivey) : "Por confirmar";
+                obj.controlOrder = order.deliveryStatus;
+                obj.valueTotalWithRes = order.orderValue;
 
-                    headq.costPerService.map(service => {
-                      if (service.id == order.typeOfService) {
-                        obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
-                        obj.costReservationIva = parseFloat(service.value);
-                        obj.valueTotalWithoutRes = (order.orderValue - service.value);
-                      }
-                    })
-
-                    // ally
-                    this.allyservice.getAlliesById(order.idAllies).subscribe((ally: any) => {
-                      obj.ally = ally.name;
-                      obj.percent = ally.intermediationPercentage;
-                      obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
-                      let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
-                      obj.valueIntermediationIva = auxvalue;
-                      obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
-                      obj.valueForAlly = (order.orderValue - (auxvalue + obj.costReservationIva));
-
-                      this.loadingUsers = false;
-                    })
-
-                    // dish
-                    let namedsh = [];
-                    let valueDish = []
-                    let quanty = []
-                    order.idDishe.forEach((object: any) => {
-
-                      quanty.push(object.quantity);
-
-                      this.dishService.getDisheById(object.id).subscribe((dish: any) => {
-                        if (dish) {
-
-                          namedsh.push(dish.name);
-                          valueDish.push(dish.price * object.quantity);
-                        }
-
-                      })
-                      obj.nameDishe = namedsh;
-                      obj.valueDishe = valueDish;
-                      obj.quantity = quanty;
-
-                    })
+                headq.costPerService.map(service => {
+                  if (service.id == order.typeOfService) {
+                    obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
+                    obj.costReservationIva = parseFloat(service.value);
+                    obj.valueTotalWithoutRes = (order.orderValue - service.value);
                   }
-                  if (index === orders.length) {
-                    this.loadingUsers = false;
-                  }
-                }
-              )
+                })
+
+                // ally
+                this.allyservice.getAlliesById(this.profile.idAllies).subscribe((ally: any) => {
+                  obj.ally = ally.name;
+                  obj.percent = ally.intermediationPercentage;
+                  obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
+                  let auxvalue = parseFloat((((order.orderValue - obj.costReservationIva) + ((order.orderValue - obj.costReservationIva) * environment.IVA)) * ally.intermediationPercentage / 100).toFixed());
+                  obj.valueIntermediationIva = auxvalue;
+                  obj.valueTotalIntRes = (obj.valueIntermediationIva + obj.costReservationIva);
+                  obj.valueForAlly = (order.orderValue - (auxvalue + obj.costReservationIva));
+
+                })
+
+                // dish
+                let namedsh = [];
+                let valueDish = []
+                let quanty = []
+                order.idDishe.forEach((object: any) => {
+
+                  quanty.push(object.quantity);
+
+                  this.dishService.getDisheById(object.id).subscribe((dish: any) => {
+                    if (dish) {
+
+                      namedsh.push(dish.name);
+                      valueDish.push(dish.price * object.quantity);
+                    }
+
+                  })
+                  obj.nameDishe = namedsh;
+                  obj.valueDishe = valueDish;
+                  obj.quantity = quanty;
+
+                })
+              }
 
               this.usergetting.push(obj);
             })
 
+          })
 
+          if (index === (orders.length-1)) {
+            this.loadingUsers = false;
           }
+
         })
-      })
+      } else {
+        this.loadingUsers = false;
+      }
     })
   }
 
   // ==================================
   // GENERATE pdf
   // ==================================
+  // summary cajero
   generatePdf() {
 
     //'p', 'mm', 'a4'
@@ -215,7 +219,7 @@ export class ReportGeneratorComponent implements OnInit {
     let arraytopdf = [];
 
     this.newdateArray.forEach((obj: ReportGenerate) => {
-      let objpdf: ReportGenerate = {};
+      let objpdf: any = {};
       let auxnamearray = []
 
       obj.nameDishe.map((name, i) => {
@@ -232,7 +236,7 @@ export class ReportGeneratorComponent implements OnInit {
       objpdf.purchaseAmount = obj.purchaseAmount;
       objpdf.registerDate = obj.registerDate;
       objpdf.dateAndHourDelivery = obj.dateAndHourDelivery;
-      objpdf.controlOrder = obj.controlOrder;
+      objpdf.controlOrder = obj.controlOrder ? "SI" : "NO";
       // objpdf.quantity = obj.quantity;
       // objpdf.nameDishe = obj.nameDishe;
 
@@ -270,7 +274,8 @@ export class ReportGeneratorComponent implements OnInit {
       styles: { halign: 'center', columnWidth: 'auto', minCellWidth: 50 }
     });
 
-    doc.save('Test.pdf');
+    let name = "Reporte " + new Date().toLocaleString() + '.pdf'
+    doc.save(name);
   }
 
 
@@ -288,7 +293,7 @@ export class ReportGeneratorComponent implements OnInit {
     let arraytopdf = [];
 
     this.newdateArray.forEach((obj: ReportGenerate) => {
-      let objpdf: ReportGenerate = {};
+      let objpdf: any = {};
       let auxnamearray = []
 
       obj.nameDishe.map((name, i) => {
@@ -305,7 +310,7 @@ export class ReportGeneratorComponent implements OnInit {
       objpdf.purchaseAmount = obj.purchaseAmount;
       objpdf.registerDate = obj.registerDate;
       objpdf.dateAndHourDelivery = obj.dateAndHourDelivery;
-      objpdf.controlOrder = obj.controlOrder;
+      objpdf.controlOrder = obj.controlOrder ? "SI": "NO";
       // objpdf.quantity = obj.quantity;
       // objpdf.nameDishe = obj.nameDishe;
 
@@ -343,7 +348,8 @@ export class ReportGeneratorComponent implements OnInit {
       styles: { halign: 'center', columnWidth: 'auto', minCellWidth: 50 }
     });
 
-    doc.save('Test.pdf');
+    let name = "Reporte " + new Date().toLocaleString() + '.pdf'
+    doc.save(name);
   }
 
   // ============================
@@ -368,6 +374,7 @@ export class ReportGeneratorComponent implements OnInit {
   SeachingRange() {
     console.log("buscando");
 
+    this.loadingUsers = true;
     const fromdate = [this.fromDate.year, this.fromDate.month, this.fromDate.day].join('-');
     const todate = [this.toDate.year, this.toDate.month, this.toDate.day].join('-');
 
@@ -379,14 +386,21 @@ export class ReportGeneratorComponent implements OnInit {
 
     this.newdateArray = [];
 
-    this.usergetting.forEach(user => {
+    this.usergetting.forEach((user, index) => {
 
-      const userdate = new Date(user.registerDate)
+      let date = user.registerDate.split(" ")[0].split("/").reverse().join("-");
+
+      const userdate = new Date(date)
 
       if (userdate >= mydateFrom && userdate <= mydateTo) {
         this.newdateArray.push(user)
       }
+
+      if (index == (this.usergetting.length - 1)) {
+        this.loadingUsers = false;
+      }
     });
+
   }
 
   // ==========================
