@@ -1,76 +1,93 @@
+<ngx-spinner bdOpacity=0.6 bdColor="rgba(255,255,255,0.6)" size="medium" color="rgb(207,44,126)" type="ball-atom"
+    [fullScreen]="true">
+</ngx-spinner>
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
 
-    <div class="filerControl d-flex justify-content-center px-1 ">
+    <div class="filerControl d-flex justify-content-center px-1 " style="flex-direction: row;">
 
-        <nav class="menu">
+        <div class="icon-back" (click)="back()">
+            <a class="d-flex">
+                <img src="assets/icons/Back.png" class="tifi-icon-back">
+            </a>
+        </div>
 
-            <ul>
-                <li>
-                    <a>De</a>
-                    <p>correo@gmail.com</p>
-                </li>
-                <li>
-                    <a>Para</a>
-                    <p>correo@gmail.com</p>
-                </li>
-                <li>
-                    <a>Ubicacion</a>
-                    <p>Bogota</p>
-                </li>
-                <li style="border: none;">
-                    <a>Servicio</a>
-                    <img src="assets/icons/pidelo.png" class="tifi-icon-back" [ngClass]="{'active': infoUSer.typeOfService == 'pidelo' }">
-                    <img src="assets/icons/llevalo.png" class="tifi-icon-back" [ngClass]="{'active': infoUSer.typeOfService == 'llevalo' }">
-                    <img src="assets/icons/reservalo.png" class="tifi-icon-back" [ngClass]="{'active': infoUSer.typeOfService == 'reservalo' }">
+        <div class="menuoption">
+            <nav class="menu">
 
-                </li>
-            </ul>
-        </nav>
+                <ul>
+                    <li>
+                        <strong><a>De:</a></strong>
+                        <p>{{profile.email}}</p>
+                    </li>
+                    <li>
+                        <strong><a>Para:</a></strong>
+                        <p>{{infoUSer.email}}</p>
+                    </li>
+                    <li>
+                        <strong><a>Ubicación:</a></strong>
+                        <p>{{location}}</p>
+                    </li>
+                    <li style="border: none;">
+                        <strong><a>Servicio:</a></strong>
+                        <img src="assets/icons/pidelo.png" class="tifi-icon-back"
+                            [ngClass]="{'active': infoUSer.typeOfService == 'pidelo' }">
+                        <img src="assets/icons/llevalo.png" class="tifi-icon-back"
+                            [ngClass]="{'active': infoUSer.typeOfService == 'llevalo' }">
+                        <img src="assets/icons/reservalo.png" class="tifi-icon-back"
+                            [ngClass]="{'active': infoUSer.typeOfService == 'reservalo' }">
 
-        <nav class="menu">
+                    </li>
+                </ul>
+            </nav>
 
-            <ul>
-                <li>
-                    <a>{{infoUSer.nameUser}}</a>
+            <nav class="menu">
 
-                </li>
-                <li>
-                    <a>{{ infoUSer.phone }}</a>
+                <ul>
+                    <li>
+                        <strong><a>Nombre:</a></strong>
+                        <a>{{infoUSer.nameUser}}</a>
 
-                </li>
-                <li>
-                    <a>Fecha nacimiento: {{ infoUSer.birthday }}</a>
+                    </li>
+                    <li>
+                        <strong><a>Tel:</a></strong>
+                        <a>{{ infoUSer.phone }}</a>
 
-                </li>
-                <li>
-                    <a>{{ infoUSer.gender }}</a>
-                </li>
-                <li>
-                    <a>{{ infoUSer.nameAllie }} | uppercase </a>
-                </li>
-                <li>
-                    <a>{{ infoUSer.nameHeadquarter }}</a>
-                </li>
-                <li style="border: none;">
-                    <a>Fecha: {{ infoUSer.date }} </a>
-                </li>
-            </ul>
-        </nav>
+                    </li>
+                    <li>
+                        <strong><a>F. nacimiento:</a></strong>
+                        <a>{{ infoUSer.birthday }}</a>
+
+                    </li>
+                    <li style="border: none;">
+                        <strong><a>Genero:</a></strong>
+                        <a>{{ infoUSer.gender }}</a>
+                    </li>
+                </ul>
+            </nav>
+            <nav class="menu">
+
+                <ul>
+                    <li>
+                        <strong><a>Aliado:</a></strong>
+                        <a>{{ infoUSer.nameAllie | uppercase }} </a>
+                    </li>
+                    <li>
+                        <strong><a>Sede:</a></strong>
+                        <a>{{ infoUSer.nameHeadquarter }}</a>
+                    </li>
+                    <li style="border: none;">
+                        <strong><a>Fecha solicitud:</a></strong>
+                        <a> {{ infoUSer.date }} </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 
     <div class="PqrGeneral">
         <div>
             <p>PQR</p>
-            <p class="chat" id="style-2">Hola ,i nombre es Natalia lo que pasa es que...
-                HTML Tutorial
-                CSS Tutorial
-                JavaScript Tutorial
-                How To Tutorial
-                SQL Tutorial
-                Python Tutorial
-                W3.CSS Tutorial
-
-            </p>
+            <p class="chat" id="style-2">{{infoUSer.description}}</p>
             <button (click)="dataforPdf()" class="btnForInforms">
                 <img src="assets/icons/descargar.png" class="tifi-icon-back">
                 Descargar</button>
@@ -79,14 +96,16 @@
         <div>
             <p>RESPUESTA</p>
             <textarea class="chat" style=" margin-bottom: 1rem; padding: 2rem;" name="area" id="response" #respo
-                cols="30" rows="10" required="" [(ngModel)]="response" >
+                cols="30" rows="10" required="" [(ngModel)]="response">
             </textarea>
-            <button *ngIf="!infoUSer.state" class="btnForInforms" (click)="reply( respo )" >
+
+            <div *ngIf="infoUSer.state" class="alert-sended"> La solicitud fue atendida </div>
+            <button *ngIf="!infoUSer.state" class="btnForInforms" (click)="reply( respo )">
                 <img src="assets/icons/enviar.png" class="tifi-icon-back">
                 Enviar
             </button>
-            <div style="width: 10rem; height: 10rem;">
-            </div>
+
+            <div *ngIf="alertEmpty" class="alert-msn"> Por favor escribe una respuesta para la Petición </div>
         </div>
     </div>
 </div>

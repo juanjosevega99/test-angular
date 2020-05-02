@@ -59,28 +59,33 @@ export class ProfileComponent implements OnInit {
     this.newArray = this.profilesgetting;
 
     //inicialization of profiles
-    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
-      for (let x in res) {
-        let profile: Profiles
-        if (res != []) {
-          profile = res[x]
+    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe((res:any) => {
 
-          const obj: ProfileList = {};
-          obj._id = profile._id;
-          obj.nameCharge = profile.nameCharge;
-          obj.identification = profile.identification;
-          obj.name = profile.name;
-          obj.photo = profile.photo;
-          obj.nameHeadquarter = profile.nameHeadquarter;
-          obj.entryDate = this.convertDate(profile.entryDate);
-          obj.modificationDate = this.convertDate(profile.modificationDate);
-          obj.numberOfModifications = profile.numberOfModifications;
-          obj.state = profile.state
-
-          this.profilesgetting.push(obj)
-          this.loading = false;
-
+      if(res.length){
+        for (let x in res) {
+          let profile: Profiles
+          if (res != []) {
+            profile = res[x]
+  
+            const obj: ProfileList = {};
+            obj._id = profile._id;
+            obj.nameCharge = profile.nameCharge;
+            obj.identification = profile.identification;
+            obj.name = profile.name;
+            obj.photo = profile.photo;
+            obj.nameHeadquarter = profile.nameHeadquarter;
+            obj.entryDate = this.convertDate(profile.entryDate);
+            obj.modificationDate = this.convertDate(profile.modificationDate);
+            obj.numberOfModifications = profile.numberOfModifications;
+            obj.state = profile.state
+  
+            this.profilesgetting.push(obj)
+            this.loading = false;
+  
+          }
         }
+      }else{
+        this.loading = false;        
       }
     })
   }

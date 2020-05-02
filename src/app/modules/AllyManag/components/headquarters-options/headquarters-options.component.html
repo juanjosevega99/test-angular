@@ -1,4 +1,4 @@
-<div class="continer compenetsstyle d-flex justify-content-center flex-column align-items-center ">
+<div class="compenetsstyle d-flex justify-content-center flex-column align-items-center ">
 
     <div class="container-fluid d-flex flex-row align-items-center " style="margin-bottom: 5rem;">
 
@@ -24,14 +24,15 @@
 
     </div>
 
-    <div class="row container-fluid d-flex justify-content-center col-xl-6">
+    <div class="row container-fluid d-flex justify-content-center col-lg-10 col-xl-6">
         <div class="col-sm-6 col-md-4 ">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-                    <i class="fas fa-info imageI" style="color: black"></i>
+                    <!-- <i class="fas fa-info imageI" style="color: #000"></i> -->
+                    <img src="assets/img/establecimiento.svg" class="imageI" alt="">
                 </div>
                 <div class="card-body">
-                    <a (click)="editAlly()" class="btn btn-lg btn-block buttonstyle">Info del establecimiento</a>
+                    <a (click)="editAlly()" class="btn btn-lg btn-block buttonstyle">Info del aliado</a>
                 </div>
             </div>
         </div>
@@ -39,7 +40,8 @@
         <div class="col-sm-6 col-md-4 ">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-                    <i class="fas fa-map-marker-alt imageI " style="color: black"></i>
+                    <!-- <i class="fas fa-map-marker-alt imageI " style="color:#311254"></i> -->
+                    <img src="assets/img/fabrica.svg" class="imageI" alt="">
                 </div>
                 <div class="card-body">
                     <button  (click)="editHeadquarter()" class="btn btn-lg btn-block buttonstyle" [disabled]="enableInfHeadquarter" >Info de la sede </button>  
@@ -50,7 +52,8 @@
         <div class="col-sm-6 col-md-4 ">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-                    <i class="fas fa-folder-open imageI " style="color: black"></i>
+                    <!-- <i class="fas fa-folder-open imageI " style="color: #4e4f4f"></i> -->
+                    <img src="assets/img/menu.svg" class="imageI" alt="">
                 </div>
                 <div class="card-body">
                     <button (click)="editMenu()" class="btn btn-lg btn-block buttonstyle" [disabled]="enableEditMenu">Editar menu</button>
@@ -61,7 +64,7 @@
         <div class="col-sm-6 col-md-4 ">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-                    <i class="fas fa-warehouse imageI " style="color: black"></i>
+                    <i class="fas fa-warehouse imageI " style="color: #ac0f17"></i>
                 </div>
                 <div class="card-body">
                     <a (click)="createHeadquart()" class="btn btn-lg btn-block buttonstyle">Crear nueva sede</a>
@@ -72,7 +75,8 @@
         <div class="col-sm-6 col-md-4">
             <div class="card border-primary mb-3">
                 <div class="continer-fluid d-flex justify-content-center py-3 " style="height: 100%;">
-                    <i class="fas fa-user-tie imageI " style="color: black"></i>
+                    <!-- <i class="fas fa-user-tie imageI " style="color: black"></i> -->
+                    <img src="assets/img/perfiles.svg" class="imageI" alt="">
                 </div>
                 <div class="card-body">
                     <button (click)="profiles()" class="btn btn-lg btn-block buttonstyle" [disabled]="enableProfiles">Perfiles</button>

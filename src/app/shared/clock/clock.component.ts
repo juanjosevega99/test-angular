@@ -1,21 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-clock',
   templateUrl: './clock.component.html',
   styleUrls: ['./clock.component.scss']
 })
-export class ClockComponent implements OnInit {
+export class ClockComponent implements OnInit, OnDestroy {
 
   date:String;
   time:String;
   today:Date;
+
+  timeTick:any;
   
   constructor() { }
 
   ngOnInit() {
 
-    setInterval( ()=>this.tick(), 1000 );
+    this.timeTick = setInterval( ()=>this.tick(), 20000 );
+  }
+
+  ngOnDestroy(){
+    clearTimeout(this.timeTick);
   }
 
   tick(): void{

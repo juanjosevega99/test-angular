@@ -3,7 +3,7 @@
     <app-loading *ngIf="loading"></app-loading>
     <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveProfile(shape)" #shape="ngForm" *ngIf="!loading" >
 
-        <a  (click)="goBackProfiles()" class="d-flex mr-2">
+        <a (click)="goBack()" class="d-flex mr-2">
             <img src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
 
@@ -155,6 +155,7 @@
                             #permis="ngModel" required
                             [ngClass]="{'is-invalid': (!permis.valid),'is-valid':(permis.valid) }"
                             [(ngModel)]="preProfile.permis">
+                            <option value="ninguno">Ninguno</option>
                             <option *ngFor="let type of permiss">
                                 {{type}}
                             </option>

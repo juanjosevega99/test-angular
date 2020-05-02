@@ -54,6 +54,18 @@ width: 50% !important;
   color: #dc3545;
 }
 
+.btn-primary:hover {
+  color: #fff;
+  background-color: #572483;
+  border-color: #572483;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #572483;
+  border-color: #572483;
+}
+
 @media (max-width:768px){
     .compenetsstyle{
         padding: 0;

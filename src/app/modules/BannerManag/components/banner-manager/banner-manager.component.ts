@@ -37,14 +37,21 @@ export class BannerManagerComponent implements OnInit {
   }
 
   loadBanners() {
+    this.bannergetting = [];
+    this.bannerArray = this.bannergetting;
     this.loadingBanners = true;
     this.bannerservice.getBanners().subscribe((banners: Banners[]) => {
-      banners.forEach((banner, index) => {
-        this.bannergetting.push(banner);
-        if(index === (banners.length -1)){
-          this.loadingBanners = false;
-        }
-      })
+      if (banners.length) {
+
+        banners.forEach((banner, index) => {
+          this.bannergetting.push(banner);
+          if (index === (banners.length - 1)) {
+            this.loadingBanners = false;
+          }
+        })
+      } else {
+        this.loadingBanners = false;
+      }
     });
   }
 
@@ -59,14 +66,16 @@ export class BannerManagerComponent implements OnInit {
     Swal.fire({
       title: '¿Actualizar Banner?',
       // text: "de que deseas guardar los cambios!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then(res => {
-      if (res) {
+      if (res.value) {
         this.saveEditBanner(banner);
+      } else {
+        this.loadBanners();
       }
     })
   }
@@ -76,7 +85,11 @@ export class BannerManagerComponent implements OnInit {
     this.bannerservice.putBanner(Banner).subscribe(banner => {
       this.spinner.hide();
       Swal.fire(
-        "Cambios Guardados Exitosamente"
+        {
+          title: "Cambios Guardados Exitosamente",
+          icon: 'success',
+          confirmButtonColor: '#572483',
+        }
       )
     })
   }

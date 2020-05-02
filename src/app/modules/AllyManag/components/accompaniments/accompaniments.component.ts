@@ -70,7 +70,6 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   timetick: any;
 
-
   constructor(private sectionService: SectionsService, private promoService: PromotionsService,
     private accompanimentService: AccompanimentsService, private _router: Router, private dishService: DishesService,
     private _activateRoute: ActivatedRoute, private _location: Location) {
@@ -182,9 +181,11 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
                 const element = this.dishSelected.idAccompaniments[index];
                 if (accomp.id == element) {
+
                   this.accompanimetsOfPromo[index] = accomp
                   this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
                   this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
+
                 }
               }
             }
@@ -216,7 +217,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
-
+    
     const checked = event.target.checked;
     event.target.checked = checked;
 
@@ -482,7 +483,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     termino = termino.toLowerCase();
     var myRegex = new RegExp('.*' + termino + '.*', 'gi');
     if (this.promoAccompaniments == true) {
-      if (termino.length > 1) {
+      if (termino.length >= 1) {
         this.accompanimetsOfPromo = this.accgetting.filter(function (item) {
           return myRegex.test(item.name)
         });
@@ -623,23 +624,37 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValue(id: number, property: string, event: any) {
+    console.log(event.target.textContent);
     let editField = event.target.textContent;
-    this.personList[id][property] = editField;
+
+    const newtext = editField;
+
+    // if(event.target.textContent){
+    // this.personList[id][property] = this.personList[id][property] + editField;
+    // }else{
+
+    this.personList[id][property] = newtext;
+    editField = '';
+
+    // }
+
   }
 
   changeValueSelect1(id: number, property: string, value: string) {
-    console.log(value);
     this.personList[id][property] = value;
   }
 
   changeValuecheck1(id: number, property: string, event: any) {
+
     let editField = event.target.checked;
     this.personList[id][property] = editField;
-    if (editField == true) {
-      this.additionalCost = true
-    } else if (editField == false) {
-      this.additionalCost = false
-    }
+
+    // if (editField == true) {
+    //   this.additionalCost = true
+    // } else if (editField == false) {
+    //   this.additionalCost = false
+    // }
+
   }
 
   changeValue2(id: number, property: string, event: any) {
