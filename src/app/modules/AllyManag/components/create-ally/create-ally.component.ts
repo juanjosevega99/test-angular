@@ -122,8 +122,7 @@ export class CreateAllyComponent implements OnInit {
       Validators.pattern("[0123456789,.'-]{8,20}")
 
       ]),
-      'logo': new FormControl('', [Validators.required,
-      ]),
+      'logo': new FormControl(''),
       'color': new FormControl(this.color),
       'idTypeOfEstablishment': new FormControl('', [Validators.required]),
       'nameTypeOfEstablishment': new FormControl(''),
@@ -137,7 +136,7 @@ export class CreateAllyComponent implements OnInit {
       Validators.pattern("[0123456789,.'-]{1,3}")
       ]),
       'description': new FormControl('', [Validators.maxLength(20)]),
-      'idAttentionSchedule': new FormControl('', [Validators.required,]),
+      'idAttentionSchedule': new FormControl(''),
       'imagesAllies': new FormControl('')
 
     })
@@ -494,9 +493,10 @@ export class CreateAllyComponent implements OnInit {
             }
             this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
               this.idSchedule = schedule._id;
-              this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
+              // this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
+              objAllie.idAttentionSchedule = this.idSchedule
               this.allieService.postAllie(objAllie).subscribe()
             })
             if (this.upload == true) {

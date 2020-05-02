@@ -347,7 +347,7 @@
                                 <th class="text-center">Descripción</th>
                                 <th class="text-center" > </th>
                             </tr>
-                            <tr *ngFor="let tyc of newArray">
+                            <tr *ngFor="let tyc of newArray; let i = index">
                                 <td>{{i+1}}</td>
                                 <td>{{tyc.name}}</td>
                                 <td>{{tyc.nameTypeTyc}}</td>

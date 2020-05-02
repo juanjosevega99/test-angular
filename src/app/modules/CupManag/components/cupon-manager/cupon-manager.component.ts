@@ -99,7 +99,7 @@ export class CuponManagerComponent implements OnInit {
       })
 
     })
-    //inicialization users by ally 
+
     //clean local storage  for ally and headquarter
     this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
 
@@ -107,8 +107,6 @@ export class CuponManagerComponent implements OnInit {
       "name": new FormControl(),
       "nameAllies": new FormControl(),
     })
-
-
 
   }
 

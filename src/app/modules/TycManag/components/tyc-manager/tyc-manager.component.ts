@@ -22,8 +22,7 @@ export class TycManagerComponent implements OnInit {
   //varibales to obtain data
   tycGettting: TermsAndConditions[] = [];
   newArray = this.tycGettting;
-
-
+  
   //variables for general search
   generalsearch: string = "";
 
@@ -39,12 +38,11 @@ export class TycManagerComponent implements OnInit {
     this.table = new FormGroup({
       "nameTypeTyc": new FormControl(),
     })
-    //clean local storage  for ally and headquarter
-    this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
     this.makeObjTycManager();
   }
 
   ngOnInit() { }
+
 
   goToEditTyc(idTyc: string, i) {
     this.saveLocalStorageServices.saveLocalStorageIdTyc(idTyc)

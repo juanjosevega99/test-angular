@@ -24,9 +24,8 @@ export class AllyManagerComponent implements OnInit {
   //variable to get headquaerters
 
   //varibales to get data
-  // attentionSchedule: string;
   arrayAllyManager: any[] = []
-  newdateArray = this.arrayAllyManager;
+  newArray = this.arrayAllyManager;
   filteredArray = [];
   // variables for date
   today: Date;
@@ -35,13 +34,11 @@ export class AllyManagerComponent implements OnInit {
   //variable of don't results
   noResults = false
   loadingAllies = false;
-  //variable for the loading
-  // loading: boolean;
-
+ 
    // array for search headquuarters
    arrayHeadquarter: any;
- /*   headquartersByIdAlly: any[] = []; */
-
+  //variables for general search
+  generalsearch: string = "";
   
   constructor(
     private _alliesService: AlliesService,
@@ -55,8 +52,6 @@ export class AllyManagerComponent implements OnInit {
       this._saveLocalStorageService.saveLocalStorageIdAlly("");
       this._saveLocalStorageService.saveLocalStorageIdHeadquarter("");
       
-      // this.manageHq = false;
-      // this.manageProm = false;
       
       //inicialization for charging the data of a profile to edit
       this.activatedRoute.params.subscribe(params => {
@@ -64,9 +59,7 @@ export class AllyManagerComponent implements OnInit {
       if (identificator == -1) {
         this.manageHq = true;
         this.manageProm = false;
-        /* this.manageHq(); */
       } else if (identificator == -2) {
-        /* this.manageProm(); */
         this.manageProm = true;
         this.manageHq = false;
       }
@@ -82,7 +75,6 @@ export class AllyManagerComponent implements OnInit {
     this.table = new FormGroup({
       "code": new FormControl(),
       "mealType": new FormControl(),
-      "generalsearch": new FormControl(),
     })
 
     this.loadingAllies = true;
@@ -94,17 +86,14 @@ export class AllyManagerComponent implements OnInit {
 
         this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
           .subscribe((schedule) => {
-            // console.log('fecha',day);
             let dayDb = schedule.attentionSchedule.find(e => e.day == day)
             let msgSchedule = `${dayDb.from} - ${dayDb.to} `
             attentionSchedule = msgSchedule
           })
 
           this._headquartService.getHeadquarterByAllIdAlly(ally.id).subscribe(headquarter => {
-            // console.log(headquarter)
               this.arrayHeadquarter = headquarter
               this.arrayHeadquarter.forEach(element => {
-                // console.log('elem', element);
                 let obj = {
                   id: element._id,
                   name: element.name
@@ -151,166 +140,52 @@ export class AllyManagerComponent implements OnInit {
   ngOnInit() {
 
   }
+   //method for a specific search
+   search() {
 
-  //method for seaching specific values by name and code
-  search(termino?: string, id?: string) {
-
-    let count = 0; // save thow values 0 o 1
-    let termsearch = '';
-    let idsearch = '';
+    let objsearch = {
+      code: "",
+      mealType: ""
+    };
 
     for (var i in this.table.value) {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
-        count += 1;
-        termsearch = this.table.value[i];
-        idsearch = i;
+        objsearch[i] = this.table.value[i];
       }
     }
-    // console.log('espacios', count);
 
-    if (count > 0 && count < 2 && !this.table.controls['generalsearch'].value) {
+    // let for general searh
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
 
-      //  un campo lleno
-      this.newdateArray = this.arrayAllyManager.filter(function (ally: Allies) {
-        //We test each element of the object to see if one string matches the regexp.
-        if (ally[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+    this.newArray = this.arrayAllyManager.
+      filter(function (ally) {
+        if (ally["mealType"].toLowerCase().indexOf(this.mealType) >= 0) {
           return ally;
         }
-      });
-
-      this.filteredArray = this.newdateArray;
-
-      // condition by when don't exit results in the table
-      if (this.newdateArray.length == 0) {
-        this.noResults = true;
-
-      } else {
-        this.noResults = false;
-      }
-
-    } else if (count == 2 && this.table.controls['generalsearch'].value) {
-
-      let aux = this.newdateArray;
-      this.newdateArray = aux.filter(function (ally: Allies) {
-        //We test each element of the object to see if one string matches the regexp.
-        if (ally[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
+      }, objsearch).
+      filter(function (ally) {
+        if (ally["code"].toLowerCase().indexOf(this.code) >= 0) {
           return ally;
         }
-      });
-
-      // condition by when don't exit results in the table
-      if (this.newdateArray.length == 0) {
-        this.noResults = true;
-
-      } else {
-        this.noResults = false;
-      }
-
-    }
-
-    else {
-
-      if (this.table.controls['generalsearch'].value) {
-      }
-
-      if (count == 0) {
-        // campos vacios
-        // existe general search?
-        this.newdateArray = this.arrayAllyManager;
-        if (this.table.controls['generalsearch'].value) {
-
-          this.searchbyterm(this.table.controls['generalsearch'].value);
-        }
-        // condition by when don't exit results in the table
-        if (this.newdateArray.length == 0) {
-          this.noResults = true;
-
-        } else {
-          this.noResults = false;
-        }
-      } else {
-
-        // campos llenos
-        // existe general search?
-        this.newdateArray = this.filteredArray.filter(function (ally: Allies) {
-          //We test each element of the object to see if one string matches the regexp.
-          if (ally[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
-            return ally;
-          }
-        });
-        // condition by when don't exit results in the table
-        if (this.newdateArray.length == 0) {
-          this.noResults = true;
-
-        } else {
-          this.noResults = false;
-        }
-
-
-        if (this.table.controls['generalsearch'].value) {
-
-          this.searchbyterm(this.table.controls['generalsearch'].value);
-
-        }
-      }
-    }
-  }
-  //method for general searching 
-  searchbyterm(termino: string) {
-
-    termino = termino.toLowerCase();
-    var myRegex = new RegExp('.*' + termino + '.*', 'gi');
-
-    // // campos de la tabla
-    let count = 0;
-    let termsearch = '';
-    let idsearch = '';
-
-    for (var i in this.table.value) {
-      // search empty fields
-      if (this.table.value[i] == null || this.table.value[i] == "") {
-        // campo vacio
-        count += 1;
-      } else {
-        termsearch = this.table.value[i];
-        idsearch = i;
-      }
-    }
-
-    if (count > 1) {
-      // campos vacios
-      this.newdateArray = this.arrayAllyManager.filter(function (item) {
+      }, objsearch).
+      filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.code) || myRegex.test(item.nameEstablishment) ||
-          myRegex.test(item.numberHeadquarters) || myRegex.test(item.allyType) ||
-          myRegex.test(item.mealType) || myRegex.test(item.schedules))
-      });
-      this.filteredArray = this.newdateArray;
-      // condition by when don't exit results in the table
-      if (this.newdateArray.length == 0) {
-        this.noResults = true;
+          myRegex.test(item.nameTypeOfCoupon) || myRegex.test(item.allyType) ||
+          myRegex.test(item.mealType) || myRegex.test(item.schedules) || myRegex.test(item.numberHeadquarters))
+          
+      })
+    // condition by when don't exit results in the table
+    if (this.newArray.length == 0) {
+      this.noResults = true;
 
-      } else {
-        this.noResults = false;
-      }
     } else {
-      // un campo lleno
-      this.newdateArray = this.filteredArray.filter(function (item) {
-        //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.code) || myRegex.test(item.nameEstablishment) ||
-          myRegex.test(item.numberHeadquarters) || myRegex.test(item.allyType) ||
-          myRegex.test(item.mealType) || myRegex.test(item.schedules))
-      });
-      // condition by when don't exit results in the table
-      if (this.newdateArray.length == 0) {
-        this.noResults = true;
-
-      } else {
-        this.noResults = false;
-      }
+      this.noResults = false;
     }
+
   }
+
   //method Get in Option Ally
   getInHeadquarts(idAlly:string, i){
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)

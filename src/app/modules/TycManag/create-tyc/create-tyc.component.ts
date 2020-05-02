@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 //services
 import Swal from 'sweetalert2';
@@ -10,7 +10,7 @@ import { TypeTermsAndConditionsService } from "src/app/services/type-terms-and-c
   templateUrl: './create-tyc.component.html',
   styleUrls: ['./create-tyc.component.scss']
 })
-export class CreateTycComponent implements OnInit {
+export class CreateTycComponent implements OnInit, OnDestroy {
 
   preTyc: Object = {
     name: null,
@@ -63,25 +63,13 @@ export class CreateTycComponent implements OnInit {
 
   ngOnInit() {
   }
+  ngOnDestroy() {
+    localStorage.removeItem('idTyc');
+  }
   goBackTycManger() {
     this._router.navigate(['/main', 'tycManager'])
-
   }
-  //Method for showing new view in the typeTyC field
-  // handleBoxtypeTyC(): boolean {
 
-  //   if (this.addtypeTyCButton) {
-  //     return this.addtypeTyCButton = false,
-  //       this.othertypeTyCInput = true,
-  //       this.selectAgainarray = true,
-  //       this.arraytypeTyCSelect = false
-  //   } else {
-  //     return this.addtypeTyCButton = true,
-  //       this.othertypeTyCInput = false,
-  //       this.selectAgainarray = false,
-  //       this.arraytypeTyCSelect = true
-  //   }
-  // }
   seeNametypeTyC(selected: any) {
 
     this.typeTyC.forEach(element => {
@@ -91,25 +79,7 @@ export class CreateTycComponent implements OnInit {
       }
     })
   }
-  //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
-  // addTypeTyc(name: String) {
-  //   if (name != null) {
-  //     let newitem = name;
-  //     let newTypeTyc: object = {
-  //       name: newitem
-  //     }
-  //     this.swallSaveTypeTyc(newTypeTyc)
-
-  //     this.handleBoxtypeTyC()
-  //   } else { alert("Ingrese los nuevos términos y condiciones") }
-
-  // }
-  // deleteTypeCoupon() {
-  //   let typeTycSelected = this.preTyc['idTypeTyc']
-    // this.swallDeleteTypeTyc(typeTycSelected)
-  // }
-
-  //method of obtain one tyC for update 
+ 
   getTyc(idTyc: string) {
     this.loading
     this.tycManagerService.getTermAndConditionById(idTyc).subscribe(tyc => {
