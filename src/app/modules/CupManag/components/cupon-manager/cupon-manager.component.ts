@@ -46,20 +46,16 @@ export class CuponManagerComponent implements OnInit {
     let formatDate = currentDate.toLocaleString('es-ES', { year: 'numeric', month: 'numeric', day: '2-digit' });
     let arrayDate = formatDate.split('/').map(x => +x);
     let objtDate: any = {};
-    // let arrayObjDate: any[] = []
     objtDate.day = arrayDate[0];
     objtDate.month = arrayDate[1];
     objtDate.year = arrayDate[2];
-    // arrayObjDate = objtDate
     // inicilization current time 
     let formatHour = currentDate.toLocaleString('en-ES', { hour: 'numeric', minute: 'numeric', hour12: false });
     let arrayCurrentHour = formatHour.split(':').map(x => +x);
     let objCurrentHour: any = {};
-    // let arrayObjCreateHour: any[] = []
     objCurrentHour.hour = arrayCurrentHour[0];
     objCurrentHour.minute = arrayCurrentHour[1];
     objCurrentHour.second = 0;
-    // arrayObjCreateHour = objCurrentHour
     
     this.couponsServices.getCoupons().subscribe(res => {
       res.forEach((coupon: Coupons, index ) => {
@@ -68,7 +64,6 @@ export class CuponManagerComponent implements OnInit {
           let expirationTime:any = coupon.expirationTime[0]
             //Validation for expiration cupón
             let resultExpirationDate = this.compareObj(expirarionDate, objtDate)
-            // let resultExpirationTime = compareObj(expirationTime,objCurrentHour )
           if (resultExpirationDate == true && objCurrentHour.hour >= expirationTime.hour ) {
             let state: any = [{
               state: "active",
@@ -182,7 +177,6 @@ export class CuponManagerComponent implements OnInit {
     this.saveLocalStorageServices.saveLocalStorageIdCoupon(idCoupon)
     this._router.navigate(['/main', 'userManager', i])
   }
-
 
   //method for a specific search
   search() {

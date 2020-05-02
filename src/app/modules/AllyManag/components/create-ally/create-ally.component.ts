@@ -455,7 +455,6 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
         //read promise of upladImages 
         const promesasImages = this.imagesAlly.map(fileImage => {
           return this._uploadImages.uploadImages(fileImage, 'allies','ImagesEstablishment')
