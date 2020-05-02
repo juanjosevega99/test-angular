@@ -17,17 +17,17 @@
 
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 
-                        <section class="col-md-4 mr-1 " style="flex-direction: column;">
+                        <section class="col-md-6 container-fluid" style="flex-direction: column;">
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                                <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
-                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                <div class="collapse navbar-collapse container-fluid"  id="navbarTogglerDemo03" [formGroup]="table">
+                                    <ul class="navbar-nav  mt-2 mt-lg-0">
                                         <li class="nav-item mr-md-2">
-                                            <input placeholder="Buscar por nombre cupón..." class="form-control text-center"
+                                            <input placeholder="Buscar nombre cupón..." class="form-control text-center"
                                                 type="text" (keyup)="search()" #code id="code"
                                                 formControlName="name">
                                         </li>
                                         <li class="nav-item">
-                                            <input placeholder="Buscar por nombre de establecimiento ..."
+                                            <input placeholder="Buscar nombre establecimiento"
                                                 class="form-control text-center" type="text"
                                                 (keyup)="search()" #name id="name"
                                                 formControlName="nameAllies">
@@ -52,10 +52,10 @@
                                 </div>
                             </div>
                         </section>
-                        <section class="col-md-6 overflow-auto mr-1 "
+                        <section class="col-md-4 overflow-auto "
                             style="flex-direction: column;  margin-bottom: 4.8rem;">
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                                <ul class="navbar-nav  mt-2 mt-lg-0 container-fluid d-flex">
                                     <li class="nav-item container-fluid d-flex">
                                         <input (keyup)="search()" class="form-control text-center"
                                             id="general" type="text" placeholder="Buscar cupon ..." #general
