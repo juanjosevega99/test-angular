@@ -224,6 +224,8 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method to select an icon for a new additional service
   selectImg(event: any) {
+    console.log(this.other);
+    
     let input = event.target;
     if (input.files && input.files[0]) {
       var reader = new FileReader();
@@ -238,26 +240,37 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for add to the view the new additional service
   addNewServiceadd(other: String) {
-    const id: Guid = Guid.create();
-    const file = this.otherImg;
-    const filePath = `assets/allies/additionalServices/${id}`;
-    const ref = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file)
-    task.snapshotChanges()
-      .pipe(
-        finalize(() => {
-          ref.getDownloadURL().subscribe(urlImage => {
-            this.urlHq = urlImage;
-            const otherService = {
-              name: other,
-              img: this.urlHq ? this.urlHq : 'assets/icons/plus.png',
-              select: false
-            }
-            this.aditionalServices.push(otherService)
-          })
-        }
-        )
-      ).subscribe()
+
+    if( other==undefined || this.otherImg == undefined) {
+      console.log(this.otherImg,"Ingrese el nombre ",other);
+      
+    } else{
+
+      const id: Guid = Guid.create();
+      const file = this.otherImg;
+      const filePath = `assets/allies/additionalServices/${id}`;
+      const ref = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, file)
+      task.snapshotChanges()
+        .pipe(
+          finalize(() => {
+            ref.getDownloadURL().subscribe(urlImage => {
+              this.urlHq = urlImage;
+              const otherService = {
+                name: other,
+                img: this.urlHq ? this.urlHq : 'assets/icons/plus.png',
+                select: false
+              }
+              this.aditionalServices.push(otherService)
+            })
+          }
+          )
+        ).subscribe()
+          this.otherImg = undefined;
+          other = undefined
+    }
+
+    
   }
 
   //method for saving the new headquarter

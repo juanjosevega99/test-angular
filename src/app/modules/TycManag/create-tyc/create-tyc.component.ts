@@ -91,9 +91,6 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   saveTyc() {
     this.swallSaveTyc()
   }
-<<<<<<< HEAD
-  //sweet alerts for save and update Tyc
-=======
   //sweet alerts for save and delete typeTyc
   swallSaveTypeTyc(newTypeTyc: any) {
     Swal.fire({
@@ -142,7 +139,6 @@ export class CreateTycComponent implements OnInit, OnDestroy {
       }
     })
   }
->>>>>>> cambios en mensajes
   swallSaveTyc() {
     Swal.fire({
       title: '¿Estás seguro?',

@@ -71,7 +71,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     preparationTime: [],
     reference: null,
     numberOfModifications: 0,
-    idAllies:null
+    idAllies: null
   }
 
   tickFunction: any;
@@ -119,6 +119,9 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   selectuser: boolean;
   stateInactive: boolean;
 
+  // Variables of alerts
+  alertBadExtensionLogo = false;
+
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService,
     private storage: AngularFireStorage,
     private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService,
@@ -160,7 +163,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.buttonPut = false;
       } else if (identificator == -2) {
-        
+
         let url = this._location.path().split('/');
         this.getDish(url[3]);
         this.loading = false;
@@ -215,13 +218,13 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   }
 
   goBackEditMenu() {
-    
+
     let url = this._location.path().split('/');
 
     if (url.length >= 5) {
       this._location.back();
-      
-    }else{
+
+    } else {
       this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
     }
 
@@ -272,8 +275,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   //charge a dish with the id
   getDish(id: string) {
     this.loading = true;
-    this.chargeDishes.getDishes().subscribe(dishes => {
-
+    /* this.chargeDishes.getDishes().subscribe(dishes => { */
+    this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
       let dish: Dishes = {}
       dish = dishes[id]
 
@@ -281,7 +284,10 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       this.preDish = this.editDish;
       this.loading = false;
       this.tickEdit();
+
     })
+
+    /* }) */
   }
 
   //charge a promotion with the id
@@ -363,19 +369,29 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   //Method for photo of the dish
   onPhotoSelected($event) {
     let input = $event.target;
-    if (input.files && input.files[0]) {
-      this.seeNewPhoto = true;
-      console.log(this.seeNewPhoto);
-      var reader = new FileReader();
-      reader.onload = function (e: any) {
-        $('#photo')
-          .attr('src', e.target.result)
-      };
-      reader.readAsDataURL(input.files[0]);
+    let filePath = input.value;
+    let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+      // alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
+      this.alertBadExtensionLogo = true;
+      input.value = '';
+      return false;
+    } else {
+      if (input.files && input.files[0]) {
+        this.alertBadExtensionLogo = false;
+        this.seeNewPhoto = true;
+        console.log(this.seeNewPhoto);
+        var reader = new FileReader();
+        reader.onload = function (e: any) {
+          $('#photo')
+            .attr('src', e.target.result)
+        };
+        reader.readAsDataURL(input.files[0]);
 
+      }
     }
-    console.log(this.fileImagedish);
     return this.fileImagedish = input.files[0];
+
   }
 
   //Method for selecting the state of a promotion
@@ -603,9 +619,14 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   //delete the dish
   deleteDish() {
     if (this.identificatorbyRoot == -1) {
-      Swal.fire('No puedes eliminar este plato ya que no ha sido creado!!')
+      Swal.fire({
+        text: "No puedes eliminar este plato ya que no ha sido creado!",
+        icon: 'error',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
     } else {
-      this.chargeDishes.getDishes().subscribe(dishes => {
+      this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
         let dish: DishList = {}
         dish = dishes[this.identificatorbyRoot]
         let realId = dish.id
@@ -638,11 +659,13 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             this.promotionsCategories = promC;
           })
         })
-        Swal.fire(
-          'Guardado!',
-          'Tu nueva categoría de promoción ha sido creada',
-          'success',
-        )
+        Swal.fire({
+          title:'Guardado!' ,
+          text: "Tu nueva categoría de promoción ha sido creada!",
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
@@ -674,10 +697,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             }
           });
         })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
+        Swal.fire({
+          title:'Eliminado!' ,
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
@@ -698,11 +723,13 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             this.dishesCategories = dishC;
           })
         })
-        Swal.fire(
-          'Guardado!',
-          'Tu nueva categoría de plato ha sido creada',
-          'success',
-        )
+        Swal.fire({
+          title:'Guardado!' ,
+          text: "Tu nueva categoría de plato ha sido creada!",
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
@@ -734,10 +761,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             }
           });
         })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
+        Swal.fire({
+          title:'Eliminado!' ,
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
@@ -833,8 +862,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
       if (result.value) {
         this.spinner.show();
-
-        await this.chargeDishes.getDishes().subscribe(dishes => {
+        
+        await this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
 
           let dish: Dishes = {};
           dish = dishes[this.identificatorbyRoot];

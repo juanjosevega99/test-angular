@@ -120,10 +120,11 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td *ngIf="!newdateArray.length && !loadingDishes" colspan="10">
-                        <a> No se encontraron resultados </a>
-                    </td>
+                <tr *ngIf="noResults && ! newdateArray.length ">
+                    <td colspan="14"> No se encontraron resultados!</td>
+                </tr>
+                <tr *ngIf="noDishes">
+                    <td colspan="14">No existen platos registrados para esta sede!!</td>
                 </tr>
             </tbody>
         </table>
