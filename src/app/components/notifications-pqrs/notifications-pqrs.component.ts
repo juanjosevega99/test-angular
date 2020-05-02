@@ -3,6 +3,7 @@ import { PqrsService } from 'src/app/services/pqrs.service';
 import { profileStorage } from 'src/app/models/ProfileStorage';
 import { ShowContentService } from 'src/app/services/providers/show-content.service';
 import { WebsocketsService } from 'src/app/services/websockets.service';
+import { Pqrs } from 'src/app/models/Pqrs';
 
 @Component({
   selector: 'app-notifications-pqrs',
@@ -20,9 +21,15 @@ export class NotificationsPqrsComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.websocket.listen('newPqr').subscribe(() => {
       this.loadPqrsnotifications();
     })
+
+    this.websocket.listen('updatepqr').subscribe(() => {
+      this.loadPqrsnotifications();
+    })
+
   }
 
   loadPqrsnotifications(){
@@ -31,13 +38,9 @@ export class NotificationsPqrsComponent implements OnInit {
       
       if (res.length > 0) {
 
-        res.forEach((order: any, index) => {
-
-          if (order.idUser) {
-            this.pqrNotifications ++;
-          }
-        
-        })
+        // pqr.state is not reply
+        let pqr = res.filter( (pqr:Pqrs)=> pqr.state == false );
+        this.pqrNotifications = pqr.length;
       }
     })
   }
