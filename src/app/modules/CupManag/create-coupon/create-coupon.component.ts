@@ -278,7 +278,7 @@ export class CreateCouponComponent implements OnInit {
     }];
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas colocar este estado al cupon!",
       icon: 'warning',
       showCancelButton: true,
@@ -404,7 +404,7 @@ export class CreateCouponComponent implements OnInit {
   //sweet alerts
   swallSaveTypeCoupon(newTypeCoupon: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar este nuevo cupon!",
       icon: 'warning',
       showCancelButton: true,
@@ -428,7 +428,7 @@ export class CreateCouponComponent implements OnInit {
   }
   swallDeleteTypeCoupon(typeCouponSelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este cupon!",
       icon: 'warning',
       showCancelButton: true,
@@ -453,7 +453,7 @@ export class CreateCouponComponent implements OnInit {
   //swall for save collection Coupon
   swallSave() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -578,7 +578,7 @@ export class CreateCouponComponent implements OnInit {
       Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
     } else {
       Swal.fire({
-        title: 'Estás seguro?',
+        title: '¿Estás seguro?',
         text: "de que deseas eliminar este coupón!",
         icon: 'warning',
         showCancelButton: true,

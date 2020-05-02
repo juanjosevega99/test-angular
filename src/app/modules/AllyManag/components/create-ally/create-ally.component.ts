@@ -349,7 +349,7 @@ export class CreateAllyComponent implements OnInit {
   //saveTypeEstablishment 
   swallSaveOtherEstablishment(newEstablishment: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -374,7 +374,7 @@ export class CreateAllyComponent implements OnInit {
   // Modal for delete Establishmet
   swallDeleteCatEstablishment(id: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar!",
       icon: 'warning',
       showCancelButton: true,
@@ -398,7 +398,7 @@ export class CreateAllyComponent implements OnInit {
   //save and Delete Meals categories 
   swallSaveMealCategory(newMeal: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -422,7 +422,7 @@ export class CreateAllyComponent implements OnInit {
   }
   swallDeleteMealCategory(id: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar!",
       icon: 'warning',
       showCancelButton: true,
@@ -446,7 +446,7 @@ export class CreateAllyComponent implements OnInit {
   //save AND cancel allie 
   swallSaveAllie() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -560,7 +560,7 @@ export class CreateAllyComponent implements OnInit {
   }
   swallPutAllie() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -620,7 +620,7 @@ export class CreateAllyComponent implements OnInit {
 
   swallCancelAlly() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas cancelar!",
       icon: 'warning',
       showCancelButton: true,
@@ -635,7 +635,7 @@ export class CreateAllyComponent implements OnInit {
   }
   swallLeave() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "que deseas salir!",
       icon: 'warning',
       showCancelButton: true,

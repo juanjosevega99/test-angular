@@ -328,7 +328,7 @@ export class PromoManagerComponent implements OnInit {
   //sweet alerts
   swallUpdateState(idDish, newstate) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el estado de esta promoción!",
       icon: 'warning',
       showCancelButton: true,

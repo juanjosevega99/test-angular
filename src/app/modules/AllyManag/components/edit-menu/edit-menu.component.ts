@@ -221,7 +221,7 @@ export class EditMenuComponent {
   //sweets alerts
   swallUpdateState(idDish, newState) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el estado de este plato!",
       icon: 'question',
       showCancelButton: true,

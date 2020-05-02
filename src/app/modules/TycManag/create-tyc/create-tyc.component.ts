@@ -91,10 +91,61 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   saveTyc() {
     this.swallSaveTyc()
   }
+<<<<<<< HEAD
   //sweet alerts for save and update Tyc
+=======
+  //sweet alerts for save and delete typeTyc
+  swallSaveTypeTyc(newTypeTyc: any) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "de que deseas guardar este nuevo término y condición",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.typeTycService.postTypeTermsAndConditions(newTypeTyc).subscribe(() => {
+          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
+            this.typeTyC = tyC;
+          })
+        })
+        Swal.fire(
+          'Guardado!',
+          'Tu nuevo término y condición ha sido creado',
+          'success',
+        )
+      }
+    })
+  }
+  swallDeleteTypeTyc(typeTycSelected: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "de que deseas eliminar este término y condición!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.value) {
+        this.typeTycService.deleteTypeTermsAndConditions(typeTycSelected).subscribe(() => {
+          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
+            this.typeTyC = tyC;
+          })
+        })
+        Swal.fire(
+          'Eliminado!',
+          'success',
+        )
+      }
+    })
+  }
+>>>>>>> cambios en mensajes
   swallSaveTyc() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -123,7 +174,7 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   //swall for update collection tyc
   swallUpdateTyc() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,

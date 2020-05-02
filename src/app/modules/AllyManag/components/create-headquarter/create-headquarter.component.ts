@@ -272,7 +272,7 @@ export class CreateHeadquarterComponent implements OnInit {
   //method for showing the sweet alert
   swallSaveHeadquarter(newHeadquarter: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas crear esta nueva sede!",
       icon: 'warning',
       showCancelButton: true,
@@ -311,7 +311,7 @@ export class CreateHeadquarterComponent implements OnInit {
   //method for updating the headquarter
   updateHeadquarter() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios para esta sede!",
       icon: 'warning',
       showCancelButton: true,
@@ -346,7 +346,7 @@ export class CreateHeadquarterComponent implements OnInit {
   //method for canceling the creation of a headquarter
   cancel() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas cancelar!",
       icon: 'warning',
       showCancelButton: true,

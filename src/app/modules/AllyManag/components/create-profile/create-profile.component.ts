@@ -249,7 +249,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     }];
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas colocar este estado al perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -361,7 +361,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   //sweet alerts
   swallSaveOtherProfile(newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar este nuevo perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -387,7 +387,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   swallDeleteProfile(categorySelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -422,7 +422,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   swallSave() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -488,7 +488,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   swallDelete(realId) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -519,7 +519,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   async swallUpdate(realId) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,

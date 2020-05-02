@@ -80,7 +80,7 @@ export class TycManagerComponent implements OnInit {
   //delete Tyc
   deleteTyc(idTyc) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminarlo!",
       icon: 'warning',
       showCancelButton: true,

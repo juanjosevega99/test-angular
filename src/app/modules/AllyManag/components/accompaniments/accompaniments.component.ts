@@ -229,7 +229,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     }
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       html: "de que deseas añadir este accompañamiento a " + `${section}`,
       icon: 'warning',
       showCancelButton: true,
@@ -308,7 +308,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     }
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este accompañamiento de " + `${section}`,
       icon: 'warning',
       showCancelButton: true,
@@ -381,7 +381,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         this.swallNoAccomp();
       } else {
         Swal.fire({
-          title: 'Estás seguro?',
+          title: '¿Estás seguro?',
           text: "de que deseas eliminar TODOS los accompañamientos de este plato!",
           icon: 'warning',
           showCancelButton: true,
@@ -404,7 +404,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         this.swallNoAccomp();
       } else {
         Swal.fire({
-          title: 'Estás seguro?',
+          title: '¿Estás seguro?',
           text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
           icon: 'warning',
           showCancelButton: true,
@@ -508,7 +508,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //CRUD ACCOMPANIMENTS
   remove(id: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este accompañamiento!",
       icon: 'warning',
       showCancelButton: true,
@@ -531,7 +531,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   update(id: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar este accompañamiento!",
       icon: 'warning',
       showCancelButton: true,
@@ -574,7 +574,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   addNewAcc() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar estos nuevos acompañamientos!",
       icon: 'warning',
       showCancelButton: true,
@@ -777,7 +777,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //Sweet alert for adding a new section
   swallSaveOtherSection(newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar esta nueva sección!",
       icon: 'warning',
       showCancelButton: true,
@@ -802,7 +802,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   swallUpdateSection(sectionSelected: any, newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el nombre de esta sección!",
       icon: 'warning',
       showCancelButton: true,
@@ -826,7 +826,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   swallDeleteSection(sectionSelected: String) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar esta sección!",
       icon: 'warning',
       showCancelButton: true,
