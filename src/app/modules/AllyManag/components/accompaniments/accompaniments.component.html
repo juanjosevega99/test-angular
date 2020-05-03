@@ -289,7 +289,7 @@
                             </select>
                         </td>
                         <td>
-                            <input (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
+                            <input [checked]="dish.typeOfAccompaniment" (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
                         </td>
                         <td>
                             <span contenteditable="true"
@@ -304,7 +304,7 @@
                             </select>
                         </td>
                         <td>
-                            <span *ngIf="additionalCost" contenteditable="true"
+                            <span *ngIf="dish.typeOfAccompaniment" contenteditable="true"
                                 (keyup)="changeValue2(id, 'accompanimentValue', $event)"></span>
                         </td>
                         <td>
@@ -329,6 +329,13 @@
                                 <input (click)="changeStateA(id, 'state', $event)"
                                     [checked]="!dish.state[0].check" type="radio" name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"> </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10">
+                            <div *ngIf="loading" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
                             </div>
                         </td>
                     </tr>
@@ -364,4 +371,7 @@
 
         </div>
     </form>
+    <!-- <pre>
+        {{ newAccompanimentList | json }}
+    </pre> -->
 </div>
