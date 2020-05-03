@@ -80,7 +80,7 @@
 
                     <div>
                         <button *ngFor="let hour of Hours; let idb = index" (click)="getHour($event, idb)" [id]="idb"
-                            class="btn btn-outline-success">{{hour.valueToShow}}</button>
+                            class="btn btn-outline-success" [disabled]="false" >{{hour.valueToShow}}</button>
                     </div>
                 </div>
                 
