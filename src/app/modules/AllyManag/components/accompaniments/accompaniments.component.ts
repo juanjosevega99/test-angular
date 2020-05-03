@@ -631,28 +631,84 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        //console.log(this.newAccompanimentList);
+
         this.loading = true;
-        this.newAccompanimentList.forEach(res => {
-          res.idAllies = localStorage.getItem("idAlly")
-          this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
-            accomp.creationDate = this.convertDate(accomp.creationDate)
-            accomp.modificationDate = this.convertDate(accomp.modificationDate)
-            this.personList.push(accomp)
-            this.flag = false
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            })
-            this.loading = false;
-            this.newAccompanimentList = []
-          })
+        let nameArraySaved: string[] = [];
+
+        this.personList.forEach(accompaniment => {
+          let nameSaved = accompaniment.name.toLowerCase()
+          nameArraySaved.push(nameSaved);
         })
+
+        let exist = false;
+        let noExist = false;
+        let nameReal = "";
+
+        this.newAccompanimentList.forEach(res => {
+
+          let nameNew = res.name.toLowerCase();
+          let nameExist = nameArraySaved.indexOf(nameNew);
+
+          if (nameExist < 0) {
+            noExist = true;
+            res.idAllies = localStorage.getItem("idAlly")
+
+            this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
+              accomp.creationDate = this.convertDate(accomp.creationDate)
+              accomp.modificationDate = this.convertDate(accomp.modificationDate)
+              this.personList.push(accomp);
+            })
+
+          } else {
+            exist = true;
+            nameReal = res.name;
+          }
+        })
+        this.swallNewAcco(noExist, exist, nameReal);
       }
     })
+  }
+
+  swallNewAcco(noExist, exist, nameReal) {
+    if (noExist == true && exist == true) {
+      this.loading = false;
+      Swal.fire({
+        title: 'Guardado',
+        text: "Algunos nuevos acompañamientos han sido creados!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      }).then((result) => {
+        if (result.value) {
+          Swal.fire({
+            html: "El acompañamiento con nombre: " + `<b>${nameReal}</b>` + " ya existe, por lo tanto NO ha sido añadido!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            cancelButtonColor: '#542b81'
+          })
+        }
+      })
+    }
+    else if (exist == true && noExist == false) {
+      this.loading = false;
+      Swal.fire({
+        html: "El acompañamiento con nombre: " + `<b>${nameReal}</b>` + " ya existe, por lo tanto NO ha sido añadido!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        cancelButtonColor: '#542b81'
+      })
+    } else if (noExist == true && exist == false) {
+      this.loading = false;
+      Swal.fire({
+        title: 'Guardado',
+        text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
+    }
+    this.flag = false;
+    this.newAccompanimentList = [];
   }
 
   //Methods for accompaniments
