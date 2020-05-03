@@ -77,7 +77,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
+      //console.log('Parametro', params['id']);
       if (params['id'] >= 0) {
         this.flagDish = true;
         this.identificatorDish = params['id'];
@@ -510,10 +510,10 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   //CRUD ACCOMPANIMENTS
-  remove(id: any) {
+  remove(pos: any) {
     Swal.fire({
       title: 'Estás seguro?',
-      text: "de que deseas eliminar este accompañamiento!",
+      text: "de que deseas eliminar este accompañamiento, recuerde que se eliminará de todos los platos que lo tengan añadido!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -521,26 +521,43 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-        let accompanimentsDishes: any
-        this.dishService.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(dishes => {
-          dishes.forEach(dish => {
-            accompanimentsDishes = dish.idAccompaniments
-            console.log(accompanimentsDishes);
+        this.loading = true;
+        let accompanimentRemove = this.personList[pos];
+        let id = accompanimentRemove.id
+        //console.log("Acompañanimento a eliminar:", accompanimentRemove.id);
 
+        this.accompanimentService.deleteAccompaniment(accompanimentRemove.id).subscribe(res => {
+          
+          this.personList.splice(id, 1);
+          
+          this.dishService.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(dishes => {
+            //console.log("platos del aliado:", dishes);
+            dishes.forEach(dish => {
+              if (dish.idAccompaniments.length) {
+                for (let index = 0; index < dish.idAccompaniments.length; index++) {
+                  const element = dish.idAccompaniments[index];
+                  if (id == element) {
+                    //console.log("esta en el plato:", dish);
+                    dish.idAccompaniments.splice(index, 1);
+                    let newids: any = {
+                      idAccompaniments: dish.idAccompaniments
+                    }
+                    //console.log("nuevos ids:", newids);
+                    this.dishService.putDishe(dish.id, newids).subscribe(res => { })
+                  }
+                }
+              }
+            })
+          })
+          this.loading = false;
+          Swal.fire({
+            title: 'Eliminado',
+            text: "Tu acompañamiento ha sido eliminado!",
+            icon: 'success',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
           })
         })
-        /* console.log( this.dishSelected.idAccompaniments); */
-
-        let dish = this.personList[id];
-        console.log(dish.id);
-
-        /* this.accompanimentService.deleteAccompaniment(dish.id).subscribe(res => {
-          this.personList.splice(id, 1);
-          Swal.fire(
-            'Eliminado!',
-            'success',
-          )
-        }) */
       }
     })
   }
@@ -599,7 +616,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log(this.newAccompanimentList);
+        //console.log(this.newAccompanimentList);
         this.newAccompanimentList.forEach(res => {
           res.idAllies = localStorage.getItem("idAlly")
           this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
@@ -640,7 +657,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValue(id: number, property: string, event: any) {
-    console.log(event.target.textContent);
+    //console.log(event.target.textContent);
     let editField = event.target.textContent;
 
     const newtext = editField;
@@ -679,7 +696,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValueSelect(id: number, property: string, value: string) {
-    console.log(value);
+    //console.log(value);
     this.newAccompanimentList[id][property] = value;
   }
 
@@ -704,7 +721,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //Method to set the section selected
   seeValue(name: String, id: String) {
     this.sectionSelected = name;
-    console.log(id);
+    //console.log(id);
     this.sectiontoUpdate = { name: name, id: id }
   }
 
@@ -741,7 +758,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //Method for the admission date
   tick(): void {
-    console.log("funtion tick");
+    //console.log("funtion tick");
 
     this.today = new Date();
     this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
