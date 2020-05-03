@@ -86,7 +86,7 @@ export class BannerManagerComponent implements OnInit {
       this.spinner.hide();
       Swal.fire(
         {
-          title: "Cambios Guardados Exitosamente",
+          title: "Cambios guardados exitosamente",
           icon: 'success',
           confirmButtonColor: '#572483',
         }

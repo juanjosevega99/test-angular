@@ -44,12 +44,12 @@
         </div>
 
         <div class="row-form">
-            <label for="exampleInputPassword1">Fecha Creación</label>
+            <label for="exampleInputPassword1">Fecha creación</label>
             <p  class="form-control" id="exampleInputPassword1"> {{formulary.value.creationDate}} </p>
         </div>
 
         <div class="row-form">
-            <label for="exampleInputPassword1">Fecha Vencimiento</label>
+            <label for="exampleInputPassword1">Fecha vencimiento</label>
             <!-- <input type="password" class="form-control" id="exampleInputPassword1"> -->
             <!-- <div class="form-group"> -->
             <div class="input-group">
@@ -74,7 +74,7 @@
         <div class="row-form">
             <label for="exampleInputPassword1">Sede</label>
             <select class="form-control" id="exampleFormControlSelect2" formControlName="idHeadquarters">
-                <option value="">selecione</option>
+                <option value="">Selecione</option>
                 <option *ngFor="let head of heads" [value]="head._id">{{ head.name }}</option>
                 <option *ngIf="!heads.length" value="">No hay sedes</option>
             </select>

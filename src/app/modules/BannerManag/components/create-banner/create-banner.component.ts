@@ -106,7 +106,7 @@ export class CreateBannerComponent implements OnInit {
     }
 
     Swal.fire({
-      title: "desea guardar la información",
+      title: "¿Desea guardar la información?",
       icon: "question",
       showCancelButton: true,
       cancelButtonText: "cancelar",
