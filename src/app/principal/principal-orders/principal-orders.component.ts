@@ -79,7 +79,7 @@ export class PrincipalOrdersComponent implements OnInit {
   orders = []
   orders2 = []
 
-  reservationOndaySelected:reservation;
+  reservationOndaySelected:reservation = {_id:'', date:'',hour:{},people:{},tables:{},idHeadquart:''}
 
   constructor(private serviceOrders: OrdersService, private userservice: UsersService, private dishService: DishesService,
     private reservationService: ReservationService, private wesocket: WebsocketsService, private spinner: NgxSpinnerService,
@@ -173,7 +173,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
     if( this.reservationOndaySelected.tables['value'] != this.Tablereservation.value ){
       if (this.datereservation && this.hourreservation.value && this.Peoplereservation.value && this.Tablereservation.value) {
-        
+
         // comprobation if date is corect
         let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
         let today = new Date();
@@ -541,6 +541,9 @@ export class PrincipalOrdersComponent implements OnInit {
           this.setColorHour("#ffb6b9", rese);
           // this.hourreservation.id = -1;}
           this.reservationOndaySelected = rese;
+          // set this variables to not change background-color
+          this.idTable = '';
+          this.idPeople = '';
 
           return;
         }
@@ -562,16 +565,18 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
   getTables(event, id) {
-    if (this.idTable) {
 
-      document.getElementById(this.idTable).style.backgroundColor = "#fff";
+      if (this.idTable) {
+  
+        document.getElementById(this.idTable).style.backgroundColor = "#fff";
+  
+      }
+  
+      document.getElementById(id + 't').style.backgroundColor = "green";
+      this.idTable = id + 't';
+      this.Tablereservation.value = event.target.textContent;
+      this.Tablereservation.id = this.idTable;
 
-    }
-
-    document.getElementById(id + 't').style.backgroundColor = "green";
-    this.idTable = id + 't';
-    this.Tablereservation.value = event.target.textContent;
-    this.Tablereservation.id = this.idTable;
 
   }
 
