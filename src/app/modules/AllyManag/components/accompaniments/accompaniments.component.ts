@@ -171,27 +171,39 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //get promotion with the param
   getPromo() {
+    this.loading = true;
     this.accompanimetsOfPromo = [];
     if (this.flagDish) {
       console.log("estoy en platos");
       this.dishService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
-        this.dishSelected = dishes[this.identificatorDish];
-        this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
-          res.forEach((accomp: Accompaniments) => {
-            if (this.dishSelected.idAccompaniments.length) {
-              for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
-                const element = this.dishSelected.idAccompaniments[index];
-                if (accomp.id == element) {
+        if (dishes.length) {
+          this.dishSelected = dishes[this.identificatorDish];
+          this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
+            if (res.length) {
+              res.forEach((accomp: Accompaniments) => {
+                if (this.dishSelected.idAccompaniments.length) {
+                  for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
+                    const element = this.dishSelected.idAccompaniments[index];
+                    if (accomp.id == element) {
 
-                  this.accompanimetsOfPromo[index] = accomp
-                  this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
-                  this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
+                      this.accompanimetsOfPromo[index] = accomp
+                      this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
+                      this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
 
+                    }
+                  }
+                  this.loading = false;
+                } else {
+                  this.loading = false;
                 }
-              }
+              })
+            } else {
+              this.loading = false;
             }
           })
-        })
+        } else {
+          this.loading = false;
+        }
       })
     }
     else {
@@ -221,10 +233,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
-
-    const checked = event.target.checked;
-    event.target.checked = checked;
-
+    
     if (this.personList[pos]["state"][0]["check"] == false) {
       Swal.fire({
         html: "El acompañamiento debe tener estado ACTIVO para poder ser añadido!",
@@ -250,18 +259,32 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         confirmButtonText: 'Si, añadir!'
       }).then((result) => {
         if (result.value) {
+          let newids: any = {
+            idAccompaniments: []
+          }
           this.loading = true;
           let dish = this.personList[pos];
           let id = dish.id
           if (this.identificatorDish) {
-            let accompExist = this.dishSelected['idAccompaniments'].indexOf(id); // it's -1 if not exist
-            if (accompExist < 0) {
-              this.dishSelected['idAccompaniments'].push(id);
-              this.dishService.putDishe(this.dishSelected.id, this.dishSelected).subscribe(res => {
+            if (this.dishSelected['idAccompaniments'].length) {
+              let accompExist = this.dishSelected['idAccompaniments'].indexOf(id); // it's -1 if not exist
+              if (accompExist < 0) {
+                this.dishSelected['idAccompaniments'].push(id);
+                this.dishService.putDishe(this.dishSelected.id, this.dishSelected).subscribe(res => {
+                  this.swallAdd();
+                })
+              } else {
+                this.swallExist();
+              }
+            } else {
+              newids = {
+                idAccompaniments: this.dishSelected.idAccompaniments = []
+              }
+              newids["idAccompaniments"] = id;
+              this.dishService.putDishe(this.dishSelected.id, newids).subscribe(res => {
+                this.loading = false
                 this.swallAdd();
               })
-            } else {
-              this.swallExist();
             }
           }
           else {
@@ -292,16 +315,13 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Añadido',
       text: "El acompañamiento ha sido añadido a " + `${section}`,
-      icon: 'warning',
+      icon: 'success',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'Ok!'
     }).then((result) => {
       if (result.value) {
-        /* this.loading=true; */
-        this.promoAccompaniments = true
-        /* this.getPromo();
-        this.loading=false; */
-
+        this.promoAccompaniments = true;
+        this.getPromo();
       }
     })
   }
@@ -336,6 +356,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
+        this.loading = true;
         let idAccompaniment = this.accompanimetsOfPromo[id].id
 
         if (this.identificatorDish) {
@@ -383,12 +404,14 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Eliminado',
       text: "El acompañamiento ha sido eliminado de " + `${section}`,
-      icon: 'warning',
+      icon: 'success',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'Ok!'
     }).then((result) => {
       if (result.value) {
-        this.promoAccompaniments = true
+        this.getPromo();
+        this.loading = false;
+        /* this.promoAccompaniments = true */
       }
     })
   }
@@ -409,6 +432,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Si, eliminar!'
         }).then((result) => {
           if (result.value) {
+            this.loading = true;
             let clearids: any = {
               idAccompaniments: this.dishSelected.idAccompaniments = []
             }
@@ -432,6 +456,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Si, eliminar!'
         }).then((result) => {
           if (result.value) {
+            this.loading = true;
             let clearids: any = {
               idAccompaniments: this.promotion.idAccompaniments = []
             }
@@ -456,12 +481,14 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Eliminado',
       text: "Tus acompañamientos han sido eliminados de " + `${section}`,
-      icon: 'warning',
+      icon: 'success',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'Ok!'
     }).then((result) => {
       if (result.value) {
-        this.promoAccompaniments = true
+        this.getPromo();
+        this.loading = false;
+        /* this.promoAccompaniments = true */
       }
     })
   }
@@ -543,7 +570,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
         this.accompanimentService.deleteAccompaniment(accompanimentRemove.id).subscribe(res => {
 
-          this.personList.splice(id, 1);
+          this.personList.splice(pos, 1);
 
           this.dishService.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(dishes => {
             //console.log("platos del aliado:", dishes);
@@ -564,6 +591,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               }
             })
           })
+          this.getPromo();
           this.loading = false;
           Swal.fire({
             title: 'Eliminado',
@@ -588,6 +616,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
+        this.loading = true;
         let dish = this.personList[id];
         let accompaniment = {
           quantity: dish.quantity,
@@ -602,11 +631,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           numberOfModifications: dish.numberOfModifications + 1,
           modificationDate: new Date()
         }
-        this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res =>
+        this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res => {
+          this.loading = false;
           Swal.fire({
             title: 'Actualizado',
             text: "Tu nuevo acompañamiento ha sido actualizado!",
-            icon: 'warning',
+            icon: 'success',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
           }).then((result) => {
@@ -614,6 +644,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               this.flag = false
             }
           })
+        }
         )
       }
     })
@@ -675,7 +706,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       Swal.fire({
         title: 'Guardado',
         text: "Algunos nuevos acompañamientos han sido creados!",
-        icon: 'warning',
+        icon: 'success',
         confirmButtonColor: '#542b81',
         confirmButtonText: 'Ok!'
       }).then((result) => {
@@ -702,7 +733,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       Swal.fire({
         title: 'Guardado',
         text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
-        icon: 'warning',
+        icon: 'success',
         confirmButtonColor: '#542b81',
         confirmButtonText: 'Ok!'
       })
@@ -715,7 +746,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   add() {
     this.flag = true
     const obj = {
-      id: '', quantity: '', unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "0", numberOfModifications: 0,
+      id: '', quantity: 0, unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "0", numberOfModifications: 0,
       preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
         state: "active",
         check: false
@@ -751,10 +782,11 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValuecheck1(id: number, property: string, event: any) {
-
     let editField = event.target.checked;
     this.personList[id][property] = editField;
-
+    if (editField == false) {
+      this.personList[id]['accompanimentValue'] = 0;
+    }
   }
 
   changeValue2(id: number, property: string, event: any) {
@@ -857,7 +889,17 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     let newCategory: object = {
       name: newitem
     }
-    this.swallSaveOtherSection(newCategory)
+    if(newitem == undefined){
+      Swal.fire({
+        title: 'Error',
+        text: "Por favor, ingrese el nombre se la sección!",
+        icon: 'error',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
+    }else{
+      this.swallSaveOtherSection(newCategory)
+    }
   }
 
   updateSection(sectionUpdated: String) {

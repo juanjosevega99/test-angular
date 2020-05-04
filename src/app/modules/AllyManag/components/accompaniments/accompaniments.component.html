@@ -152,8 +152,15 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngIf=" !accompanimetsOfPromo.length ">
+                    <tr *ngIf=" !accompanimetsOfPromo.length && !loading ">
                         <td colspan="14">No has añadido acompañamientos!!</td>
+                    </tr>
+                    <tr>
+                        <td colspan="14">
+                            <div *ngIf="loading" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -249,7 +256,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="10">
+                        <td colspan="16">
                             <div *ngIf="loading" class="fa-3x text-center">
                                 <i class="fas fa-spinner fa-pulse"></i>
                             </div>
@@ -333,7 +340,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="10">
+                        <td colspan="12">
                             <div *ngIf="loading" class="fa-3x text-center">
                                 <i class="fas fa-spinner fa-pulse"></i>
                             </div>
@@ -371,7 +378,4 @@
 
         </div>
     </form>
-    <!-- <pre>
-        {{ newAccompanimentList | json }}
-    </pre> -->
 </div>
