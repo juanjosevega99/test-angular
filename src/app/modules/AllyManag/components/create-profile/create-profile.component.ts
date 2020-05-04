@@ -441,21 +441,24 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   }
 
   swallSave() {
+
     Swal.fire({
       title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
+
       if (result.value) {
         this.loading = true;
         // console.log("Array FINAL: ", this.preProfile);
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/profiles/${id}`;
+        
         const ref = this.storage.ref(filePath);
 
         this.firebaseservice.SignUp(this.preProfile['email'], this.preProfile['identification']).then(response => {
@@ -471,11 +474,12 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
                 this.urlPorfile = urlImage;
                 // console.log(this.urlPorfile);
-                this.preProfile['photo'] = this.urlPorfile
+                this.preProfile['photo'] = this.urlPorfile;
                 this.preProfile['idFirebase'] = response.user.uid;
                 this.preProfile['_id'] = response.user.uid;
 
                 this.profiles.postProfile(this.preProfile).subscribe(message => {
+
                   this.loading = false;
                   Swal.fire({
                     title: 'Guardado',
@@ -497,6 +501,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
           ).subscribe(res => { })
 
         }).catch(err => {
+<<<<<<< HEAD
           //console.log(err);
           this.loading = false;
           Swal.fire({
@@ -506,6 +511,12 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Ok!'
           })
           /* Swal.fire(
+=======
+          this.loading = false;
+          this.preProfile['email'] = '';
+
+          Swal.fire(
+>>>>>>> development_Aldair
             `TifiAdmin ${err['message']} `,
           ) */
         })
@@ -555,7 +566,11 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
       if (result.value) {
+<<<<<<< HEAD
         //console.log("Array FINAL: ", this.editProfile);
+=======
+        // console.log("Array FINAL: ", this.editProfile);
+>>>>>>> development_Aldair
         this.loading = true;
         this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
           let profile: Profiles = {};
@@ -588,6 +603,10 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
               .pipe(finalize(() => {
                 ref.getDownloadURL().subscribe(urlImage => {
                   this.urlPorfile = urlImage;
+<<<<<<< HEAD
+=======
+
+>>>>>>> development_Aldair
                   // console.log(this.urlPorfile);
                   this.preProfile['photo'] = this.urlPorfile;
                   this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {

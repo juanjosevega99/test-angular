@@ -245,7 +245,7 @@
 
         <section class="col-12 d-flex" style="justify-content: center;">
 
-            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
+            <button *ngIf="!buttonPut" [disabled]="!shape.valid || !fileImagedish" type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
             <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="putProfile()" class="btn btn-outline-primary btn-lg" >Actualizar</button>
         </section>
 

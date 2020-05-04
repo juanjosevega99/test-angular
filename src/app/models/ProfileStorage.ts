@@ -8,6 +8,7 @@ export class profileStorage {
     nameCharge?: string = '';
     photo?: string = '';
     email?: string = '';
+    name?: string = '';
     showContent?: content = {
         options: false,
         principal: false,

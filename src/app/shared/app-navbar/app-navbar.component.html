@@ -11,9 +11,10 @@
         <app-side-bar></app-side-bar>
 
             <div class="img-round1 display-none-sm ">
-                <img class="img-allyLogo " [src]='profile.photo'>
+                <img *ngIf="profile.nameCharge == 'administradorTIFI'" class="img-allyLogo " [src]='profile.photo'>
+                <img *ngIf="profile.nameCharge != 'administradorTIFI'" class="img-allyLogo " [src]='photoAlly'>
 
-                <div *ngIf="profile.nameCharge != 'administradorTIFI'" class=" notification">
+                <div *ngIf="profile.showContent.principal" class=" notification" [routerLink]="['/main/principal-orders']">
                     <span class="badge"><app-notifications-orders ></app-notifications-orders></span>
                 </div>
             </div>
