@@ -14,7 +14,7 @@ export class SwallServicesService {
 
   saveChanges(){
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -34,7 +34,7 @@ export class SwallServicesService {
 
   cancel(){
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas cancelar!",
       icon: 'warning',
       showCancelButton: true,

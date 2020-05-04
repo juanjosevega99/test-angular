@@ -79,6 +79,8 @@ export class PromoManagerComponent implements OnInit {
                     let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
                     let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
 
+                    console.log("fecha inicio:", datestart);
+                    
                     const obj: DishPromotion = {};
 
                     obj.id = promo.id;
@@ -168,21 +170,37 @@ export class PromoManagerComponent implements OnInit {
 
   //method for very the dates
   verifyDate(idDish, i) {
-    this.promoService.getPromotions().subscribe(promos => {
+    this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(promos => {
+      
       let promo = promos[i]
+      
+      console.log(promo, promos);
+      
+
       let yf = promo.endDatePromotion[0]['year'];
       let mf = promo.endDatePromotion[0]['month'];
       let df = promo.endDatePromotion[0]['day'];
       let hf = promo.endDatePromotion[1]['hour'];
       let minf = promo.endDatePromotion[1]['minute'];
 
+      console.log(yf, mf, df, hf, minf);
+      
       let datee = new Date(yf, mf, df, hf, minf)
 
       this.today = new Date()
+
       let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
       let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
 
-      if (datetoday > datefinish) {
+      console.log(datetoday);
+      console.log("fecha final:",datefinish);
+      
+      
+      
+      
+      if (datetoday > datefinish ) {
+        console.log("wwwwwwwwwwwwwwwwwwwww");
+        
         Swal.fire({
           title: 'Actualizar',
           html: "Las fechas de la promoción están <b>vencidas</b>, Ingresa nuevas fechas para activar!",
@@ -328,7 +346,7 @@ export class PromoManagerComponent implements OnInit {
   //sweet alerts
   swallUpdateState(idDish, newstate) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el estado de esta promoción!",
       icon: 'warning',
       showCancelButton: true,

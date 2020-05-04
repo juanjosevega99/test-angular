@@ -6,7 +6,7 @@
     <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveDish(shape)" #shape="ngForm" *ngIf="!loading">
 
         <a *ngIf="!linkEditMenu" (click)="goBackEditMenu()" class="d-flex mr-2">
-            <img src="assets/icons/Back.png" class="tifi-icon-back">            
+            <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 
         <a *ngIf="linkEditMenu" [routerLink]="['/main','promoManager']" class="d-flex mr-2">
@@ -344,15 +344,24 @@
             <div *ngIf="!promotion" class="form-group row">
                 <label class="col-md-5 col-form-label">Foto del plato</label>
                 <div class="col-md-7">
-
                     <div class="row align-items-center ">
                         <div class="photo">
-                            <img [src]="preDish.imageDishe" id="photo" width="100px" height="100px"
-                                title="No hay foto subida">
+                            <img  title="*Campo requerido" [tooltip]="HtmlContent" content-type="template" id="photo" width="100px" height="100px"
+                                style="border-radius: 0.5rem" [src]="preDish.imageDishe">
                         </div>
                         <div class="upload-btn-wrapper">
+                            <ng-template #HtmlContent>
+                                <p>Se recomienda subir archivo .png y dimensiones: 
+                                    Ancho -> 300 px, Alto -> 168 px</p>
+                            </ng-template>
+                            <div *ngIf="alertBadExtensionLogo" class="alert alert-danger" role="alert">
+                                Por favor solo subir archivos que tengan como
+                                extensión .jpeg/.jpg/.png/.gif
+                            </div>
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
-                            <input type="file" name="photo" (change)="onPhotoSelected($event)" />
+                            <input   type="file" name="photo" required 
+                                (change)="onPhotoSelected($event)" />
+                            <span tooltip="Tooltip text"></span>
                         </div>
                     </div>
 
@@ -365,7 +374,8 @@
 
                     <div class="row align-items-center ">
                         <div class="photo">
-                            <img [src]="promotionArray.photo" id="photo" width="100px" height="100px" title="No hay foto subida">
+                            <img [src]="promotionArray.photo" id="photo" width="100px" height="100px"
+                                title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
@@ -466,7 +476,7 @@
             </section>
             <section *ngIf="!selectuser" class="col-6 d-flex" style="justify-content: center;">
                 <div class="col-6 d-flex" style="padding: 1rem;">
-                    <a  (click)="gotopromotion()" class="btn btn-outline-primary btn-lg">Ingresar
+                    <a (click)="gotopromotion()" class="btn btn-outline-primary btn-lg">Ingresar
                         promoción</a>
                 </div>
                 <!-- [routerLink]="['/main/createDish',-2]" -->
@@ -475,7 +485,7 @@
                 <div *ngIf="!stateInactive" class="col-6 d-flex" style="padding: 1rem;">
                     <a (click)="goSelectUsers()" class="btn btn-outline-primary btn-lg">Seleccionar usuarios</a>
                 </div>
-                <div *ngIf="stateInactive"  class="col-6 d-flex" style="padding: 1rem;">
+                <div *ngIf="stateInactive" class="col-6 d-flex" style="padding: 1rem;">
                     <a (click)="correctState()" class="btn btn-outline-primary btn-lg">Seleccionar usuarios</a>
                 </div>
             </section>
@@ -490,8 +500,8 @@
         <section *ngIf="promotion" class="col-12 d-flex" style="justify-content: center;">
             <button *ngIf="!selectuser" type="button" (click)="savePromotion()" [disabled]="!shape.valid"
                 class="btn btn-outline-primary btn-lg">Guardar promoción</button>
-                <button *ngIf="selectuser" type="button" (click)="putPromotion()" [disabled]="!shape.valid"
-                class="btn btn-outline-primary btn-lg">Guardar promoción</button>  
+            <button *ngIf="selectuser" type="button" (click)="putPromotion()" [disabled]="!shape.valid"
+                class="btn btn-outline-primary btn-lg">Guardar promoción</button>
         </section>
 
     </form>

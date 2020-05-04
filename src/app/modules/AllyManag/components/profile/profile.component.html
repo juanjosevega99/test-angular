@@ -1,6 +1,6 @@
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
-    <app-loading *ngIf="loading"></app-loading>
-    <div  *ngIf="!loading" class="row">
+    <!-- <app-loading *ngIf="loading"></app-loading> -->
+    <div class="row">
         <div style="width: 5%;" class="d-flex align-items-center">
             <a (click)="goBackHeadquarterOptions()" class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
@@ -61,7 +61,7 @@
             </div>
         </section>
     </div>
-    <div  *ngIf="!loading" class="tableFixHead mt-5">
+    <div class="tableFixHead mt-5">
         <table>
             <thead >
                 <tr>
@@ -109,8 +109,18 @@
                         <a [routerLink]="[ '/main/createProfile', i ]"  class="btn"> <i class="far fa-edit"></i> </a><!--(click)="seeI(prof.id)" [routerLink]="[ '/main/createProfile', prof.id ]" -->
                     </td>
                 </tr>
-                <tr *ngIf="!newArray.length" >
-                    <td colspan="11">No existen Perfiles registrados para esta sede</td>
+                <tr>
+                    <td colspan="10">
+                        <div *ngIf="loading" class="fa-3x text-center">
+                            <i class="fas fa-spinner fa-pulse"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="noResults && ! newArray.length ">
+                    <td colspan="14"> No se encontraron resultados!</td>
+                </tr>
+                <tr *ngIf="noProfiles">
+                    <td colspan="14">No existen perfiles registrados para esta sede!!</td>
                 </tr>
             </tbody>
         </table>

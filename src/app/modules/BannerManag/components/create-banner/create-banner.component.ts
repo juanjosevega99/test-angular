@@ -41,13 +41,14 @@ export class CreateBannerComponent implements OnInit {
     private _location: Location) {
 
     this.loadAllies();
-    this.loadHeads();
+
 
     if (this.activate.params['_value'].id) {
       this.bannerService.getBannerById(this.activate.params['_value'].id).subscribe((banner: Banners) => {
         this.editBanner = banner;
+        this.loadHeads(banner.idAllies);
+        this.formulary.value['idAllies'] = banner.idAllies;
         this.setDataEdit();
-
       });
 
     } else {
@@ -76,8 +77,15 @@ export class CreateBannerComponent implements OnInit {
     this.allyservice.getAllies().subscribe(allies => this.allies = allies);
   }
 
-  loadHeads() {
-    this.headService.getHeadquarters().subscribe(heads => this.heads = heads);
+  loadHeads(id?: string) {
+
+    let idally = id ? id : this.formulary.value.idAllies;
+    this.heads = [];
+
+    if (idally) {
+      this.headService.getHeadquarterByAllIdAlly(idally).subscribe((heads: any) => this.heads = heads);
+    }
+
   }
 
   creationDate() {
@@ -92,8 +100,13 @@ export class CreateBannerComponent implements OnInit {
 
   saveBanner() {
 
+    if (!this.formulary.valid || !this.editBanner.imageBanner) {
+      this.showinfocontent = true;
+      return
+    }
+
     Swal.fire({
-      title: "desea guardar la información",
+      title: "¿Desea guardar la información?",
       icon: "question",
       showCancelButton: true,
       cancelButtonText: "cancelar",
@@ -104,42 +117,55 @@ export class CreateBannerComponent implements OnInit {
       if (res.value) {
         let Banner = this.createBanenr();
 
-        if (this.formulary.valid && this.photo) {
-          this.spinner.show();
-          this.uploadimg.uploadImages(this.photo, "allies", "banners").then((result: string) => {
-            Banner.imageBanner = result;
+        if (Banner.creationDate <= Banner.expirationDate) {
 
+          if (this.formulary.valid && this.photo) {
+            this.spinner.show();
+            this.uploadimg.uploadImages(this.photo, "allies", "banners").then((result: string) => {
+              Banner.imageBanner = result;
+
+              if (this.editBanner.id) {
+                Banner.id = this.editBanner.id;
+                this.saveEditBanner(Banner);
+              } else {
+                this.saveNewBanner(Banner);
+              }
+
+            }).catch(err => {
+              this.spinner.hide();
+              console.log(err);
+              Swal.fire(
+                "Problemas con tu connexión a internet"
+              )
+            })
+
+            this.showinfocontent = false;
+
+          } else if (this.formulary.valid && !this.photo) {
+            this.spinner.show();
             if (this.editBanner.id) {
               Banner.id = this.editBanner.id;
               this.saveEditBanner(Banner);
             } else {
-              this.saveNewBanner(Banner);
+              this.spinner.hide();
+              this.showinfocontent = true;
             }
 
-          }).catch(err => {
-            this.spinner.hide();
-            console.log(err);
-            Swal.fire(
-              "Problemas con tu connexión a internet"
-            )
-          })
-
-          this.showinfocontent = false;
-
-        } else if (this.formulary.valid && !this.photo) {
-          this.spinner.show();
-          if (this.editBanner.id) {
-            Banner.id = this.editBanner.id;
-            this.saveEditBanner(Banner);
-          } else {
-            this.spinner.hide();
+          }
+          else {
             this.showinfocontent = true;
           }
 
+        } else {
+          Swal.fire({
+            title: "La fecha de expiración debe ser mayor a la fecha de creación",
+            icon: "error",
+            confirmButtonColor: '#572483'
+          })
+
         }
-        else {
-          this.showinfocontent = true;
-        }
+
+
       }
     })
 
@@ -152,7 +178,7 @@ export class CreateBannerComponent implements OnInit {
       this.spinner.hide();
       Swal.fire(
         {
-          title: "Banner Guardado Exitosamente",
+          title: "Banner guardado exitosamente",
           icon: 'success',
           confirmButtonColor: '#572483',
         }
@@ -172,7 +198,7 @@ export class CreateBannerComponent implements OnInit {
       this.spinner.hide();
       Swal.fire(
         {
-          title: "Banner Guardado Exitosamente",
+          title: "Banner guardado exitosamente",
           icon: 'success',
           confirmButtonColor: '#572483',
         }
@@ -200,7 +226,7 @@ export class CreateBannerComponent implements OnInit {
     Banner.idAllies = this.formulary.value.idAllies;
     Banner.nameAllies = this.allies.find(ally => ally.id == this.formulary.value.idAllies)['name'];
     Banner.idHeadquarters = this.formulary.value.idHeadquarters;
-    Banner.nameHeadquarters = this.heads.find(headquartes => headquartes.id == this.formulary.value.idHeadquarters)['name'];
+    Banner.nameHeadquarters = this.heads.find(headquartes => headquartes._id == this.formulary.value.idHeadquarters)['name'];
     Banner.description = this.formulary.value.description;
     Banner.name = this.formulary.value.name;
     Banner.imageBanner = this.formulary.value.imageBanner;
@@ -224,12 +250,13 @@ export class CreateBannerComponent implements OnInit {
 
       let reader = new FileReader();
       reader.onload = function (e: any) {
-        $('#photo').attr('src', e.target.result)
+        $('#photo').attr('src', e.target.result);
       };
       reader.readAsDataURL(input.files[0]);
 
       this.showimgalert = false;
       this.photo = input.files[0];
+      this.editBanner.imageBanner = input.files[0]; 
 
     } else {
       this.showimgalert = true;
@@ -241,6 +268,7 @@ export class CreateBannerComponent implements OnInit {
 
     let date = new Date(this.editBanner.expirationDate);
     this.expirationDate = { day: date.getUTCDate(), month: date.getUTCMonth() + 1, year: date.getUTCFullYear() };
+
     this.formulary.setValue({
       'code': this.editBanner.code,
       'state': this.editBanner.state,

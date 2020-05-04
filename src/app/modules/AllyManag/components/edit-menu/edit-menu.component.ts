@@ -42,6 +42,8 @@ export class EditMenuComponent {
   //variables of idAlly
   idAlly: number;
   loadingDishes = false;
+  noDishes: boolean;
+  noResults: boolean;
 
   constructor(private dishesService: DishesService,
     private _router: Router,
@@ -61,7 +63,8 @@ export class EditMenuComponent {
 
     //inicialization of dishes
     this.loadDishes();
-
+    this.noResults = false;
+    this.noDishes = false;
 
     this.state = [{ name: 'active', selected: false }, { name: 'inactive', selected: false }]
 
@@ -91,8 +94,36 @@ export class EditMenuComponent {
     this.newdateArray = this.dishesgetting;
 
 
-    this.dishesService.getDishes().subscribe(res => {
-      if (res.length ) {
+    /* this.dishesService.getDishes().subscribe(res => { */
+      this.dishesService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
+
+        if (Object.keys(res).length) {
+          for (let x in res) {
+            let dish: Dishes
+            dish = res[x]
+
+            const obj: DishList = {};
+            obj.id = dish.id;
+            obj.reference = dish.reference;
+            obj.nameDishesCategories = dish.nameDishesCategories;
+            obj.name = dish.name;
+            obj.imageDishe = dish.imageDishe;
+            obj.price = dish.price;
+            obj.modificationDateDay = this.convertDateday(dish.modificationDate);
+            obj.modificationDateTime = this.convertDatetime(dish.modificationDate)
+            obj.numberOfModifications = dish.numberOfModifications;
+            obj.state = dish.state;
+
+            this.dishesgetting.push(obj);
+            this.loadingDishes = false;
+          }
+        } else {
+          this.loadingDishes = false;
+          this.noDishes = true;
+        }
+      })
+
+      /* if (res.length) {
         res.forEach((dish: Dishes, index) => {
           const obj: DishList = {};
           obj.id = dish.id;
@@ -108,14 +139,14 @@ export class EditMenuComponent {
 
           this.dishesgetting.push(obj);
 
-          if(index == (res.length - 1)){
+          if (index == (res.length - 1)) {
             this.loadingDishes = false;
           }
         })
-      }else{
+      } else {
         this.loadingDishes = false;
       }
-    })
+    }) */
   }
 
   //method for updating the state to active
@@ -160,6 +191,8 @@ export class EditMenuComponent {
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
 
         objsearch[i] = this.table.value[i];
+      }  else {
+        this.noResults = true;
       }
     }
 
@@ -167,21 +200,21 @@ export class EditMenuComponent {
 
 
     this.newdateArray = this.dishesgetting.
-    filter(function (dish) {
-      if (dish["reference"].toLowerCase().indexOf(this.reference) >= 0) {
-        return dish;
-      }
-    }, objsearch).
-    filter(function (dish) {
-      if (dish["name"].toLowerCase().indexOf(this.name) >= 0) {
-        return dish;
-      }
-    }, objsearch).
-    filter(function (item) {
-      //We test each element of the object to see if one string matches the regexp.
-      return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
+      filter(function (dish) {
+        if (dish["reference"].toLowerCase().indexOf(this.reference) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (dish) {
+        if (dish["name"].toLowerCase().indexOf(this.name) >= 0) {
+          return dish;
+        }
+      }, objsearch).
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.modificationDateDay) || myRegex.test(item.modificationDateTime) ||
           myRegex.test(item.numberOfModifications.toString()))
-    })
+      })
 
   }
 
@@ -221,7 +254,7 @@ export class EditMenuComponent {
   //sweets alerts
   swallUpdateState(idDish, newState) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el estado de este plato!",
       icon: 'question',
       showCancelButton: true,
@@ -230,13 +263,18 @@ export class EditMenuComponent {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
+        this.loadingDishes = true;
         this.dishesService.putDishe(idDish, newState).subscribe(res => {
-          this.dishesService.getDishes().subscribe(dish => {
+          this.dishesService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dish => {
             this.dishesgetting = dish
-            Swal.fire(
-              'Actualizado!',
-              'success',
-            )
+            this.loadingDishes = false;
+            Swal.fire({
+              title: 'Actualizado',
+              text: "El estado del plato ha sido actualizado!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
           })
         })
       } else {

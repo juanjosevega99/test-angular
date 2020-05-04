@@ -77,7 +77,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
+      //console.log('Parametro', params['id']);
       if (params['id'] >= 0) {
         this.flagDish = true;
         this.identificatorDish = params['id'];
@@ -91,7 +91,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     //inicialization of accompaniments
     this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
-    
+
       for (let x in res) {
         let accompaniment;
         if (res != []) {
@@ -99,7 +99,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           /* res.forEach(accompaniment => { */
           let obj: any = {}
 
-          obj.id = accompaniment._id
+          obj.id = accompaniment.id
           obj.quantity = accompaniment.quantity
           obj.unitMeasurement = accompaniment.unitMeasurement
           obj.name = accompaniment.name
@@ -124,7 +124,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     this.acti = false
     this.inacti = false
     this.promoAccompaniments = true
-    
+
 
     //preparation time
     this.time = ['minutos', 'horas']
@@ -171,28 +171,44 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //get promotion with the param
   getPromo() {
+    this.loading = true;
     this.accompanimetsOfPromo = [];
-    if (this.identificatorDish) {
-      this.dishService.getDishes().subscribe(dishes => {
-        this.dishSelected = dishes[this.identificatorDish]
-        this.accompanimentService.getAccompaniments().subscribe(res => {
-          res.forEach((accomp: Accompaniments) => {
-            if (this.dishSelected.idAccompaniments.length) {
-              for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
-                const element = this.dishSelected.idAccompaniments[index];
-                if (accomp.id == element) {
+    if (this.flagDish) {
+      console.log("estoy en platos");
+      this.dishService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
+        if (dishes.length) {
+          this.dishSelected = dishes[this.identificatorDish];
+          this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
+            if (res.length) {
+              res.forEach((accomp: Accompaniments) => {
+                if (this.dishSelected.idAccompaniments.length) {
+                  for (let index = 0; index < this.dishSelected.idAccompaniments.length; index++) {
+                    const element = this.dishSelected.idAccompaniments[index];
+                    if (accomp.id == element) {
 
-                  this.accompanimetsOfPromo[index] = accomp
-                  this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
-                  this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
+                      this.accompanimetsOfPromo[index] = accomp
+                      this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
+                      this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
 
+                    }
+                  }
+                  this.loading = false;
+                } else {
+                  this.loading = false;
                 }
-              }
+              })
+            } else {
+              this.loading = false;
             }
           })
-        })
+        } else {
+          this.loading = false;
+        }
       })
-    } else {
+    }
+    else {
+      console.log("estoy en prormos");
+
       this.promoService.getPromotions().subscribe(res => {
         res.forEach((promo: Promotions) => {
           if (this.idPromo == promo.reference) {
@@ -217,57 +233,78 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
-    
-    const checked = event.target.checked;
-    event.target.checked = checked;
 
-    let section: string;
-    if (this.identificatorDish) {
-      section = "este plato!";
+    if (this.personList[pos]["state"][0]["check"] == false) {
+      Swal.fire({
+        html: "El acompañamiento debe tener estado ACTIVO para poder ser añadido!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        cancelButtonColor: '#542b81'
+      })
     } else {
-      section = "esta promoción!";
-    }
-
-    Swal.fire({
-      title: 'Estás seguro?',
-      html: "de que deseas añadir este accompañamiento a " + `${section}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, añadir!'
-    }).then((result) => {
-      if (result.value) {
-        let dish = this.personList[pos];
-        let id = dish.id
-        if (this.identificatorDish) {
-          let accompExist = this.dishSelected['idAccompaniments'].indexOf(id); // it's -1 if not exist
-          if (accompExist < 0) {
-            this.dishSelected['idAccompaniments'].push(id);
-            this.dishService.putDishe(this.dishSelected.id, this.dishSelected).subscribe(res => {
-              this.swallAdd();
-            })
-          } else {
-            this.swallExist();
-          }
-        }
-        else {
-          let accompExist = this.promotion['idAccompaniments'].indexOf(id);
-          if (accompExist < 0) {
-            this.promotion['idAccompaniments'].push(id)
-            this.promoService.putPromotion(this.promotion.id, this.promotion).subscribe(res => {
-              this.swallAdd();
-            })
-          } else {
-            this.swallExist();
-          }
-        }
+      let section: string;
+      if (this.identificatorDish) {
+        section = "este plato!";
+      } else {
+        section = "esta promoción!";
       }
-    })
+
+      Swal.fire({
+        title: 'Estás seguro?',
+        html: "de que deseas añadir este accompañamiento a " + `${section}`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#542b81',
+        cancelButtonColor: '#542b81',
+        confirmButtonText: 'Si, añadir!'
+      }).then((result) => {
+        if (result.value) {
+          let newids: any = {
+            idAccompaniments: []
+          }
+          this.loading = true;
+          let dish = this.personList[pos];
+          let id = dish.id
+          if (this.identificatorDish) {
+            if (this.dishSelected['idAccompaniments'].length) {
+              let accompExist = this.dishSelected['idAccompaniments'].indexOf(id); // it's -1 if not exist
+              if (accompExist < 0) {
+                this.dishSelected['idAccompaniments'].push(id);
+                this.dishService.putDishe(this.dishSelected.id, this.dishSelected).subscribe(res => {
+                  this.swallAdd();
+                })
+              } else {
+                this.swallExist();
+              }
+            } else {
+              newids = {
+                idAccompaniments: this.dishSelected.idAccompaniments = []
+              }
+              newids["idAccompaniments"] = id;
+              this.dishService.putDishe(this.dishSelected.id, newids).subscribe(res => {
+                this.loading = false
+                this.swallAdd();
+              })
+            }
+          }
+          else {
+            let accompExist = this.promotion['idAccompaniments'].indexOf(id);
+            if (accompExist < 0) {
+              this.promotion['idAccompaniments'].push(id)
+              this.promoService.putPromotion(this.promotion.id, this.promotion).subscribe(res => {
+                this.swallAdd();
+              })
+            } else {
+              this.swallExist();
+            }
+          }
+        }
+      })
+    }
   }
 
   swallAdd() {
-
+    this.loading = false;
     let section: string;
     if (this.identificatorDish) {
       section = "este plato!";
@@ -278,17 +315,19 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Añadido',
       text: "El acompañamiento ha sido añadido a " + `${section}`,
-      icon: 'warning',
+      icon: 'success',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'Ok!'
     }).then((result) => {
       if (result.value) {
-        this.promoAccompaniments = true
+        this.promoAccompaniments = true;
+        this.getPromo();
       }
     })
   }
 
   swallExist() {
+    this.loading = false;
     Swal.fire({
       text: "El acompañamiento ya está asociado!",
       icon: 'error',
@@ -308,7 +347,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     }
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este accompañamiento de " + `${section}`,
       icon: 'warning',
       showCancelButton: true,
@@ -317,6 +356,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
+        this.loading = true;
         let idAccompaniment = this.accompanimetsOfPromo[id].id
 
         if (this.identificatorDish) {
@@ -347,12 +387,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               })
             }
           }
-        }  
+        }
       }
     })
   }
 
-  swallDelete(){
+  swallDelete() {
 
     let section: string;
     if (this.identificatorDish) {
@@ -364,24 +404,26 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Eliminado',
       text: "El acompañamiento ha sido eliminado de " + `${section}`,
-      icon: 'warning',
+      icon: 'success',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'Ok!'
     }).then((result) => {
       if (result.value) {
-        this.promoAccompaniments = true
+        this.getPromo();
+        this.loading = false;
+        /* this.promoAccompaniments = true */
       }
     })
   }
 
   //method fot the button "No hay acompañamientos", remove all the accompaniments of the promo or dish
   removeAllAccompanimentOfPromo() {
-    if(this.identificatorDish){
+    if (this.identificatorDish) {
       if (!this.dishSelected.idAccompaniments.length) {
         this.swallNoAccomp();
       } else {
         Swal.fire({
-          title: 'Estás seguro?',
+          title: '¿Estás seguro?',
           text: "de que deseas eliminar TODOS los accompañamientos de este plato!",
           icon: 'warning',
           showCancelButton: true,
@@ -390,6 +432,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Si, eliminar!'
         }).then((result) => {
           if (result.value) {
+            this.loading = true;
             let clearids: any = {
               idAccompaniments: this.dishSelected.idAccompaniments = []
             }
@@ -404,7 +447,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         this.swallNoAccomp();
       } else {
         Swal.fire({
-          title: 'Estás seguro?',
+          title: '¿Estás seguro?',
           text: "de que deseas eliminar TODOS los accompañamientos de esta promoción!",
           icon: 'warning',
           showCancelButton: true,
@@ -413,6 +456,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Si, eliminar!'
         }).then((result) => {
           if (result.value) {
+            this.loading = true;
             let clearids: any = {
               idAccompaniments: this.promotion.idAccompaniments = []
             }
@@ -425,29 +469,31 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  swalDeleteAll(){
+  swalDeleteAll() {
 
     let section: string;
     if (this.identificatorDish) {
       section = "este plato!";
     } else {
       section = "esta promoción!";
-    } 
+    }
 
     Swal.fire({
       title: 'Eliminado',
       text: "Tus acompañamientos han sido eliminados de " + `${section}`,
-      icon: 'warning',
+      icon: 'success',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'Ok!'
     }).then((result) => {
       if (result.value) {
-        this.promoAccompaniments = true
+        this.getPromo();
+        this.loading = false;
+        /* this.promoAccompaniments = true */
       }
     })
   }
 
-  swallNoAccomp(){
+  swallNoAccomp() {
 
     let section: string;
     if (this.identificatorDish) {
@@ -458,7 +504,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
     Swal.fire({
       title: 'Error',
-      text: `${section}`+ " no tiene acompañamientos!",
+      text: `${section}` + " no tiene acompañamientos!",
       icon: 'error',
       confirmButtonColor: '#542b81',
       confirmButtonText: 'ok!'
@@ -506,10 +552,10 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   //CRUD ACCOMPANIMENTS
-  remove(id: any) {
+  remove(pos: any) {
     Swal.fire({
       title: 'Estás seguro?',
-      text: "de que deseas eliminar este accompañamiento!",
+      text: "de que deseas eliminar este accompañamiento, recuerde que se eliminará de todos los platos que lo tengan añadido!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -517,13 +563,43 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
-        let dish = this.personList[id];
-        this.accompanimentService.deleteAccompaniment(dish.id).subscribe(res => {
-          this.personList.splice(id, 1);
-          Swal.fire(
-            'Eliminado!',
-            'success',
-          )
+        this.loading = true;
+        let accompanimentRemove = this.personList[pos];
+        let id = accompanimentRemove.id
+        //console.log("Acompañanimento a eliminar:", accompanimentRemove.id);
+
+        this.accompanimentService.deleteAccompaniment(accompanimentRemove.id).subscribe(res => {
+
+          this.personList.splice(pos, 1);
+
+          this.dishService.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(dishes => {
+            //console.log("platos del aliado:", dishes);
+            dishes.forEach(dish => {
+              if (dish.idAccompaniments.length) {
+                for (let index = 0; index < dish.idAccompaniments.length; index++) {
+                  const element = dish.idAccompaniments[index];
+                  if (id == element) {
+                    //console.log("esta en el plato:", dish);
+                    dish.idAccompaniments.splice(index, 1);
+                    let newids: any = {
+                      idAccompaniments: dish.idAccompaniments
+                    }
+                    //console.log("nuevos ids:", newids);
+                    this.dishService.putDishe(dish.id, newids).subscribe(res => { })
+                  }
+                }
+              }
+            })
+          })
+          this.getPromo();
+          this.loading = false;
+          Swal.fire({
+            title: 'Eliminado',
+            text: "Tu acompañamiento ha sido eliminado!",
+            icon: 'success',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
         })
       }
     })
@@ -531,15 +607,16 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   update(id: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar este accompañamiento!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
+        this.loading = true;
         let dish = this.personList[id];
         let accompaniment = {
           quantity: dish.quantity,
@@ -554,11 +631,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           numberOfModifications: dish.numberOfModifications + 1,
           modificationDate: new Date()
         }
-        this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res =>
+        this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res => {
+          this.loading = false;
           Swal.fire({
             title: 'Actualizado',
             text: "Tu nuevo acompañamiento ha sido actualizado!",
-            icon: 'warning',
+            icon: 'success',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
           }).then((result) => {
@@ -566,6 +644,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               this.flag = false
             }
           })
+        }
         )
       }
     })
@@ -574,42 +653,100 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   addNewAcc() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar estos nuevos acompañamientos!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log(this.newAccompanimentList);
-        this.newAccompanimentList.forEach(res => {
-          res.idAllies = localStorage.getItem("idAlly")
-          this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
-            accomp.creationDate = this.convertDate(accomp.creationDate)
-            accomp.modificationDate = this.convertDate(accomp.modificationDate)
-            this.personList.push(accomp)
-            this.flag = false
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            })
-            this.newAccompanimentList = []
-          })
+
+        this.loading = true;
+        let nameArraySaved: string[] = [];
+
+        this.personList.forEach(accompaniment => {
+          let nameSaved = accompaniment.name.toLowerCase()
+          nameArraySaved.push(nameSaved);
         })
+
+        let exist = false;
+        let noExist = false;
+        let nameReal = "";
+
+        this.newAccompanimentList.forEach(res => {
+
+          let nameNew = res.name.toLowerCase();
+          let nameExist = nameArraySaved.indexOf(nameNew);
+
+          if (nameExist < 0) {
+            noExist = true;
+            res.idAllies = localStorage.getItem("idAlly")
+
+            this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
+              accomp.creationDate = this.convertDate(accomp.creationDate)
+              accomp.modificationDate = this.convertDate(accomp.modificationDate)
+              this.personList.push(accomp);
+            })
+
+          } else {
+            exist = true;
+            nameReal = res.name;
+          }
+        })
+        this.swallNewAcco(noExist, exist, nameReal);
       }
     })
+  }
+
+  swallNewAcco(noExist, exist, nameReal) {
+    if (noExist == true && exist == true) {
+      this.loading = false;
+      Swal.fire({
+        title: 'Guardado',
+        text: "Algunos nuevos acompañamientos han sido creados!",
+        icon: 'success',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      }).then((result) => {
+        if (result.value) {
+          Swal.fire({
+            html: "El acompañamiento con nombre: " + `<b>${nameReal}</b>` + " ya existe, por lo tanto NO ha sido añadido!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            cancelButtonColor: '#542b81'
+          })
+        }
+      })
+    }
+    else if (exist == true && noExist == false) {
+      this.loading = false;
+      Swal.fire({
+        html: "El acompañamiento con nombre: " + `<b>${nameReal}</b>` + " ya existe, por lo tanto NO ha sido añadido!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        cancelButtonColor: '#542b81'
+      })
+    } else if (noExist == true && exist == false) {
+      this.loading = false;
+      Swal.fire({
+        title: 'Guardado',
+        text: "Tu(s) nuevo(s) acompañamiento(s) ha(n) sido creado(s)!",
+        icon: 'success',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
+    }
+    this.flag = false;
+    this.newAccompanimentList = [];
   }
 
   //Methods for accompaniments
   add() {
     this.flag = true
     const obj = {
-      id: '', quantity: '', unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "tiempo", numberOfModifications: 0,
+      id: '', quantity: 0, unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "0", numberOfModifications: 0,
       preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
         state: "active",
         check: false
@@ -624,7 +761,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValue(id: number, property: string, event: any) {
-    console.log(event.target.textContent);
+    //console.log(event.target.textContent);
     let editField = event.target.textContent;
 
     const newtext = editField;
@@ -645,16 +782,11 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValuecheck1(id: number, property: string, event: any) {
-
     let editField = event.target.checked;
     this.personList[id][property] = editField;
-
-    // if (editField == true) {
-    //   this.additionalCost = true
-    // } else if (editField == false) {
-    //   this.additionalCost = false
-    // }
-
+    if (editField == false) {
+      this.personList[id]['accompanimentValue'] = 0;
+    }
   }
 
   changeValue2(id: number, property: string, event: any) {
@@ -663,17 +795,15 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValueSelect(id: number, property: string, value: string) {
-    console.log(value);
+    //console.log(value);
     this.newAccompanimentList[id][property] = value;
   }
 
   changeValuecheck(id: number, property: string, event: any) {
     let editField = event.target.checked;
     this.newAccompanimentList[id][property] = editField;
-    if (editField == true) {
-      this.additionalCost = true
-    } else if (editField == false) {
-      this.additionalCost = false
+    if (editField == false) {
+      this.newAccompanimentList[id]['accompanimentValue'] = 0;
     }
   }
 
@@ -688,7 +818,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //Method to set the section selected
   seeValue(name: String, id: String) {
     this.sectionSelected = name;
-    console.log(id);
+    //console.log(id);
     this.sectiontoUpdate = { name: name, id: id }
   }
 
@@ -725,7 +855,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //Method for the admission date
   tick(): void {
-    console.log("funtion tick");
+    //console.log("funtion tick");
 
     this.today = new Date();
     this.times = this.today.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -759,7 +889,17 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     let newCategory: object = {
       name: newitem
     }
-    this.swallSaveOtherSection(newCategory)
+    if (newitem == undefined) {
+      Swal.fire({
+        title: 'Error',
+        text: "Por favor, ingrese el nombre se la sección!",
+        icon: 'error',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
+    } else {
+      this.swallVerifyName(newCategory)
+    }
   }
 
   updateSection(sectionUpdated: String) {
@@ -775,36 +915,65 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   //Sweet alert for adding a new section
-  swallSaveOtherSection(newCategory: any) {
+  swallVerifyName(newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar esta nueva sección!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.sectionService.postSection(newCategory).subscribe(() => {
-          this.sectionService.getSections().subscribe(section => {
-            this.sections = section;
-          })
+        let newCat = newCategory.name;
+        let newname = newCat.toLowerCase();
+        let listNames = []
+
+        this.sections.forEach(section => {
+          let name = section.name.toLowerCase();
+          listNames.push(name);
         })
-        Swal.fire(
-          'Guardado!',
-          'Tu nueva sección ha sido creada',
-          'success',
-        )
+
+        let searchName = listNames.indexOf(newname);
+
+        if (searchName < 0) {
+          this.swallSaveOtherSection(newCategory);
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            html: "La sección: " + `<b>${newCat}</b>` + " ya se encuentra registrada!",
+            icon: 'error',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+        } 
       }
     })
   }
 
+  swallSaveOtherSection(newCategory) {
+
+    this.sectionService.postSection(newCategory).subscribe(() => {
+      this.sectionService.getSections().subscribe(section => {
+        this.sections = section;
+      })
+    })
+    Swal.fire({
+      title: 'Guardado!',
+      text: "Tu nueva sección ha sido creada",
+      icon: 'success',
+      confirmButtonColor: '#542b81',
+      confirmButtonText: 'Ok!'
+    })
+
+  }
+
   swallUpdateSection(sectionSelected: any, newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el nombre de esta sección!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -816,17 +985,19 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             this.sections = section
           })
         })
-        Swal.fire(
-          'Actualizado!',
-          'success',
-        )
+        Swal.fire({
+          title: 'Actualizado!',
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
 
   swallDeleteSection(sectionSelected: String) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar esta sección!",
       icon: 'warning',
       showCancelButton: true,
@@ -851,10 +1022,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             }
           })
         })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
+        Swal.fire({
+          title: 'Eliminado!',
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }

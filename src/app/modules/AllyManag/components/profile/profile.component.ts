@@ -29,7 +29,9 @@ export class ProfileComponent implements OnInit {
   idAlly: number;
 
   //flag loading
-  loading: boolean;
+  loading= false;
+  noProfiles: boolean;
+  noResults: boolean;
 
   constructor(private profilesService: ProfilesService,
     private _router: Router,
@@ -41,11 +43,13 @@ export class ProfileComponent implements OnInit {
     })
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
+      //console.log('Parametro', params['id']);
       this.idAlly = params['id']
     });
 
-    this.loading = true;
+    
+    this.noProfiles = false;
+    this.noResults = false;
     this.loadProfiles();
 
   }
@@ -55,37 +59,36 @@ export class ProfileComponent implements OnInit {
   }
 
   loadProfiles() {
-    this.profilesgetting=[];
+    this.loading = true;
+    this.profilesgetting = [];
     this.newArray = this.profilesgetting;
 
     //inicialization of profiles
-    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe((res:any) => {
-
-      if(res.length){
+    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
+      if (Object.keys(res).length) {
         for (let x in res) {
           let profile: Profiles
-          if (res != []) {
-            profile = res[x]
-  
-            const obj: ProfileList = {};
-            obj._id = profile._id;
-            obj.nameCharge = profile.nameCharge;
-            obj.identification = profile.identification;
-            obj.name = profile.name;
-            obj.photo = profile.photo;
-            obj.nameHeadquarter = profile.nameHeadquarter;
-            obj.entryDate = this.convertDate(profile.entryDate);
-            obj.modificationDate = this.convertDate(profile.modificationDate);
-            obj.numberOfModifications = profile.numberOfModifications;
-            obj.state = profile.state
-  
-            this.profilesgetting.push(obj)
-            this.loading = false;
-  
-          }
+
+          profile = res[x]
+
+          const obj: ProfileList = {};
+          obj._id = profile._id;
+          obj.nameCharge = profile.nameCharge;
+          obj.identification = profile.identification;
+          obj.name = profile.name;
+          obj.photo = profile.photo;
+          obj.nameHeadquarter = profile.nameHeadquarter;
+          obj.entryDate = this.convertDate(profile.entryDate);
+          obj.modificationDate = this.convertDate(profile.modificationDate);
+          obj.numberOfModifications = profile.numberOfModifications;
+          obj.state = profile.state
+
+          this.profilesgetting.push(obj)
+          this.loading = false;
         }
-      }else{
-        this.loading = false;        
+      } else {
+        this.loading = false;
+        this.noProfiles = true;
       }
     })
   }
@@ -142,6 +145,8 @@ export class ProfileComponent implements OnInit {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
         objsearch[i] = this.table.value[i];
+      } else {
+        this.noResults = true;
       }
     }
 
@@ -171,7 +176,7 @@ export class ProfileComponent implements OnInit {
   //sweets alerts
   swallUpdateState(idProfile, newState) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el estado de este perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -181,7 +186,7 @@ export class ProfileComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true
-        this.profilesService.putProfile(idProfile, newState).subscribe(res => {   
+        this.profilesService.putProfile(idProfile, newState).subscribe(res => {
           this.loadProfiles()
         })
         Swal.fire({

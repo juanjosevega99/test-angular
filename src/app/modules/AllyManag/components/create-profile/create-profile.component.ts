@@ -96,6 +96,9 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   loading: boolean;
   timeTick: any;
 
+  // Variables of alerts
+  alertBadExtensionLogo = false;
+
   constructor(
     private _router: Router, private firebaseservice: AuthFireServiceService,
     private activatedRoute: ActivatedRoute,
@@ -110,7 +113,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
-    
+
     this.State = [{
       state: "active",
       check: false
@@ -128,7 +131,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
       let identificator = params['id'];
       this.identificatorbyRoot = identificator;
-      
+
       if (identificator != -1) {
         this.getProfile(identificator);
       } else if (identificator == -1) {
@@ -168,7 +171,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     clearTimeout(this.timeTick);
   }
 
-  goBack(){
+  goBack() {
     this._location.back();
   }
 
@@ -185,7 +188,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   getProfile(id: any) {
     this.loading;
 
-    if (Number.isInteger(id/1)) {
+    if (Number.isInteger(id / 1)) {
       this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
         let profile: Profiles = {}
 
@@ -197,7 +200,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
         this.loading = false;
       })
     } else {
-      this.chargeProfiles.getProfileById(id).subscribe( profile =>{
+      this.chargeProfiles.getProfileById(id).subscribe(profile => {
         this.editProfile = profile;
         this.preProfile = this.editProfile;
         this.tick();
@@ -210,7 +213,12 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   //method for delete a profile
   deleteProfile() {
     if (this.identificatorbyRoot == -1) {
-      Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
+      Swal.fire({
+        text: "No puedes eliminar este perfil ya que no ha sido creado!",
+        icon: 'error',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
     } else {
       this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
         let profile: ProfileList = {}
@@ -249,7 +257,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     }];
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas colocar este estado al perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -315,20 +323,30 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   //Method for photo of the dish
   onPhotoSelected($event) {
     let input = $event.target;
-    if (input.files && input.files[0]) {
-      this.seeNewPhoto = true;
-      console.log(this.seeNewPhoto);
+    let filePath = input.value;
+    let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+      // alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
+      this.alertBadExtensionLogo = true;
+      input.value = '';
+      return false;
+    } else {
+      if (input.files && input.files[0]) {
+        this.alertBadExtensionLogo = false;
+        this.seeNewPhoto = true;
+        console.log(this.seeNewPhoto);
 
-      var reader = new FileReader();
-      reader.onload = function (e: any) {
-        $('#photo')
-          .attr('src', e.target.result)
-      };
-      reader.readAsDataURL(input.files[0]);
+        var reader = new FileReader();
+        reader.onload = function (e: any) {
+          $('#photo')
+            .attr('src', e.target.result)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
     }
     return this.fileImagedish = input.files[0]
-  }
 
+  }
   //save new profile
   saveProfile() {
     this.swallSave()
@@ -361,7 +379,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   //sweet alerts
   swallSaveOtherProfile(newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar este nuevo perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -377,7 +395,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
         })
         Swal.fire(
           'Guardado!',
-          'Tu nuevo perfil ha sido creada',
+          'Tu nuevo perfil ha sido creado',
           'success',
         )
         this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
@@ -387,7 +405,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   swallDeleteProfile(categorySelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -412,17 +430,19 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
             }
           });
         })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
+        Swal.fire({
+          title: 'Eliminado',
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
 
   swallSave() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -460,7 +480,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
                   Swal.fire({
                     title: 'Guardado',
                     text: "Tu nuevo perfil ha sido creado!",
-                    icon: 'warning',
+                    icon: 'success',
                     confirmButtonColor: '#542b81',
                     confirmButtonText: 'Ok!'
                   }).then((result) => {
@@ -477,10 +497,17 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
           ).subscribe(res => { })
 
         }).catch(err => {
-          console.log(err);
-          Swal.fire(
+          //console.log(err);
+          this.loading = false;
+          Swal.fire({
+            text: `TifiAdmin ${err['message']} `,
+            icon: 'error',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+          /* Swal.fire(
             `TifiAdmin ${err['message']} `,
-          )
+          ) */
         })
       }
     })
@@ -488,7 +515,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   swallDelete(realId) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este perfil!",
       icon: 'warning',
       showCancelButton: true,
@@ -519,7 +546,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   async swallUpdate(realId) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -528,7 +555,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
       if (result.value) {
-        console.log("Array FINAL: ", this.editProfile);
+        //console.log("Array FINAL: ", this.editProfile);
         this.loading = true;
         this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
           let profile: Profiles = {};
@@ -541,7 +568,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
               Swal.fire({
                 title: 'Guardado',
                 text: "Tu perfil ha sido actualizado!",
-                icon: 'warning',
+                icon: 'success',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
               }).then((result) => {
@@ -561,13 +588,13 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
               .pipe(finalize(() => {
                 ref.getDownloadURL().subscribe(urlImage => {
                   this.urlPorfile = urlImage;
-                  console.log(this.urlPorfile);
+                  // console.log(this.urlPorfile);
                   this.preProfile['photo'] = this.urlPorfile;
                   this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
                     Swal.fire({
                       title: 'Guardado',
                       text: "Tu perfil ha sido actualizado!",
-                      icon: 'warning',
+                      icon: 'success',
                       confirmButtonColor: '#542b81',
                       confirmButtonText: 'Ok!'
                     }).then((result) => {
