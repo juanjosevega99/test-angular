@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ShowContentService } from 'src/app/services/providers/show-content.service';
 import { profileStorage } from 'src/app/models/ProfileStorage';
+import { AlliesService } from 'src/app/services/allies.service';
 
 @Component({
   selector: 'app-app-navbar',
@@ -14,9 +15,13 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   today:Date;
   profile : profileStorage = new profileStorage();
   timeTick :any;
+  photoAlly : string;
 
-  constructor( private showcontentservice: ShowContentService) { 
+  constructor( private showcontentservice: ShowContentService, private allyservice: AlliesService) { 
     this.profile =  this.showcontentservice.showMenus();
+    this.allyservice.getAlliesById( this.profile.idAllies ).subscribe( ally =>{
+      this.photoAlly = ally['logo'];
+    })
   }
 
   ngOnInit() {

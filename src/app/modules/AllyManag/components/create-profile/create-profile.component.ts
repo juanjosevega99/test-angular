@@ -317,7 +317,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     let input = $event.target;
     if (input.files && input.files[0]) {
       this.seeNewPhoto = true;
-      console.log(this.seeNewPhoto);
+      // console.log(this.seeNewPhoto);
 
       var reader = new FileReader();
       reader.onload = function (e: any) {
@@ -421,21 +421,24 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   }
 
   swallSave() {
+
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar los cambios!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
+
       if (result.value) {
         this.loading = true;
         // console.log("Array FINAL: ", this.preProfile);
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
         const filePath = `assets/allies/profiles/${id}`;
+        
         const ref = this.storage.ref(filePath);
 
         this.firebaseservice.SignUp(this.preProfile['email'], this.preProfile['identification']).then(response => {
@@ -451,11 +454,12 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
                 this.urlPorfile = urlImage;
                 // console.log(this.urlPorfile);
-                this.preProfile['photo'] = this.urlPorfile
+                this.preProfile['photo'] = this.urlPorfile;
                 this.preProfile['idFirebase'] = response.user.uid;
                 this.preProfile['_id'] = response.user.uid;
 
                 this.profiles.postProfile(this.preProfile).subscribe(message => {
+
                   this.loading = false;
                   Swal.fire({
                     title: 'Guardado',
@@ -477,7 +481,9 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
           ).subscribe(res => { })
 
         }).catch(err => {
-          console.log(err);
+          this.loading = false;
+          this.preProfile['email'] = '';
+
           Swal.fire(
             `TifiAdmin ${err['message']} `,
           )
@@ -528,7 +534,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
       if (result.value) {
-        console.log("Array FINAL: ", this.editProfile);
+        // console.log("Array FINAL: ", this.editProfile);
         this.loading = true;
         this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
           let profile: Profiles = {};
@@ -561,7 +567,8 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
               .pipe(finalize(() => {
                 ref.getDownloadURL().subscribe(urlImage => {
                   this.urlPorfile = urlImage;
-                  console.log(this.urlPorfile);
+
+                  // console.log(this.urlPorfile);
                   this.preProfile['photo'] = this.urlPorfile;
                   this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
                     Swal.fire({
