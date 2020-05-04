@@ -6,6 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service"
+import { CouponsService } from "src/app/services/coupons.service"
 //models
 import { TermsAndConditions } from '../../../../models/TermsAndConditions';
 
@@ -22,7 +23,7 @@ export class TycManagerComponent implements OnInit {
   //varibales to obtain data
   tycGettting: TermsAndConditions[] = [];
   newArray = this.tycGettting;
-  
+
   //variables for general search
   generalsearch: string = "";
 
@@ -34,7 +35,8 @@ export class TycManagerComponent implements OnInit {
   constructor(
     private saveLocalStorageServices: SaveLocalStorageService,
     private _router: Router,
-    private tycManegerService: TermsAndConditionsService) {
+    private tycManegerService: TermsAndConditionsService,
+    private couponsService: CouponsService) {
     this.table = new FormGroup({
       "nameTypeTyc": new FormControl(),
     })
@@ -63,15 +65,15 @@ export class TycManagerComponent implements OnInit {
           obj.name = tyc.name
           obj.nameTypeTyc = tyc.nameTypeTyc
           obj.description = tyc.description
-  
+
           this.tycGettting.push(obj)
-          
-          if(index === (res.length -1)){
+
+          if (index === (res.length - 1)) {
             this.loading = false;
           }
         });
-        
-      }else{
+
+      } else {
         this.loading = false;
       }
     })
@@ -79,31 +81,46 @@ export class TycManagerComponent implements OnInit {
 
   //delete Tyc
   deleteTyc(idTyc) {
-    Swal.fire({
-      title: 'Estás seguro?',
-      text: "de que deseas eliminarlo!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, eliminar!'
-    }).then((result) => {
-      if (result.value) {
-        this.tycManegerService.deleteTermAndCondition(idTyc).subscribe(() => {
-          this.makeObjTycManager();
-        })
+    this.couponsService.getCoupons().subscribe(coupons => {
+      let tycCoupon = coupons.filter(coupon => coupon.idTermsAndConditions == idTyc)
+      if (tycCoupon.length != 0) {
         Swal.fire({
-          title: 'Eliminado',
-          icon: 'success',
+          text: `No se puede eliminar el TyC porque esta utilizado en el cupón: ${tycCoupon[0].name} `,
+          icon: 'warning',
           confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
+        })
+      } else {
+        Swal.fire({
+          title: 'Estás seguro?',
+          text: "de que deseas eliminarlo!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          cancelButtonColor: '#542b81',
+          confirmButtonText: 'Si, eliminar!'
         }).then((result) => {
           if (result.value) {
-            this._router.navigate(['/main', 'tycManager',]);
+            this.tycManegerService.deleteTermAndCondition(idTyc).subscribe(() => {
+              this.makeObjTycManager();
+            })
+            Swal.fire({
+              title: 'Eliminado',
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }).then((result) => {
+              if (result.value) {
+                this._router.navigate(['/main', 'tycManager',]);
+              }
+            })
           }
         })
       }
+
+
     })
+
 
   }
   //method for a specific search
