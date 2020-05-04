@@ -233,7 +233,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //selected one item for add an accompaniments
   selectedOne(event, pos: number) {
-    
+
     if (this.personList[pos]["state"][0]["check"] == false) {
       Swal.fire({
         html: "El acompañamiento debe tener estado ACTIVO para poder ser añadido!",
@@ -252,7 +252,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       Swal.fire({
         title: 'Estás seguro?',
         html: "de que deseas añadir este accompañamiento a " + `${section}`,
-        icon: 'warning',
+        icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#542b81',
         cancelButtonColor: '#542b81',
@@ -609,7 +609,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas actualizar este accompañamiento!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -655,7 +655,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar estos nuevos acompañamientos!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -889,7 +889,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     let newCategory: object = {
       name: newitem
     }
-    if(newitem == undefined){
+    if (newitem == undefined) {
       Swal.fire({
         title: 'Error',
         text: "Por favor, ingrese el nombre se la sección!",
@@ -897,8 +897,8 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         confirmButtonColor: '#542b81',
         confirmButtonText: 'Ok!'
       })
-    }else{
-      this.swallSaveOtherSection(newCategory)
+    } else {
+      this.swallVerifyName(newCategory)
     }
   }
 
@@ -915,36 +915,65 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   //Sweet alert for adding a new section
-  swallSaveOtherSection(newCategory: any) {
+  swallVerifyName(newCategory: any) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas guardar esta nueva sección!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.sectionService.postSection(newCategory).subscribe(() => {
-          this.sectionService.getSections().subscribe(section => {
-            this.sections = section;
-          })
+        let newCat = newCategory.name;
+        let newname = newCat.toLowerCase();
+        let listNames = []
+
+        this.sections.forEach(section => {
+          let name = section.name.toLowerCase();
+          listNames.push(name);
         })
-        Swal.fire(
-          'Guardado!',
-          'Tu nueva sección ha sido creada',
-          'success',
-        )
+
+        let searchName = listNames.indexOf(newname);
+
+        if (searchName < 0) {
+          this.swallSaveOtherSection(newCategory);
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            html: "La sección: " + `<b>${newCat}</b>` + " ya se encuentra registrada!",
+            icon: 'error',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+        } 
       }
     })
+  }
+
+  swallSaveOtherSection(newCategory) {
+
+    this.sectionService.postSection(newCategory).subscribe(() => {
+      this.sectionService.getSections().subscribe(section => {
+        this.sections = section;
+      })
+    })
+    Swal.fire({
+      title: 'Guardado!',
+      text: "Tu nueva sección ha sido creada",
+      icon: 'success',
+      confirmButtonColor: '#542b81',
+      confirmButtonText: 'Ok!'
+    })
+
   }
 
   swallUpdateSection(sectionSelected: any, newCategory: any) {
     Swal.fire({
       title: 'Estás seguro?',
       text: "de que deseas actualizar el nombre de esta sección!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -956,10 +985,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             this.sections = section
           })
         })
-        Swal.fire(
-          'Actualizado!',
-          'success',
-        )
+        Swal.fire({
+          title: 'Actualizado!',
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
@@ -991,10 +1022,12 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             }
           })
         })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
+        Swal.fire({
+          title: 'Eliminado!',
+          icon: 'success',
+          confirmButtonColor: '#542b81',
+          confirmButtonText: 'Ok!'
+        })
       }
     })
   }
