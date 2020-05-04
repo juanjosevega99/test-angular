@@ -14,6 +14,7 @@ import { Promotions } from 'src/app/models/Promotions';
 import { PromotionsCategoriesService } from 'src/app/services/promotions-categories.service';
 import { PromotionsService } from 'src/app/services/promotions.service';
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+import { CouponsService } from "src/app/services/coupons.service"
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Location } from '@angular/common';
 
@@ -126,7 +127,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     private storage: AngularFireStorage,
     private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService,
     private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService,
-    private spinner: NgxSpinnerService, private _location: Location) {
+    private spinner: NgxSpinnerService, private _location: Location,
+    private couponsService: CouponsService) {
 
     //flags
     this.loading = true;
@@ -609,7 +611,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }
   }
 
-
   //CRUD DISH
   //save new dish
   saveDish(shape: NgForm) {
@@ -630,7 +631,20 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         let dish: DishList = {}
         dish = dishes[this.identificatorbyRoot]
         let realId = dish.id
-        this.swallDelete(realId)
+        this.couponsService.getCoupons().subscribe(coupons => { 
+          let tycCoupon = coupons.filter(coupon => coupon.idDishes == realId)
+          if (tycCoupon.length != 0) {
+            Swal.fire({
+              text: `No se puede eliminar el plato porque esta utilizado en el cupón: ${tycCoupon[0].name} `,
+              icon: 'warning',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
+          } else {
+            this.swallDelete(realId)
+          }
+        })
+
       })
     }
   }

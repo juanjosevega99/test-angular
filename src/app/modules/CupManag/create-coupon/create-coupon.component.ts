@@ -221,7 +221,7 @@ export class CreateCouponComponent implements OnInit {
           this.arrayDishes = dish
           this.arrayDishes.forEach(element => {
             let obj = {
-              id: element._id,
+              id: element.id,
               name: element.name
             }
 
@@ -575,7 +575,7 @@ export class CreateCouponComponent implements OnInit {
   // delete coupon selected 
   swallDeleteCoupon() {
     if (this.idParams == -1) {
-      Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
+      Swal.fire('No puedes eliminar este cupón ya que no ha sido creado!!')
     } else {
       Swal.fire({
         title: '¿Estás seguro?',
