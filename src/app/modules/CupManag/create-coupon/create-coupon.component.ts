@@ -10,7 +10,8 @@ import { DishesService } from "src/app/services/dishes.service";
 import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { CouponsAvailableService } from "src/app/services/coupons-available.service";
-
+import { TermsAndConditions } from 'src/app/models/TermsAndConditions';
+import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service";
 @Component({
   selector: 'app-create-coupon',
   templateUrl: './create-coupon.component.html',
@@ -37,7 +38,8 @@ export class CreateCouponComponent implements OnInit {
     numberOfCouponsAvailable: null,
     description: null,
     imageCoupon: null,
-    termsAndConditions: null,
+    idTermsAndConditions: null,
+    nameTermsAndConditions: null,
     codeReferred: null,
   }
 
@@ -76,13 +78,18 @@ export class CreateCouponComponent implements OnInit {
   fileImagedish: any;
   urlImagedish: any;
 
-
   //variables for receiving the coupon that will be edited
   identificatorbyRoot: any;
   idParams: number;
   buttonPut: boolean;
   seeNewPhoto: boolean;
-
+  
+  // variables for collection Tyc
+  tycGettting: TermsAndConditions[] = [];
+  newArray = this.tycGettting;
+  arrayTyc: any;
+   //variables for general search
+   generalsearch: string = "";
   // All Flags 
   //flags of type Coupons
   timeCreation = true
@@ -95,8 +102,10 @@ export class CreateCouponComponent implements OnInit {
   meridian = true;
   //variable for the loading
   loading: boolean;
-
-
+  loadingTable :boolean;
+  // flag dont result
+  noResults = false;
+  
   constructor(
     private _router: Router,
     private activatedRoute: ActivatedRoute,
@@ -107,7 +116,8 @@ export class CreateCouponComponent implements OnInit {
     private dishesServices: DishesService,
     private _uploadImages: UploadImagesService,
     private saveLocalStorageService: SaveLocalStorageService,
-    private couponsAvilableService: CouponsAvailableService) {
+    private couponsAvilableService: CouponsAvailableService,
+    private tycManegerService: TermsAndConditionsService) {
 
     //flags
     this.loading = true;
@@ -268,7 +278,7 @@ export class CreateCouponComponent implements OnInit {
     }];
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas colocar este estado al cupon!",
       icon: 'warning',
       showCancelButton: true,
@@ -343,6 +353,39 @@ export class CreateCouponComponent implements OnInit {
     }
     return this.fileImagedish = input.files[0]
   }
+// method for modal TyC
+
+  makeObjTycManager() {
+    this.loadingTable = true
+    this.tycGettting = [];
+    this.newArray = this.tycGettting;
+    this.tycManegerService.getTermsAndConditions().subscribe((res:any) => {
+      this.arrayTyc = res;
+      let arrayTycCoupons = this.arrayTyc.filter((tyc) => tyc.nameTypeTyc == 'Términos y condiciones cupones')
+      if (arrayTycCoupons.length != 0) {
+        arrayTycCoupons.forEach((tyc: TermsAndConditions, index) => {
+          const obj: TermsAndConditions = {};
+          obj.id = tyc.id
+          obj.name = tyc.name
+          obj.nameTypeTyc = tyc.nameTypeTyc
+          obj.description = tyc.description
+
+          this.tycGettting.push(obj)          
+          if(index === (res.length -1)){
+            this.loadingTable = false;
+          }
+        });
+      }else {
+        this.loadingTable=false
+        this.noResults = true 
+      }
+    })
+  }
+  addTycToCoupon(idTyc:string, nameTyc:string){
+    this.preCoupon['idTermsAndConditions'] = idTyc
+    this.preCoupon['nameTermsAndConditions'] = nameTyc
+  }
+
   //save new coupon
   saveCoupon() {
     this.swallSave()
@@ -361,7 +404,7 @@ export class CreateCouponComponent implements OnInit {
   //sweet alerts
   swallSaveTypeCoupon(newTypeCoupon: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar este nuevo cupon!",
       icon: 'warning',
       showCancelButton: true,
@@ -385,7 +428,7 @@ export class CreateCouponComponent implements OnInit {
   }
   swallDeleteTypeCoupon(typeCouponSelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este cupon!",
       icon: 'warning',
       showCancelButton: true,
@@ -410,7 +453,7 @@ export class CreateCouponComponent implements OnInit {
   //swall for save collection Coupon
   swallSave() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -465,20 +508,18 @@ export class CreateCouponComponent implements OnInit {
     objCoupon.id = this.identificatorbyRoot
     objCoupon.numberOfCouponsAvailable = this.preCoupon['numberOfUnits']
     this.couponsServices.putCoupon(objCoupon).subscribe(()=> this.loading=false)
-    // this._router.navigate(['/main', 'couponManager',]);
   }
 
   //swall for update collection Coupon
-
   swallUpdateCoupon() {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas elimar el cupón!",
+      text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, eliminar!'
+      confirmButtonText: 'Si, guardar!'
     }).then((result) => {
 
       if (result.value) {
@@ -519,7 +560,7 @@ export class CreateCouponComponent implements OnInit {
             .catch((e) => {
               if (this.upload == false) {
                 Swal.fire({
-                  text: "El cupón no ha sido creado porque no se subió la imagen",
+                  text: "El cupón no ha sido actualizado porque no se subió la imagen",
                   icon: 'warning',
                   confirmButtonColor: '#542b81',
                   confirmButtonText: 'Ok!'
@@ -537,7 +578,7 @@ export class CreateCouponComponent implements OnInit {
       Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
     } else {
       Swal.fire({
-        title: 'Estás seguro?',
+        title: '¿Estás seguro?',
         text: "de que deseas eliminar este coupón!",
         icon: 'warning',
         showCancelButton: true,
@@ -573,5 +614,25 @@ export class CreateCouponComponent implements OnInit {
       })
     }
   }
+    //method for a specific search
+    search() {
+
+      var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
+  
+      this.newArray = this.tycGettting.
+        filter(function (item) {
+          //We test each element of the object to see if one string matches the regexp.
+          return (myRegex.test(item.name) || myRegex.test(item.description))
+        })
+      // condition by when don't exit results in the table
+      if (this.newArray.length == 0) {
+        this.noResults = true;
+  
+      } else {
+        this.noResults = false;
+      }
+  
+    }
+  
 
 }

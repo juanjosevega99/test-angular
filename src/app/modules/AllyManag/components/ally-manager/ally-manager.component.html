@@ -8,45 +8,62 @@
         </div>
         <section class="col-11">
             <div class="filerControl px-1">
-                <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <nav class="navbar navbar-expand-sm navbar-light bg-light" style="width: 100%;">
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
 
-                        <ul class=" navbar-nav mr-auto mt-2 mt-lg-0 ">
-                            <li class="nav-item mx-5">
-                                <input class="form-control " type="text" placeholder="Buscar por código ..."
-                                    (keyup)="search(code.value, code.id)" #code id="code" formControlName="code"
-                                    style="width: 100%;">
-                            </li>
-                            <li class="nav-item mx-5">
-                                <input class="form-control container-fluid" type="text"
-                                    placeholder="Buscar por tipo de comida ..."
-                                    (keyup)="search( mealType.value, mealType.id)" #mealType id="nameMealsCategories"
-                                    formControlName="mealType" style="width: 100%;">
-                            </li>
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 
-                            <li class="nav-item mx-5  ">
-                                <div class="input-group-append">
-                                    <input class="form-control text-center" type="text"
-                                        placeholder="Buscar establecimiento ..." (keyup)="searchbyterm( general.value)"
-                                        #general id="general" formControlName="generalsearch">
-                                    <span class="input-group-text backgroundIcon"><i class="fas fa-search "></i></span>
+                        <section class="col-md-5 " style="flex-direction: column;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
+                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                        <li class="nav-item mr-md-2">
+                                            <input placeholder="Buscar código ..." class="form-control text-center"
+                                                type="text" (keyup)="search()" #code id="code"
+                                                formControlName="code">
+                                        </li>
+                                        <li class="nav-item">
+                                            <input placeholder="Buscar tipo de comida ..."
+                                                class="form-control text-center" type="text"
+                                                (keyup)="search()" #name id="name"
+                                                formControlName="mealType">
+                                        </li>
+                                    </ul>
                                 </div>
-                            </li>
+                            </nav>
+                        </section>
+                        <section class="col-md-4 overflow-auto  " style="flex-direction: column;">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                                    <li class="nav-item container d-flex">
+                                        <input (keyup)="search()" class="form-control text-center "
+                                            id="general" type="text" placeholder="Buscar aliado ..." #general
+                                            [(ngModel)]="generalsearch">
+                                    </li>
+                                </ul>
+                            </nav>
+                        </section>
+                        <section class="col-md-2 col-2">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-center ">
+                                <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
+                                    <li class="nav-item">
+                                        <a [routerLink]="['/main','createAlly', -1]"
+                                            class="btn btn-outline-primary">Crear aliado</a>
+                                </ul>
+                            </nav>
 
-                            <li class="nav-item mx-5">
-                                <button [routerLink]="['/main','createAlly', -1]"
-                                    class="btn btn-outline-primary ml-2">Crear aliado</button>
-                            </li>
-                        </ul>
+                        </section>
+
                     </div>
                 </nav>
             </div>
         </section>
+
     </div>
 
     <div class="tableFixHead mt-5">
@@ -67,15 +84,13 @@
                 </tr>
             </thead>
             <tbody class="mt-5">
-                <tr *ngFor="let ally of newdateArray; let i = index " class="text-center">
+                <tr *ngFor="let ally of newArray; let i = index " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
                     <td> <button type="button" class="btn btn-link" *ngIf="manageHq" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </button>
                         <button type="button" class="btn btn-link" *ngIf="manageProm" (click)="promosByAlly(ally.idAlly, i)"   > {{ally.nameEstablishment}} </button><!-- [routerLink]="['/main', 'promoManager']" -->
                         <button type="button" class="btn btn-link" *ngIf="managePromfromUser" [routerLink]="['/main','userManager','promoManager']"> {{ally.nameEstablishment}} </button>
                     </td>
-                    <!-- <td> <a (click)="getInHeadquarts(ally.idAlly, i)"> {{ally.nameEstablishment}} </a></td> -->
-                    <!-- [routerLink]="['/main', 'headquarts']" -->
                     <td> {{ally.numberHeadquarters}} </td>
                     <td *ngIf="manageProm"><select class="form-control mr-2" name="headquarters">
                         <option *ngFor="let hq of ally.nameHq" [ngValue]="hq.id">

@@ -405,7 +405,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }];
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas colocar este estado a la promoción!",
       icon: 'warning',
       showCancelButton: true,
@@ -432,7 +432,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }];
 
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas colocar este estado al plato!",
       icon: 'question',
       showCancelButton: true,
@@ -487,7 +487,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
           promo = x
           let realId = x.id;
           Swal.fire({
-            title: 'Estás seguro?',
+            title: '¿Estás seguro?',
             text: "de que deseas guardar los cambios!",
             icon: 'warning',
             showCancelButton: true,
@@ -565,7 +565,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             promo = x
             let realId = x.id;
             Swal.fire({
-              title: 'Estás seguro?',
+              title: '¿Estás seguro?',
               text: "de que deseas eliminar este plato!",
               icon: 'warning',
               showCancelButton: true,
@@ -592,7 +592,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 })
                 Swal.fire({
                   title: 'Eliminado',
-                  text: "Tu plato ha sido eliminado!",
+                  text: "!Tu plato ha sido eliminado!",
                   icon: 'warning',
                   confirmButtonColor: '#542b81',
                   confirmButtonText: 'Ok!'
@@ -645,7 +645,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   //sweet alerts
   swallSaveOtherPromo(newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar esta nueva categoría!",
       icon: 'warning',
       showCancelButton: true,
@@ -672,7 +672,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   swallDeleteCatPromo(categorySelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar esta categoría!",
       icon: 'warning',
       showCancelButton: true,
@@ -709,7 +709,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   swallSaveOtherDish(newCategory: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar esta nueva categoría!",
       icon: 'warning',
       showCancelButton: true,
@@ -736,7 +736,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   swallDeleteDish(categorySelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar esta categoría!",
       icon: 'warning',
       showCancelButton: true,
@@ -773,7 +773,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   swallSaveDish(newHeadquarter: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'question',
       showCancelButton: true,
@@ -823,7 +823,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   swallDelete(realId) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este plato!",
       icon: 'warning',
       showCancelButton: true,
@@ -835,7 +835,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         this.chargeDishes.deleteDishe(realId).subscribe(message => {
           Swal.fire({
             title: 'Eliminado',
-            text: "Tu plato ha sido eliminado!",
+            text: "!Tu plato ha sido eliminado!",
             icon: 'success',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
@@ -851,7 +851,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   async swallUpdate() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -877,7 +877,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
               this.spinner.hide();
               Swal.fire({
                 title: 'Guardado',
-                text: "Tu plato ha sido actualizado!",
+                text: "!Tu plato ha sido actualizado!",
                 icon: 'success',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
@@ -906,7 +906,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
                       Swal.fire({
                         title: 'Guardado',
-                        text: "Tu plato ha sido actualizado!",
+                        text: "!Tu plato ha sido actualizado!",
                         icon: 'success',
                         confirmButtonColor: '#542b81',
                         confirmButtonText: 'Ok!'
@@ -928,7 +928,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   swallSavePromotion(promotionArray) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,

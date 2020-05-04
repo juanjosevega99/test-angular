@@ -54,7 +54,8 @@ export class CouponsService {
             numberOfCouponsAvailable: coupons.numberOfCouponsAvailable,
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
-            termsAndConditions: coupons.termsAndConditions,
+            idTermsAndConditions: coupons.idTermsAndConditions,
+            nameTermsAndConditions: coupons.nameTermsAndConditions,
             codeReferred: coupons.codeReferred
           };
           return obj;
@@ -89,7 +90,8 @@ export class CouponsService {
             numberOfCouponsAvailable: coupons.numberOfCouponsAvailable,
             description: coupons.description,
             imageCoupon: coupons.imageCoupon,
-            termsAndConditions: coupons.termsAndConditions,
+            idTermsAndConditions: coupons.idTermsAndConditions,
+            nameTermsAndConditions: coupons.nameTermsAndConditions,
             codeReferred: coupons.codeReferred
           };
           return obj;

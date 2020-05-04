@@ -176,7 +176,7 @@ export class ProfileComponent implements OnInit {
   //sweets alerts
   swallUpdateState(idProfile, newState) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas actualizar el estado de este perfil!",
       icon: 'warning',
       showCancelButton: true,

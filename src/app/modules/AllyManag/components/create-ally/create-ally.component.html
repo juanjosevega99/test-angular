@@ -401,11 +401,13 @@
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
                                                                         <button
-                                                                                class=" container  btn btn-outline-primary">
+                                                                                class=" container  btn btn-outline-primary" [disabled]="disableImagesAlly">
                                                                                 Adjuntar archivos {{contImage}}
+                                                                                
                                                                         </button>
                                                                         <input type="file" name="photo"
-                                                                                (change)="onImagesSelected($event)" />
+                                                                                (change)="onImagesSelected($event)"
+                                                                                [disabled]="disableImagesAlly" />
                                                                 </div>
 
                                                         </div>
@@ -419,11 +421,11 @@
                                 <div class="form-group row d-flex flex-column ">
 
                                         <button *ngIf="!buttonPut" type="submit" class="btn btn-outline-primary mb-5" 
-                                        >
+                                         [disabled]="forma.invalid">
                                                 Guardar
                                         </button>
                                         <button *ngIf="buttonPut" type="button" class="btn btn-outline-primary mb-5"
-                                                (click)="swallPutAllie()">
+                                                (click)="swallPutAllie()" [disabled]="forma.invalid">
                                                 Actualizar
                                         </button>
                                         <button class="btn btn-outline-primary" type="button" (click)="cancelChanges()">
@@ -436,5 +438,7 @@
                 </div>
                 
         </form>
+
+
 
 </div>

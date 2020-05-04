@@ -22,8 +22,7 @@ export class TycManagerComponent implements OnInit {
   //varibales to obtain data
   tycGettting: TermsAndConditions[] = [];
   newArray = this.tycGettting;
-
-
+  
   //variables for general search
   generalsearch: string = "";
 
@@ -39,12 +38,11 @@ export class TycManagerComponent implements OnInit {
     this.table = new FormGroup({
       "nameTypeTyc": new FormControl(),
     })
-    //clean local storage  for ally and headquarter
-    this.saveLocalStorageServices.saveLocalStorageIdCoupon("");
     this.makeObjTycManager();
   }
 
   ngOnInit() { }
+
 
   goToEditTyc(idTyc: string, i) {
     this.saveLocalStorageServices.saveLocalStorageIdTyc(idTyc)
@@ -58,26 +56,31 @@ export class TycManagerComponent implements OnInit {
     this.tycGettting = [];
     this.newArray = this.tycGettting;
     this.tycManegerService.getTermsAndConditions().subscribe(res => {
-      res.forEach((tyc: TermsAndConditions, index) => {
-        const obj: TermsAndConditions = {};
-        obj.id = tyc.id
-        obj.name = tyc.name
-        obj.nameTypeTyc = tyc.nameTypeTyc
-        obj.description = tyc.description
-
-        this.tycGettting.push(obj)
+      if (res.length != 0) {
+        res.forEach((tyc: TermsAndConditions, index) => {
+          const obj: TermsAndConditions = {};
+          obj.id = tyc.id
+          obj.name = tyc.name
+          obj.nameTypeTyc = tyc.nameTypeTyc
+          obj.description = tyc.description
+  
+          this.tycGettting.push(obj)
+          
+          if(index === (res.length -1)){
+            this.loading = false;
+          }
+        });
         
-        if(index === (res.length -1)){
-          this.loading = false;
-        }
-      });
+      }else{
+        this.loading = false;
+      }
     })
   }
 
   //delete Tyc
   deleteTyc(idTyc) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminarlo!",
       icon: 'warning',
       showCancelButton: true,
@@ -127,7 +130,7 @@ export class TycManagerComponent implements OnInit {
       }, objsearch).
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
-        return (myRegex.test(item.name) || myRegex.test(item.description))
+        return (myRegex.test(item.name) || myRegex.test(item.nameTypeTyc) || myRegex.test(item.description))
       })
     // condition by when don't exit results in the table
     if (this.newArray.length == 0) {

@@ -46,12 +46,10 @@ export class HeadquartersOptionsComponent implements OnInit {
      this.identificador = params['id']
 
       this.headquarterService.getHeadquarterByAllIdAlly(idAlly).subscribe(headquarter => {
-        console.log(headquarter)
         if (headquarter != "") {
           this.arrayHeadquarter = headquarter
           this.arrayHeadquarter.forEach(element => {
 
-            console.log('elem', element);
             let obj = {
               id: element._id,
               name: element.name

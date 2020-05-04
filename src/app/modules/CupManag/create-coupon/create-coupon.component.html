@@ -1,8 +1,8 @@
 <div class="compenetsstyle">
     <app-loading *ngIf="loading"></app-loading>
     <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveCoupon(shape)" #shape="ngForm" *ngIf="!loading">
-        
-        <a  class="d-flex mr-2">
+
+        <a class="d-flex mr-2">
             <img (click)="goBackProfiles()" src="assets/icons/Back.png " class="tifi-icon-back">
         </a>
 
@@ -14,9 +14,8 @@
 
                     <div class="radio radio-success m-2 form-check form-check-inline">
                         <input class="form-check-input " type="radio" name="radio3" id="radio3"
-                            [checked]="State[0].check" #active
-                            disabled="true"
-                            [value]="State[0].state" [checked]="preCoupon.state[0].check">
+                            [checked]="State[0].check" #active disabled="true" [value]="State[0].state"
+                            [checked]="preCoupon.state[0].check">
                         <label for="radio3">
                             Activo
                         </label>
@@ -24,9 +23,8 @@
 
                     <div class="radio radio-danger m-2 form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="radio2" id="radio4"
-                            [checked]="State[1].check" #inactive
-                            disabled="true"
-                            [value]="State[1].state" [checked]="preCoupon.state[1].check">
+                            [checked]="State[1].check" #inactive disabled="true" [value]="State[1].state"
+                            [checked]="preCoupon.state[1].check">
                         <label for="radio4">
                             Inactivo
                         </label>
@@ -41,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group row align-items-center">
                 <label class="col-md-5 col-form-label">Fecha de creación</label>
                 <div class="col-md-7">
@@ -60,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div  class="form-group row">
+            <div class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de creación </label>
                 <div class="col-md-7">
                     <ngb-timepicker name="den" [(ngModel)]="preCoupon.creationTime[0]" #timeCreate="ngModel" required
@@ -78,7 +76,7 @@
                     <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
                         nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.idAllies"
                         (change)="seeNameAlly(nameAllies.value)">
-                        
+
                         <option *ngFor="let ally of arrayAllies" [ngValue]=ally.id>
                             {{ally.name}}
                         </option>
@@ -93,7 +91,7 @@
                         [ngClass]="{'is-invalid': (!nameHeadquarters.valid ) && 
                         nameHeadquarters.touched ,'is-valid':(nameHeadquarters.valid) }"
                         [(ngModel)]="preCoupon.idHeadquarters" (change)="seeNameHeadquarter(nameHeadquarters.value)">
-                       
+
                         <option *ngFor="let headquarter of headquartersByIdAlly;" [ngValue]=" headquarter.id">
                             {{headquarter.name}}
                         </option>
@@ -103,11 +101,10 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Platos</label>
                 <div class="col-md-7">
-                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required
-                        [ngClass]="{'is-invalid': (!idDish.valid ) && 
-                        idDish.touched ,'is-valid':(idDish.valid) }"
-                        [(ngModel)]="preCoupon.idDishes" (change)="seeNameDish(idDish.value)">
-                       
+                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required [ngClass]="{'is-invalid': (!idDish.valid ) && 
+                        idDish.touched ,'is-valid':(idDish.valid) }" [(ngModel)]="preCoupon.idDishes"
+                        (change)="seeNameDish(idDish.value)">
+
                         <option *ngFor="let dish of dishesByIdHeadquarter;" [ngValue]=" dish.id">
                             {{dish.name}}
                         </option>
@@ -124,16 +121,15 @@
                             #nameTypeOfCoupon="ngModel" required [ngClass]="{'is-invalid': (!nameTypeOfCoupon.valid ) && 
                             nameTypeOfCoupon.touched ,'is-valid':(nameTypeOfCoupon.valid) }"
                             [(ngModel)]="preCoupon.idtypeOfCoupon" (change)="seeNameTypeCoupon(nameTypeOfCoupon.value)">
-                           
-                            <option *ngFor="let coupon of typeCoupon" 
-                                [ngValue]="coupon.id">
+
+                            <option *ngFor="let coupon of typeCoupon" [ngValue]="coupon.id">
                                 {{coupon.name}}
                             </option>
                         </select>
 
                         <input *ngIf="otherTypeCouponInput" placeholder="Otro cupon" #TypeCoupon="ngModel"
-                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherTypeCoupon" 
-                            type="text" name="otherTypeCoupon">
+                            class="col-md-9 col-form-label mr-2 form-control " [(ngModel)]="otherTypeCoupon" type="text"
+                            name="otherTypeCoupon">
 
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
                             (click)="handleBoxTypeCoupons()"> Cancelar</button>
@@ -190,11 +186,12 @@
             <div *ngIf="timeCreation" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de caducidad </label>
                 <div class="col-md-7">
-                    <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime[0]" #expirationTime="ngModel" required
+                    <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime[0]" #expirationTime="ngModel"
+                        required
                         [ngClass]="{'is-invalid': (!expirationTime.valid && expirationTime.touched),'is-valid':(expirationTime.valid)}"
                         [meridian]="meridian">
                     </ngb-timepicker>
-                    <div  *ngIf="expirationTime.errors?.required" class="invalid-feedback">*hora es
+                    <div *ngIf="expirationTime.errors?.required" class="invalid-feedback">*hora es
                         requerida</div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
@@ -207,7 +204,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Nombre cupón</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" name="nameCoupon" #nameCoupon="ngModel" id="id" placeholder="Nombre cupón"
+                    <input class="form-control" type="text" name="nameCoupon" #nameCoupon="ngModel" id="id"
+                        placeholder="Nombre cupón"
                         [ngClass]="{'is-invalid': (!nameCoupon.valid && nameCoupon.touched),'is-valid':(nameCoupon.valid) }"
                         [(ngModel)]="preCoupon.name" required>
                     <div *ngIf="nameCoupon.errors?.required" class="invalid-feedback">*Este campo es requerido
@@ -219,12 +217,12 @@
                 <label class="col-md-5 col-form-label">Unidades disponibles</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"
-                        pattern="[0123456789,.'-]{1,10}"
-                        [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || 
+                        pattern="[0123456789,.'-]{1,10}" [ngClass]="{'is-invalid': (!numberOfUnits.valid && numberOfUnits.touched) || 
                         numberOfUnits.errors?.pattern ,'is-valid':(numberOfUnits.valid) }"
-                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles" >
+                        [(ngModel)]="preCoupon.numberOfUnits" required placeholder="Unidades disponibles">
                     <div *ngIf="numberOfUnits.errors?.required" class="invalid-feedback">*Este campo es requerido </div>
-                    <div *ngIf="numberOfUnits.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras </div>
+                    <div *ngIf="numberOfUnits.errors?.pattern" class="invalid-feedback">* No se puede utilizar letras
+                    </div>
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
@@ -262,16 +260,24 @@
                             <input type="file" name="photo" (change)="onPhotoSelected($event)" />
                         </div>
                     </div>
-
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Nombre de términos y condiciones </label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="nameTyc" #nameTyc="ngModel"
+                        [(ngModel)]="preCoupon.nameTermsAndConditions" placeholder="Nombre de términos y condiciones"
+                        disabled=true>
                 </div>
             </div>
             <div class="form-group row justify-content-center ">
                 <div class="col-md-7">
-
                     <div class="row justify-content-center container-fluid">
-                        <button class="btn1 btn btn-outline-primary" type="button" >Terminos y condiciones </button>
+                        <button type="button" class="btn1 btn btn-outline-primary" data-toggle="modal"
+                            data-target="#exampleModalCenter" (click)="makeObjTycManager()">
+                            Términos y condiciones
+                        </button>
                     </div>
-
                 </div>
             </div>
 
@@ -283,9 +289,94 @@
                 class="btn btn-outline-primary btn-lg">Guardar</button>
             <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="swallUpdateCoupon()"
                 class="btn btn-outline-primary btn-lg">Actualizar</button>
+
         </section>
+
 
     </form>
 
+    <!-- Modal TermsAndConditions-->
+    <div class="modal fade bd-example-modal-xl" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #572483; text-align: center;">
+                    <h5 class="modal-title" id="exampleModalCenterTitle" style="color: white; ">Lista de términos y
+                        condiciones</h5>
+                    
+                    <section class="col-8">
+                        <div class="filerControl px-1">
+                            <nav class="navbar navbar-expand-sm navbar-light bg-light" >
+            
+                                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                    data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                                    aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+            
+                                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                                    <section class="col-md-12 overflow-auto mr-1 "
+                                        style="flex-direction: column;">
+                                        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                                            <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
+                                                <li class="nav-item container-fluid d-flex">
+                                                    <input (keyup)="search()" class="form-control text-center"
+                                                        id="general" type="text" placeholder="Buscar términos y condiciones..." #general
+                                                        [(ngModel)]="generalsearch">
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </section>
+            
+                                </div>
+                            </nav>
+                        </div>
+                    </section>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="tableFixHead mt-5" id="table-content">
+                    <div id="table-print">
+
+                        <table >
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Nombre TyC</th>
+                                <th class="text-center">Tipo de TyC</th>
+                                <th class="text-center">Descripción</th>
+                                <th class="text-center" > </th>
+                            </tr>
+                            <tr *ngFor="let tyc of newArray; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{tyc.name}}</td>
+                                <td>{{tyc.nameTypeTyc}}</td>
+                                <td>{{tyc.description}}</td>
+                                <td>
+                                    <button  (click)="addTycToCoupon(tyc.id, tyc.name)" class="btn1 btn btn-outline-primary "
+                                    data-dismiss="modal"> 
+                                        Agregar
+                                    </button>
+                                </td>
+                            </tr>
+                            <td colspan="7">
+                                <div *ngIf="loadingTable" class="fa-3x text-center">
+                                    <i class="fas fa-spinner fa-pulse"></i>
+                                </div>          
+                            </td>
+                            <tr>
+                                <td *ngIf="noResults" colspan="7">
+                                    <a> No se encontraron resultados </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

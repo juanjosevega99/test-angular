@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 //services
 import Swal from 'sweetalert2';
@@ -10,7 +10,7 @@ import { TypeTermsAndConditionsService } from "src/app/services/type-terms-and-c
   templateUrl: './create-tyc.component.html',
   styleUrls: ['./create-tyc.component.scss']
 })
-export class CreateTycComponent implements OnInit {
+export class CreateTycComponent implements OnInit, OnDestroy {
 
   preTyc: Object = {
     name: null,
@@ -19,10 +19,6 @@ export class CreateTycComponent implements OnInit {
     description: null
   }
   //variables for typeTyC
-  arraytypeTyCSelect: boolean = true;
-  othertypeTyCInput: boolean = false;
-  addtypeTyCButton: boolean = true;
-  selectAgainarray: boolean = false;
   newtypeTyC: String;
   typeTyC: any[] = [];
 
@@ -67,25 +63,13 @@ export class CreateTycComponent implements OnInit {
 
   ngOnInit() {
   }
+  ngOnDestroy() {
+    localStorage.removeItem('idTyc');
+  }
   goBackTycManger() {
     this._router.navigate(['/main', 'tycManager'])
-
   }
-  //Method for showing new view in the typeTyC field
-  handleBoxtypeTyC(): boolean {
 
-    if (this.addtypeTyCButton) {
-      return this.addtypeTyCButton = false,
-        this.othertypeTyCInput = true,
-        this.selectAgainarray = true,
-        this.arraytypeTyCSelect = false
-    } else {
-      return this.addtypeTyCButton = true,
-        this.othertypeTyCInput = false,
-        this.selectAgainarray = false,
-        this.arraytypeTyCSelect = true
-    }
-  }
   seeNametypeTyC(selected: any) {
 
     this.typeTyC.forEach(element => {
@@ -95,25 +79,7 @@ export class CreateTycComponent implements OnInit {
       }
     })
   }
-  //CRD -- Methos of TypeProfile: CREATE ,READ AND DELETE 
-  addTypeTyc(name: String) {
-    if (name != null) {
-      let newitem = name;
-      let newTypeTyc: object = {
-        name: newitem
-      }
-      this.swallSaveTypeTyc(newTypeTyc)
-
-      this.handleBoxtypeTyC()
-    } else { alert("Ingrese los nuevos términos y condiciones") }
-
-  }
-  deleteTypeCoupon() {
-    let typeTycSelected = this.preTyc['idTypeTyc']
-    this.swallDeleteTypeTyc(typeTycSelected)
-  }
-
-  //method of obtain one tyC for update 
+ 
   getTyc(idTyc: string) {
     this.loading
     this.tycManagerService.getTermAndConditionById(idTyc).subscribe(tyc => {
@@ -128,7 +94,7 @@ export class CreateTycComponent implements OnInit {
   //sweet alerts for save and delete typeTyc
   swallSaveTypeTyc(newTypeTyc: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar este nuevo término y condición",
       icon: 'warning',
       showCancelButton: true,
@@ -152,7 +118,7 @@ export class CreateTycComponent implements OnInit {
   }
   swallDeleteTypeTyc(typeTycSelected: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar este término y condición!",
       icon: 'warning',
       showCancelButton: true,
@@ -175,7 +141,7 @@ export class CreateTycComponent implements OnInit {
   }
   swallSaveTyc() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -201,10 +167,10 @@ export class CreateTycComponent implements OnInit {
     })
   }
 
-  //swall for update collection Coupon
+  //swall for update collection tyc
   swallUpdateTyc() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -215,7 +181,7 @@ export class CreateTycComponent implements OnInit {
       if (result.value) {
         let objTyc: any = this.preTyc
         objTyc.id = this.identificatorbyRoot
-        this.tycManagerService.putTermAndCondition(objTyc).subscribe(() => alert('tyc Updated'))
+        this.tycManagerService.putTermAndCondition(objTyc).subscribe()
         Swal.fire({
           title: 'Actualizado',
           text: "Tus nuevos términos y condiciones han sido actualizados!",

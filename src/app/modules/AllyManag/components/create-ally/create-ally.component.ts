@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { Router, ActivatedRoute } from '@angular/router';
 //services
 import { AlliesCategoriesService } from '../../../../services/allies-categories.service';
 import { MealsCategoriesService } from "../../../../services/meals-categories.service";
@@ -8,9 +9,9 @@ import { AlliesService } from "../../../../services/allies.service";
 import { UploadImagesService } from "../../../../services/providers/uploadImages.service";
 import Swal from 'sweetalert2';
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
+import { HeadquartersService } from 'src/app/services/headquarters.service';
 //other libraris
 import * as $ from 'jquery';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-ally',
@@ -69,6 +70,9 @@ export class CreateAllyComponent implements OnInit {
   alertBadExtensionPhotosAlly = false
    //flag by state swall
    upload = false;
+   //enable of "Fotos del establecimiento" if it have service  reserved
+   disableImagesAlly: boolean;
+   arrayServicesByAlly:any;
   constructor(
     private alliesCatServices: AlliesCategoriesService,
     private mealsCatServices: MealsCategoriesService,
@@ -77,7 +81,8 @@ export class CreateAllyComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private _router: Router,
     private _activateRoute: ActivatedRoute,
-    private _saveLocalStorageService: SaveLocalStorageService) {
+    private _saveLocalStorageService: SaveLocalStorageService,
+    private headquartersService: HeadquartersService) {
 
     //flags
     this.loading = true;
@@ -91,9 +96,11 @@ export class CreateAllyComponent implements OnInit {
       let identificator = params['id']
       if (identificator != -1) {
         this.getAlly(idAlly)
+
       } else {
         this.loading = false
         this.buttonPut = false
+        this.disableImagesAlly= true;
       }
       this.idParams = identificator;
       this.identificatorbyRoot = idAlly;
@@ -115,8 +122,7 @@ export class CreateAllyComponent implements OnInit {
       Validators.pattern("[0123456789,.'-]{8,20}")
 
       ]),
-      'logo': new FormControl('', [Validators.required,
-      ]),
+      'logo': new FormControl(''),
       'color': new FormControl(this.color),
       'idTypeOfEstablishment': new FormControl('', [Validators.required]),
       'nameTypeOfEstablishment': new FormControl(''),
@@ -130,7 +136,7 @@ export class CreateAllyComponent implements OnInit {
       Validators.pattern("[0123456789,.'-]{1,3}")
       ]),
       'description': new FormControl('', [Validators.maxLength(20)]),
-      'idAttentionSchedule': new FormControl('', [Validators.required,]),
+      'idAttentionSchedule': new FormControl(''),
       'imagesAllies': new FormControl('')
 
     })
@@ -168,6 +174,7 @@ export class CreateAllyComponent implements OnInit {
     this.scheduleServices.getAttentionSchedules().subscribe(schedule => {
       this.attentionSchedule = schedule;
     })
+    // contition of headquartes services
 
   }
   ngOnInit() {
@@ -195,6 +202,16 @@ export class CreateAllyComponent implements OnInit {
         this.loading = false;
       })
     })
+    this.headquartersService.getHeadquarterByIdAlly(id).subscribe(services=>{
+      this.arrayServicesByAlly = services;
+      let arrayServicesReserved = this.arrayServicesByAlly.filter(service=> service.value == "Resérvalo")
+      if (arrayServicesReserved.length != 0){
+        this.disableImagesAlly = false
+      } else{
+        this.disableImagesAlly = true
+      }
+    })
+
   }
   getColour(event) {
     this.color = event.target.value
@@ -332,7 +349,7 @@ export class CreateAllyComponent implements OnInit {
   //saveTypeEstablishment 
   swallSaveOtherEstablishment(newEstablishment: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -357,7 +374,7 @@ export class CreateAllyComponent implements OnInit {
   // Modal for delete Establishmet
   swallDeleteCatEstablishment(id: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar!",
       icon: 'warning',
       showCancelButton: true,
@@ -381,7 +398,7 @@ export class CreateAllyComponent implements OnInit {
   //save and Delete Meals categories 
   swallSaveMealCategory(newMeal: any) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -405,7 +422,7 @@ export class CreateAllyComponent implements OnInit {
   }
   swallDeleteMealCategory(id: string) {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas eliminar!",
       icon: 'warning',
       showCancelButton: true,
@@ -429,7 +446,7 @@ export class CreateAllyComponent implements OnInit {
   //save AND cancel allie 
   swallSaveAllie() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -438,7 +455,7 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        console.log('File of IMAGE NEED', this.fileImgLogo) //delete console.log
+        this.loading=true;
         //read promise of upladImages 
         const promesasImages = this.imagesAlly.map(fileImage => {
           return this._uploadImages.uploadImages(fileImage, 'allies','ImagesEstablishment')
@@ -476,10 +493,12 @@ export class CreateAllyComponent implements OnInit {
             }
             this.scheduleServices.postAttentionSchedule(addSchedule).subscribe((schedule: any) => {
               this.idSchedule = schedule._id;
-              this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
+              // this.forma.controls['idAttentionSchedule'].setValue(this.idSchedule)
               //upload all fields to ally  collection 
               let objAllie = this.forma.value
+              objAllie.idAttentionSchedule = this.idSchedule
               this.allieService.postAllie(objAllie).subscribe()
+              this.loading=false
             })
             if (this.upload == true) {
               Swal.fire({
@@ -536,11 +555,12 @@ export class CreateAllyComponent implements OnInit {
     let objAllie = this.forma.value
     objAllie._id = this.identificatorbyRoot
     this.allieService.putAllie(objAllie).subscribe()
+    this.loading= false
     this._router.navigate(['/main', 'allyManager','-1'])
   }
   swallPutAllie() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
@@ -549,6 +569,7 @@ export class CreateAllyComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.loading= true
         //read promise of upladImages
         if (this.seeNewPhoto == false && this.seeNewImagesAlly == false) {
           this.uploadFielstoCollectionUpdate()
@@ -599,7 +620,7 @@ export class CreateAllyComponent implements OnInit {
 
   swallCancelAlly() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "de que deseas cancelar!",
       icon: 'warning',
       showCancelButton: true,
@@ -614,7 +635,7 @@ export class CreateAllyComponent implements OnInit {
   }
   swallLeave() {
     Swal.fire({
-      title: 'Estás seguro?',
+      title: '¿Estás seguro?',
       text: "que deseas salir!",
       icon: 'warning',
       showCancelButton: true,

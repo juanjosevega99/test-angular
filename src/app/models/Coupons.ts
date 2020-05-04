@@ -19,6 +19,7 @@ export class Coupons {
     numberOfCouponsAvailable?: number;
     description?:string;
     imageCoupon?:string;
-    termsAndConditions?:string;
+    idTermsAndConditions?:string;
+    nameTermsAndConditions?: string;
     codeReferred?:string;
 }
