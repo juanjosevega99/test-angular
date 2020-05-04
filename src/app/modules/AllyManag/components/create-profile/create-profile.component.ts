@@ -501,7 +501,6 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
           ).subscribe(res => { })
 
         }).catch(err => {
-<<<<<<< HEAD
           //console.log(err);
           this.loading = false;
           Swal.fire({
@@ -511,12 +510,10 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Ok!'
           })
           /* Swal.fire(
-=======
           this.loading = false;
           this.preProfile['email'] = '';
 
           Swal.fire(
->>>>>>> development_Aldair
             `TifiAdmin ${err['message']} `,
           ) */
         })
@@ -566,11 +563,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, guardar!'
     }).then(async (result) => {
       if (result.value) {
-<<<<<<< HEAD
         //console.log("Array FINAL: ", this.editProfile);
-=======
-        // console.log("Array FINAL: ", this.editProfile);
->>>>>>> development_Aldair
         this.loading = true;
         this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
           let profile: Profiles = {};
@@ -603,10 +596,6 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
               .pipe(finalize(() => {
                 ref.getDownloadURL().subscribe(urlImage => {
                   this.urlPorfile = urlImage;
-<<<<<<< HEAD
-=======
-
->>>>>>> development_Aldair
                   // console.log(this.urlPorfile);
                   this.preProfile['photo'] = this.urlPorfile;
                   this.chargeProfiles.putProfile(realId, this.editProfile).subscribe(res => {
