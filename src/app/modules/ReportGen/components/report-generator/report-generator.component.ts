@@ -97,7 +97,9 @@ export class ReportGeneratorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.SeachingRange();
+    
+    setTimeout(() => { this.SeachingRange() }, 2000);
+
   }
 
   convertDate(date: Date): string {
@@ -135,20 +137,25 @@ export class ReportGeneratorComponent implements OnInit {
                 obj.location = headq.ubication;
                 obj.codeOrder = order.code;
                 obj.client = user.name + " " + user.lastname;
-                obj.typeOfService = order.typeOfService['type'];
+                obj.typeOfService = order.typeOfService['type'].toLocaleLowerCase();
                 obj.purchaseAmount = order.orderValue;
                 obj.registerDate = this.convertDateToShow(order.dateAndHourReservation);
-                obj.dateAndHourDelivery =  order.dateAndHourDelivey ? this.convertDateToShow(order.dateAndHourDelivey) : "Por confirmar";
+                obj.dateAndHourDelivery = order.dateAndHourDelivey ? this.convertDateToShow(order.dateAndHourDelivey) : "Por confirmar";
                 obj.controlOrder = order.deliveryStatus;
                 obj.valueTotalWithRes = order.orderValue;
 
-                headq.costPerService.map(service => {
-                  if (service.id == order.typeOfService) {
-                    obj.costReservation = parseFloat((parseInt(service.value) - (parseInt(service.value) * environment.IVA)).toFixed());
-                    obj.costReservationIva = parseFloat(service.value);
-                    obj.valueTotalWithoutRes = (order.orderValue - service.value);
-                  }
-                })
+                const costService = headq.costPerService.find(ser => this.removeAccents(ser.id).toLocaleLowerCase() === obj.typeOfService);
+
+                if (costService) {
+                  obj.costReservation = parseFloat((parseInt(costService.value) - (parseInt(costService.value) * environment.IVA)).toFixed());
+                  obj.costReservationIva = costService.value ? parseFloat(costService.value) : 0;
+                  obj.valueTotalWithoutRes = (order.orderValue - costService.value);
+                } else {
+
+                  obj.costReservation = 0;
+                  obj.costReservationIva=0;
+                  obj.valueTotalWithoutRes= order.orderValue;
+                }
 
                 // ally
                 this.allyservice.getAlliesById(this.profile.idAllies).subscribe((ally: any) => {
@@ -190,7 +197,7 @@ export class ReportGeneratorComponent implements OnInit {
 
           })
 
-          if (index === (orders.length-1)) {
+          if (index === (orders.length - 1)) {
             this.loadingUsers = false;
           }
 
@@ -199,6 +206,13 @@ export class ReportGeneratorComponent implements OnInit {
         this.loadingUsers = false;
       }
     })
+  }
+
+
+  // ==================================
+  // remove acents
+  removeAccents(str): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   // ==================================
@@ -310,7 +324,7 @@ export class ReportGeneratorComponent implements OnInit {
       objpdf.purchaseAmount = obj.purchaseAmount;
       objpdf.registerDate = obj.registerDate;
       objpdf.dateAndHourDelivery = obj.dateAndHourDelivery;
-      objpdf.controlOrder = obj.controlOrder ? "SI": "NO";
+      objpdf.controlOrder = obj.controlOrder ? "SI" : "NO";
       // objpdf.quantity = obj.quantity;
       // objpdf.nameDishe = obj.nameDishe;
 

@@ -174,7 +174,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.accompanimetsOfPromo = [];
     if (this.flagDish) {
-      console.log("estoy en platos");
+
       this.dishService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
         if (dishes.length) {
           this.dishSelected = dishes[this.identificatorDish];
@@ -207,7 +207,6 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       })
     }
     else {
-      console.log("estoy en prormos");
 
       this.promoService.getPromotions().subscribe(res => {
         res.forEach((promo: Promotions) => {
@@ -517,6 +516,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //see accompaniments of the promotion
   back() {
+    this.getPromo();
     this.promoAccompaniments = true
   }
   //see the general list of accompaniments
@@ -761,19 +761,9 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValue(id: number, property: string, event: any) {
-    //console.log(event.target.textContent);
+
     let editField = event.target.textContent;
-
-    const newtext = editField;
-
-    // if(event.target.textContent){
-    // this.personList[id][property] = this.personList[id][property] + editField;
-    // }else{
-
-    this.personList[id][property] = newtext;
-    editField = '';
-
-    // }
+    this.personList[id][property] = editField;
 
   }
 

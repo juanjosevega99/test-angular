@@ -211,12 +211,13 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   }
 
   gotopromotion() {
+
     const url = this._location.path();
-    console.log(url);
+    // this._router.navigate([url + '/-2']);
 
-    this._router.navigate([url + '/-2']);
+    this.ifChanges([url + '/-2'])
   }
-
+  
   goBackEditMenu() {
 
     let url = this._location.path().split('/');
@@ -231,7 +232,41 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   }
 
   routeAccompaniments() {
-    this._router.navigate(['/main', 'accompaniments', this.identificatorbyRoot])
+    this.ifChanges(['/main', 'accompaniments', this.identificatorbyRoot]);
+  }
+
+  // if changes function verify if cahnges in dish and get question if you want to sava changes
+  ifChanges(rute:string[]){
+    this.chargeDishes.getDisheById( this.editDish['id'] ).subscribe( dish =>{
+      
+      if(this.editDish.state[0]['check'] === dish.state[0]['check'] && this.editDish.idDishesCategories === dish.idDishesCategories && this.editDish.reference === dish.reference
+      && this.editDish.name === dish.name && this.editDish.price === dish.price && this.editDish.imageDishe === dish.imageDishe && this.editDish.description === dish.description
+      && this.editDish.preparationTime[0] === dish.preparationTime[0]  && this.editDish.preparationTime[1] === dish.preparationTime[1]){
+
+        this._router.navigate(rute)
+        
+      }else{
+
+        Swal.fire({
+          title:"Desea guardar los cambios",
+          icon:"question",
+          showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          cancelButtonColor: '#542b81',
+          confirmButtonText: 'Guardar'
+
+        }).then(res=>{
+
+          if(res.value){
+            this.updateDish(rute);
+          }else{
+            this._router.navigate(rute);
+          }
+        })
+
+      }
+
+    })
   }
 
   //Metod to see the id of promotion cateogy selected
@@ -274,6 +309,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   //charge a dish with the id
   getDish(id: string) {
+
     this.loading = true;
     /* this.chargeDishes.getDishes().subscribe(dishes => { */
     this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
@@ -281,7 +317,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       dish = dishes[id]
 
       this.editDish = dish;
-      this.preDish = this.editDish;
+      this.preDish = dish;
       this.loading = false;
       this.tickEdit();
 
@@ -306,7 +342,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 const element = y.idPromotion[index];
                 if (x.id == element) {
                   this.editDish = y;
-                  this.preDish = this.editDish
+                  this.preDish = y;
                 }
               }
             })
@@ -407,7 +443,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "de que deseas colocar este estado a la promoción!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -861,7 +897,13 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }).then(async (result) => {
 
       if (result.value) {
-        this.spinner.show();
+        this.updateDish(['/main', 'editmenu', this.identificatorbyRoot])        
+      }
+    })
+  }
+
+  async updateDish( rute:string[] ){
+    this.spinner.show();
         
         await this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
 
@@ -883,7 +925,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 confirmButtonText: 'Ok!'
               }).then((result) => {
                 if (result.value) {
-                  this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                  this._router.navigate(rute);
                 }
               })
 
@@ -912,7 +954,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                         confirmButtonText: 'Ok!'
                       }).then((result) => {
                         if (result.value) {
-                          this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                          this._router.navigate(rute);
                         }
                       })
                     })
@@ -922,8 +964,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
               ).subscribe()
           }
         })
-      }
-    })
+
   }
 
   swallSavePromotion(promotionArray) {

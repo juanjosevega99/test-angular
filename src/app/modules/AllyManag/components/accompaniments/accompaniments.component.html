@@ -185,14 +185,14 @@
                     </tr>
                     <tr *ngFor="let person of personList; let id = index">
                         <td>
-                            <span contenteditable="true" (keyup.enter)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
+                            <span class="text-center" contenteditable="true" (blur)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true" (keyup)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
+                            <span class="text-center" contenteditable="true" (blur)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
                         </td>
                         <td>
-                            <span contenteditable="true"
-                                (keyup)="changeValue(id, 'name', $event)">{{person.name}}</span>
+                            <span contenteditable="true" class="text-center"
+                                (blur)="changeValue(id, 'name', $event)">{{person.name}}</span>
                         </td>
                         <td>
                             <select #nameSection (change)="changeValueSelect1(id, 'nameTypeSection', nameSection.value)"
@@ -208,8 +208,8 @@
                                  [checked]="person.typeOfAccompaniment">
                         </td>
                         <td>
-                            <span contenteditable="true"
-                                (keyup)="changeValue(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
+                            <span class="text-center" contenteditable="true"
+                                (blur)="changeValue(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
                         </td>
                         <td>
                             <select #unityTime (click)="changeValueSelect1(id, 'preparationTimeUnity',unityTime.value)"
@@ -221,8 +221,8 @@
                             </select>
                         </td>
                         <td>
-                            <span *ngIf="person.typeOfAccompaniment" contenteditable="true"
-                                (keyup)="changeValue(id, 'accompanimentValue', $event)">{{person.accompanimentValue}}</span>
+                            <span class="text-center" *ngIf="person.typeOfAccompaniment" contenteditable="true"
+                                (blur)="changeValue(id, 'accompanimentValue', $event)">{{person.accompanimentValue}}</span>
                         </td>
                         <td>{{person.creationDate}}</td>
                         <td>{{person.modificationDate}}</td>

@@ -95,7 +95,7 @@
                         <td>{{ order.purchaseAmount }}</td>
                         <td>{{ order.registerDate }}</td>
                         <td>{{ order.dateAndHourDelivery }}</td>
-                        <td>{{ order.controlOrder }}</td>
+                        <td>{{ order.controlOrder ? "si" : "No" }}</td>
 
                         <!-- <td>
                             <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
@@ -180,7 +180,7 @@
                         <td>{{ order.purchaseAmount }}</td>
                         <td>{{ order.registerDate }}</td>
                         <td>{{ order.dateAndHourDelivery }}</td>
-                        <td>{{ order.controlOrder }}</td>
+                        <td>{{ order.controlOrder ? "si" : "No" }}</td>
 
                         <!-- <td>
                             <tr *ngFor="let quantity of order.quantity" >{{quantity}}</tr>
@@ -191,7 +191,7 @@
                     </tr>
                     </td>
                     <td>
-                        <tr *ngFor="let valueDishe of order.valueDishe">{{valueDishe}}</tr>
+                        <tr *ngFor="let valueDishe of order.valueDishe">{{ "$ " + valueDishe}}</tr>
                     </td>
                     <td>{{"$ " + order.costReservationIva }}</td>
                     <td>{{"$ " + order.purchaseAmount }}</td>
