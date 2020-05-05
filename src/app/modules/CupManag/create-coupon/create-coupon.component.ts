@@ -75,8 +75,8 @@ export class CreateCouponComponent implements OnInit {
   //array for search couponsAvailable by idCoupon
   couponsAvailableByIdCoupon : any;
   //variable for upload images
-  fileImagedish: any;
-  urlImagedish: any;
+  fileImageCoupon: any;
+  // urlImagedish: any;
 
   //variables for receiving the coupon that will be edited
   identificatorbyRoot: any;
@@ -221,7 +221,7 @@ export class CreateCouponComponent implements OnInit {
           this.arrayDishes = dish
           this.arrayDishes.forEach(element => {
             let obj = {
-              id: element._id,
+              id: element.id,
               name: element.name
             }
 
@@ -279,7 +279,7 @@ export class CreateCouponComponent implements OnInit {
 
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas colocar este estado al cupon!",
+      text: "¡De que deseas colocar este estado al cupon!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -351,7 +351,7 @@ export class CreateCouponComponent implements OnInit {
         reader.readAsDataURL(input.files[0]);
       }
     }
-    return this.fileImagedish = input.files[0]
+    return this.fileImageCoupon = input.files[0]
   }
 // method for modal TyC
 
@@ -405,7 +405,7 @@ export class CreateCouponComponent implements OnInit {
   swallSaveTypeCoupon(newTypeCoupon: any) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas guardar este nuevo cupon!",
+      text: "¡De que deseas guardar este nuevo cupon!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -429,7 +429,7 @@ export class CreateCouponComponent implements OnInit {
   swallDeleteTypeCoupon(typeCouponSelected: string) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas eliminar este cupon!",
+      text: "¡De que deseas eliminar este cupon!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -454,7 +454,7 @@ export class CreateCouponComponent implements OnInit {
   swallSave() {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas guardar los cambios!",
+      text: "¡De que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -463,7 +463,7 @@ export class CreateCouponComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true
-        this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
+        this._uploadImages.uploadImages(this.fileImageCoupon, 'adminCoupon', 'coupon')
           .then(urlImage => {
             this.upload = true;
             this.preCoupon['imageCoupon'] = urlImage
@@ -478,7 +478,7 @@ export class CreateCouponComponent implements OnInit {
             if (this.upload == true) {
               Swal.fire({
                 title: 'Guardado',
-                text: "Tu nuevo cupón ha sido creado!",
+                text: "¡Tu nuevo cupón ha sido creado!",
                 icon: 'warning',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
@@ -492,14 +492,13 @@ export class CreateCouponComponent implements OnInit {
           .catch((e) => {
             if (this.upload == false) {
               Swal.fire({
-                text: "El cupón no ha sido creado porque no se subió la imagen",
+                text: "¡El cupón no ha sido creado porque no se subió la imagen",
                 icon: 'warning',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
               })
             }
-          }
-          );
+          });
       }
     })
   }
@@ -514,7 +513,7 @@ export class CreateCouponComponent implements OnInit {
   swallUpdateCoupon() {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas guardar los cambios!",
+      text: "¡De que deseas guardar los cambios!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -528,7 +527,7 @@ export class CreateCouponComponent implements OnInit {
           this.uploadCouponUpdate()
           Swal.fire({
             title: 'Guardado',
-            text: "Tu nuevo cupón ha sido actualizado!",
+            text: "¡Tu nuevo cupón ha sido actualizado!",
             icon: 'warning',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
@@ -538,7 +537,7 @@ export class CreateCouponComponent implements OnInit {
             }
           })
         } else if (this.seeNewPhoto == true) {
-          this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
+          this._uploadImages.uploadImages(this.fileImageCoupon, 'adminCoupon', 'coupon')
             .then(urlImage => {
               this.upload = true;
               this.preCoupon['imageCoupon'] = urlImage
@@ -546,7 +545,7 @@ export class CreateCouponComponent implements OnInit {
               if (this.upload == true) {
                 Swal.fire({
                   title: 'Guardado',
-                  text: "Tu nuevo cupón ha sido actualizado!",
+                  text: "¡Tu nuevo cupón ha sido actualizado!",
                   icon: 'warning',
                   confirmButtonColor: '#542b81',
                   confirmButtonText: 'Ok!'
@@ -575,11 +574,11 @@ export class CreateCouponComponent implements OnInit {
   // delete coupon selected 
   swallDeleteCoupon() {
     if (this.idParams == -1) {
-      Swal.fire('No puedes eliminar este perfil ya que no ha sido creado!!')
+      Swal.fire('¡No puedes eliminar este cupón ya que no ha sido creado!')
     } else {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: "de que deseas eliminar este coupón!",
+        text: "¡De que deseas eliminar este coupón!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#542b81',
@@ -601,7 +600,7 @@ export class CreateCouponComponent implements OnInit {
           })
           Swal.fire({
             title: 'Eliminado',
-            text: "Tu cupón ha sido eliminado!",
+            text: "¡Tu cupón ha sido eliminado!",
             icon: 'warning',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'

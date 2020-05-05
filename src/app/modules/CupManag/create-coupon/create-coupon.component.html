@@ -101,7 +101,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Platos</label>
                 <div class="col-md-7">
-                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required [ngClass]="{'is-invalid': (!idDish.valid ) && 
+                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required 
+                    [ngClass]="{'is-invalid': (!idDish.valid ) && 
                         idDish.touched ,'is-valid':(idDish.valid) }" [(ngModel)]="preCoupon.idDishes"
                         (change)="seeNameDish(idDish.value)">
 

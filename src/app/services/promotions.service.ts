@@ -49,7 +49,8 @@ export class PromotionsService {
               reference: promotions.reference,
               numberOfModifications : promotions.numberOfModifications,
               idAccompaniments: promotions.idAccompaniments,
-              idAllies : promotions.idAllies
+              idAllies : promotions.idAllies,
+              flag : promotions.flag,
             };
             return obj;
           })
@@ -102,7 +103,8 @@ export class PromotionsService {
             reference: promotions.reference,
             numberOfModifications : promotions.numberOfModifications,
             idAccompaniments: promotions.idAccompaniments,
-            idAllies : promotions.idAllies
+            idAllies : promotions.idAllies,
+            flag : promotions.flag,
           };
           return obj;
         })
