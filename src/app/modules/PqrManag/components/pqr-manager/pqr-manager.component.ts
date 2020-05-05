@@ -29,12 +29,12 @@ export class PqrManagerComponent implements OnInit {
   location = "bogota";
 
   profile: profileStorage = new profileStorage();
-  dateCreatePqr= ''; //this is for save the real date of pqr, iss nescesaary to updae pqr
+  dateCreatePqr = ''; //this is for save the real date of pqr, iss nescesaary to updae pqr
   toPdf = {}
 
   constructor(private activateParams: ActivatedRoute, private pqrservice: PqrsService, private userService: UsersService,
-    private _location: Location, private profileService: ShowContentService, private headService: HeadquartersService, private spinner:NgxSpinnerService,
-    private sendmail:SendmailService) {
+    private _location: Location, private profileService: ShowContentService, private headService: HeadquartersService, private spinner: NgxSpinnerService,
+    private sendmail: SendmailService) {
 
     this.activateParams.params.subscribe(res => {
 
@@ -59,8 +59,8 @@ export class PqrManagerComponent implements OnInit {
 
           })
 
-          this.headService.getHeadquarterById(pqr.idHeadquarter).subscribe( res =>{
-            if (res){
+          this.headService.getHeadquarterById(pqr.idHeadquarter).subscribe(res => {
+            if (res) {
               this.location = res.ubication;
             }
           })
@@ -86,46 +86,54 @@ export class PqrManagerComponent implements OnInit {
   // =================
   reply(res) {
 
-    if(this.response){
+    if (this.response) {
 
-      this.spinner.show();      
+      this.spinner.show();
 
       this.infoUSer['reply'] = this.response.toString();
       this.infoUSer['emailReply'] = this.profile.email;
-      this.infoUSer.state = true;
       this.infoUSer.date = this.dateCreatePqr;
-
+      
       let infotoemail: sendmail = {
         username: this.infoUSer.nameUser,
         email: this.infoUSer.email,
         question: this.infoUSer.description,
         reply: this.response
       }
+      
+      this.sendmail.sendmail(infotoemail).subscribe(res => {
+        
+        this.pqrservice.updatePqr(this.infoUSer.id, this.infoUSer).subscribe(res => {
+          
+          this.infoUSer.state = true;
+          this.alertEmpty = false;
+          this.spinner.hide();
+          Swal.fire({
+            title: "La solicitud fue atendida",
+            icon: "success"
+          })
 
-      this.pqrservice.updatePqr(this.infoUSer.id, this.infoUSer).subscribe(res =>{
-
-        this.sendmail.sendmail(infotoemail).subscribe( res =>{
+        }, err => {
 
           this.spinner.hide();
-          this.alertEmpty = false;
           Swal.fire({
-            title:"La solicitud fue atendida",
-            icon:"success"
+            title: "ocurio un error enviando la respuesta",
+            icon: "error"
           })
-          
         })
 
-      }, err =>{
+      }, err => {
+
         this.spinner.hide();
         Swal.fire({
-          title:"ocurio un error enviando la respuesta",
-          icon:"error"
+          title: "ocurio un error enviando el email con la respuesta",
+          icon: "error"
         })
       })
 
-    }else{
+    } else {
       this.alertEmpty = true;
-    }    
+    }
   }
 
   // ========================
@@ -172,7 +180,7 @@ export class PqrManagerComponent implements OnInit {
     //build the pdf file
     doc.autoTable(col, rows);
     doc.save('Pqr-' + this.infoUSer.id + " -" + this.infoUSer.nameUser + ".pdf");
-    
+
   }
 
 

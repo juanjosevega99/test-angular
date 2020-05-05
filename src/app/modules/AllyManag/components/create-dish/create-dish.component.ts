@@ -14,8 +14,10 @@ import { Promotions } from 'src/app/models/Promotions';
 import { PromotionsCategoriesService } from 'src/app/services/promotions-categories.service';
 import { PromotionsService } from 'src/app/services/promotions.service';
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
+import { CouponsService } from "src/app/services/coupons.service"
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Location } from '@angular/common';
+import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
 
 
 @Component({
@@ -122,12 +124,16 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   // Variables of alerts
   alertBadExtensionLogo = false;
+   //flag by state swall
+   upload: boolean = false;
 
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService,
     private storage: AngularFireStorage,
     private dishCategory: DishesCategoriesService, private promotionCategory: PromotionsCategoriesService,
     private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService,
-    private spinner: NgxSpinnerService, private _location: Location) {
+    private spinner: NgxSpinnerService, private _location: Location,
+    private couponsService: CouponsService,
+    private _uploadImages: UploadImagesService) {
 
     //flags
     this.loading = true;
@@ -373,7 +379,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     let filePath = input.value;
     let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
     if (!allowedExtensions.exec(filePath)) {
-      // alert('Por favor solo subir archivos que tengan como extensión .jpeg/.jpg/.png/.gif');
       this.alertBadExtensionLogo = true;
       input.value = '';
       return false;
@@ -623,7 +628,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }
   }
 
-
   //CRUD DISH
   //save new dish
   saveDish(shape: NgForm) {
@@ -644,7 +648,20 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         let dish: DishList = {}
         dish = dishes[this.identificatorbyRoot]
         let realId = dish.id
-        this.swallDelete(realId)
+        this.couponsService.getCoupons().subscribe(coupons => { 
+          let tycCoupon = coupons.filter(coupon => coupon.idDishes == realId)
+          if (tycCoupon.length != 0) {
+            Swal.fire({
+              text: `No se puede eliminar el plato porque esta utilizado en el cupón: ${tycCoupon[0].name} `,
+              icon: 'warning',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
+          } else {
+            this.swallDelete(realId)
+          }
+        })
+
       })
     }
   }
@@ -802,35 +819,41 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter');
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
-        const filePath = `assets/allies/menu/${id}`;
-        const ref = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, file)
-        task.snapshotChanges()
-          .pipe(
-            finalize(() => {
-              ref.getDownloadURL().subscribe(urlImage => {
-                this.urlDish = urlImage;
+        
+        this._uploadImages.uploadImages(this.fileImagedish, 'allies', 'menu')
+          .then(urlImage => {
+            this.upload = true;
+            this.preDish['imageDishe'] = urlImage
+            this.chargeDishes.postDishe(this.preDish).subscribe(message => {
+              this.spinner.hide();
 
-                this.preDish['imageDishe'] = this.urlDish;
-                this.chargeDishes.postDishe(this.preDish).subscribe(message => {
-                  this.spinner.hide();
+            })
 
-                  Swal.fire({
-                    title: 'Guardado',
-                    text: "Tu nuevo plato ha sido creado!",
-                    icon: 'success',
-                    confirmButtonColor: '#542b81',
-                    confirmButtonText: 'Ok!'
-                  }).then((result) => {
-                    if (result.value) {
-                      this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
-                    }
-                  })
-                })
+            if (this.upload == true) {
+              Swal.fire({
+                title: 'Guardado',
+                text: "¡Tu nuevo plato ha sido creado!",
+                icon: 'success',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+                }
               })
             }
-            )
-          ).subscribe()
+          })
+          .catch((e) => {
+            if (this.upload == false) {
+              this.spinner.hide();
+              Swal.fire({
+                text: "El plato no ha sido creado porque no se subió la imagen",
+                icon: 'warning',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              })
+            }
+          });
       }
     })
   }
@@ -845,20 +868,33 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
-      if (result.value) {
-        this.chargeDishes.deleteDishe(realId).subscribe(message => {
-          Swal.fire({
-            title: 'Eliminado',
-            text: "!Tu plato ha sido eliminado!",
-            icon: 'success',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          }).then((result) => {
-            if (result.value) {
-              this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
-            }
+      if (result.value) { 
+
+        let urlImg = 'assets/allies/menu/' + this.preDish['imageDishe'].split("%")[3].split("?")[0].slice(2); 
+        this._uploadImages.DeleteImage(urlImg).then(res =>{
+          this.chargeDishes.deleteDishe(realId).subscribe(message => {
+            Swal.fire({
+              title: 'Eliminado',
+              text: "!Tu plato ha sido eliminado!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }).then((result) => {
+              if (result.value) {
+                this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
+              }
+            })
           })
+          // this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
+          // this.couponsAvilableService.getCouponAvailableByIdCoupon(this.identificatorbyRoot)
+          // .subscribe( couponAvailable => {
+          //   this.couponsAvailableByIdCoupon = couponAvailable
+          //   this.couponsAvailableByIdCoupon.forEach(element => {
+          //     this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
+          //   });
+          // })         
         })
+       
       }
     })
   }
