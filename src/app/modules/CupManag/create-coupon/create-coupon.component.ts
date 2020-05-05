@@ -75,8 +75,8 @@ export class CreateCouponComponent implements OnInit {
   //array for search couponsAvailable by idCoupon
   couponsAvailableByIdCoupon : any;
   //variable for upload images
-  fileImagedish: any;
-  urlImagedish: any;
+  fileImageCoupon: any;
+  // urlImagedish: any;
 
   //variables for receiving the coupon that will be edited
   identificatorbyRoot: any;
@@ -351,7 +351,7 @@ export class CreateCouponComponent implements OnInit {
         reader.readAsDataURL(input.files[0]);
       }
     }
-    return this.fileImagedish = input.files[0]
+    return this.fileImageCoupon = input.files[0]
   }
 // method for modal TyC
 
@@ -463,7 +463,7 @@ export class CreateCouponComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true
-        this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
+        this._uploadImages.uploadImages(this.fileImageCoupon, 'adminCoupon', 'coupon')
           .then(urlImage => {
             this.upload = true;
             this.preCoupon['imageCoupon'] = urlImage
@@ -498,8 +498,7 @@ export class CreateCouponComponent implements OnInit {
                 confirmButtonText: 'Ok!'
               })
             }
-          }
-          );
+          });
       }
     })
   }
@@ -538,7 +537,7 @@ export class CreateCouponComponent implements OnInit {
             }
           })
         } else if (this.seeNewPhoto == true) {
-          this._uploadImages.uploadImages(this.fileImagedish, 'adminCoupon', 'coupon')
+          this._uploadImages.uploadImages(this.fileImageCoupon, 'adminCoupon', 'coupon')
             .then(urlImage => {
               this.upload = true;
               this.preCoupon['imageCoupon'] = urlImage
