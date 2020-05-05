@@ -71,7 +71,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     preparationTime: [],
     reference: null,
     numberOfModifications: 0,
-    idAllies: null
+    idAllies: null,
+    flag:false,
   }
 
   tickFunction: any;

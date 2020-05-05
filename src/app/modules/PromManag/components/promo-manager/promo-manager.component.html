@@ -112,8 +112,18 @@
                                 class="far fa-edit"></i> </a>
                     </td>
                 </tr>
-                <tr *ngIf=" !dishPromoArray.length " >
-                    <td colspan="13">No has añadido promociones!!</td>
+                <tr>
+                    <td colspan="15">
+                        <div *ngIf="loadingDishes" class="fa-3x text-center">
+                            <i class="fas fa-spinner fa-pulse"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="noResults && !dishPromoArray.length ">
+                    <td colspan="15"> No se encontraron resultados!</td>
+                </tr>
+                <tr *ngIf="noDishes">
+                    <td colspan="15">No existen promociones registrados para este aliado!!</td>
                 </tr>
             </tbody>
         </table>
