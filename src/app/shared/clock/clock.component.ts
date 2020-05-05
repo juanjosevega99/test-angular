@@ -16,7 +16,8 @@ export class ClockComponent implements OnInit, OnDestroy {
   constructor() { }
 
   ngOnInit() {
-
+    
+    this.tick();
     this.timeTick = setInterval( ()=>this.tick(), 20000 );
   }
 

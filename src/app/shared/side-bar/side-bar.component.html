@@ -9,24 +9,27 @@
         <div class="sidebar-header ">
             <img [src]="profile.photo" alt="..."
                 class="rounded-circle img">
-            <div *ngIf="profile.nameCharge != 'administradorTIFI'" class="d-flex mt-2 flex-column">
-                <p class="text-center text-Margin-botton textStablishment"> {{profile.nameAllie}} </p>
-                <p class="text-Margin-botton">Sede: {{profile.nameHeadquarter}} </p>
+            <div class="d-flex mt-2 flex-column">
+                <p class="text-center text-Margin-botton textStablishment"> {{profile.name }} </p>
+                <p class="text-Margin-botton mt-1">Cargo: {{profile.nameCharge}} </p>
                 
             </div>
-            <div *ngIf="profile.nameCharge == 'administradorTIFI'" class="d-flex mt-2 flex-column" >
-                <p  class="text-with-out textLyrics1 "
-                    style="font-size: 1.2rem;"> {{profile.nameCharge | uppercase }} </p>
-            </div>
+            <!-- <div class="d-flex mt-3 flex-column" >
+               <strong>
+                <p  class="text-with-out textLyrics1" style="font-size: .8rem;"> {{profile.name | uppercase }}</p>
+               </strong> 
+                <p  class="text-with-out textLyrics1"
+                    style="font-size: 1rem;"> {{profile.nameCharge | uppercase }} </p>
+            </div> -->
             <button [routerLink]="['/main/createProfile/', profile.id]" type="button" class="btn btn-link colorBackGround" style="margin-top: 15px;">Editar</button>
         </div>
         <ul class="list-unstyled components" style="text-align: center; width: 100%; ">
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
-                <a [routerLink]="[ '/main', 'pqrList' ]" class="notification" style="margin-right: 40px;">
+                <a *ngIf="profile.showContent.pqrs" [routerLink]="[ '/main', 'pqrList' ]" class="notification" style="margin-right: 40px;">
                     <i class="fas fa-envelope icon-style icon"></i>
                     <span class="badge"><app-notifications-pqrs></app-notifications-pqrs></span>
                 </a>
-                <a [routerLink]="['/main/principal-orders']" class="notification">
+                <a *ngIf="profile.showContent.principal" [routerLink]="['/main/principal-orders']" class="notification">
                     <i class="fas fa-bell icon"></i>
                     <span class="badge"><app-notifications-orders></app-notifications-orders></span>                
                 </a>

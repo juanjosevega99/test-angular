@@ -22,6 +22,7 @@ export class ShowContentService {
       profile.idAllies = profilest.idAllies;
       profile.photo = profilest.photo;
       profile.email = profilest.email;
+      profile.name = profilest.name;
 
       let showContent = {
         options: false,
@@ -46,6 +47,7 @@ export class ShowContentService {
           showContent.principal = true;
           break;
         case 'asesor':
+        case 'administradorPDV':
           showContent.pqrs = true;
           break;
         case 'contador':

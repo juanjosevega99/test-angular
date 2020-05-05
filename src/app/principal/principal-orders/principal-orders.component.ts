@@ -39,7 +39,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
   datereservation: string = '';
   idEvent: string = "";
-  hourreservation = { id: "", valueToShow: "", value: "" };
+  hourreservation = { id: -1, valueToShow: "", value: "" };
   Tablereservation = { id: "", value: "" }
   Peoplereservation = { id: "", value: "" }
   idButton = '';
@@ -56,13 +56,6 @@ export class PrincipalOrdersComponent implements OnInit {
   Reservations = [];
   // =========================
   // ====== profile ==========
-
-  profilegen = {
-    id: '123',
-    name: 'pepito',
-    idAllies: "5e7b744640e2af2d2f5a6610",
-    idHedquart: "5e7b7cf227d3a60b0fb06494"
-  }
 
   profile: profileStorage;
 
@@ -85,6 +78,9 @@ export class PrincipalOrdersComponent implements OnInit {
 
   orders = []
   orders2 = []
+
+  reservationOndaySelected:reservation = {_id:'', date:'',hour:{},people:{},tables:{},idHeadquart:''}
+
   constructor(private serviceOrders: OrdersService, private userservice: UsersService, private dishService: DishesService,
     private reservationService: ReservationService, private wesocket: WebsocketsService, private spinner: NgxSpinnerService,
     private showmenu: ShowContentService) {
@@ -114,16 +110,6 @@ export class PrincipalOrdersComponent implements OnInit {
     // load reservations
     this.loadReservations();
 
-    this.dishService.getDishes().subscribe((dishes: Dishes[]) => {
-      let diss = [];
-      dishes.forEach(dis => {
-
-        diss.push(dis);
-
-      })
-
-      this.listOfDishes = diss;
-    })
 
   }
 
@@ -132,10 +118,9 @@ export class PrincipalOrdersComponent implements OnInit {
     // this.orderList();
     this.orders2 = this.orders;
 
-    
+
     this.wesocket.listen('newOrder').subscribe((res: Orders) => {
 
-      // console.log("desde server", res);
       if (res.idHeadquartes == this.profile.idHeadquarter) {
         this.formatOrderUnit(res);
         this.orderList(this.orders);
@@ -145,14 +130,23 @@ export class PrincipalOrdersComponent implements OnInit {
 
     this.wesocket.listen("newReservation").subscribe((reservation: reservation) => {
 
+      const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
+
       if (this.profile.idHeadquarter == reservation.idHeadquart) {
 
-        if (this.idEvent == "" && this.datereservation != "") {
+        if (lastevent.publicId == " ") {
+
           this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
           this.datereservation = "";
         }
-        this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
-        this.Reservations.push(reservation);
+
+        let ordersInDay = this.calendarEvents.filter(resin => resin.date === reservation.date);
+
+        if (!ordersInDay.length) {
+          this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
+          this.Reservations.push(reservation);
+        }
+
         this.idEvent = "";
         this.resetIds();
 
@@ -161,41 +155,75 @@ export class PrincipalOrdersComponent implements OnInit {
 
   }
 
+  loadDishes() {
+    this.dishService.getDishesByIdAlly(this.profile.idAllies).subscribe((dishes: Dishes[]) => {
+      let diss = [];
+      dishes.forEach(dis => {
+
+        diss.push(dis);
+
+      })
+
+      this.listOfDishes = diss;
+    })
+  }
+
 
   showToReservation() {
-    if (this.datereservation && this.hourreservation.value && this.Peoplereservation.value && this.Tablereservation.value) {
 
-      // comprobation if date is corect
-      let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
-      let today = new Date();
+    if( this.reservationOndaySelected.tables['value'] != this.Tablereservation.value ){
+      if (this.datereservation && this.hourreservation.value && this.Peoplereservation.value && this.Tablereservation.value) {
 
-      if (dateres >= today) {
-
-        this.copilist = this.listOfDishes.slice();
-        // this.showmodal = true;
-        this.setReservation();
-
+        // comprobation if date is corect
+        let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
+        let today = new Date();
+  
+        if (dateres >= today) {
+  
+          // this copilist is use when implemented the other part of reservation.
+          // this.copilist = this.listOfDishes.slice();
+          // this.showmodal = true;
+  
+          this.setReservation();
+  
+        } else {
+  
+          Swal.fire({
+  
+            title: 'Fecha incorrecta',
+            // text: "la Fecha es incorrecta",
+            icon: 'warning',
+            // showCancelButton: true,
+            confirmButtonColor: '#542b81',
+            // cancelButtonColor: '#542b81',
+            confirmButtonText: 'Aceptar',
+            // cancelButtonText: 'No'
+  
+          })
+        }
+  
       } else {
-
         Swal.fire({
-
-          title: 'Fecha incorrecta',
-          // text: "la Fecha es incorrecta",
+  
+          title: 'Por favor selecciona todos los campos',
+          text: "Fecha, Hora, Personas, Mesas",
           icon: 'warning',
           // showCancelButton: true,
           confirmButtonColor: '#542b81',
           // cancelButtonColor: '#542b81',
           confirmButtonText: 'Aceptar',
           // cancelButtonText: 'No'
-
+  
         })
       }
+      
+    }else{
 
-    } else {
+
       Swal.fire({
-
-        title: 'Por favor selecciona todos los campos',
-        text: "Fecha, Hora, Personas, Mesas",
+  
+        title: 'La hora que seleccionaste ya tiene una reserva para este dia',
+        text: "Por favor selecciona otra fecha",
         icon: 'warning',
         // showCancelButton: true,
         confirmButtonColor: '#542b81',
@@ -203,8 +231,10 @@ export class PrincipalOrdersComponent implements OnInit {
         confirmButtonText: 'Aceptar',
         // cancelButtonText: 'No'
 
-      })
+      })     
+      
     }
+
 
 
   }
@@ -300,6 +330,8 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
   createHours() {
+    this.Hours = [];
+
     for (let hour = 0; hour < 24; hour++) {
       for (let min = 0; min < 31; min += 30) {
         let toHour = ''
@@ -336,7 +368,6 @@ export class PrincipalOrdersComponent implements OnInit {
 
 
   tolast(index: number) {
-    console.log("to Last");
 
     let auxOrder: Orders = this.orders2[index];
     this.orders2.splice(index, 1);
@@ -347,10 +378,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
   orderList(ordersArray) {
 
-    console.log(ordersArray.sort((a, b) => new Date(a.DateDelivery).getTime() - new Date(b.DateDelivery).getTime()));
-
     ordersArray.forEach((order: Orders, i) => {
-      console.log(order.orderStatus);
 
       if (order.orderStatus == "Cancelada" || order.orderStatus == "Entregado") {
         this.tolast(i);
@@ -362,7 +390,6 @@ export class PrincipalOrdersComponent implements OnInit {
   // ============================
   // === charge reservation =====
   loadReservations() {
-    console.log("loading reservations");
 
     this.calendarEvents = [];
     this.Reservations = [];
@@ -372,7 +399,11 @@ export class PrincipalOrdersComponent implements OnInit {
       this.Reservations = reservations;
       this.Reservations.forEach((res: reservation) => {
 
-        this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+        let ordersInDay = this.calendarEvents.filter(resin => resin.date === res.date);
+
+        if (!ordersInDay.length) {
+          this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+        }
 
       });
     })
@@ -389,7 +420,7 @@ export class PrincipalOrdersComponent implements OnInit {
     this.idPeople = '';
     this.idTable = '';
     this.datereservation = '';
-    this.hourreservation = { id: '', valueToShow: '', value: '' };
+    this.hourreservation = { id: -1, valueToShow: '', value: '' };
     this.Tablereservation = { id: '', value: '' };
     this.Peoplereservation = { id: '', value: '' };
 
@@ -403,6 +434,7 @@ export class PrincipalOrdersComponent implements OnInit {
     if (color) {
 
       background = color;
+      // document.getElementById(res['hour']['id']).setAttribute( "disabled", "true" );
       document.getElementById(res['hour']['id']).style.backgroundColor = background;
       document.getElementById(res['tables']['id']).style.backgroundColor = background;
       document.getElementById(res['people']['id']).style.backgroundColor = background;
@@ -412,7 +444,7 @@ export class PrincipalOrdersComponent implements OnInit {
       if (this.Reservations.length) {
 
         this.Reservations.forEach((res: reservation) => {
-          document.getElementById(res['hour']['id']).style.backgroundColor = background;
+          document.getElementById(res.hour['id']).style.backgroundColor = background;
           document.getElementById(res.tables['id']).style.backgroundColor = background;
           document.getElementById(res.people['id']).style.backgroundColor = background;
         })
@@ -421,12 +453,28 @@ export class PrincipalOrdersComponent implements OnInit {
     }
   }
 
+  setColorHour(color?: string, res?: reservation) {
+
+    if (color) {
+      // document.getElementById(res.hour['id']).style.backgroundColor = color;
+      document.getElementById(res.tables['id']).style.backgroundColor = color;
+      document.getElementById(res.people['id']).style.backgroundColor = color;
+    } else {
+
+      if (this.Reservations.length) {
+        this.Reservations.forEach((res: reservation) => {
+          document.getElementById(res.tables['id']).style.backgroundColor = "#fff";
+          document.getElementById(res.people['id']).style.backgroundColor = "#fff";
+        })
+      }
+    }
+  }
+
   // ============================
   // ======= Calendar ===========
   eventClick(event) {
 
     // get id of event, this id is on order.typeOfServiceobj
-    // console.log("from event", event.event._def.extendedProps.publicId);
     this.handleDateClick(event.event._def.extendedProps);
 
   }
@@ -434,34 +482,30 @@ export class PrincipalOrdersComponent implements OnInit {
   handleDateClick(event) {
 
     // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
-    if (this.datereservation) {
+    const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
+
+    if (lastevent.publicId == " ") {
 
       this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-
     }
 
     // setting date of event
     this.datereservation = event.target ? event.target : event.dateStr;
 
+    let reservationsOnDay = this.Reservations.filter((res: reservation) => res.date === this.datereservation);
     // setting the id event's is necessary to use in setFree()  Reservation
     this.idEvent = event.publicId ? event.publicId : "";
 
     // this event should not id, because is a generic event only for see
-    let objdate = { publicId: "", title: 'programar', date: this.datereservation, target: this.datereservation }
+    let objdate = { publicId: " ", title: 'programar', date: this.datereservation, target: this.datereservation }
     this.calendarEvents.push(objdate);
 
-    if (this.Reservations.length) {
 
-      this.setColor();
+    this.setColor();
 
-      this.Reservations.forEach((res: reservation) => {
-
-        if (event.publicId == res._id) {
-
-          this.setColor("#ffb6b9", res);
-          return
-
-        }
+    if (reservationsOnDay.length) {
+      reservationsOnDay.forEach((res: reservation) => {
+        this.setColor("#ffb6b9", res);
       });
 
     }
@@ -469,30 +513,70 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
   getHour(event, id) {
+
+
     if (this.idButton) {
 
       document.getElementById(this.idButton).style.backgroundColor = "#fff";
+      this.idButton = '';
 
     }
 
-    document.getElementById(id).style.backgroundColor = "#54a735";
-    this.idButton = id;
+    let reservation = this.Reservations.filter((res: reservation) => {
+      if (res.hour['id'] === id && this.datereservation === res.date) {
+        return res;
+      }
+    })
+
     this.hourreservation = this.Hours[id];
-    this.hourreservation.id = this.idButton;
+    this.hourreservation.id = id;
+
+
+    this.setColorHour();
+    if (reservation.length) {
+
+      reservation.forEach((rese: reservation) => {
+
+        if (rese.date === this.datereservation && rese.hour['id'] === id) {
+          this.setColorHour("#ffb6b9", rese);
+          // this.hourreservation.id = -1;}
+          this.reservationOndaySelected = rese;
+          // set this variables to not change background-color
+          this.idTable = '';
+          this.idPeople = '';
+
+          return;
+        }
+      })
+
+    } else {
+      document.getElementById(id).style.backgroundColor = "#54a735";
+      this.idButton = id;
+      this.reservationOndaySelected = {
+        _id:'',
+        date:'',
+        hour:{},
+        people:{},
+        tables:{},
+        idHeadquart:''
+      };
+    }
 
   }
 
   getTables(event, id) {
-    if (this.idTable) {
 
-      document.getElementById(this.idTable).style.backgroundColor = "#fff";
+      if (this.idTable) {
+  
+        document.getElementById(this.idTable).style.backgroundColor = "#fff";
+  
+      }
+  
+      document.getElementById(id + 't').style.backgroundColor = "green";
+      this.idTable = id + 't';
+      this.Tablereservation.value = event.target.textContent;
+      this.Tablereservation.id = this.idTable;
 
-    }
-
-    document.getElementById(id + 't').style.backgroundColor = "green";
-    this.idTable = id + 't';
-    this.Tablereservation.value = event.target.textContent;
-    this.Tablereservation.id = this.idTable;
 
   }
 
@@ -677,13 +761,9 @@ export class PrincipalOrdersComponent implements OnInit {
 
           this.reservationService.postReservation(reservation).subscribe((res: reservation) => {
 
-            if (this.idEvent = "" && this.datereservation != "") {
-
-              this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-              this.datereservation = "";
-            }
             // this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
             // this.Reservations.push(res);
+            this.datereservation = "";
             this.idEvent = "";
             // this.createOrder(reservation);
             // this.loadReservations();
