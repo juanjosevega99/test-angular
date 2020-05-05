@@ -93,19 +93,20 @@ export class PqrManagerComponent implements OnInit {
       this.infoUSer['reply'] = this.response.toString();
       this.infoUSer['emailReply'] = this.profile.email;
       this.infoUSer.date = this.dateCreatePqr;
+      this.infoUSer.state = true;
       
       let infotoemail: sendmail = {
         username: this.infoUSer.nameUser,
         email: this.infoUSer.email,
         question: this.infoUSer.description,
-        reply: this.response
+        reply: this.response,
+
       }
       
       this.sendmail.sendmail(infotoemail).subscribe(res => {
         
         this.pqrservice.updatePqr(this.infoUSer.id, this.infoUSer).subscribe(res => {
           
-          this.infoUSer.state = true;
           this.alertEmpty = false;
           this.spinner.hide();
           Swal.fire({
@@ -120,6 +121,7 @@ export class PqrManagerComponent implements OnInit {
             title: "ocurio un error enviando la respuesta",
             icon: "error"
           })
+          this.infoUSer.state = false;
         })
 
       }, err => {
@@ -129,6 +131,7 @@ export class PqrManagerComponent implements OnInit {
           title: "ocurio un error enviando el email con la respuesta",
           icon: "error"
         })
+        this.infoUSer.state = false;
       })
 
     } else {
