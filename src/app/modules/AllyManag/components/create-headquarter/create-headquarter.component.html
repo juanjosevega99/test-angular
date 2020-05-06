@@ -4,12 +4,11 @@
 
 
         <a  (click)="goBackHeadquarterOptions()" class="d-flex mr-2">
-            <!-- [routerLink]="['/main','headquarts']" -->
             <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 
 
-        <section class="col-5">
+        <section class="col-10 col-sm-10 col-md-10 col-lg-5 col-xl-5">
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-control-label">Nombre de la sede</label>
@@ -28,10 +27,12 @@
                 <label class="col-md-5 col-form-label">Ubicación</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <select *ngIf="otherLocationSelect" class="form-control" name="ubication" #locationHq="ngModel"
+                        <select *ngIf="otherLocationSelect" class="form-control" name="locationHq" #locationHq="ngModel"
                             [(ngModel)]="preHeadquarters.ubication" required
-                            [ngClass]="{'is-invalid': (!locationHq.valid),'is-valid':(locationHq.valid) }">
-                            <option *ngFor="let list of Location">
+                            [ngClass]="{'is-invalid': (!locationHq.valid && locationHq.touched ),'is-valid':(locationHq.valid) }">
+                        
+                            <option *ngFor="let list of Location"
+                            [ngValue]= "list.name">
                                 {{list.name}}
                             </option>
                         </select>
@@ -120,10 +121,10 @@
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" pattern="\([0-9]{3}\)[0-9]{3}[ -][0-9]{4}"
-                        placeholder="(xxx)xxx-xxxx" name="telephoneGC" [(ngModel)]="preHeadquarters.telephoneGC">
+                        placeholder="Ej: (123)456-7891" name="telephoneGC" [(ngModel)]="preHeadquarters.telephoneGC">
                     <div class="col-md-9">
                         <div class="form-control-feedback">
-                            <small> *Indicador seguido del número:(xxx)xxx-xxxx </small>
+                            <small> *Indicador seguido del número:(123)456-7891 </small>
                         </div>
                     </div>
                 </div>
@@ -147,13 +148,13 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Código sede</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="dddddd-d"
+                    <input class="form-control" type="text" placeholder="Ej: 444444-1"
                         pattern="[0-9a-zA-Z]{6}[ -][0-9a-zA-Z]{1}" #codeHq="ngModel"
                         [ngClass]="{'is-invalid': (!codeHq.valid && codeHq.touched) || codeHq.errors?.pattern ,'is-valid':(codeHq.valid) }"
                         name="code" [(ngModel)]="preHeadquarters.code" required>
                     <div class="col-md-9">
                         <div class="form-control-feedback">
-                            <small> *Formato(7 carácteres): xxxxxx-x </small>
+                            <small> *Formato(7 carácteres): 444444-1 </small>
                         </div>
                     </div>
                     <div *ngIf=" codeHq.errors?.required" class="invalid-feedback">*Este campo es requerido</div>
@@ -165,7 +166,7 @@
 
 
 
-        <section class="col-5">
+        <section class="col-10 col-sm-10 col-md-10 col-lg-5 col-xl-5">
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios prestados</label>
@@ -176,16 +177,16 @@
                             <!-- {{service.name}} -->
                         </label>
                         <input class="form-check-input" type="checkbox" [checked]="service.select"
-                            (change)="selectedService($event,i)" [value]="service.name">
+                            (change)="selectedService($event,i)" [value]="service.name" >
                     </div>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Costo por reserva/pedido</label>
-                <div class="col-md-7">
+                <label class="col-md-5  col-lg-5 col-form-label">Costo por reserva/pedido</label>
+                <div class="col-md-7 col-lg-7 d-flex flex-column" >
                     <div class="form-check form-check-inline" *ngFor="let x of cost; let position = index">
-                        <div *ngIf="preHeadquarters['principarlServices'][position]?.checked">
+                        <div *ngIf="preHeadquarters['principarlServices'][position]?.checked" style="margin-top: 0.8rem;">
                             <label>
                                 <img src={{x.img}} height="30px" width="30px">
                             </label>
@@ -205,7 +206,7 @@
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios adicionales</label>
-                <div class="col-md-7">
+                <div class="col-md-7 d-flex flex-column">
                     <div class="form-check form-check-inline" *ngFor="let x of aditionalServices;let i=index">
                         <input class="form-check-input" type="checkbox" [checked]="x.select"
                             (click)="getAdditionalService(nameService.textContent,imageService.src,i,$event)"
@@ -214,6 +215,7 @@
                             <img id={{i}} src={{x.img}} height="25px" width="25px" #imageService>
                             {{x.name}}
                         </label>
+                       
                     </div>
                     <a class="ml-4">
                         <input class="form-check-input " type="checkbox" (click)="handleBoxOtherservice()">
@@ -222,16 +224,29 @@
                             otro
                         </label>
                         <div *ngIf="othersServiceInput">
-                            <input class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other" id="other"
-                                required>
+                            <input class="col-md-9 col-form-label mr-2 form-control" name="otherService"  #otherService="ngModel" id="id" 
+                            placeholder="Nombre del servicio" [ngClass]="{'is-invalid': (!otherService.valid && otherService.touched),'is-valid':(otherService.valid) }"
+                            [(ngModel)]="other" required>
                             <div class="row">
                                 <div class="upload-btn-wrapper">
+                                    <div *ngIf="alertBadExtensionImageCoupon" class="alert alert-danger" role="alert">
+                                        Por favor solo subir archivos que tengan como
+                                        extensión .jpeg/.jpg/.png/.gif
+                                    </div>
                                     <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
                                     <input type="file" (change)="selectImg($event)">
                                 </div>
                                 <button type="button" class="btn btn-outline-primary"
-                                    (click)="addNewServiceadd(other)">Añadir</button>
+                                    (click)="addNewServiceadd()">Añadir
+                                </button>
+                                
                             </div>
+                            <div *ngIf="loadingBanners" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </div>
+                            <div *ngIf="otherService.errors?.required" class="invalid-feedback">*Este campo es requerido
+                            </div>
+                            <div class="valid-feedback">Ok!</div>
                         </div>
                     </a>
                 </div>
@@ -298,10 +313,10 @@
                 <label class="col-md-5 col-form-label">Fijo</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" pattern="\([0-9]{3}\)[0-9]{3}[ -][0-9]{4}"
-                        placeholder="(xxx)xxx-xxxx" name="telHq" [(ngModel)]="preHeadquarters.telephoneHC">
+                        placeholder="Ej: (123)456-7891" name="telHq" [(ngModel)]="preHeadquarters.telephoneHC">
                     <div class="col-md-9">
                         <div class="form-control-feedback">
-                            <small> *Indicador seguido del número:(xxx)xxx-xxxx </small>
+                            <small> *Indicador seguido del número:(123)456-7891 </small>
                         </div>
                     </div>
                 </div>
@@ -324,13 +339,13 @@
 
         </section>
 
-        <section class="col-1 d-flex justify-content-center align-items-center ">
+        <section class="col-10 col-sm-10 col-md-10 col-lg-1 col-xl-1 d-flex justify-content-center align-items-center ">
 
             <div class="d-flex flex-column ">
                 <div class="form-group row" style="margin-bottom: 5rem;">
                     <label class="">&nbsp;</label>
                     <div class="input-group">
-                        <button *ngIf="!edit" [disabled]="!shape.valid" type="submit" class="btn btn-outline-primary" id="btnguardar">
+                        <button *ngIf="!edit" [disabled]="shape.invalid" type="submit" class="btn btn-outline-primary" id="btnguardar">
                             Guardar
                         </button>
                         <button *ngIf="edit" (click)="updateHeadquarter()" [disabled]="!shape.valid" type="button" class="btn btn-outline-primary" id="btnguardar">
@@ -352,8 +367,5 @@
 
     </form>
 
-    <!-- <pre>
-        {{ preHeadquarters | json }}
-    </pre> -->
 
 </div>

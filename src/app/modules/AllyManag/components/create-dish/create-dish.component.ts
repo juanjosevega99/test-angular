@@ -897,7 +897,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   swallDelete(realId) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas eliminar este plato!",
+      text: "¡De que deseas eliminar este plato!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
@@ -920,15 +920,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
               }
             })
-          })
-          // this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
-          // this.couponsAvilableService.getCouponAvailableByIdCoupon(this.identificatorbyRoot)
-          // .subscribe( couponAvailable => {
-          //   this.couponsAvailableByIdCoupon = couponAvailable
-          //   this.couponsAvailableByIdCoupon.forEach(element => {
-          //     this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
-          //   });
-          // })         
+          })        
         })
        
       }

@@ -149,7 +149,7 @@ export class CreateCouponComponent implements OnInit {
     this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
       this.typeCoupon = typeCoupon;
       if (this.preCoupon['idtypeOfCoupon']) {
-        var type = this.typeCoupon.find(element => element.id === this.preCoupon['idtypeOfCoupon'])
+        let type = this.typeCoupon.find(element => element.id === this.preCoupon['idtypeOfCoupon'])
         this.preCoupon['idtypeOfCoupon'] = type.id
       }
     })
