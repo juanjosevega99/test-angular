@@ -65,7 +65,19 @@ export class PqrListComponent implements OnInit {
       "nameHeadquarter": new FormControl(),
 
     })
+    this.loadPqrs();    
 
+  }
+
+  ngOnInit() {
+    this.websocket.listen('newPqr').subscribe((pqr: Pqrs) => {
+      if (pqr.idHeadquarter == this.profile.idHeadquarter) {
+        this.formaterPqr(pqr);
+      }
+    })
+  }
+
+  loadPqrs(){
     this.loadingPqrs = true;
 
     if (this.profile.nameCharge.toLocaleLowerCase() != "administradortifi") {
@@ -109,15 +121,7 @@ export class PqrListComponent implements OnInit {
         }
       })
     }
-
-  }
-
-  ngOnInit() {
-    this.websocket.listen('newPqr').subscribe((pqr: Pqrs) => {
-      if (pqr.idHeadquarter == this.profile.idHeadquarter) {
-        this.formaterPqr(pqr);
-      }
-    })
+    
   }
 
   // =====================================
@@ -206,7 +210,7 @@ export class PqrListComponent implements OnInit {
     //'p', 'mm', 'a4'
 
     let doc = new jsPDF('landscape');
-    let col = ["Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
+    let col = ["#", "Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
       "Sede"];
     let rows = [];
     let auxrow = [];
@@ -215,16 +219,22 @@ export class PqrListComponent implements OnInit {
       auxrow[0] = i + 1;
       for (const key in user) {
         if (user.hasOwnProperty(key)) {
-          // Mostrando en pantalla la clave junto a su valor
-          auxrow.push(user[key]);
+          if(key == "id"){
+
+            auxrow.push(user[key].slice(12, user[key].length ));
+          }else{
+
+            auxrow.push(user[key]);
+          }
         }
       }
       rows.push(auxrow);
     });
 
     //build the pdf file
+    let name = "reporte Pqrs"  + new Date().toLocaleString() +'.pdf'
     doc.autoTable(col, rows);
-    doc.save('Test.pdf');
+    doc.save(name);
   }
 
 
@@ -237,7 +247,7 @@ export class PqrListComponent implements OnInit {
       const obj: Pqrs = {};
 
       obj.id = order.id,
-        obj.date = this.convertDate(order.date);
+      obj.date = this.convertDate(order.date);
       obj.nameUser = user.name;
       obj.email = user.email;
       obj.phone = user.phone;

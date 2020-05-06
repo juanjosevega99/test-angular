@@ -369,27 +369,17 @@
             </div>
 
             <div *ngIf="promotion" class="form-group row">
-                <label class="col-md-5 col-form-label">Foto de la promoción</label>
+                <label class="col-md-5 col-form-label">Foto del plato</label>
                 <div class="col-md-7">
 
                     <div class="row align-items-center ">
                         <div class="photo">
-                            <img  title="*Campo requerido" [tooltip]="HtmlContent" content-type="template" id="photo" width="100px" height="100px"
-                                style="border-radius: 0.5rem" [src]="promotionArray.photo">
+                            <img [src]="promotionArray.photo" id="photo" width="100px" height="100px"
+                                title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
-                            <ng-template #HtmlContent>
-                                <p>Se recomienda subir archivo .png y dimensiones: 
-                                    Ancho -> 300 px, Alto -> 168 px</p>
-                            </ng-template>
-                            <div *ngIf="alertBadExtensionLogo" class="alert alert-danger" role="alert">
-                                Por favor solo subir archivos que tengan como
-                                extensión .jpeg/.jpg/.png/.gif
-                            </div>
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
-                            <input   type="file" name="photo" required 
-                                (change)="onPhotoSelected($event)" />
-                            <span tooltip="Tooltip text"></span>
+                            <input type="file" name="photo" (change)="onPhotoSelected($event)" />
                         </div>
                     </div>
 
