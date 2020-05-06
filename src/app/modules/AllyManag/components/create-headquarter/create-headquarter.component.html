@@ -27,13 +27,12 @@
                 <label class="col-md-5 col-form-label">Ubicación</label>
                 <div class="col-md-7">
                     <div class="input-group">
-                        <select *ngIf="otherLocationSelect" class="form-control" name="ubication" #locationHq="ngModel"
+                        <select *ngIf="otherLocationSelect" class="form-control" name="locationHq" #locationHq="ngModel"
                             [(ngModel)]="preHeadquarters.ubication" required
-                            [ngClass]="{'is-invalid': (!locationHq.valid),'is-valid':(locationHq.valid) }">
-                            <option >
-                                BOGOTÁ
-                            </option>
-                            <option *ngFor="let list of Location">
+                            [ngClass]="{'is-invalid': (!locationHq.valid && locationHq.touched ),'is-valid':(locationHq.valid) }">
+                        
+                            <option *ngFor="let list of Location"
+                            [ngValue]= "list.name">
                                 {{list.name}}
                             </option>
                         </select>
@@ -216,6 +215,7 @@
                             <img id={{i}} src={{x.img}} height="25px" width="25px" #imageService>
                             {{x.name}}
                         </label>
+                       
                     </div>
                     <a class="ml-4">
                         <input class="form-check-input " type="checkbox" (click)="handleBoxOtherservice()">
@@ -224,16 +224,29 @@
                             otro
                         </label>
                         <div *ngIf="othersServiceInput">
-                            <input class="col-md-9 col-form-label mr-2 form-control" [(ngModel)]="other" name="other" id="other"
-                                required>
+                            <input class="col-md-9 col-form-label mr-2 form-control" name="otherService"  #otherService="ngModel" id="id" 
+                            placeholder="Nombre del servicio" [ngClass]="{'is-invalid': (!otherService.valid && otherService.touched),'is-valid':(otherService.valid) }"
+                            [(ngModel)]="other" required>
                             <div class="row">
                                 <div class="upload-btn-wrapper">
+                                    <div *ngIf="alertBadExtensionImageCoupon" class="alert alert-danger" role="alert">
+                                        Por favor solo subir archivos que tengan como
+                                        extensión .jpeg/.jpg/.png/.gif
+                                    </div>
                                     <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
                                     <input type="file" (change)="selectImg($event)">
                                 </div>
                                 <button type="button" class="btn btn-outline-primary"
-                                    (click)="addNewServiceadd(other)">Añadir</button>
+                                    (click)="addNewServiceadd()">Añadir
+                                </button>
+                                
                             </div>
+                            <div *ngIf="loadingBanners" class="fa-3x text-center">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </div>
+                            <div *ngIf="otherService.errors?.required" class="invalid-feedback">*Este campo es requerido
+                            </div>
+                            <div class="valid-feedback">Ok!</div>
                         </div>
                     </a>
                 </div>
