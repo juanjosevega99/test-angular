@@ -245,7 +245,7 @@
             <div *ngIf="promotion" class="form-group row">
                 <label class="col-md-5 col-form-label">Nombre del plato</label>
                 <div class="col-md-7">
-                    <label class="form-control">{{preDish.name}}</label>
+                    <label class="form-control" style="height: 4rem;">{{preDish.name}}</label>
                 </div>
             </div>
 
@@ -292,12 +292,29 @@
                             class="btn1 btn btn-outline-primary">
                             Otro
                         </button>
-
                         <button *ngIf="addcategoryButton" (click)="deleteCategoryPromo()" type="button"
                             class="btn1 btn btn-outline-primary">
                             Borrar
                         </button>
-
+                        <div *ngIf="selectAgainarray" class="form-group row" style="margin-top: 2rem;">
+                            <div class="col-md-7">
+                                <div class="row align-items-center ">
+                                    <div class="photo">
+                                        <img [src]="promotionArray.imageTypePromotion" id="photo" width="100px" height="100px"
+                                            title="No hay foto subida">
+                                    </div>
+                                    <div class="upload-btn-wrapper">
+                                        <div *ngIf="alertBadExtensionImagePromCategory" class="alert alert-danger" role="alert">
+                                            Por favor solo subir archivos que tengan como
+                                            extensión .jpeg/.jpg/.png/.gif
+                                        </div>
+                                        <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
+                                        <span tooltip="Tooltip text"></span>
+                                        <input type="file" name="photo" (change)="onPhotoSelectedImagesPromCategory($event)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="invalid-feedback">*Este campo es requerido </div>
                         <div class="valid-feedback">Ok!</div>
 

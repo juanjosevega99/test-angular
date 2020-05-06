@@ -5,6 +5,7 @@ export class Promotions {
     endDatePromotion?:string[];
     name?:string;
     idname?:string;
+    imageTypePromotion?:string;
     price?:number;
     photo?:string;
     description?:string;

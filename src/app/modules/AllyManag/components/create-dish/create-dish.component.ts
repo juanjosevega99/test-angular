@@ -63,11 +63,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   promotionArray: Object = {
     id: null,
     state: [],
-    idname: null,
-    name: null,
     promotionStartDate: [],
     endDatePromotion: [],
+    idname: null,
     price: null,
+    name: null,
+    imageTypePromotion: null,
     photo: null,
     description: null,
     preparationTime: [],
@@ -120,11 +121,15 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   idroute: string[] = [];
   selectuser: boolean;
   stateInactive: boolean;
+  //variable for images type promotion
+  fileImagePromCategory: any;
 
   // Variables of alerts
   alertBadExtensionLogo = false;
-   //flag by state swall
-   upload: boolean = false;
+  //flag by state swall
+  upload: boolean = false;
+  // Variables of alerts
+  alertBadExtensionImagePromCategory = false
 
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService,
     private storage: AngularFireStorage,
@@ -252,17 +257,41 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   //CRD -- Methos of TypePromo: CREATE ,READ AND DELETE 
   addCategoryPromo(name: String) {
-    if (name != null) {
-      let newitem = name;
-      let newCategory: object = {
-        name: newitem
-      }
-      this.swallSaveOtherPromo(newCategory)
-
+    if (name != null || this.promotionArray['imageTypePromotion'] != null) {
+      // let newitem = name;
+      // let newCategory: object = {
+      //   name: newitem
+      // }
+      this.swallSaveOtherPromo(name)
       this.handleBoxCategories()
+
     } else { alert("Ingrese el nombre de la nueva categoría") }
   }
+  //Method for photo of the dish
+  onPhotoSelectedImagesPromCategory($event) {
+    let input = $event.target;
+    let filePath = input.value;
+    let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+    let image = "";
+    if (!allowedExtensions.exec(filePath)) {
+      input.value = '';
+      this.alertBadExtensionImagePromCategory = true;
+      return false;
+    } else {
+      if (input.files && input.files[0]) {
+        this.seeNewPhoto = true;
+        this.alertBadExtensionImagePromCategory = false;
 
+        var reader = new FileReader();
+        reader.onload = function (e: any) {
+          $('#photo')
+            .attr('src', e.target.result)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    return this.fileImagePromCategory = input.files[0]
+  }
   deleteCategoryPromo() {
     let categorySelected = this.promotionArray['name']
     this.swallDeleteCatPromo(categorySelected)
@@ -634,7 +663,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         let dish: DishList = {}
         dish = dishes[this.identificatorbyRoot]
         let realId = dish.id
-        this.couponsService.getCoupons().subscribe(coupons => { 
+        this.couponsService.getCoupons().subscribe(coupons => {
           let tycCoupon = coupons.filter(coupon => coupon.idDishes == realId)
           if (tycCoupon.length != 0) {
             Swal.fire({
@@ -660,29 +689,38 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
 
   //sweet alerts
-  swallSaveOtherPromo(newCategory: any) {
+  swallSaveOtherPromo(name: String) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas guardar esta nueva categoría!",
+      text: "!De que deseas guardar esta nueva categoría!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, guardar!'
+      confirmButtonText: '!Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.promotionCategory.postPromotionCategory(newCategory).subscribe(() => {
-          this.promotionCategory.getPromotionCategory().subscribe(promC => {
-            this.promotionsCategories = promC;
+        this._uploadImages.uploadImages(this.fileImagePromCategory, 'allies', 'typePromotion')
+          .then(urlImage => {
+            this.promotionArray['imageTypePromotion'] = urlImage
+            let newitem = name;
+            let newCategory: object = {
+              name: newitem,
+              imageTypePromotion: urlImage
+            }
+            this.promotionCategory.postPromotionCategory(newCategory).subscribe(() => {
+              this.promotionCategory.getPromotionCategory().subscribe(promC => {
+                this.promotionsCategories = promC;
+              })
+            })
+            Swal.fire({
+              title: 'Guardado!',
+              text: "Tu nueva categoría de promoción ha sido creada!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            })
           })
-        })
-        Swal.fire({
-          title:'Guardado!' ,
-          text: "Tu nueva categoría de promoción ha sido creada!",
-          icon: 'success',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        })
       }
     })
   }
@@ -715,7 +753,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
           });
         })
         Swal.fire({
-          title:'Eliminado!' ,
+          title: 'Eliminado!',
           icon: 'success',
           confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
@@ -741,7 +779,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
           })
         })
         Swal.fire({
-          title:'Guardado!' ,
+          title: 'Guardado!',
           text: "Tu nueva categoría de plato ha sido creada!",
           icon: 'success',
           confirmButtonColor: '#542b81',
@@ -779,7 +817,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
           });
         })
         Swal.fire({
-          title:'Eliminado!' ,
+          title: 'Eliminado!',
           icon: 'success',
           confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
@@ -805,7 +843,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter');
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
-        
+
         this._uploadImages.uploadImages(this.fileImagedish, 'allies', 'menu')
           .then(urlImage => {
             this.upload = true;
@@ -854,10 +892,10 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
-      if (result.value) { 
+      if (result.value) {
 
-        let urlImg = 'assets/allies/menu/' + this.preDish['imageDishe'].split("%")[3].split("?")[0].slice(2); 
-        this._uploadImages.DeleteImage(urlImg).then(res =>{
+        let urlImg = 'assets/allies/menu/' + this.preDish['imageDishe'].split("%")[3].split("?")[0].slice(2);
+        this._uploadImages.DeleteImage(urlImg).then(res => {
           this.chargeDishes.deleteDishe(realId).subscribe(message => {
             Swal.fire({
               title: 'Eliminado',
@@ -870,9 +908,9 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/main', 'editmenu', this.identificatorbyRoot]);
               }
             })
-          })        
+          })
         })
-       
+
       }
     })
   }
@@ -890,7 +928,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
       if (result.value) {
         this.spinner.show();
-        
+
         await this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
 
           let dish: Dishes = {};

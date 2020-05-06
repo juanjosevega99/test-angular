@@ -36,7 +36,8 @@ export class PromotionsCategoriesService {
         promotioncategory.map(promotionscategories => {
           let obj = {
             id: promotionscategories._id,
-            name: promotionscategories.name
+            name: promotionscategories.name,
+            imageTypePromotion: promotionscategories.imageTypePromotion
           };
           return obj;
         })
@@ -52,7 +53,8 @@ export class PromotionsCategoriesService {
           promotionscategories.map(promotionscategories => {
             let obj = {
               id: promotionscategories.id,
-              name: promotionscategories.name
+              name: promotionscategories.name,
+              imageTypePromotion: promotionscategories.imageTypePromotion
             };
             return obj;
           })

@@ -304,8 +304,8 @@ export class CreateHeadquarterComponent implements OnInit {
     this.allyService.getAlliesById(this.idAllyLocalStorage).subscribe(allie => {
       this.preHeadquarters['nameAllies'] = allie.name
     })
-    let selecctService = this.services.filter(service => service.select == false)
-        if (selecctService.length != 0) {
+    let selecctService = this.preHeadquarters['principarlServices'].filter(service => service.checked == true)
+        if (selecctService.length > 0) {
           this.swallSaveHeadquarter(this.preHeadquarters)
         } else {
           Swal.fire({
