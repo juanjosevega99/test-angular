@@ -395,6 +395,14 @@
                                 title="No hay foto subida">
                         </div>
                         <div class="upload-btn-wrapper">
+                            <ng-template #HtmlContent>
+                                <p>Se recomienda subir archivo .png y dimensiones: 
+                                    Ancho -> 300 px, Alto -> 168 px</p>
+                            </ng-template>
+                            <div *ngIf="alertBadExtensionLogo" class="alert alert-danger" role="alert">
+                                Por favor solo subir archivos que tengan como
+                                extensión .jpeg/.jpg/.png/.gif
+                            </div>
                             <button class="btn1 btn btn-outline-primary">Cargar Imagen</button>
                             <input type="file" name="photo" (change)="onPhotoSelected($event)" />
                         </div>

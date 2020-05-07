@@ -7,9 +7,8 @@ import { LocationServiceService } from 'src/app/services/location-service.servic
 import { HeadquartersService } from 'src/app/services/headquarters.service';
 import Swal from 'sweetalert2';
 import { AngularFireStorage } from "@angular/fire/storage";
-import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
-import { Guid } from "guid-typescript";
+import { NgxSpinnerService } from 'ngx-spinner';
 //services
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
 import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
@@ -81,8 +80,9 @@ export class CreateHeadquarterComponent implements OnInit {
   idAlly: number;
   idAllyLocalStorage: string;
   //variable for aditional services
-  otherServiceSave: any = {}
+  otherServiceSave: any;
   arrayOtherServiceSave: any = [];
+  otherChecked = false;
   //flag for edit headquarter
   edit: boolean
   // Variables of alerts
@@ -100,7 +100,8 @@ export class CreateHeadquarterComponent implements OnInit {
     private allyService: AlliesService,
     private locationService: LocationServiceService,
     private _saveLocalStorageService: SaveLocalStorageService,
-    private _uploadImages: UploadImagesService) {
+    private _uploadImages: UploadImagesService,
+    private spinner: NgxSpinnerService) {
 
     //get Ally's id of LocalStorage
     this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
@@ -175,9 +176,9 @@ export class CreateHeadquarterComponent implements OnInit {
         res.aditionalServices.forEach((additionalService) => {
           if (additionalService) {
             let additional = this.aditionalServices.find(add => add.name == additionalService.name);
-  
+
             if (!additional) {
-              let obj = { name: additionalService.name, img: additionalService.image, select: true }
+              let obj = { name: additionalService.name, img: additionalService.img, select: true }
               this.aditionalServices.push(obj)
             } else {
               additional.select = true
@@ -193,7 +194,7 @@ export class CreateHeadquarterComponent implements OnInit {
   getAdditionalService(nameService: String, imageService: String, position: number, event) {
     let seviceChecked: Object = {
       name: nameService.trim(),
-      image: imageService
+      img: imageService
     }
     const checked = event.target.checked;
 
@@ -227,18 +228,21 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 
   //method for seeing the additional service selected
-  selectedAditionalService(event, pos: number, image) {
-    const checked = event.target.checked;
-    event.target.checked = checked;
+  selectedAditionalService(event, pos: number, img) {
+    const select = event.target.checked;
+    event.target.checked = select;
     const name = event.target.value;
     event.target.value = name;
 
-    this.preHeadquarters['aditionalServices'][pos] = { name, checked, image }
+    // this.preHeadquarters['aditionalServices'][pos] = { name, checked, image }
+    this.aditionalServices[pos] = { name, select, img };
+
   }
 
   //method for showing and hiding the input of a new additional service
   handleBoxOtherservice() {
     this.othersServiceInput = !this.othersServiceInput;
+    this.otherChecked = !this.otherChecked
   }
 
   //method to select an icon for a new additional service
@@ -269,13 +273,12 @@ export class CreateHeadquarterComponent implements OnInit {
 
       }
     }
-    // return this.otherImg = input.files[0]
   }
 
   //method for add to the view the new additional service
   addNewServiceadd() {
     // || this.otherImg == undefined
-    if (this.other == undefined) {
+    if (this.other == undefined || !this.otherServiceSave) {
       Swal.fire({
         text: "¡Ingrese  la imagen y el nombre del servicio!",
         icon: 'warning',
@@ -283,9 +286,12 @@ export class CreateHeadquarterComponent implements OnInit {
       })
     } else {
       this.aditionalServices.push(this.otherServiceSave)
-      
+      //restore botton other anc clean varibales
+      this.othersServiceInput = false
+      this.otherChecked = false;
+      this.other = ''
+      this.otherServiceSave = ''
     }
-
 
   }
 
@@ -298,6 +304,7 @@ export class CreateHeadquarterComponent implements OnInit {
     let selecctService = this.preHeadquarters['principarlServices'].filter(service => service.checked == true)
     if (selecctService.length > 0) {
       this.swallSaveHeadquarter()
+
     } else {
       Swal.fire({
         text: "¡Escoja almenos un servicio prestado!",
@@ -319,31 +326,24 @@ export class CreateHeadquarterComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: '¡Si, crear!'
     }).then((result) => {
+      
       if (result.value) {
-        this.loadingServicesAditionals = true
+        this.spinner.show()
         this.ArrayseviceChecked.forEach((element, index) => {
 
-          let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name.trim())
+          let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name)
           if (servicesChecked) {
             this._uploadImages.uploadImages(servicesChecked.fileImage, 'allies', 'additionalServices')
               .then(urlImage => {
-                element['image'] = urlImage
+                element['img'] = urlImage
 
 
                 if (index == (this.ArrayseviceChecked.length - 1)) {
-                  let agregateAdditionalServices: object = {
-                    additionalServices: this.ArrayseviceChecked
-                  }
 
-                  this.additionalServices.postAdditionalService(agregateAdditionalServices).subscribe(message => {
-                    this.additionalServices.getAdditionalServices().subscribe(service => {
-                      this.collectionAddService = service;
+                  this.preHeadquarters['aditionalServices'] = this.ArrayseviceChecked
 
-                    })
-                  })
-                  // console.log("Array FINAL: ", this.preHeadquarters);
                   this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
-                    this.loadingServicesAditionals = false
+                    this.spinner.hide()
                     Swal.fire({
                       title: 'Guardado',
                       text: "Tu nueva sede ha sido creada!",
@@ -359,11 +359,26 @@ export class CreateHeadquarterComponent implements OnInit {
                 }
               })
 
+          }else{
+            if (index == (this.ArrayseviceChecked.length - 1)) {
+
+              this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
+                this.spinner.hide()
+                Swal.fire({
+                  title: 'Guardado',
+                  text: "Tu nueva sede ha sido creada!",
+                  icon: 'success',
+                  confirmButtonColor: '#542b81',
+                  confirmButtonText: 'Ok!'
+                }).then((result) => {
+                  if (result.value) {
+                    this._router.navigate(['/main', 'headquarts', this.idAlly]);
+                  }
+                })
+              })
+            }
           }
         });
-
-
-
       }
     })
   }
@@ -372,7 +387,7 @@ export class CreateHeadquarterComponent implements OnInit {
   updateNewServices() {
     let id = localStorage.getItem('idHeadquarter')
     this.headquarters.putHeadquarter(id, this.preHeadquarters).subscribe(message => {
-      this.loadingServicesAditionals = false
+      this.spinner.hide()
       Swal.fire({
         title: 'Guardado',
         text: "¡Tu sede ha sido actualizada!",
@@ -399,6 +414,7 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.spinner.show()
         this.preHeadquarters['principarlServices'].forEach((ser, i) => {
           if (ser.checked == false) {
             let cost = this.preHeadquarters['costPerService']
@@ -412,7 +428,7 @@ export class CreateHeadquarterComponent implements OnInit {
             if (servicesChecked) {
               this._uploadImages.uploadImages(servicesChecked.fileImage, 'allies', 'additionalServices')
                 .then(urlImage => {
-                  element['image'] = urlImage
+                  element['img'] = urlImage
 
                   if (index == (this.ArrayseviceChecked.length - 1)) {
                     this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
@@ -420,27 +436,20 @@ export class CreateHeadquarterComponent implements OnInit {
                   }
                 })
             } else {
-              this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
-              this.updateNewServices();
+              if (index == (this.ArrayseviceChecked.length - 1)) {
+                let servicesChecked = this.aditionalServices.filter(element => element.select == true);
+                this.preHeadquarters['aditionalServices'] = servicesChecked;
+                this.updateNewServices();
+              }
             }
 
 
           });
 
         } else {
-          this.headquarters.putHeadquarter(localStorage.getItem('idHeadquarter'), this.preHeadquarters).subscribe(res => {
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu nueva sede ha sido actualizada!",
-              icon: 'success',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'headquarts', this.idAlly]);
-              }
-            })
-          })
+          let servicesChecked = this.aditionalServices.filter(element => element.select == true);
+          this.preHeadquarters['aditionalServices'] = servicesChecked
+          this.updateNewServices()
         }
 
 

@@ -1,3 +1,6 @@
+<ngx-spinner bdOpacity=0.6 bdColor="rgba(255,255,255,0.6)" size="medium" color="rgb(207,44,126)" type="ball-atom"
+    [fullScreen]="true">
+</ngx-spinner>
 <div class="compenetsstyle ">
 
     <form novalidate="" class="row" (ngSubmit)="saveHq(shape)" #shape="ngForm">
@@ -218,7 +221,7 @@
                        
                     </div>
                     <a class="ml-4">
-                        <input class="form-check-input " type="checkbox" (click)="handleBoxOtherservice()">
+                        <input class="form-check-input " type="checkbox" [checked]="otherChecked" (click)="handleBoxOtherservice()">
                         <label class="form-check-label servicio">
                             <img src='assets/icons/info.png' height="25px" width="25px">
                             otro

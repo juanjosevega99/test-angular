@@ -12,6 +12,9 @@ import { SaveLocalStorageService } from "src/app/services/save-local-storage.ser
 import { CouponsAvailableService } from "src/app/services/coupons-available.service";
 import { TermsAndConditions } from 'src/app/models/TermsAndConditions';
 import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service";
+import { NgxSpinnerService } from 'ngx-spinner';
+
+
 @Component({
   selector: 'app-create-coupon',
   templateUrl: './create-coupon.component.html',
@@ -117,7 +120,8 @@ export class CreateCouponComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private saveLocalStorageService: SaveLocalStorageService,
     private couponsAvilableService: CouponsAvailableService,
-    private tycManegerService: TermsAndConditionsService) {
+    private tycManegerService: TermsAndConditionsService,
+    private spinner: NgxSpinnerService) {
 
     //flags
     this.loading = true;
@@ -406,17 +410,19 @@ export class CreateCouponComponent implements OnInit {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡De que deseas guardar este nuevo cupon!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.spinner.show()
         this.typeCouponService.postTypeCoupon(newTypeCoupon).subscribe(() => {
           this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
             this.typeCoupon = typeCoupon;
           })
+          this.spinner.hide()
         })
         Swal.fire(
           'Guardado!',
@@ -430,17 +436,19 @@ export class CreateCouponComponent implements OnInit {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡De que deseas eliminar este cupon!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
+        this.spinner.show()
         this.typeCouponService.deleteTypeCoupon(typeCouponSelected).subscribe(() => {
           this.typeCouponService.getTypeCoupon().subscribe(typeCoupon => {
             this.typeCoupon = typeCoupon;
           })
+          this.spinner.hide()
         })
         Swal.fire(
           'Eliminado!',
@@ -455,14 +463,14 @@ export class CreateCouponComponent implements OnInit {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡De que deseas guardar los cambios!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.loading = true
+        this.spinner.show()
         this._uploadImages.uploadImages(this.fileImageCoupon, 'adminCoupon', 'coupon')
           .then(urlImage => {
             this.upload = true;
@@ -471,7 +479,7 @@ export class CreateCouponComponent implements OnInit {
             this.couponsServices.postCoupon(this.preCoupon).subscribe((coupon: any) => {
               let idCoupon = coupon._id;
               this.generateCoupons(idCoupon)
-              this.loading = false
+              this.spinner.hide()
               
             })
 
@@ -479,7 +487,7 @@ export class CreateCouponComponent implements OnInit {
               Swal.fire({
                 title: 'Guardado',
                 text: "¡Tu nuevo cupón ha sido creado!",
-                icon: 'warning',
+                icon: 'success',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
               }).then((result) => {
@@ -492,7 +500,7 @@ export class CreateCouponComponent implements OnInit {
           .catch((e) => {
             if (this.upload == false) {
               Swal.fire({
-                text: "¡El cupón no ha sido creado porque no se subió la imagen",
+                text: "¡El cupón no ha sido creado porque no se subió la imagen!",
                 icon: 'warning',
                 confirmButtonColor: '#542b81',
                 confirmButtonText: 'Ok!'
@@ -506,7 +514,7 @@ export class CreateCouponComponent implements OnInit {
     let objCoupon: any = this.preCoupon
     objCoupon.id = this.identificatorbyRoot
     objCoupon.numberOfCouponsAvailable = this.preCoupon['numberOfUnits']
-    this.couponsServices.putCoupon(objCoupon).subscribe(()=> this.loading=false)
+    this.couponsServices.putCoupon(objCoupon).subscribe(()=> this.spinner.hide())
   }
 
   //swall for update collection Coupon
@@ -514,7 +522,7 @@ export class CreateCouponComponent implements OnInit {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡De que deseas guardar los cambios!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -522,13 +530,13 @@ export class CreateCouponComponent implements OnInit {
     }).then((result) => {
 
       if (result.value) {
-        this.loading = true
+        this.spinner.show()
         if (this.seeNewPhoto == false) {
           this.uploadCouponUpdate()
           Swal.fire({
             title: 'Guardado',
             text: "¡Tu nuevo cupón ha sido actualizado!",
-            icon: 'warning',
+            icon: 'success',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
           }).then((result) => {
@@ -579,14 +587,14 @@ export class CreateCouponComponent implements OnInit {
       Swal.fire({
         title: '¿Estás seguro?',
         text: "¡De que deseas eliminar este coupón!",
-        icon: 'warning',
+        icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#542b81',
         cancelButtonColor: '#542b81',
         confirmButtonText: 'Si, eliminar!'
       }).then((result) => {
         if (result.value) {
-          this.loading = true
+          this.spinner.show()
           let urlImg = 'assets/adminCoupon/coupon/' + this.preCoupon['imageCoupon'].split("%")[3].split("?")[0].slice(2);
           this._uploadImages.DeleteImage(urlImg).then(res =>{
             this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
@@ -596,12 +604,13 @@ export class CreateCouponComponent implements OnInit {
               this.couponsAvailableByIdCoupon.forEach(element => {
                 this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
               });
+              this.spinner.hide()
             })          
           })
           Swal.fire({
             title: 'Eliminado',
             text: "¡Tu cupón ha sido eliminado!",
-            icon: 'warning',
+            icon: 'success',
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
           }).then((result) => {
@@ -615,7 +624,7 @@ export class CreateCouponComponent implements OnInit {
   }
     //method for a specific search
     search() {
-
+      
       var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
   
       this.newArray = this.tycGettting.

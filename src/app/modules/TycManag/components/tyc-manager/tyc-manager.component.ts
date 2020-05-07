@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service";
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service"
 import { CouponsService } from "src/app/services/coupons.service"
+import { NgxSpinnerService } from 'ngx-spinner';
 //models
 import { TermsAndConditions } from '../../../../models/TermsAndConditions';
 
@@ -36,7 +37,8 @@ export class TycManagerComponent implements OnInit {
     private saveLocalStorageServices: SaveLocalStorageService,
     private _router: Router,
     private tycManegerService: TermsAndConditionsService,
-    private couponsService: CouponsService) {
+    private couponsService: CouponsService,
+    private spinner : NgxSpinnerService) {
     this.table = new FormGroup({
       "nameTypeTyc": new FormControl(),
     })
@@ -93,26 +95,28 @@ export class TycManagerComponent implements OnInit {
       } else {
         Swal.fire({
           title: 'Estás seguro?',
-          text: "de que deseas eliminarlo!",
-          icon: 'warning',
+          text: "¡De que deseas eliminarlo!",
+          icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#542b81',
           cancelButtonColor: '#542b81',
           confirmButtonText: 'Si, eliminar!'
         }).then((result) => {
           if (result.value) {
+            this.spinner.show()
             this.tycManegerService.deleteTermAndCondition(idTyc).subscribe(() => {
               this.makeObjTycManager();
-            })
-            Swal.fire({
-              title: 'Eliminado',
-              icon: 'success',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'tycManager',]);
-              }
+              this.spinner.hide()
+              Swal.fire({
+                title: 'Eliminado',
+                icon: 'success',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'tycManager',]);
+                }
+              })
             })
           }
         })

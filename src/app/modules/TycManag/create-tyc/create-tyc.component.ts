@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { SaveLocalStorageService } from "src/app/services/save-local-storage.service";
 import { TermsAndConditionsService } from "src/app/services/terms-and-conditions.service"
 import { TypeTermsAndConditionsService } from "src/app/services/type-terms-and-conditions.service";
+import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
   selector: 'app-create-tyc',
   templateUrl: './create-tyc.component.html',
@@ -34,7 +36,8 @@ export class CreateTycComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private saveLocalStorageService: SaveLocalStorageService,
     private tycManagerService: TermsAndConditionsService,
-    private typeTycService: TypeTermsAndConditionsService) {
+    private typeTycService: TypeTermsAndConditionsService,
+    private spinner: NgxSpinnerService) {
     //flags
     this.loading = true;
     this.buttonPut = true;
@@ -91,70 +94,70 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   saveTyc() {
     this.swallSaveTyc()
   }
-  //sweet alerts for save and delete typeTyc
-  swallSaveTypeTyc(newTypeTyc: any) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "de que deseas guardar este nuevo término y condición",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, guardar!'
-    }).then((result) => {
-      if (result.value) {
-        this.typeTycService.postTypeTermsAndConditions(newTypeTyc).subscribe(() => {
-          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
-            this.typeTyC = tyC;
-          })
-        })
-        Swal.fire(
-          'Guardado!',
-          'Tu nuevo término y condición ha sido creado',
-          'success',
-        )
-      }
-    })
-  }
-  swallDeleteTypeTyc(typeTycSelected: string) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "de que deseas eliminar este término y condición!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#542b81',
-      cancelButtonColor: '#542b81',
-      confirmButtonText: 'Si, eliminar!'
-    }).then((result) => {
-      if (result.value) {
-        this.typeTycService.deleteTypeTermsAndConditions(typeTycSelected).subscribe(() => {
-          this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
-            this.typeTyC = tyC;
-          })
-        })
-        Swal.fire(
-          'Eliminado!',
-          'success',
-        )
-      }
-    })
-  }
+  // //sweet alerts for save and delete typeTyc
+  // swallSaveTypeTyc(newTypeTyc: any) {
+  //   Swal.fire({
+  //     title: '¿Estás seguro?',
+  //     text: "¡de que deseas guardar este nuevo término y condición!",
+  //     icon: 'question',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#542b81',
+  //     cancelButtonColor: '#542b81',
+  //     confirmButtonText: 'Si, guardar!'
+  //   }).then((result) => {
+  //     if (result.value) {
+  //       this.typeTycService.postTypeTermsAndConditions(newTypeTyc).subscribe(() => {
+  //         this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
+  //           this.typeTyC = tyC;
+  //         })
+  //       })
+  //       Swal.fire(
+  //         'Guardado!',
+  //         'Tu nuevo término y condición ha sido creado',
+  //         'success',
+  //       )
+  //     }
+  //   })
+  // }
+  // swallDeleteTypeTyc(typeTycSelected: string) {
+  //   Swal.fire({
+  //     title: '¿Estás seguro?',
+  //     text: "¡de que deseas eliminar este término y condición!",
+  //     icon: 'question',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#542b81',
+  //     cancelButtonColor: '#542b81',
+  //     confirmButtonText: 'Si, eliminar!'
+  //   }).then((result) => {
+  //     if (result.value) {
+  //       this.typeTycService.deleteTypeTermsAndConditions(typeTycSelected).subscribe(() => {
+  //         this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
+  //           this.typeTyC = tyC;
+  //         })
+  //       })
+  //       Swal.fire(
+  //         'Eliminado!',
+  //         'success',
+  //       )
+  //     }
+  //   })
+  // }
   swallSaveTyc() {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas guardar los cambios!",
-      icon: 'warning',
+      text: "¡De que deseas guardar los cambios!",
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.tycManagerService.postTermAndCondition(this.preTyc).subscribe()
-
+        this.spinner.show()
+        this.tycManagerService.postTermAndCondition(this.preTyc).subscribe(()=> this.spinner.hide())
         Swal.fire({
           title: 'Guardado',
-          text: "Tus nuevos términos y condiciones han sido creados!",
+          text: "¡Tus nuevos términos y condiciones han sido creados!",
           icon: 'success',
           confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
@@ -171,27 +174,30 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   swallUpdateTyc() {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "de que deseas guardar los cambios!",
-      icon: 'warning',
+      text: "¡De que deseas guardar los cambios!",
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
+        this.spinner.show()
         let objTyc: any = this.preTyc
         objTyc.id = this.identificatorbyRoot
-        this.tycManagerService.putTermAndCondition(objTyc).subscribe()
-        Swal.fire({
-          title: 'Actualizado',
-          text: "Tus nuevos términos y condiciones han sido actualizados!",
-          icon: 'success',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'tycManager',]);
-          }
+        this.tycManagerService.putTermAndCondition(objTyc).subscribe(()=> {
+          this.spinner.hide()
+            Swal.fire({
+              title: 'Actualizado',
+              text: "¡Tus nuevos términos y condiciones han sido actualizados!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }).then((result) => {
+              if (result.value) {
+                this._router.navigate(['/main', 'tycManager',]);
+              }
+            })
         })
 
       }
