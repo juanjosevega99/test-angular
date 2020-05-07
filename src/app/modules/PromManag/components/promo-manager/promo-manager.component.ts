@@ -28,6 +28,10 @@ export class PromoManagerComponent implements OnInit {
   dishPromoArray = this.dishgetting;
 
   today: Date;
+  loadingDishes = false;
+  noDishes: boolean;
+  noResults: boolean;
+  flagState: boolean;
 
   constructor(private dishesService: DishesService, private promoService: PromotionsService, private _router: Router) {
 
@@ -37,9 +41,23 @@ export class PromoManagerComponent implements OnInit {
       "name": new FormControl(),
     })
 
+    this.noResults = false;
+    this.noDishes = false;
 
+    this.loadPromos();
+    this.flagState=false;
+    
+  }
+
+  ngOnInit() {
+
+  }
+
+  loadPromos(){
     //inicialization of dishes
-    this.dishesService.getDishes().subscribe(res => {
+    this.dishPromoArray=[];
+    this.dishesService.getDishesByIdAlly(localStorage.getItem('idAlly')).subscribe(res => {
+      this.loadingDishes = true;
       res.forEach((dish: Dishes) => {
         if (res.length > 0) {
           if (dish.idPromotion != null) {
@@ -47,99 +65,105 @@ export class PromoManagerComponent implements OnInit {
               let iditem = dish.idPromotion[item];
 
               this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(res => {
-                
-                res.forEach((promo: Promotions) => {
-                  if (iditem == promo.id) {
-                    console.log("id de promocion:",promo.id);
-                    let yf = promo.endDatePromotion[0]['year'];
-                    let mf = promo.endDatePromotion[0]['month'];
-                    let df = promo.endDatePromotion[0]['day'];
-                    let hf = promo.endDatePromotion[1]['hour'];
-                    let minf = promo.endDatePromotion[1]['minute'];
+                if (res.length) {
+                  res.forEach((promo: Promotions) => {
+                    if (iditem == promo.id) {
 
-                    let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
-                    let datee = new Date(yf, mf, df, hf, minf)
-                    let timee = datee.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                      let yf = promo.endDatePromotion[0]['year'];
+                      let mf = promo.endDatePromotion[0]['month']-1;
+                      let df = promo.endDatePromotion[0]['day'];
+                      let hf = promo.endDatePromotion[1]['hour'];
+                      let minf = promo.endDatePromotion[1]['minute'];
+                      let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
+                      let datee = new Date(yf, mf, df, hf, minf)
+                      
+                      let ys = promo.promotionStartDate[0]['year'];
+                      let ms = promo.promotionStartDate[0]['month']-1;
+                      let ds = promo.promotionStartDate[0]['day'];
+                      let hs = promo.promotionStartDate[1]['hour'];
+                      let mins = promo.promotionStartDate[1]['minute'];
+                      let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
+                      let datei = new Date(ys, ms, ds, hs, mins)
+                      
+                      let diff = dateF - dateS;
+                     
+                      this.today = new Date();
+                      let datetoday =  this.convertDateDay(this.today);
 
+                      let datestart =  this.convertDateDay(datei);
+                      let timei = this.convertDateTime(datei);
 
-                    let ys = promo.promotionStartDate[0]['year'];
-                    let ms = promo.promotionStartDate[0]['month'];
-                    let ds = promo.promotionStartDate[0]['day'];
-                    let hs = promo.promotionStartDate[1]['hour'];
-                    let mins = promo.promotionStartDate[1]['minute'];
+                      let datefinish = this.convertDateDay(datee);
+                      let timee = this.convertDateTime(datee);
 
-                    let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
-                    let datei = new Date(ys, ms, ds, hs, mins)
-                    let timei = datei.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                      const obj: DishPromotion = {};
 
-                    let diff = dateF - dateS;
+                      obj.id = promo.id;
+                      obj.reference = `${dish.reference}-${item + 1}`;
+                      obj.nameDishesCategories = dish.nameDishesCategories;
+                      obj.name = dish.name;
+                      obj.photo = promo.photo;
+                      obj.price = dish.price;
+                      obj.namepromo = promo.name;
+                      obj.pricepromo = promo.price;
+                      obj.daysPromo = diff / (1000 * 60 * 60 * 24);
+                      obj.promotionStartDate = promo.promotionStartDate;
+                      obj.timestart = timei;
+                      obj.endDatePromotion = promo.endDatePromotion;
+                      obj.timeend = timee;
+                      
 
-                    this.today = new Date()
-                    let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-                    let datestart = datei.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-                    let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-
-                    console.log("fecha inicio:", datestart);
+                      if (this.today >= datei && this.today <= datee) {
+                        if(promo.flag == true){
+                          obj.state = promo.state;
+                        }else{
+                          let stateDate: any = [{
+                            state: "active",
+                            check: true
+                          }, {
+                            state: "inactive",
+                            check: false
+                          }]
+                          obj.state = stateDate
+                        }
                     
-                    const obj: DishPromotion = {};
+                      } else if (this.today > datee || this.today < datei) {
+                        let stateDate: any = [{
+                          state: "active",
+                          check: false
+                        }, {
+                          state: "inactive",
+                          check: true
+                        }]
+                        obj.state = stateDate
+                      }
 
-                    obj.id = promo.id;
-                    obj.reference = `${dish.reference}-${item + 1}`;
-                    obj.nameDishesCategories = dish.nameDishesCategories;
-                    obj.name = dish.name;
-                    obj.photo = promo.photo;
-                    obj.price = dish.price;
-                    obj.namepromo = promo.name;
-                    obj.pricepromo = promo.price;
-                    obj.daysPromo = diff / (1000 * 60 * 60 * 24);
-                    obj.promotionStartDate = promo.promotionStartDate;
-                    obj.timestart = timei;
-                    obj.endDatePromotion = promo.endDatePromotion;
-                    obj.timeend = timee;
-                    /* obj.state = promo.state; */
-
-
-                    if (datetoday >= datestart && datetoday <= datefinish) {
-                      /* obj.state = promo.state */
-                      let stateDate: any = [{
-                        state: "active",
-                        check: true
-                      }, {
-                        state: "inactive",
-                        check: false
-                      }]
-                      obj.state = stateDate
-                    } else if (datetoday > datefinish || datetoday < datestart) {
-                      let stateDate: any = [{
-                        state: "active",
-                        check: false
-                      }, {
-                        state: "inactive",
-                        check: true
-                      }]
-                      obj.state = stateDate
+                      this.dishPromoArray.push(obj)
+                      const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
+                      this.promoService.putPromotion(iditem, promee).subscribe(res => { })
                     }
-
-                    this.dishPromoArray.push(obj)
-                    const promee: Promotions = { reference: `${dish.reference}-${item + 1}`, state: obj.state };
-                    this.promoService.putPromotion(iditem, promee).subscribe(res => { })
-                  } 
-                })
+                  })
+                  this.loadingDishes = false;
+                } else {
+                  this.noDishes = true;
+                  this.loadingDishes = false;
+                }
               })
-
             }
+          } else {
+            this.loadingDishes = false;
           }
+        } else {
+          this.noDishes = true;
+          this.loadingDishes = false;
         }
       })
     })
   }
 
-  ngOnInit() {
-
-  }
-
   //method for updating the state to active
   changeStateA(idDish) {
+    
     let newstate: object = {
       state: [{
         state: "active",
@@ -147,9 +171,9 @@ export class PromoManagerComponent implements OnInit {
       }, {
         state: "inactive",
         check: false
-      }]
-    }
+      }],
 
+    }
     this.swallUpdateState(idDish, newstate)
   }
 
@@ -162,7 +186,9 @@ export class PromoManagerComponent implements OnInit {
       }, {
         state: "inactive",
         check: true
-      }]
+      }],
+      
+      flag : true
     }
 
     this.swallUpdateState(idDish, newstate)
@@ -171,36 +197,33 @@ export class PromoManagerComponent implements OnInit {
   //method for very the dates
   verifyDate(idDish, i) {
     this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(promos => {
-      
+
       let promo = promos[i]
-      
-      console.log(promo, promos);
-      
+
+      //console.log(promo);
 
       let yf = promo.endDatePromotion[0]['year'];
-      let mf = promo.endDatePromotion[0]['month'];
+      let mf = promo.endDatePromotion[0]['month']-1;
       let df = promo.endDatePromotion[0]['day'];
       let hf = promo.endDatePromotion[1]['hour'];
       let minf = promo.endDatePromotion[1]['minute'];
 
-      console.log(yf, mf, df, hf, minf);
-      
+      // console.log(yf, mf, df, hf, minf);
+
       let datee = new Date(yf, mf, df, hf, minf)
 
+      let ys = promo.promotionStartDate[0]['year'];
+      let ms = promo.promotionStartDate[0]['month']-1;
+      let ds = promo.promotionStartDate[0]['day'];
+      let hs = promo.promotionStartDate[1]['hour'];
+      let mins = promo.promotionStartDate[1]['minute'];
+
+      let datei = new Date(ys, ms, ds, hs, mins)
+      
       this.today = new Date()
+      
+      if (this.today > datee) {
 
-      let datetoday = this.today.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-      let datefinish = datee.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
-
-      console.log(datetoday);
-      console.log("fecha final:",datefinish);
-      
-      
-      
-      
-      if (datetoday > datefinish ) {
-        console.log("wwwwwwwwwwwwwwwwwwwww");
-        
         Swal.fire({
           title: 'Actualizar',
           html: "Las fechas de la promoción están <b>vencidas</b>, Ingresa nuevas fechas para activar!",
@@ -212,6 +235,26 @@ export class PromoManagerComponent implements OnInit {
         }).then((result) => {
           if (result.value) {
             this._router.navigate(['/main', 'createDish', promo.reference])
+          } else{
+            this.loadPromos();
+          }
+        })
+
+      } else if (this.today < datei) {
+
+        Swal.fire({
+          title: 'Actualizar',
+          html: "<b>Faltan días</b>, para activar la promoción ingresa nuevas fechas!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#542b81',
+          cancelButtonColor: '#542b81',
+          confirmButtonText: 'Si, actualizar!'
+        }).then((result) => {
+          if (result.value) {
+            this._router.navigate(['/main', 'createDish', promo.reference])
+          } else{
+            this.loadPromos();
           }
         })
       }
@@ -219,6 +262,19 @@ export class PromoManagerComponent implements OnInit {
         this.changeStateA(idDish)
       }
     })
+  }
+
+  //methods to convert date
+  convertDateDay(date: Date): string {
+    const d = new Date(date);
+    const n = d.toLocaleString('es-ES', { day: '2-digit', month: 'numeric', year: 'numeric' });
+    return n;
+  }
+
+  convertDateTime(time: Date): string {
+    const d = new Date(time);
+    const n = d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return n;
   }
 
   //method for seaching a specific values by name and code
@@ -233,11 +289,13 @@ export class PromoManagerComponent implements OnInit {
         count += 1;
         termsearch = this.table.value[i];
         idsearch = i;
+      } else {
+        this.noResults = true;
       }
     }
 
-    console.log("campos llenos: ", count);
-    console.log('valueGenerate', this.generalsearch);
+    /* console.log("campos llenos: ", count);
+    console.log('valueGenerate', this.generalsearch); */
 
     if (count > 0 && count < 2 && !this.generalsearch) {
 
@@ -275,15 +333,13 @@ export class PromoManagerComponent implements OnInit {
         this.dishPromoArray = this.dishgetting;
 
         if (this.generalsearch) {
-          console.log("buscando general searhc");
+          /* console.log("buscando general searhc"); */
           this.searchbyterm(this.generalsearch);
 
         }
       } else {
-
         // campos llenos
         // existe general search?
-
         this.dishPromoArray = this.filteredArray.filter(function (dish: Dishes) {
           //We test each element of the object to see if one string matches the regexp.
           if (dish[idsearch].toLowerCase().indexOf(termsearch) >= 0) {
@@ -292,10 +348,8 @@ export class PromoManagerComponent implements OnInit {
         });
 
         if (this.generalsearch) {
-
-          console.log("buscando general searhc");
+          /* console.log("buscando general searhc"); */
           this.searchbyterm(this.generalsearch);
-
         }
       }
     }
@@ -321,10 +375,9 @@ export class PromoManagerComponent implements OnInit {
         idsearch = i;
       }
     }
-    console.log("campos vacios: ", count);
+    /* console.log("campos vacios: ", count); */
     if (count > 1) {
       // campos vacios
-
       this.dishPromoArray = this.dishgetting.filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.reference) || myRegex.test(item.nameDishesCategories) || myRegex.test(item.name) || myRegex.test(item.price.toString()) || myRegex.test(item.pricepromo.toString()) || myRegex.test(item.namepromo) ||
@@ -355,8 +408,11 @@ export class PromoManagerComponent implements OnInit {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
+        this.loadingDishes= true;
         this.promoService.putPromotion(idDish, newstate).subscribe(res => {
-          this.promoService.getPromotions().subscribe(dish => {
+         
+          this.promoService.getAllPromotionsByAlly(localStorage.getItem("idAlly")).subscribe(dish => {
+            this.loadingDishes=false;
             Swal.fire({
               text: "Estado actualizado!!",
               icon: 'success',

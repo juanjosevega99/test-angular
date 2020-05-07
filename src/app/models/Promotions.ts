@@ -14,4 +14,5 @@ export class Promotions {
     numberOfModifications?:number;
     idAccompaniments?:string[];
     idAllies?:string;
+    flag?:boolean;
 }

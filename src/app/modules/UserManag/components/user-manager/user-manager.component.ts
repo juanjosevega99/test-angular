@@ -351,7 +351,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
     } else {
 
-      console.log(this.userSelected);
       this.selectPromosSend();
 
       if (this.promosSelected.length) {
@@ -371,7 +370,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     }
 
     this.userservice.putUsers(user.idUser, promosend).subscribe((userUpdate: Users) => {
-      console.log("promociones enviadas satisfactoriamente");
       Swal.fire({
         text: "La promoción ha sido aplicada satisfactoriamente a los usuarios seleccionados!",
         icon: 'success',
@@ -449,7 +447,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     }
 
     this.userservice.putUsers(user.idUser, promosend).subscribe((userUpdate: Users) => {
-      console.log("promociones enviadas satisfactoriamente");
       Swal.fire({
         title: 'promociones enviadas satisfactoriamente',
         // text: `"de que deseas enviar estos cupones!"`,
@@ -482,8 +479,7 @@ export class UserManagerComponent implements OnInit, OnDestroy {
     }
 
     this.selectforsend();
-    // console.log("users", this.usergetting);
-    // console.log(this.table);
+
   }
 
   //get data to export
@@ -542,7 +538,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
           confirmButtonText: 'Ok!'
         })
       } else {
-        console.log(this.userSelected)
         this.swallSendCouponToUsersSelected();
       }
 
@@ -697,8 +692,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
   generatePdf() {
     //'p', 'mm', 'a4'
-    console.log(this.userSelected);
-
     let doc = new jsPDF('landscape');
     let col = ["#", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
       "Sede", "Usabilidad", "Monto compras"];
@@ -776,7 +769,6 @@ export class UserManagerComponent implements OnInit, OnDestroy {
       // search full fields
       if (this.table.value[i] !== null && this.table.value[i] !== "") {
         objsearch[i] = this.table.value[i];
-        /* console.log(this.table.controls[i].parent.value); *//* this.table.controls['generalsearch'].value */
       }
     }
 

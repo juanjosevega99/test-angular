@@ -53,8 +53,30 @@ export class DishesService {
     );
   }
 
-  getDisheById(id): Observable<any> {
-    return this.httpclient.get<Dishes>(environment.UrlBase + "dishes/" + id)
+  getDisheById(id): Observable<Dishes> {
+    return this.httpclient.get<Dishes>(environment.UrlBase + "dishes/" + id).pipe(
+      map( (dish:any) =>{
+        let obj = {
+          id: dish._id,
+          idDishesCategories: dish.idDishesCategories,
+          nameDishesCategories: dish.nameDishesCategories,
+          reference: dish.reference,
+          name: dish.name,
+          creationDate: dish.creationDate,
+          modificationDate: dish.modificationDate,
+          numberOfModifications: dish.numberOfModifications,
+          state: dish.state,
+          price: dish.price,
+          imageDishe: dish.imageDishe,
+          description: dish.description,
+          preparationTime: dish.preparationTime,
+          idAccompaniments: dish.idAccompaniments,
+          idPromotion: dish.idPromotion,
+          idHeadquarter : dish.idHeadquarter
+        };
+        return obj;        
+      } )
+    )
   }
 
   getDishesByIdHeadquarter(idHeadquarter): Observable<Dishes[]>{

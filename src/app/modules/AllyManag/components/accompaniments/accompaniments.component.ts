@@ -174,7 +174,6 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.accompanimetsOfPromo = [];
     if (this.flagDish) {
-      console.log("estoy en platos");
       this.dishService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
         if (dishes.length) {
           this.dishSelected = dishes[this.identificatorDish];
@@ -207,26 +206,39 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       })
     }
     else {
-      console.log("estoy en prormos");
+      this.promoService.getAllPromotionsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
+        if (res.length) {
+          res.forEach((promo: Promotions) => {
+            if (this.idPromo == promo.reference) {
+              this.promotion = promo
+              this.accompanimentService.getAllAccompanimentsByAlly(localStorage.getItem("idAlly")).subscribe(res => {
+                if (res.length) {
+                  res.forEach((accomp: Accompaniments) => {
+                    if (this.promotion.idAccompaniments.length) {
+                      for (let index = 0; index < promo.idAccompaniments.length; index++) {
+                        const element = promo.idAccompaniments[index];
+                        if (accomp.id == element) {
 
-      this.promoService.getPromotions().subscribe(res => {
-        res.forEach((promo: Promotions) => {
-          if (this.idPromo == promo.reference) {
-            this.promotion = promo
-            this.accompanimentService.getAccompaniments().subscribe(res => {
-              res.forEach((accomp: Accompaniments) => {
-                for (let index = 0; index < promo.idAccompaniments.length; index++) {
-                  const element = promo.idAccompaniments[index];
-                  if (accomp.id == element) {
-                    this.accompanimetsOfPromo[index] = accomp
-                    this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
-                    this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
-                  }
+                          this.accompanimetsOfPromo[index] = accomp
+                          this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
+                          this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
+
+                        }
+                      }
+                      this.loading = false;
+                    } else {
+                      this.loading = false;
+                    }
+                  })
+                } else {
+                  this.loading = false;
                 }
               })
-            })
-          }
-        })
+            }
+          })
+        } else {
+          this.loading = false;
+        }
       })
     }
   }
@@ -288,14 +300,24 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             }
           }
           else {
-            let accompExist = this.promotion['idAccompaniments'].indexOf(id);
-            if (accompExist < 0) {
-              this.promotion['idAccompaniments'].push(id)
-              this.promoService.putPromotion(this.promotion.id, this.promotion).subscribe(res => {
+            if (this.promotion['idAccompaniments'].length) {
+              let accompExist = this.promotion['idAccompaniments'].indexOf(id);
+              if (accompExist < 0) {
+                this.promotion['idAccompaniments'].push(id)
+                this.promoService.putPromotion(this.promotion.id, this.promotion).subscribe(res => {
+                  this.swallAdd();
+                })
+              } else {
+                this.swallExist();
+              }
+            } else {
+              newids = {
+                idAccompaniments: this.promotion.idAccompaniments = []
+              }
+              newids["idAccompaniments"] = id;
+              this.promoService.putPromotion(this.promotion.id, newids).subscribe(res => {
                 this.swallAdd();
               })
-            } else {
-              this.swallExist();
             }
           }
         }
@@ -517,6 +539,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   //see accompaniments of the promotion
   back() {
+    this.getPromo();
     this.promoAccompaniments = true
   }
   //see the general list of accompaniments
@@ -761,19 +784,9 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   changeValue(id: number, property: string, event: any) {
-    //console.log(event.target.textContent);
+
     let editField = event.target.textContent;
-
-    const newtext = editField;
-
-    // if(event.target.textContent){
-    // this.personList[id][property] = this.personList[id][property] + editField;
-    // }else{
-
-    this.personList[id][property] = newtext;
-    editField = '';
-
-    // }
+    this.personList[id][property] = editField;
 
   }
 
@@ -947,7 +960,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             confirmButtonColor: '#542b81',
             confirmButtonText: 'Ok!'
           })
-        } 
+        }
       }
     })
   }

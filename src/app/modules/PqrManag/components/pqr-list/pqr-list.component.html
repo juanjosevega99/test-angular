@@ -8,7 +8,7 @@
             </a>
         </div>
 
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light" style="width: 94%;">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
                 aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -143,7 +143,7 @@
             </thead>
             <tbody class="mt-5">
                 <tr *ngFor="let user of newdateArray; let i = index " class="text-center">
-                    <td>{{user.id}}</td>
+                    <td>{{user.id.slice(12,user.id.length ) }}</td>
                     <td>{{user.date}}</td>
                     <td>{{user.nameUser}}</td>
                     <td>{{user.email}}</td>
