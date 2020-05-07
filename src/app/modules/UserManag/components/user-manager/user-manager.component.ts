@@ -528,22 +528,31 @@ export class UserManagerComponent implements OnInit, OnDestroy {
   }
 
   sendCouponToUsers() {
-    if (this.userSelected.length) {
-      if (this.userSelected.length > this.numberOfCoupons) {
-        // alert("")
+    if (localStorage.getItem('idCoupon')) {
+      if (this.userSelected.length) {
+        if (this.userSelected.length > this.numberOfCoupons) {
+          Swal.fire({
+            text: "No puede entregar más cupones de los que tiene disponibles",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+        } else {
+          this.swallSendCouponToUsersSelected();
+        }
+
+      } else {
         Swal.fire({
-          text: "no puede entregar más cupones de los que tiene disponibles",
+          text: "¡Seleccione al menos un usuario!",
           icon: 'warning',
           confirmButtonColor: '#542b81',
           confirmButtonText: 'Ok!'
         })
-      } else {
-        this.swallSendCouponToUsersSelected();
       }
 
     } else {
       Swal.fire({
-        text: "seleccione al menos un usuario",
+        text: "¡No hay un cupón seleccionado!",
         icon: 'warning',
         confirmButtonColor: '#542b81',
         confirmButtonText: 'Ok!'
