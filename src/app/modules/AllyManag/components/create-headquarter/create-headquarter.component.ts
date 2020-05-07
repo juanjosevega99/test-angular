@@ -12,6 +12,8 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Guid } from "guid-typescript";
 //services
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
+import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
+
 
 
 
@@ -78,13 +80,15 @@ export class CreateHeadquarterComponent implements OnInit {
   //variables of idAlly
   idAlly: number;
   idAllyLocalStorage: string;
-
+  //variable for aditional services
+  otherServiceSave: any = {}
+  arrayOtherServiceSave: any = [];
   //flag for edit headquarter
   edit: boolean
   // Variables of alerts
   alertBadExtensionImageCoupon = false
   // flag for loading
-  loadingBanners = false;
+  loadingServicesAditionals = false;
 
   constructor(
     private storage: AngularFireStorage,
@@ -95,7 +99,8 @@ export class CreateHeadquarterComponent implements OnInit {
     private additionalServices: AdditionalServicesService,
     private allyService: AlliesService,
     private locationService: LocationServiceService,
-    private _saveLocalStorageService: SaveLocalStorageService) {
+    private _saveLocalStorageService: SaveLocalStorageService,
+    private _uploadImages: UploadImagesService) {
 
     //get Ally's id of LocalStorage
     this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
@@ -163,20 +168,22 @@ export class CreateHeadquarterComponent implements OnInit {
       this.headquarters.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(res => {
         this.edit = true
         this.preHeadquarters = res;
-        res.principarlServices.forEach((res) => {
-          let service = this.services.find(ser => ser.name === res.value);
-          service.select = res.checked;
+        res.principarlServices.forEach((principalService) => {
+          let service = this.services.find(ser => ser.name === principalService.value);
+          service.select = principalService.checked;
         })
-        res.aditionalServices.forEach((res) => {
-          if (res) {
-            let additional = this.aditionalServices.find(add => add.name == res.value);
-            if (!additional && res) {
-              let obj = { name: res.value, img: res.image, select: res.checked }
+        res.aditionalServices.forEach((additionalService) => {
+          if (additionalService) {
+            let additional = this.aditionalServices.find(add => add.name == additionalService.name);
+  
+            if (!additional) {
+              let obj = { name: additionalService.name, img: additionalService.image, select: true }
               this.aditionalServices.push(obj)
             } else {
-              additional.select = res.checked;
+              additional.select = true
             }
           }
+
         })
       })
     }
@@ -185,7 +192,7 @@ export class CreateHeadquarterComponent implements OnInit {
   //method for adding selected additional services in a new array
   getAdditionalService(nameService: String, imageService: String, position: number, event) {
     let seviceChecked: Object = {
-      name: nameService,
+      name: nameService.trim(),
       image: imageService
     }
     const checked = event.target.checked;
@@ -223,10 +230,10 @@ export class CreateHeadquarterComponent implements OnInit {
   selectedAditionalService(event, pos: number, image) {
     const checked = event.target.checked;
     event.target.checked = checked;
-    const value = event.target.value;
-    event.target.value = value;
+    const name = event.target.value;
+    event.target.value = name;
 
-    this.preHeadquarters['aditionalServices'][pos] = { value, checked, image }
+    this.preHeadquarters['aditionalServices'][pos] = { name, checked, image }
   }
 
   //method for showing and hiding the input of a new additional service
@@ -236,6 +243,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method to select an icon for a new additional service
   selectImg(event) {
+
     let input = event.target;
     let filePath = input.value;
     let allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
@@ -248,51 +256,34 @@ export class CreateHeadquarterComponent implements OnInit {
         this.alertBadExtensionImageCoupon = false;
 
         var reader = new FileReader();
-        reader.onload = function (e: any) {
-          $('#photo')
-            .attr('src', e.target.result)
+        reader.onload = (e: any) => {
+          this.otherServiceSave = {
+            name: this.other,
+            img: e.target.result,
+            select: false
+          }
+          this.otherServiceSave.fileImage = input.files[0]
+          this.arrayOtherServiceSave.push(this.otherServiceSave)
         };
         reader.readAsDataURL(input.files[0]);
+
       }
     }
-    return this.otherImg = input.files[0]
+    // return this.otherImg = input.files[0]
   }
 
   //method for add to the view the new additional service
   addNewServiceadd() {
-
-    if (this.other == undefined || this.otherImg == undefined) {
+    // || this.otherImg == undefined
+    if (this.other == undefined) {
       Swal.fire({
         text: "¡Ingrese  la imagen y el nombre del servicio!",
         icon: 'warning',
         confirmButtonColor: '#542b81',
       })
     } else {
-      this.loadingBanners  = true
-      const id: Guid = Guid.create();
-      const file = this.otherImg;
-      const filePath = `assets/allies/additionalServices/${id}`;
-      const ref = this.storage.ref(filePath);
-      const task = this.storage.upload(filePath, file)
-      task.snapshotChanges()
-        .pipe(
-          finalize(() => {
-            ref.getDownloadURL().subscribe(urlImage => {
-              
-              this.urlHq = urlImage;
-              const otherService = {
-                name: this.other,
-                img: this.urlHq ? this.urlHq : 'assets/icons/plus.png',
-                select: false
-              }
-              this.aditionalServices.push(otherService)
-              this.loadingBanners  = false
-            })
-          }
-          )
-        ).subscribe()
-      this.otherImg = undefined;
-      // other = undefined
+      this.aditionalServices.push(this.otherServiceSave)
+      
     }
 
 
@@ -305,55 +296,94 @@ export class CreateHeadquarterComponent implements OnInit {
       this.preHeadquarters['nameAllies'] = allie.name
     })
     let selecctService = this.preHeadquarters['principarlServices'].filter(service => service.checked == true)
-        if (selecctService.length > 0) {
-          this.swallSaveHeadquarter(this.preHeadquarters)
-        } else {
-          Swal.fire({
-            text: "¡Escoja almenos un servicio prestado!",
-            icon: 'warning',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          })
-        }
+    if (selecctService.length > 0) {
+      this.swallSaveHeadquarter()
+    } else {
+      Swal.fire({
+        text: "¡Escoja almenos un servicio prestado!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      })
+    }
   }
 
   //method for showing the sweet alert
-  swallSaveHeadquarter(newHeadquarter: any) {
+  swallSaveHeadquarter() {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡De que deseas crear esta nueva sede!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
       confirmButtonText: '¡Si, crear!'
     }).then((result) => {
       if (result.value) {
-        let agregateAdditionalServices: object = {
-          additionalServices: this.ArrayseviceChecked
-        }
-        this.additionalServices.postAdditionalService(agregateAdditionalServices).subscribe(message => {
-          this.additionalServices.getAdditionalServices().subscribe(service => {
-            this.collectionAddService = service;
-            // console.log(this.collectionAddService);
-          })
-        })
-        // console.log("Array FINAL: ", this.preHeadquarters);
-          this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
-            Swal.fire({
-              title: 'Guardado',
-              text: "Tu nueva sede ha sido creada!",
-              icon: 'warning',
-              confirmButtonColor: '#542b81',
-              confirmButtonText: 'Ok!'
-            }).then((result) => {
-              if (result.value) {
-                this._router.navigate(['/main', 'headquarts', this.idAlly]);
-              }
-            })
-          })      
+        this.loadingServicesAditionals = true
+        this.ArrayseviceChecked.forEach((element, index) => {
+
+          let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name.trim())
+          if (servicesChecked) {
+            this._uploadImages.uploadImages(servicesChecked.fileImage, 'allies', 'additionalServices')
+              .then(urlImage => {
+                element['image'] = urlImage
+
+
+                if (index == (this.ArrayseviceChecked.length - 1)) {
+                  let agregateAdditionalServices: object = {
+                    additionalServices: this.ArrayseviceChecked
+                  }
+
+                  this.additionalServices.postAdditionalService(agregateAdditionalServices).subscribe(message => {
+                    this.additionalServices.getAdditionalServices().subscribe(service => {
+                      this.collectionAddService = service;
+
+                    })
+                  })
+                  // console.log("Array FINAL: ", this.preHeadquarters);
+                  this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
+                    this.loadingServicesAditionals = false
+                    Swal.fire({
+                      title: 'Guardado',
+                      text: "Tu nueva sede ha sido creada!",
+                      icon: 'success',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    }).then((result) => {
+                      if (result.value) {
+                        this._router.navigate(['/main', 'headquarts', this.idAlly]);
+                      }
+                    })
+                  })
+                }
+              })
+
+          }
+        });
+
+
 
       }
+    })
+  }
+
+  //method for update headquarters new services
+  updateNewServices() {
+    let id = localStorage.getItem('idHeadquarter')
+    this.headquarters.putHeadquarter(id, this.preHeadquarters).subscribe(message => {
+      this.loadingServicesAditionals = false
+      Swal.fire({
+        title: 'Guardado',
+        text: "¡Tu sede ha sido actualizada!",
+        icon: 'success',
+        confirmButtonColor: '#542b81',
+        confirmButtonText: 'Ok!'
+      }).then((result) => {
+        if (result.value) {
+          this._router.navigate(['/main', 'headquarts', this.idAlly]);
+        }
+      })
     })
   }
 
@@ -362,7 +392,7 @@ export class CreateHeadquarterComponent implements OnInit {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios para esta sede!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -375,19 +405,46 @@ export class CreateHeadquarterComponent implements OnInit {
             cost[i].value = ""
           }
         })
-        this.headquarters.putHeadquarter(localStorage.getItem('idHeadquarter'), this.preHeadquarters).subscribe(res => {
-          Swal.fire({
-            title: 'Guardado',
-            text: "Tu nueva sede ha sido actualizada!",
-            icon: 'warning',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          }).then((result) => {
-            if (result.value) {
-              this._router.navigate(['/main', 'headquarts', this.idAlly]);
+        if (this.ArrayseviceChecked.length > 0) {
+          this.ArrayseviceChecked.forEach((element, index) => {
+
+            let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name)
+            if (servicesChecked) {
+              this._uploadImages.uploadImages(servicesChecked.fileImage, 'allies', 'additionalServices')
+                .then(urlImage => {
+                  element['image'] = urlImage
+
+                  if (index == (this.ArrayseviceChecked.length - 1)) {
+                    this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
+                    this.updateNewServices();
+                  }
+                })
+            } else {
+              this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
+              this.updateNewServices();
             }
+
+
+          });
+
+        } else {
+          this.headquarters.putHeadquarter(localStorage.getItem('idHeadquarter'), this.preHeadquarters).subscribe(res => {
+            Swal.fire({
+              title: 'Guardado',
+              text: "Tu nueva sede ha sido actualizada!",
+              icon: 'success',
+              confirmButtonColor: '#542b81',
+              confirmButtonText: 'Ok!'
+            }).then((result) => {
+              if (result.value) {
+                this._router.navigate(['/main', 'headquarts', this.idAlly]);
+              }
+            })
           })
-        })
+        }
+
+
+
       }
     })
   }
