@@ -147,6 +147,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for load the headquarter id
   loadIdHeadquarter() {
+    
     if (localStorage.getItem('idHeadquarter')) {
       this.headquarters.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(res => {
         this.edit = true
