@@ -171,8 +171,10 @@ export class CreateHeadquarterComponent implements OnInit {
         this.edit = true
         this.preHeadquarters = res;
         res.principarlServices.forEach((principalService) => {
-          let service = this.services.find(ser => ser.name === principalService.value);
-          service.select = principalService.checked;
+          if(principalService){
+            let service = this.services.find(ser => ser.name === principalService.value);
+            service.select = principalService.checked;
+          }
         })
         res.aditionalServices.forEach((additionalService) => {
           if (additionalService) {
@@ -186,6 +188,12 @@ export class CreateHeadquarterComponent implements OnInit {
             }
           }
 
+        })
+      }, err =>{
+        this.spinner.hide();
+        Swal.fire({
+          title:"ha ocurrido un error",
+          icon:"error"
         })
       })
     }
@@ -358,6 +366,12 @@ export class CreateHeadquarterComponent implements OnInit {
                     })
                   })
                 }
+              }).catch(err=>{
+                this.spinner.hide();
+                Swal.fire({
+                  title:"Ha ocurrido un error",
+                  icon:"error"
+                })
               })
 
           }else{
@@ -376,6 +390,12 @@ export class CreateHeadquarterComponent implements OnInit {
                     this._router.navigate(['/main', 'headquarts', this.idAlly]);
                   }
                 })
+              }, err =>{
+                this.spinner.hide();
+                Swal.fire({
+                  title:"ha ocurrido un error actualizando la sede",
+                  icon:"error"
+                })
               })
             }
           }
@@ -386,6 +406,8 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for update headquarters new services
   updateNewServices() {
+    this.spinner.show()
+
     let id = localStorage.getItem('idHeadquarter')
     this.headquarters.putHeadquarter(id, this.preHeadquarters).subscribe(message => {
       this.spinner.hide()
@@ -400,6 +422,8 @@ export class CreateHeadquarterComponent implements OnInit {
           this._router.navigate(['/main', 'headquarts', this.idAlly]);
         }
       })
+    }, err =>{
+      this.spinner.hide();
     })
   }
 
@@ -415,14 +439,18 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-        this.spinner.show()
+
         this.preHeadquarters['principarlServices'].forEach((ser, i) => {
-          if (ser.checked == false) {
-            let cost = this.preHeadquarters['costPerService']
-            cost[i].value = ""
+          if(ser){
+            if (ser.checked == false) {
+              let cost = this.preHeadquarters['costPerService']
+              cost[i].value = ""
+            }
           }
         })
+
         if (this.ArrayseviceChecked.length > 0) {
+          this.spinner.show();
           this.ArrayseviceChecked.forEach((element, index) => {
 
             let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name)
@@ -432,6 +460,7 @@ export class CreateHeadquarterComponent implements OnInit {
                   element['img'] = urlImage
 
                   if (index == (this.ArrayseviceChecked.length - 1)) {
+                    this.spinner.hide();
                     this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
                     this.updateNewServices();
                   }

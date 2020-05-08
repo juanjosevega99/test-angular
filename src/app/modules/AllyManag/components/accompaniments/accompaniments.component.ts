@@ -698,32 +698,50 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         let noExist = false;
         let nameReal = "";
 
-        this.newAccompanimentList.forEach(res => {
+        this.newAccompanimentList.forEach((res, index) => {
+          res
 
-          let nameNew = res.name.toLowerCase();
-          let nameExist = nameArraySaved.indexOf(nameNew);
+          if (res.name && res.quantity && res.preparationTimeNumber) {
 
-          if (nameExist < 0) {
-            noExist = true;
-            res.idAllies = localStorage.getItem("idAlly")
+            let nameNew = res.name.toLowerCase();
+            let nameExist = nameArraySaved.indexOf(nameNew);
 
-            this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
-              accomp.creationDate = this.convertDate(accomp.creationDate)
-              accomp.modificationDate = this.convertDate(accomp.modificationDate)
-              this.personList.push(accomp);
-            })
+            if (nameExist < 0) {
+              noExist = true;
+              res.idAllies = localStorage.getItem("idAlly")
+
+              this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
+                accomp.creationDate = this.convertDate(accomp.creationDate)
+                accomp.modificationDate = this.convertDate(accomp.modificationDate)
+                this.personList.push(accomp);
+              })
+
+            } else {
+              exist = true;
+              nameReal = res.name;
+            }
+
+            if(index == (this.newAccompanimentList.length-1) ){
+
+              this.swallNewAcco(noExist, exist, nameReal);
+            }
 
           } else {
-            exist = true;
-            nameReal = res.name;
+            this.loading = false;
+            Swal.fire({
+              title: "Algunos campos estan vacios",
+              text: "Asegurate de llenar todos los campos como 'cantidad', 'unidad', 'nombre de acompañamiento', el costo adicional será cero en caso de selecionarlo y no colocar ningun valor ",
+              confirmButtonColor:"#542b81"
+            })
           }
+
         })
-        this.swallNewAcco(noExist, exist, nameReal);
       }
     })
   }
 
   swallNewAcco(noExist, exist, nameReal) {
+
     if (noExist == true && exist == true) {
       this.loading = false;
       Swal.fire({

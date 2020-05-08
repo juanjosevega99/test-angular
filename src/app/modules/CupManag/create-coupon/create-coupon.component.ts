@@ -216,6 +216,7 @@ export class CreateCouponComponent implements OnInit {
   }
 
   seeNameHeadquarter(selected: any) {
+    this.preCoupon['idDishes'] = "";
     this.arrayDishes = []
     this.dishesByIdHeadquarter = []
     this.headquartersByIdAlly.forEach(element => {

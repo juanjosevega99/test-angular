@@ -398,21 +398,25 @@ export class ReportGeneratorComponent implements OnInit {
     const mydateTo = new Date(this.to);
 
     this.newdateArray = [];
-
-    this.usergetting.forEach((user, index) => {
-
-      let date = user.registerDate.split(" ")[0].split("/").reverse().join("-");
-
-      const userdate = new Date(date)
-
-      if (userdate >= mydateFrom && userdate <= mydateTo) {
-        this.newdateArray.push(user)
-      }
-
-      if (index == (this.usergetting.length - 1)) {
-        this.loadingUsers = false;
-      }
-    });
+    
+    if(this.usergetting.length){
+      this.usergetting.forEach((user, index) => {
+  
+        let date = user.registerDate.split(" ")[0].split("/").reverse().join("-");
+  
+        const userdate = new Date(date)
+  
+        if (userdate >= mydateFrom && userdate <= mydateTo) {
+          this.newdateArray.push(user)
+        }
+  
+        if (index == (this.usergetting.length - 1)) {
+          this.loadingUsers = false;
+        }
+      });
+    }else{
+      this.loadingUsers=false;
+    }
 
   }
 

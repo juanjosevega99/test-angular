@@ -204,7 +204,12 @@ export class CreateAllyComponent implements OnInit {
     })
     this.headquartersService.getHeadquarterByIdAlly(id).subscribe(services=>{
       this.arrayServicesByAlly = services;
-      let arrayServicesReserved = this.arrayServicesByAlly.filter(service=> service.value == "Resérvalo")
+      let arrayServicesReserved = this.arrayServicesByAlly.filter(service=> {
+        if(service){
+
+          return service.value == "Resérvalo"
+        }
+      })
       if (arrayServicesReserved.length != 0){
         this.disableImagesAlly = false
       } else{
