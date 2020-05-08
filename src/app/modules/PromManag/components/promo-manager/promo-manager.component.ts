@@ -45,21 +45,21 @@ export class PromoManagerComponent implements OnInit {
     this.noDishes = false;
 
     this.loadPromos();
-    this.flagState=false;
-    
+    this.flagState = false;
+
   }
 
   ngOnInit() {
 
   }
 
-  loadPromos(){
+  loadPromos() {
     //inicialization of dishes
-    this.dishPromoArray=[];
+    this.dishPromoArray = [];
+    this.loadingDishes = true;
     this.dishesService.getDishesByIdAlly(localStorage.getItem('idAlly')).subscribe(res => {
-      this.loadingDishes = true;
-      res.forEach((dish: Dishes) => {
-        if (res.length > 0) {
+      if (res.length > 0) {
+        res.forEach((dish: Dishes) => {
           if (dish.idPromotion != null) {
             for (let item = 0; item < dish.idPromotion.length; item++) {
               let iditem = dish.idPromotion[item];
@@ -70,27 +70,27 @@ export class PromoManagerComponent implements OnInit {
                     if (iditem == promo.id) {
 
                       let yf = promo.endDatePromotion[0]['year'];
-                      let mf = promo.endDatePromotion[0]['month']-1;
+                      let mf = promo.endDatePromotion[0]['month'] - 1;
                       let df = promo.endDatePromotion[0]['day'];
                       let hf = promo.endDatePromotion[1]['hour'];
                       let minf = promo.endDatePromotion[1]['minute'];
                       let dateF = new Date(`${yf}-${mf}-${df}`).getTime();
                       let datee = new Date(yf, mf, df, hf, minf)
-                      
+
                       let ys = promo.promotionStartDate[0]['year'];
-                      let ms = promo.promotionStartDate[0]['month']-1;
+                      let ms = promo.promotionStartDate[0]['month'] - 1;
                       let ds = promo.promotionStartDate[0]['day'];
                       let hs = promo.promotionStartDate[1]['hour'];
                       let mins = promo.promotionStartDate[1]['minute'];
                       let dateS = new Date(`${ys}-${ms}-${ds}`).getTime();
                       let datei = new Date(ys, ms, ds, hs, mins)
-                      
-                      let diff = dateF - dateS;
-                     
-                      this.today = new Date();
-                      let datetoday =  this.convertDateDay(this.today);
 
-                      let datestart =  this.convertDateDay(datei);
+                      let diff = dateF - dateS;
+
+                      this.today = new Date();
+                      let datetoday = this.convertDateDay(this.today);
+
+                      let datestart = this.convertDateDay(datei);
                       let timei = this.convertDateTime(datei);
 
                       let datefinish = this.convertDateDay(datee);
@@ -111,12 +111,12 @@ export class PromoManagerComponent implements OnInit {
                       obj.timestart = timei;
                       obj.endDatePromotion = promo.endDatePromotion;
                       obj.timeend = timee;
-                      
+
 
                       if (this.today >= datei && this.today <= datee) {
-                        if(promo.flag == true){
+                        if (promo.flag == true) {
                           obj.state = promo.state;
-                        }else{
+                        } else {
                           let stateDate: any = [{
                             state: "active",
                             check: true
@@ -126,7 +126,7 @@ export class PromoManagerComponent implements OnInit {
                           }]
                           obj.state = stateDate
                         }
-                    
+
                       } else if (this.today > datee || this.today < datei) {
                         let stateDate: any = [{
                           state: "active",
@@ -153,17 +153,19 @@ export class PromoManagerComponent implements OnInit {
           } else {
             this.loadingDishes = false;
           }
-        } else {
-          this.noDishes = true;
-          this.loadingDishes = false;
-        }
-      })
+
+        })
+
+      } else {
+        this.noDishes = true;
+        this.loadingDishes = false;
+      }
     })
   }
 
   //method for updating the state to active
   changeStateA(idDish) {
-    
+
     let newstate: object = {
       state: [{
         state: "active",
@@ -187,8 +189,8 @@ export class PromoManagerComponent implements OnInit {
         state: "inactive",
         check: true
       }],
-      
-      flag : true
+
+      flag: true
     }
 
     this.swallUpdateState(idDish, newstate)
@@ -203,7 +205,7 @@ export class PromoManagerComponent implements OnInit {
       //console.log(promo);
 
       let yf = promo.endDatePromotion[0]['year'];
-      let mf = promo.endDatePromotion[0]['month']-1;
+      let mf = promo.endDatePromotion[0]['month'] - 1;
       let df = promo.endDatePromotion[0]['day'];
       let hf = promo.endDatePromotion[1]['hour'];
       let minf = promo.endDatePromotion[1]['minute'];
@@ -213,15 +215,15 @@ export class PromoManagerComponent implements OnInit {
       let datee = new Date(yf, mf, df, hf, minf)
 
       let ys = promo.promotionStartDate[0]['year'];
-      let ms = promo.promotionStartDate[0]['month']-1;
+      let ms = promo.promotionStartDate[0]['month'] - 1;
       let ds = promo.promotionStartDate[0]['day'];
       let hs = promo.promotionStartDate[1]['hour'];
       let mins = promo.promotionStartDate[1]['minute'];
 
       let datei = new Date(ys, ms, ds, hs, mins)
-      
+
       this.today = new Date()
-      
+
       if (this.today > datee) {
 
         Swal.fire({
@@ -235,7 +237,7 @@ export class PromoManagerComponent implements OnInit {
         }).then((result) => {
           if (result.value) {
             this._router.navigate(['/main', 'createDish', promo.reference])
-          } else{
+          } else {
             this.loadPromos();
           }
         })
@@ -253,7 +255,7 @@ export class PromoManagerComponent implements OnInit {
         }).then((result) => {
           if (result.value) {
             this._router.navigate(['/main', 'createDish', promo.reference])
-          } else{
+          } else {
             this.loadPromos();
           }
         })
@@ -408,11 +410,11 @@ export class PromoManagerComponent implements OnInit {
       confirmButtonText: 'Si, actualizar!'
     }).then((result) => {
       if (result.value) {
-        this.loadingDishes= true;
+        this.loadingDishes = true;
         this.promoService.putPromotion(idDish, newstate).subscribe(res => {
-         
+
           this.promoService.getAllPromotionsByAlly(localStorage.getItem("idAlly")).subscribe(dish => {
-            this.loadingDishes=false;
+            this.loadingDishes = false;
             Swal.fire({
               text: "Estado actualizado!!",
               icon: 'success',
