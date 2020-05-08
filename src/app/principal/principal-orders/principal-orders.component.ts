@@ -482,12 +482,15 @@ export class PrincipalOrdersComponent implements OnInit {
   handleDateClick(event) {
 
     // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
-    const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
+    if(this.calendarEvents.length){
+      const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
 
-    if (lastevent.publicId == " ") {
-
-      this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+      if (lastevent.publicId == " ") {
+  
+        this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+      }
     }
+
 
     // setting date of event
     this.datereservation = event.target ? event.target : event.dateStr;
@@ -770,7 +773,9 @@ export class PrincipalOrdersComponent implements OnInit {
             this.resetIds();
             this.setColor();
             Swal.fire(
-              'Reservación Guardada',
+              {title:'Reservación Guardada',
+              confirmButtonColor: '#542b81'
+            }
             )
 
           })

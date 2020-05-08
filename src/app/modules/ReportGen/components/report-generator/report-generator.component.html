@@ -65,8 +65,10 @@
                         <th class="text-center">Cliente</th>
                         <th class="text-center">T. servicio</th>
                         <th class="text-center">Valor Pedido</th>
-                        <th class="text-center">F. H. Reserva</th>
-                        <th class="text-center">F. H Entrega</th>
+                        <th class="text-center">F. Reserva</th>
+                        <th class="text-center">H. Reserva</th>
+                        <th class="text-center">F. Entrega</th>
+                        <th class="text-center">H Entrega</th>
                         <th class="text-center">Control Pedidos</th>
                         <!-- <th class="text-center">Catidad</th> -->
                         <th class="text-center">Cantidad/Plato</th>
@@ -93,8 +95,10 @@
                         <td>{{ order.client }}</td>
                         <td>{{ order.typeOfService }}</td>
                         <td>{{ order.purchaseAmount }}</td>
-                        <td>{{ order.registerDate }}</td>
-                        <td>{{ order.dateAndHourDelivery }}</td>
+                        <td>{{ order.registerDate.split(" ")[0] }}</td>
+                        <td>{{ order.registerDate.split(" ")[1] +""+ order.registerDate.split(" ")[2] }}</td>
+                        <td>{{ order.dateAndHourDelivery.split(" ")[0] }}</td>
+                        <td>{{ order.dateAndHourDelivery.split(" ")[1] + order.dateAndHourDelivery.split(" ")[2] }}</td>
                         <td>{{ order.controlOrder ? "si" : "No" }}</td>
 
                         <!-- <td>
@@ -112,7 +116,7 @@
                     <td>{{"$ " + order.purchaseAmount }}</td>
                     <td>{{"$ " + order.valueTotalWithoutRes }}</td>
                     <td>{{"$ " + order.costReservation }}</td>
-                    <td>{{ order.percent + "%" }}</td>
+                    <td>{{ order.percent }}</td>
                     <td>{{"$ " + order.valueIntermediation  }}</td>
                     <td>{{"$ " + order.valueIntermediationIva  }}</td>
                     <td>{{"$ " + order.valueTotalIntRes }}</td>
@@ -139,7 +143,7 @@
 
     <div *ngIf="profile.reportPermissions.reportadminpdv" class="container-fluid">
         <div class="tableFixHead">
-            <table id="excel-table-general">
+            <table>
 
                 <thead>
                     <tr>
