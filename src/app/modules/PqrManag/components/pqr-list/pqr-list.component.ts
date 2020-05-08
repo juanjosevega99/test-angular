@@ -13,6 +13,8 @@ import { Users } from 'src/app/models/Users';
 import { WebsocketsService } from 'src/app/services/websockets.service';
 import { profileStorage } from '../../../../models/ProfileStorage';
 import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import { AlliesService } from 'src/app/services/allies.service';
+import { HeadquartersService } from 'src/app/services/headquarters.service';
 
 @Component({
   selector: 'app-pqr-list',
@@ -50,7 +52,8 @@ export class PqrListComponent implements OnInit {
   profile: profileStorage;
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private pqrlistservice: PqrsService,
-    private userService: UsersService, private websocket: WebsocketsService, private showmenu: ShowContentService) {
+    private userService: UsersService, private websocket: WebsocketsService, private showmenu: ShowContentService,
+    private headservice: HeadquartersService ) {
 
     this.profile = this.showmenu.showMenus();
 
@@ -65,6 +68,8 @@ export class PqrListComponent implements OnInit {
       "nameHeadquarter": new FormControl(),
 
     })
+
+
     this.loadPqrs();    
 
   }
@@ -72,6 +77,7 @@ export class PqrListComponent implements OnInit {
   ngOnInit() {
     this.websocket.listen('newPqr').subscribe((pqr: Pqrs) => {
       if (pqr.idHeadquarter == this.profile.idHeadquarter) {
+        pqr.id = pqr['_id'];
         this.formaterPqr(pqr);
       }
     })
@@ -246,15 +252,18 @@ export class PqrListComponent implements OnInit {
     this.userService.getUserById(order.idUser).subscribe((user: Users) => {
       const obj: Pqrs = {};
 
+      this.headservice.getHeadquarterById( order.idHeadquarter ).subscribe( head=>{
+        obj.nameHeadquarter = head.name;
+        obj.nameAllie = head.nameAllies;
+      })
+
       obj.id = order.id,
       obj.date = this.convertDate(order.date);
       obj.nameUser = user.name;
       obj.email = user.email;
       obj.phone = user.phone;
       obj.birthday = this.convertDate(user.birthday);
-      obj.gender = user.gender;
-      obj.nameAllie = order.nameAllie;
-      obj.nameHeadquarter = order.nameHeadquarter;
+      obj.gender = user.gender;            
       obj.typeOfService = order.typeOfService;
       obj.state = order.state;
 

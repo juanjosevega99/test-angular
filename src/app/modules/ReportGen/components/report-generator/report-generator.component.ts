@@ -51,7 +51,7 @@ export class ReportGeneratorComponent implements OnInit {
   loadingUsers = false;
 
   //Array for filter
-  newdateArray = this.usergetting;
+  newdateArray = []
   //variable para formatear los campos de la tabla
   table: FormGroup;
 
@@ -119,7 +119,7 @@ export class ReportGeneratorComponent implements OnInit {
   loadUserAndOrders() {
     this.loadingUsers = true;
 
-    this.orderservice.getOrdersByAlly(this.profile.idAllies).subscribe((orders: Orders[]) => {
+    this.orderservice.getOrdersByAllyHead(this.profile.idHeadquarter).subscribe((orders: Orders[]) => {
 
       if (orders.length > 0) {
 
@@ -147,7 +147,7 @@ export class ReportGeneratorComponent implements OnInit {
                 const costService = headq.costPerService.find(ser => this.removeAccents(ser.id).toLocaleLowerCase() === obj.typeOfService);
 
                 if (costService) {
-                  obj.costReservation = parseFloat((parseInt(costService.value) - (parseInt(costService.value) * environment.IVA)).toFixed());
+                  obj.costReservation = costService.value ? parseFloat((parseInt(costService.value) - (parseInt(costService.value) * environment.IVA)).toFixed()) : 0;
                   obj.costReservationIva = costService.value ? parseFloat(costService.value) : 0;
                   obj.valueTotalWithoutRes = (order.orderValue - costService.value);
                 } else {
@@ -179,9 +179,10 @@ export class ReportGeneratorComponent implements OnInit {
 
                   this.dishService.getDisheById(object.id).subscribe((dish: any) => {
                     if (dish) {
-
-                      namedsh.push(dish.name);
-                      valueDish.push(dish.price * object.quantity);
+                      let namedish = dish.name ? dish.name : "no se encontro resultado";
+                      let price = dish.price ? dish.price * object.quantity : 'no se encontro resultado'
+                      namedsh.push(namedish);
+                      valueDish.push(price);
                     }
 
                   })
