@@ -1,4 +1,4 @@
-<div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
+<div class="compenetsstyle pt-5 " style="background-color: #e9e7e7;">
 
   <div class="filerControl px-1">
 
@@ -77,7 +77,7 @@
       <form class="form-inline d-flex justify-content-end " #formadate>
         <div class="form-group hidden">
           <div class="input-group">
-            <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+            <input name="datepicker" class="form-control noview" ngbDatepicker #datepicker="ngbDatepicker"
               [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
               outsideDays="hidden" [startDate]="fromDate">
             <ng-template #t let-date let-focused="focused">

@@ -12,14 +12,37 @@
     height: 6rem
   }
 
-  .father {
-    position: relative;
+  .compenet-options{
+    padding: 7rem;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-content: center;
   }
- .son {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 30%;
-    width: 60%;
-    margin: 8% 0 0 -32%;
+
+  .div-option{
+    width: 100%;
+    max-width: 1300px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
   }
+
+
+@media( max-width: 414px ){
+
+  .compenet-options{
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+}
+
+@media( max-width: 991px ){
+
+  .div-option{
+   align-content: initial;
+  }
+
+
+}

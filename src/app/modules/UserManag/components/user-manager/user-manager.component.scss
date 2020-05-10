@@ -9,7 +9,14 @@
 } */
 
 .compenetsstyle{
+  padding-left: 3rem;
+  padding-right: 3rem;
   height: 100%;
+}
+
+.noview{
+  background-color: #e9e7e7 ;
+  border: none;
 }
 
 .form-group.hidden {
@@ -269,6 +276,12 @@ th {
 
   .btnInfos div{
     margin: .5rem;
+  }
+
+  .compenetsstyle{
+    
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
 }
