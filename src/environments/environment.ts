@@ -15,7 +15,8 @@ export const environment = {
     measurementId: "G-MHFJRC1QX5"
   },
 
-  UrlBase: "https://tifi.herokuapp.com/",
+  //UrlBase: "https://tifi.herokuapp.com/",
+  UrlBase: "https://tifibackend.herokuapp.com/",
   // UrlBaseSocket:"http://localhost:5000", no es necesario con los nuevos cambios
   /* UrlBase:"http://localhost:5000/", */
   //https://tifi.herokuapp.com/
