@@ -12,8 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 //services
 import { SaveLocalStorageService } from "../../../../services/save-local-storage.service";
 import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
-
-
+import { Marker } from '../../../../../classes/marker.class';
 
 
 @Component({
@@ -57,6 +56,8 @@ export class CreateHeadquarterComponent implements OnInit {
     mobileHC: null,
     telephoneHC: null,
     emailHC: null,
+    markerLocation: [],
+
   }
 
   //other variables
@@ -89,6 +90,11 @@ export class CreateHeadquarterComponent implements OnInit {
   alertBadExtensionImageCoupon = false
   // flag for loading
   loadingServicesAditionals = false;
+  //varibles by latitude and length for ubication headquarter
+  markers: Marker[] = [];
+  lat: number;
+  lng: number;
+
 
   constructor(
     private storage: AngularFireStorage,
@@ -103,6 +109,8 @@ export class CreateHeadquarterComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private spinner: NgxSpinnerService) {
 
+    
+
     //get Ally's id of LocalStorage
     this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
 
@@ -113,7 +121,20 @@ export class CreateHeadquarterComponent implements OnInit {
     this._activateRoute.params.subscribe(params => {
       this.idAlly = params['id']
     });
-
+  
+    // get geolocation 
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.lat = pos.coords.latitude
+        this.lng = pos.coords.longitude
+   
+        const newMarker = new Marker(this.lat, this.lng);
+        this.markers.push(newMarker);
+  
+        // this.preHeadquarters['markerLocation'] = this.markers[0]
+  
+      }, error => console.log(error)
+      )   
+    
     //flag to change button save and update
     this.edit = false
 
@@ -148,6 +169,14 @@ export class CreateHeadquarterComponent implements OnInit {
   ngOnInit() {
 
   }
+  addMarker(event) {
+
+    const coords = event.coords
+    const newMarker = new Marker(coords.lat, coords.lng);
+    this.markers[0] = newMarker;
+    
+  }
+  
   goBackHeadquarterOptions() {
     if (localStorage.getItem('idHeadquarter')) {
       localStorage.removeItem('idHeadquarter');
@@ -163,9 +192,13 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for load the headquarter id
   loadIdHeadquarter() {
-    
     if (localStorage.getItem('idHeadquarter')) {
       this.headquarters.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(res => {
+      if (res.markerLocation[0]) {
+        const newMarker = new Marker(res.markerLocation[0].lat, res.markerLocation[0].lng);
+        this.markers[0] = newMarker
+      }
+
         this.edit = true
         this.preHeadquarters = res;
         res.principarlServices.forEach((principalService) => {
@@ -333,9 +366,10 @@ export class CreateHeadquarterComponent implements OnInit {
       cancelButtonColor: '#542b81',
       confirmButtonText: '¡Si, crear!'
     }).then((result) => {
-      
+
       if (result.value) {
         this.spinner.show()
+        this.preHeadquarters['markerLocation'] = this.markers
         this.ArrayseviceChecked.forEach((element, index) => {
 
           let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name)
@@ -372,7 +406,7 @@ export class CreateHeadquarterComponent implements OnInit {
                 })
               })
 
-          }else{
+          } else {
             if (index == (this.ArrayseviceChecked.length - 1)) {
 
               this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
@@ -437,7 +471,8 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
       if (result.value) {
-
+        this.spinner.show()
+        this.preHeadquarters['markerLocation'] = this.markers
         this.preHeadquarters['principarlServices'].forEach((ser, i) => {
           if(ser){
             if (ser.checked == false) {

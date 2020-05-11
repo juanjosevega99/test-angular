@@ -21,7 +21,7 @@ export class PromotionsCategoriesService {
 
   putPromotionCategory(promotioncategory): Observable<PromotionsCategories> {
     return this.httpclient.put<PromotionsCategories>(
-      environment.UrlBase + "promotions-categories" + promotioncategory.id,
+      environment.UrlBase + "promotions-categories/" + promotioncategory.id,
       promotioncategory
     );
   }
@@ -36,6 +36,7 @@ export class PromotionsCategoriesService {
         promotioncategory.map(promotionscategories => {
           let obj = {
             id: promotionscategories._id,
+            idAlly: promotionscategories.idAlly,
             name: promotionscategories.name,
             imageTypePromotion: promotionscategories.imageTypePromotion
           };
@@ -45,19 +46,19 @@ export class PromotionsCategoriesService {
     );
   }
 
-  getPromotionCategoryById(id): Observable<any[]> {
+  getPromotionCategoryById(id): Observable<PromotionsCategories> {
     return this.httpclient
-      .get<PromotionsCategories[]>(environment.UrlBase + "promotions-categories/" + id)
+      .get<PromotionsCategories>(environment.UrlBase + "promotions-categories/" + id)
       .pipe(
-        map((promotionscategories: any[]) =>
-          promotionscategories.map(promotionscategories => {
+        map((promotionscategories: PromotionsCategories) => {
             let obj = {
-              id: promotionscategories.id,
+              id: id,
+              idAlly: promotionscategories.idAlly,
               name: promotionscategories.name,
               imageTypePromotion: promotionscategories.imageTypePromotion
             };
             return obj;
-          })
+          }
         )
       );
   }

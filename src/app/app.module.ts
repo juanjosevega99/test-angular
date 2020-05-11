@@ -73,6 +73,9 @@ import { CreateTycComponent } from './modules/TycManag/create-tyc/create-tyc.com
 import { NotificationsOrdersComponent } from './components/notifications-orders/notifications-orders.component';
 import { NotificationsPqrsComponent } from './components/notifications-pqrs/notifications-pqrs.component';
 
+// Angular google maps
+import { AgmCoreModule } from '@agm/core';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -147,7 +150,11 @@ import { NotificationsPqrsComponent } from './components/notifications-pqrs/noti
     ReactiveFormsModule,
     NgxPrintModule,
     TooltipModule,
-    FullCalendarModule
+    FullCalendarModule,
+    BrowserModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDW9z4LhQ4-4zS0ysMcxaM9gAvRMD0zmtc'
+    })
     
     
   ],
