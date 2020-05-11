@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  firebase : {
+  firebase: {
     apiKey: "AIzaSyC4pTBwEQ5fVuStF1FtFLeLtTswvUYB5a4",
     authDomain: "tifiwebapp.firebaseapp.com",
     databaseURL: "https://tifiwebapp.firebaseio.com",
@@ -14,10 +14,9 @@ export const environment = {
     appId: "1:882165751714:web:e8939fcbe5ede7ad405cfb"
   },
 
-  // UrlBase:"https://tifi.herokuapp.com/",
-  // UrlBase:"https://tifi.herokuapp.com/",
+  // UrlBase: "https://tifi.herokuapp.com/",
   // UrlBaseSocket:"http://localhost:5000", no es necesario con los nuevos cambios
-  UrlBase:"http://localhost:5000/",
+   UrlBase:"http://localhost:5000/", 
   //https://tifi.herokuapp.com/
 
   IVA: 0.19

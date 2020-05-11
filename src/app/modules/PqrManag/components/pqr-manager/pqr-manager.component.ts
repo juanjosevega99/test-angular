@@ -38,36 +38,7 @@ export class PqrManagerComponent implements OnInit {
 
     this.activateParams.params.subscribe(res => {
 
-      this.pqrservice.getCPqrsById(res.id).subscribe(
-        (pqr: any) => {
-
-          this.userService.getUserById(pqr.idUser).subscribe((user: Users) => {
-            this.infoUSer.id = res.id;
-            this.infoUSer.nameUser = user.name;
-            this.infoUSer.phone = user.phone;
-            this.infoUSer.birthday = this.convertDateborn(user.birthday);
-            this.infoUSer.gender = user.gender;
-            this.infoUSer.nameAllie = pqr.nameAllie;
-            this.infoUSer.nameHeadquarter = pqr.nameHeadquarter;
-            this.infoUSer.date = this.convertDate(pqr.date);
-            this.dateCreatePqr = pqr.date;
-            this.infoUSer.state = pqr.state;
-            this.infoUSer.email = user.email;
-            this.infoUSer.description = pqr.description;
-            this.infoUSer.typeOfService = pqr.typeOfService;
-            this.response = pqr.reply;
-
-          })
-
-          this.headService.getHeadquarterById(pqr.idHeadquarter).subscribe(res => {
-            if (res) {
-              this.location = res.ubication;
-            }
-          })
-
-
-        }
-      )
+      this.loadPRQ(res);
 
     })
 
@@ -79,6 +50,43 @@ export class PqrManagerComponent implements OnInit {
 
   back() {
     this._location.back();
+  }
+
+
+  loadPRQ(res:any){
+
+    this.spinner.show();
+
+    this.pqrservice.getCPqrsById(res.id).subscribe(
+      (pqr: any) => {
+
+        this.headService.getHeadquarterById( pqr.idHeadquarter ).subscribe( head=>{
+          this.infoUSer.nameHeadquarter = head.name;
+          this.infoUSer.nameAllie = head.nameAllies;
+          this.location = head.ubication;
+        })
+
+        this.userService.getUserById(pqr.idUser).subscribe((user: Users) => {
+
+          this.infoUSer.id = res.id;
+          this.infoUSer.nameUser = user.name;
+          this.infoUSer.phone = user.phone;
+          this.infoUSer.birthday = this.convertDateborn(user.birthday);
+          this.infoUSer.gender = user.gender;
+          this.infoUSer.date = this.convertDate(pqr.date);
+          this.dateCreatePqr = pqr.date;
+          this.infoUSer.state = pqr.state;
+          this.infoUSer.email = user.email;
+          this.infoUSer.description = pqr.description;
+          this.infoUSer.typeOfService = pqr.typeOfService;
+          this.response = pqr.reply;
+
+          this.spinner.hide();
+
+        })
+
+      }
+    )
   }
 
   // =================
@@ -194,7 +202,6 @@ export class PqrManagerComponent implements OnInit {
       const d = new Date(date);
       n = d.toISOString().split("T")[0];
     } catch{
-      console.log(date);
 
     }
     return n;

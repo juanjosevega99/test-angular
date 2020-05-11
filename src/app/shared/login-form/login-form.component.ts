@@ -23,7 +23,7 @@ export class LoginFormComponent implements OnInit {
   loading: boolean = false;
 
   constructor(public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService,
-    private serviceProfile: ProfilesService) { }
+    private serviceProfile: ProfilesService) {}
 
   ngOnInit() {
     // this.signError = true;
@@ -32,7 +32,9 @@ export class LoginFormComponent implements OnInit {
       let profile = JSON.parse(localStorage.getItem('profile'));
       this.navigateProfile(profile);
     }
+
   }
+
 
   login() {
     this.spinner.show();
@@ -69,9 +71,10 @@ export class LoginFormComponent implements OnInit {
 
           } else {
             this.spinner.hide();
-            Swal.fire({ title: "No es posible iniciar sesión, por favor comunicate con soporte",
-            icon:'warning'
-          })
+            Swal.fire({
+              title: "No es posible iniciar sesión, por favor comunicate con soporte",
+              icon: 'warning'
+            })
           }
 
         }, err => {

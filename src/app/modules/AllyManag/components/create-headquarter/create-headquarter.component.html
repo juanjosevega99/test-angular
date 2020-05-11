@@ -347,7 +347,7 @@
                 <label class="col-md-5 col-form-label">Ubicación</label>
                 <div class="col-md-7">
                     <agm-map (mapClick)="addMarker($event)" [latitude]="lat" [longitude]="lng" [zoom]= "10">
-                        <agm-marker *ngFor="let marker of markers, let i = index" 
+                        <agm-marker *ngFor="let marker of markers" 
                         [latitude]="marker.lat" [longitude]="marker.lng"
                         > 
                         

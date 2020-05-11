@@ -361,7 +361,7 @@
                     <button type="button" (click)="cancelAdd()" class="btn btn-outline-primary btn-lg">Cancelar</button>
                 </div>
                 <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button *ngIf="!promoAccompaniments" (click)="add()" type="button"
+                    <button *ngIf="!promoAccompaniments && !flag" (click)="add()" type="button"
                         class="btn btn-outline-primary btn-lg">
                         Nuevo acompañamiento</button>
                     <button *ngIf="promoAccompaniments" (click)="seeList()" type="button"

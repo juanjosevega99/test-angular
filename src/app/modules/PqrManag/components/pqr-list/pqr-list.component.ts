@@ -13,6 +13,8 @@ import { Users } from 'src/app/models/Users';
 import { WebsocketsService } from 'src/app/services/websockets.service';
 import { profileStorage } from '../../../../models/ProfileStorage';
 import { ShowContentService } from 'src/app/services/providers/show-content.service';
+import { AlliesService } from 'src/app/services/allies.service';
+import { HeadquartersService } from 'src/app/services/headquarters.service';
 
 @Component({
   selector: 'app-pqr-list',
@@ -50,7 +52,8 @@ export class PqrListComponent implements OnInit {
   profile: profileStorage;
 
   constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter, private pqrlistservice: PqrsService,
-    private userService: UsersService, private websocket: WebsocketsService, private showmenu: ShowContentService) {
+    private userService: UsersService, private websocket: WebsocketsService, private showmenu: ShowContentService,
+    private headservice: HeadquartersService) {
 
     this.profile = this.showmenu.showMenus();
 
@@ -65,19 +68,22 @@ export class PqrListComponent implements OnInit {
       "nameHeadquarter": new FormControl(),
 
     })
-    this.loadPqrs();    
+
+
+    this.loadPqrs();
 
   }
 
   ngOnInit() {
     this.websocket.listen('newPqr').subscribe((pqr: Pqrs) => {
       if (pqr.idHeadquarter == this.profile.idHeadquarter) {
+        pqr.id = pqr['_id'];
         this.formaterPqr(pqr);
       }
     })
   }
 
-  loadPqrs(){
+  loadPqrs() {
     this.loadingPqrs = true;
 
     if (this.profile.nameCharge.toLocaleLowerCase() != "administradortifi") {
@@ -90,14 +96,14 @@ export class PqrListComponent implements OnInit {
             if (order.idUser) {
               this.formaterPqr(order);
             }
-            
-            if (index === (res.length-1)) {
+
+            if (index === (res.length - 1)) {
               this.loadingPqrs = false;
             }
 
           })
-        }else{
-          this.loadingPqrs=false;
+        } else {
+          this.loadingPqrs = false;
         }
       })
     } else {
@@ -112,7 +118,7 @@ export class PqrListComponent implements OnInit {
               this.formaterPqr(order);
             }
 
-            if (index === (res.length-1)) {
+            if (index === (res.length - 1)) {
               this.loadingPqrs = false;
             }
           })
@@ -121,7 +127,7 @@ export class PqrListComponent implements OnInit {
         }
       })
     }
-    
+
   }
 
   // =====================================
@@ -210,29 +216,35 @@ export class PqrListComponent implements OnInit {
     //'p', 'mm', 'a4'
 
     let doc = new jsPDF('landscape');
-    let col = ["#", "Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento",
-      "Sede"];
+    let col = ["#", "Radicado", "Fecha", "Nombre", "Correo", "Celular", "F. Nacimiento", "Genero", "Establecimiento", "Sede"];
+    const coltopdf = ['id','date', 'nameUser', 'email', 'phone', 'birthday', 'gender', 'nameAllie', 'nameHeadquarter'];
+
     let rows = [];
     let auxrow = [];
+
     this.usergetting.map((user, i) => {
       auxrow = [];
       auxrow[0] = i + 1;
-      for (const key in user) {
-        if (user.hasOwnProperty(key)) {
-          if(key == "id"){
 
-            auxrow.push(user[key].slice(12, user[key].length ));
-          }else{
+      coltopdf.forEach(key => {
+
+        if (user.hasOwnProperty(key)) {
+          if (key == "id") {
+
+            auxrow.push(user[key].slice(12, user[key].length));
+          } else {
 
             auxrow.push(user[key]);
           }
         }
-      }
+        
+      })
+      
       rows.push(auxrow);
     });
 
     //build the pdf file
-    let name = "reporte Pqrs"  + new Date().toLocaleString() +'.pdf'
+    let name = "reporte Pqrs" + new Date().toLocaleString() + '.pdf'
     doc.autoTable(col, rows);
     doc.save(name);
   }
@@ -246,15 +258,18 @@ export class PqrListComponent implements OnInit {
     this.userService.getUserById(order.idUser).subscribe((user: Users) => {
       const obj: Pqrs = {};
 
+      this.headservice.getHeadquarterById(order.idHeadquarter).subscribe(head => {
+        obj.nameHeadquarter = head.name;
+        obj.nameAllie = head.nameAllies;
+      })
+
       obj.id = order.id,
-      obj.date = this.convertDate(order.date);
+        obj.date = this.convertDate(order.date);
       obj.nameUser = user.name;
       obj.email = user.email;
       obj.phone = user.phone;
       obj.birthday = this.convertDate(user.birthday);
       obj.gender = user.gender;
-      obj.nameAllie = order.nameAllie;
-      obj.nameHeadquarter = order.nameHeadquarter;
       obj.typeOfService = order.typeOfService;
       obj.state = order.state;
 
@@ -364,7 +379,7 @@ export class PqrListComponent implements OnInit {
       filter(function (item) {
         //We test each element of the object to see if one string matches the regexp.
         return (myRegex.test(item.date) || myRegex.test(item.nameUser) || myRegex.test(item.email) || myRegex.test(item.phone) || myRegex.test(item.birthday) || myRegex.test(item.gender) ||
-          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) || myRegex.test(item.id) )
+          myRegex.test(item.nameAllie) || myRegex.test(item.nameHeadquarter) || myRegex.test(item.typeOfService) || myRegex.test(item.id))
 
       }).
       filter(function (item) {
@@ -385,7 +400,7 @@ export class PqrListComponent implements OnInit {
         } else {
           return item;
         }
-      }, objdate)    
+      }, objdate)
   }
 
 

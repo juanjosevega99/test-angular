@@ -79,7 +79,7 @@
                     <p>HORA RESERVA</p>
 
                     <div>
-                        <button *ngFor="let hour of Hours; let idb = index" (click)="getHour($event, idb)" [id]="idb"
+                        <button *ngFor="let hour of Hours" (click)="getHour($event, hour.id)" [id]="hour.id"
                             class="btn btn-outline-success" [disabled]="false" >{{hour.valueToShow}}</button>
                     </div>
                 </div>

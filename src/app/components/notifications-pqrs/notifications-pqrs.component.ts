@@ -34,7 +34,6 @@ export class NotificationsPqrsComponent implements OnInit {
 
   loadPqrsnotifications(){
     this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
-      console.log(res);
       
       if (res.length > 0) {
 

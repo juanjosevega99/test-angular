@@ -230,12 +230,11 @@ export class EditMenuComponent {
   //method for the state
   State(value: string, event) {
     const check = event.target.checked;
-    console.log(value, check);
+    
     this.dishesService.getDishes().subscribe(res => {
       res.forEach((dish: Dishes) => {
         let state: any = []
         state = dish.state
-        console.log(state);
       })
     })
   }

@@ -334,7 +334,6 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       if (input.files && input.files[0]) {
         this.alertBadExtensionLogo = false;
         this.seeNewPhoto = true;
-        console.log(this.seeNewPhoto);
 
         var reader = new FileReader();
         reader.onload = function (e: any) {

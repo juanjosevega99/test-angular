@@ -71,7 +71,7 @@ const routes: Routes = [
 
       { path: "principal", component: PrincipalPageComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "principal-orders", component: PrincipalOrdersComponent, canActivate: [ GuardCAGService ] },
-      { path: "options", component: OptionsComponent, canActivate: [ GuardPqrService ] },
+      { path: "options", component: OptionsComponent },
       { path: "userManager/:id", component: UserManagerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "allyManager/:id", component: AllyManagerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createAlly/:id", component: CreateAllyComponent, canActivate: [ GuardAdminTifiService ] },
