@@ -133,7 +133,6 @@ export class CreateBannerComponent implements OnInit {
 
             }).catch(err => {
               this.spinner.hide();
-              console.log(err);
               Swal.fire(
                 "Problemas con tu connexión a internet"
               )
@@ -311,7 +310,6 @@ export class CreateBannerComponent implements OnInit {
 
         }).catch(err => {
           this.spinner.hide();
-          console.log(err);
 
         })
 

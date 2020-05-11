@@ -111,7 +111,6 @@ export class CreateHeadquarterComponent implements OnInit {
 
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      console.log('Parametro', params['id']);
       this.idAlly = params['id']
     });
 
@@ -159,7 +158,6 @@ export class CreateHeadquarterComponent implements OnInit {
   getNameAlly() {
     this.allies.getAllies().subscribe(ally => {
       this.nameAlli = ally
-      console.log("imprimiendo aliados", this.nameAlli);
     })
   }
 

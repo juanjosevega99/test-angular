@@ -39,7 +39,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
   datereservation: string = '';
   idEvent: string = "";
-  hourreservation = { id: -1, valueToShow: "", value: "" };
+  hourreservation = { id: "", valueToShow: "", value: "" };
   Tablereservation = { id: "", value: "" }
   Peoplereservation = { id: "", value: "" }
   idButton = '';
@@ -74,12 +74,14 @@ export class PrincipalOrdersComponent implements OnInit {
 
   Hours = []
   Tables = []
-
+  clearnextbypromo = false;
 
   orders = []
   orders2 = []
 
-  reservationOndaySelected:reservation = {_id:'', date:'',hour:{},people:{},tables:{},idHeadquart:''}
+  reservationOndaySelected: reservation = { _id: '', date: '', hour: { id: '' }, people: {}, tables: {}, idHeadquart: '' }
+  hourswithreservations = [];
+  tableswithreservations = [];
 
   constructor(private serviceOrders: OrdersService, private userservice: UsersService, private dishService: DishesService,
     private reservationService: ReservationService, private wesocket: WebsocketsService, private spinner: NgxSpinnerService,
@@ -143,9 +145,9 @@ export class PrincipalOrdersComponent implements OnInit {
         let ordersInDay = this.calendarEvents.filter(resin => resin.date === reservation.date);
 
         if (!ordersInDay.length) {
-          this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
-          this.Reservations.push(reservation);
+          this.calendarEvents.push({ publicId: reservation._id, title: "reservas", date: reservation.date, target: reservation.date });
         }
+        this.Reservations.push(reservation);
 
         this.idEvent = "";
         this.resetIds();
@@ -171,25 +173,25 @@ export class PrincipalOrdersComponent implements OnInit {
 
   showToReservation() {
 
-    if( this.reservationOndaySelected.tables['value'] != this.Tablereservation.value ){
+    if (this.reservationOndaySelected.tables['value'] != this.Tablereservation.value) {
       if (this.datereservation && this.hourreservation.value && this.Peoplereservation.value && this.Tablereservation.value) {
 
         // comprobation if date is corect
         let dateres = new Date(this.datereservation + "T" + this.hourreservation.value);
         let today = new Date();
-  
+
         if (dateres >= today) {
-  
+
           // this copilist is use when implemented the other part of reservation.
           // this.copilist = this.listOfDishes.slice();
           // this.showmodal = true;
-  
+
           this.setReservation();
-  
+
         } else {
-  
+
           Swal.fire({
-  
+
             title: 'Fecha incorrecta',
             // text: "la Fecha es incorrecta",
             icon: 'warning',
@@ -198,13 +200,13 @@ export class PrincipalOrdersComponent implements OnInit {
             // cancelButtonColor: '#542b81',
             confirmButtonText: 'Aceptar',
             // cancelButtonText: 'No'
-  
+
           })
         }
-  
+
       } else {
         Swal.fire({
-  
+
           title: 'Por favor selecciona todos los campos',
           text: "Fecha, Hora, Personas, Mesas",
           icon: 'warning',
@@ -213,17 +215,17 @@ export class PrincipalOrdersComponent implements OnInit {
           // cancelButtonColor: '#542b81',
           confirmButtonText: 'Aceptar',
           // cancelButtonText: 'No'
-  
+
         })
       }
-      
-    }else{
+
+    } else {
 
 
       Swal.fire({
-  
+
         title: 'La hora que seleccionaste ya tiene una reserva para este dia',
-        text: "Por favor selecciona otra fecha",
+        text: "Por favor selecciona otra opcion",
         icon: 'warning',
         // showCancelButton: true,
         confirmButtonColor: '#542b81',
@@ -231,8 +233,8 @@ export class PrincipalOrdersComponent implements OnInit {
         confirmButtonText: 'Aceptar',
         // cancelButtonText: 'No'
 
-      })     
-      
+      })
+
     }
 
 
@@ -270,13 +272,13 @@ export class PrincipalOrdersComponent implements OnInit {
       costReservation: 2010,
     }
 
-    this.serviceOrders.postCharge(order).subscribe(res => {
-      // this.loadReservations();
-      // this.resetIds();
-      // Swal.fire(
-      //   'Reservación Guardada',
-      // )
-    });
+    // this.serviceOrders.postCharge(order).subscribe(res => {
+    //   // this.loadReservations();
+    //   // this.resetIds();
+    //   // Swal.fire(
+    //   //   'Reservación Guardada',
+    //   // )
+    // });
   }
 
   adddish() {
@@ -331,11 +333,12 @@ export class PrincipalOrdersComponent implements OnInit {
 
   createHours() {
     this.Hours = [];
-
+    let idb = 0;
     for (let hour = 0; hour < 24; hour++) {
       for (let min = 0; min < 31; min += 30) {
         let toHour = ''
-        let objHour = { valueToShow: '', value: '' };
+        let objHour = { valueToShow: '', value: '', id: idb + 'b' };
+        idb++;
 
         if (hour < 12) {
           toHour = hour < 10 ? "0" + hour + ":" + (min < 30 ? '0' + min : min) + " am" : hour + ":" + (min < 30 ? '0' + min : min) + " am";
@@ -402,14 +405,14 @@ export class PrincipalOrdersComponent implements OnInit {
         let ordersInDay = this.calendarEvents.filter(resin => resin.date === res.date);
 
         if (!ordersInDay.length) {
-          this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+          this.calendarEvents.push({ publicId: res._id, title: 'Reservas', date: res['date'], target: res['date'] });
         }
 
       });
     })
 
     this.resetIds();
-    this.setColor();
+    // this.setColor();
   }
 
 
@@ -420,12 +423,213 @@ export class PrincipalOrdersComponent implements OnInit {
     this.idPeople = '';
     this.idTable = '';
     this.datereservation = '';
-    this.hourreservation = { id: -1, valueToShow: '', value: '' };
+    this.hourreservation = { id: "", valueToShow: '', value: '' };
     this.Tablereservation = { id: '', value: '' };
     this.Peoplereservation = { id: '', value: '' };
 
     this.selectDishes = [];
   }
+
+  
+
+  // ============================
+  // ======= Calendar ===========
+  eventClick(event) {
+
+    // get id of event, this id is on order.typeOfServiceobj
+    this.handleDateClick(event.event._def.extendedProps);
+
+  }
+
+  handleDateClick(event) {
+
+    this.idEvent = '';
+    
+    
+    if (this.clearnextbypromo ) {
+      
+      this.cleancolors();
+      this.clearnextbypromo = false;
+    }
+    
+    // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
+    if (this.calendarEvents.length) {
+      const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
+      
+      if (lastevent.publicId == " ") {
+        
+        this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
+      }
+    }
+    
+    // setting date of event
+    this.datereservation = event.target ? event.target : event.dateStr;
+    // variable to save all reservations on day
+    this.hourswithreservations = this.Reservations.filter((res: reservation) => res.date === this.datereservation);
+
+    // this event should not id, because is a generic event only for see
+    let objdate = { publicId: " ", title: 'programar', date: this.datereservation, target: this.datereservation }
+
+    this.calendarEvents.push(objdate);
+
+
+    // this.setColor();
+
+    if (this.hourswithreservations.length) {
+      this.cleancolors();
+      this.clearnextbypromo = true;
+      this.idButton = ''; // this is not clear the last button selected
+
+      this.hourswithreservations.forEach((res: reservation) => {
+        this.setColor("#ffb6b9", res);
+      });
+
+    }
+
+  }
+
+  getHour(event, id) {
+
+    // setting the id event's is necessary to use in setFree()  Reservation and it is fixed en gettables fucntion
+    this.idEvent = '';
+    this.tableswithreservations = []
+
+    if (this.idButton) {
+
+      document.getElementById(this.idButton).style.backgroundColor = "#fff";
+      this.idButton = '';
+
+    }
+
+    this.hourswithreservations = this.Reservations.filter((res: reservation) => {
+      if (res.hour['id'] === id && this.datereservation === res.date) {
+        return res;
+      }
+    })
+
+    this.hourreservation = this.Hours.find(hourse => hourse.id === id);
+    // this.hourreservation.id = id+'b';
+
+
+    // this.setColorHour();
+    if (this.hourswithreservations.length) {
+      this.clearTAblesPersons();
+
+      this.hourswithreservations.forEach((rese: reservation) => {
+
+        if (rese.date === this.datereservation && rese.hour['id'] === id) {
+
+          this.tableswithreservations.push(rese)
+          this.setColorHour("#ffb6b9", rese);
+          // this.hourreservation.id = -1;}
+          // set this variables to not change background-color
+          this.idTable = '';
+          this.idPeople = '';
+
+          return;
+        }
+      })
+
+    } else {
+
+      this.clearTAblesPersons();
+      document.getElementById(id).style.backgroundColor = "#54a735";
+      this.idButton = id;
+      this.reservationOndaySelected = {
+        _id: '',
+        date: '',
+        hour: {},
+        people: {},
+        tables: {},
+        idHeadquart: ''
+      };
+    }
+
+  }
+
+  getTables(event, id) {
+
+    // variable to know if hours is the a promotions
+    let hour = this.tableswithreservations.filter(reserva => reserva.tables['id'] === (id + 't'));
+
+    if (this.idTable && !hour.length) {
+
+      document.getElementById(this.idTable).style.backgroundColor = "#fff";
+
+    }
+
+    if (!hour.length) {
+      document.getElementById(id + 't').style.backgroundColor = "green";
+      this.idTable = id + 't';
+    }
+
+    // if( (id+'t') !== this.reservationOndaySelected.tables['id'] ){   //this validations is not change color when is selected a day with ressetvations
+
+    // }
+
+    this.Tablereservation.value = event.target.textContent;
+    this.Tablereservation.id = this.idTable;
+
+    this.clearPerson();
+
+    if (hour.length) {
+      this.reservationOndaySelected = hour[0];
+      this.idEvent = this.reservationOndaySelected['_id'];
+      this.clearPerson("#ffb6b9", hour[0]);
+
+    } else {
+      this.idEvent = '';
+      this.reservationOndaySelected = { _id: '', date: '', hour: { id: '' }, people: {}, tables: {}, idHeadquart: '' }
+      
+    }
+
+  }
+
+  getPeople(event, id) {
+    if (this.idPeople && this.idPeople !== this.reservationOndaySelected.people['id']) {
+
+      document.getElementById(this.idPeople).style.backgroundColor = "#fff";
+
+    }
+
+    if ((id + 'p') !== this.reservationOndaySelected.people['id']) {
+
+      document.getElementById(id + 'p').style.backgroundColor = "green";
+    }
+
+    this.idPeople = id + 'p';
+    this.Peoplereservation.value = event.target.textContent;
+    this.Peoplereservation.id = this.idPeople;
+
+  }
+
+  cleancolors() {
+    this.Hours.forEach(hour => {
+      document.getElementById(hour.id).style.backgroundColor = "#fff";
+    })
+    this.clearTAblesPersons();
+
+  }
+
+  clearTAblesPersons() {
+    this.Tables.forEach((table, index) => {
+      document.getElementById(index + 't').style.backgroundColor = "#fff";
+      document.getElementById(index + 'p').style.backgroundColor = "#fff";
+    })
+  }
+
+  clearPerson(color?: string, res?: reservation){
+
+    if(color){
+      document.getElementById(res['people']['id']).style.backgroundColor = color;
+    }else{
+
+      this.Tables.forEach((table, index) => {
+        document.getElementById(index + 'p').style.backgroundColor = "#fff";
+      })
+    }
+  }
+
 
   setColor(color?: string, res?: {}) {
 
@@ -439,18 +643,19 @@ export class PrincipalOrdersComponent implements OnInit {
       document.getElementById(res['tables']['id']).style.backgroundColor = background;
       document.getElementById(res['people']['id']).style.backgroundColor = background;
 
-    } else {
-
-      if (this.Reservations.length) {
-
-        this.Reservations.forEach((res: reservation) => {
-          document.getElementById(res.hour['id']).style.backgroundColor = background;
-          document.getElementById(res.tables['id']).style.backgroundColor = background;
-          document.getElementById(res.people['id']).style.backgroundColor = background;
-        })
-      }
-
     }
+    // else {
+
+    // if (this.Reservations.length) {
+
+    //   this.Reservations.forEach((res: reservation) => {
+    //     document.getElementById(res.hour['id']).style.backgroundColor = background;
+    //     document.getElementById(res.tables['id']).style.backgroundColor = background;
+    //     document.getElementById(res.people['id']).style.backgroundColor = background;
+    //   })
+    // }
+
+    // }
   }
 
   setColorHour(color?: string, res?: reservation) {
@@ -461,139 +666,9 @@ export class PrincipalOrdersComponent implements OnInit {
       document.getElementById(res.people['id']).style.backgroundColor = color;
     } else {
 
-      if (this.Reservations.length) {
-        this.Reservations.forEach((res: reservation) => {
-          document.getElementById(res.tables['id']).style.backgroundColor = "#fff";
-          document.getElementById(res.people['id']).style.backgroundColor = "#fff";
-        })
-      }
+      this.clearTAblesPersons();
     }
   }
-
-  // ============================
-  // ======= Calendar ===========
-  eventClick(event) {
-
-    // get id of event, this id is on order.typeOfServiceobj
-    this.handleDateClick(event.event._def.extendedProps);
-
-  }
-
-  handleDateClick(event) {
-
-    // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
-    const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
-
-    if (lastevent.publicId == " ") {
-
-      this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-    }
-
-    // setting date of event
-    this.datereservation = event.target ? event.target : event.dateStr;
-
-    let reservationsOnDay = this.Reservations.filter((res: reservation) => res.date === this.datereservation);
-    // setting the id event's is necessary to use in setFree()  Reservation
-    this.idEvent = event.publicId ? event.publicId : "";
-
-    // this event should not id, because is a generic event only for see
-    let objdate = { publicId: " ", title: 'programar', date: this.datereservation, target: this.datereservation }
-    this.calendarEvents.push(objdate);
-
-
-    this.setColor();
-
-    if (reservationsOnDay.length) {
-      reservationsOnDay.forEach((res: reservation) => {
-        this.setColor("#ffb6b9", res);
-      });
-
-    }
-
-  }
-
-  getHour(event, id) {
-
-
-    if (this.idButton) {
-
-      document.getElementById(this.idButton).style.backgroundColor = "#fff";
-      this.idButton = '';
-
-    }
-
-    let reservation = this.Reservations.filter((res: reservation) => {
-      if (res.hour['id'] === id && this.datereservation === res.date) {
-        return res;
-      }
-    })
-
-    this.hourreservation = this.Hours[id];
-    this.hourreservation.id = id;
-
-
-    this.setColorHour();
-    if (reservation.length) {
-
-      reservation.forEach((rese: reservation) => {
-
-        if (rese.date === this.datereservation && rese.hour['id'] === id) {
-          this.setColorHour("#ffb6b9", rese);
-          // this.hourreservation.id = -1;}
-          this.reservationOndaySelected = rese;
-          // set this variables to not change background-color
-          this.idTable = '';
-          this.idPeople = '';
-
-          return;
-        }
-      })
-
-    } else {
-      document.getElementById(id).style.backgroundColor = "#54a735";
-      this.idButton = id;
-      this.reservationOndaySelected = {
-        _id:'',
-        date:'',
-        hour:{},
-        people:{},
-        tables:{},
-        idHeadquart:''
-      };
-    }
-
-  }
-
-  getTables(event, id) {
-
-      if (this.idTable) {
-  
-        document.getElementById(this.idTable).style.backgroundColor = "#fff";
-  
-      }
-  
-      document.getElementById(id + 't').style.backgroundColor = "green";
-      this.idTable = id + 't';
-      this.Tablereservation.value = event.target.textContent;
-      this.Tablereservation.id = this.idTable;
-
-
-  }
-
-  getPeople(event, id) {
-    if (this.idPeople) {
-
-      document.getElementById(this.idPeople).style.backgroundColor = "#fff";
-
-    }
-
-    document.getElementById(id + 'p').style.backgroundColor = "green";
-    this.idPeople = id + 'p';
-    this.Peoplereservation.value = event.target.textContent;
-    this.Peoplereservation.id = this.idPeople;
-
-  }
-
   // ==========================================
   // ========= setReservation && setfree ======
 
@@ -639,7 +714,7 @@ export class PrincipalOrdersComponent implements OnInit {
                     order.typeOfService = { type: "reservalo", tables: res['tables']['value'] }
 
                     this.serviceOrders.putCharge(order).subscribe(resorder => {
-                      this.setColor("#fff", res);
+                      // this.setColor("#fff", res);
                       this.reservationService.deleteReservation(res['_id']).subscribe(response => {
                         this.loadReservations();
                         // this.formaterOrders();
@@ -655,7 +730,7 @@ export class PrincipalOrdersComponent implements OnInit {
                   } else {
 
                     if (count == this.orders2.length) {
-                      this.setColor();
+                      // this.setColor();
                       this.reservationService.deleteReservation(res['_id']).subscribe(response => {
                         this.loadReservations();
                         // this.formaterOrders();
@@ -670,7 +745,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
                 })
               } else {
-                this.setColor();
+                // this.setColor();
                 this.reservationService.deleteReservation(res['_id']).subscribe(response => {
                   this.loadReservations();
                   // this.formaterOrders();
@@ -687,7 +762,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
             Swal.fire({
 
-              title: 'No existen reservas para la fecha',
+              title: 'No existen reservas para la mesa',
               icon: 'warning',
               // showCancelButton: true,
               confirmButtonColor: '#542b81',
@@ -768,9 +843,13 @@ export class PrincipalOrdersComponent implements OnInit {
             // this.createOrder(reservation);
             // this.loadReservations();
             this.resetIds();
-            this.setColor();
+            // this.setColor();
+            this.cleancolors();
             Swal.fire(
-              'Reservación Guardada',
+              {
+                title: 'Reservación Guardada',
+                confirmButtonColor: '#542b81'
+              }
             )
 
           })
