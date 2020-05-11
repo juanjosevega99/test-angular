@@ -153,7 +153,7 @@ import { AgmCoreModule } from '@agm/core';
     FullCalendarModule,
     BrowserModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyC4pTBwEQ5fVuStF1FtFLeLtTswvUYB5a4'
+      apiKey: 'AIzaSyDW9z4LhQ4-4zS0ysMcxaM9gAvRMD0zmtc'
     })
     
     
