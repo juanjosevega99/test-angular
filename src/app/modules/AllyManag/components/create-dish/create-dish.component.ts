@@ -62,6 +62,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   promotionArray: Object = {
     id: null,
+    idAlly: null,
     state: [],
     promotionStartDate: [],
     endDatePromotion: [],
@@ -84,6 +85,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   identificatorbyRoot: any;
   buttonPut: boolean;
   seeNewPhoto: boolean;
+  seeNewPhotoTypePromotion: boolean;
 
   //variables for tick
   dateEntry: String;
@@ -95,10 +97,16 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   timesModification: String;
 
   //variables for categories
-  arrayCategorySelect: boolean = true;
-  otherCategoryInput: boolean = false;
-  addcategoryButton: boolean = true;
-  selectAgainarray: boolean = false;
+  //flag for change button of CRUD
+  arrayCategorySelect = true;
+  otherCategoryInput = false;
+  addcategoryButton = true;
+  flagButtonTypePromotion = false;
+  selectAgainarray = false;
+  imgTypePromotion = false;
+  buttonGuardarCat = false;
+  buttonUpdateCat = false;
+
   newCategory: String;
   dishesCategories: any[] = [];
 
@@ -123,14 +131,15 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   selectuser: boolean;
   stateInactive: boolean;
   //variable for images type promotion
-  fileImagePromCategory: any;
-
+  fileImagePromCategory: any = []
   // Variables of alerts
   alertBadExtensionLogo = false;
   //flag by state swall
   upload: boolean = false;
   // Variables of alerts
   alertBadExtensionImagePromCategory = false
+  //Vaviable for other typePromotion
+  otherCat: string;
 
   constructor(private _router: Router, private activatedRoute: ActivatedRoute, private chargeDishes: DishesService,
     private storage: AngularFireStorage,
@@ -144,6 +153,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
+    this.seeNewPhotoTypePromotion = false;
     this.selectuser = false;
     this.stateInactive = false;
 
@@ -289,17 +299,48 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Method for edit Type promotion
+  editPromotion(idPromotionCat) {
+    if (idPromotionCat) {
+      this.promotionCategory.getPromotionCategoryById(this.promotionArray['idname']).subscribe(promCat => {
+        this.otherCat = promCat.name
+        this.promotionArray['imageTypePromotion'] = promCat.imageTypePromotion
+        this.flagButtonTypePromotion = true;
+        this.handleBoxCategories()
+      })
+
+    } else {
+      Swal.fire({
+        text: "¡Seleccione un tipo de promoción!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+      })
+    }
+
+  }
+
   //CRD -- Methos of TypePromo: CREATE ,READ AND DELETE 
-  addCategoryPromo(name: String) {
-    if (name == undefined || !this.fileImagePromCategory) {
+  addCategoryPromo() {
+    if (this.otherCat == '' || this.fileImagePromCategory.length == 0) {
       Swal.fire({
         text: "¡Ingrese  la imagen y el nombre del tipo de promoción!",
         icon: 'warning',
         confirmButtonColor: '#542b81',
       })
     } else {
-      this.swallSaveOtherPromo(name)
+      this.swallSaveOtherPromo()
 
+    }
+  }
+  UpdateCategoryPromo() {
+    if (this.otherCat == '' || this.promotionArray['imageTypePromotion'] == '') {
+      Swal.fire({
+        text: "¡Ingrese  la imagen y el nombre del tipo de promoción!",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+      })
+    } else {
+      this.swallUpdateOtherPromo()
     }
   }
   //Method for photo of the dish
@@ -314,7 +355,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       return this.fileImagePromCategory = '';
     } else {
       if (input.files && input.files[0]) {
-
+        this.seeNewPhotoTypePromotion = true;
         this.alertBadExtensionImagePromCategory = false;
 
         var reader = new FileReader();
@@ -328,8 +369,17 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }
   }
   deleteCategoryPromo() {
-    let categorySelected = this.promotionArray['name']
-    this.swallDeleteCatPromo(categorySelected)
+    if (this.promotionArray['name']) {
+      // let categorySelected = this.promotionArray['name']
+      this.swallDeleteCatPromo(this.promotionArray['name'])
+      
+    }else{
+      Swal.fire({
+        text: "¡Seleccione un tipo de promoción",
+        icon: 'warning',
+        confirmButtonColor: '#542b81',
+      })
+    }
   }
 
   //Method to see the id of the dish category selected
@@ -344,8 +394,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   //charge a dish with the id
   getDish(id: string) {
-
     this.loading = true;
+
     /* this.chargeDishes.getDishes().subscribe(dishes => { */
     this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
       let dish: Dishes = {}
@@ -406,15 +456,37 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   //Method for showing new view in the categories field
   handleBoxCategories(): boolean {
-    if (this.addcategoryButton) {
+    // this.otherCat = ''
+    if (this.flagButtonTypePromotion) {
+      this.flagButtonTypePromotion = false;
+      // this.otherCat = ''
       return this.addcategoryButton = false,
         this.otherCategoryInput = true,
         this.selectAgainarray = true,
+        this.buttonGuardarCat = false,
+        this.buttonUpdateCat = true,
+        this.imgTypePromotion = true,
+        this.arrayCategorySelect = false
+    }
+    if (this.addcategoryButton) {
+      this.otherCat = ''
+      this.fileImagePromCategory = []
+      return this.addcategoryButton = false,
+        this.otherCategoryInput = true,
+        this.selectAgainarray = true,
+        this.buttonGuardarCat = true,
+        this.imgTypePromotion = true,
+        this.buttonUpdateCat = false,
         this.arrayCategorySelect = false
     } else {
+      this.otherCat = ''
+      this.fileImagePromCategory = []
       return this.addcategoryButton = true,
         this.otherCategoryInput = false,
         this.selectAgainarray = false,
+        this.buttonGuardarCat = false,
+        this.imgTypePromotion = false,
+        this.buttonUpdateCat = false,
         this.arrayCategorySelect = true
     }
   }
@@ -549,14 +621,14 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   //save a promotion
   savePromotion() {
-    if(this.fileImagedish){
-
+    if (this.fileImagedish) {
       this.swallSavePromotion(this.promotionArray);
-    }else{
+
+    } else {
       Swal.fire({
-        title:"Seleccione una imagen para la promoción",
-        icon:"info",
-        confirmButtonColor:"#542b81"
+        title: "Seleccione una imagen para la promoción",
+        icon: "info",
+        confirmButtonColor: "#542b81"
       })
     }
   }
@@ -580,7 +652,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
           }).then(async (result) => {
             if (result.value) {
               this.spinner.show()
-              //console.log("Array FINAL: ", this.promotionArray);
               this.promotionArray['numberOfModifications'] = this.promotionArray['numberOfModifications'] + 1
               if (this.seeNewPhoto == false) {
                 this.promotionArray['photo'] = x.photo;
@@ -682,7 +753,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                       if (dish.idPromotion.length) {
                         for (let index = 0; index < dish.idPromotion.length; index++) {
                           if (realId == dish.idPromotion[index]) {
-                            //console.log(dish.idPromotion);
                             dish.idPromotion.splice(index, 1)
                             let newids: any = {
                               idPromotion: dish.idPromotion
@@ -768,11 +838,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   }
 
   //sweet alerts
-  swallSaveOtherPromo(name: String) {
+  //CRUD FOR TYPE PROMOTIONS
+  swallSaveOtherPromo() {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "!Deseas guardar esta nueva categoría!",
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#542b81',
       cancelButtonColor: '#542b81',
@@ -783,9 +854,9 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         this._uploadImages.uploadImages(this.fileImagePromCategory, 'allies', 'typePromotion')
           .then(urlImage => {
             this.promotionArray['imageTypePromotion'] = urlImage
-            let newitem = name;
             let newCategory: object = {
-              name: newitem,
+              idAlly: localStorage.getItem('idAlly'),
+              name: this.otherCat,
               imageTypePromotion: urlImage
             }
             this.promotionCategory.postPromotionCategory(newCategory).subscribe(() => {
@@ -803,6 +874,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 confirmButtonColor: '#542b81'
               })
             })
+
             Swal.fire({
               title: 'Guardado!',
               text: "¡Tu nueva categoría de promoción ha sido creada!",
@@ -819,6 +891,81 @@ export class CreateDishComponent implements OnInit, OnDestroy {
               confirmButtonColor: '#542b81'
             })
           })
+      }
+    })
+  }
+  //method for update collection TypePromotion
+  updateTypePromotion() {
+    let objTypePromotion: any = {
+      id: this.promotionArray['idname'],
+      idAlly: localStorage.getItem('idAlly'),
+      name: this.otherCat,
+      imageTypePromotion: this.promotionArray['imageTypePromotion']
+    }
+    this.promotionCategory.putPromotionCategory(objTypePromotion).subscribe(() => {
+      // this.spinner.hide()
+      this.promotionCategory.getPromotionCategory().subscribe(promC => {
+        this.handleBoxCategories()
+
+        this.promotionsCategories = promC;
+      })
+      this.spinner.hide()
+    }, err => {
+      this.spinner.hide();
+      Swal.fire({
+        title: "Ocurrio un error al crear la promoción",
+        icon: "error",
+        confirmButtonColor: '#542b81'
+      })
+    })
+  }
+  // Update Type promotions
+  swallUpdateOtherPromo() {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "!Deseas guardar los cambios!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#542b81',
+      cancelButtonColor: '#542b81',
+      confirmButtonText: '!Si, guardar!'
+    }).then((result) => {
+      if (result.value) {
+        this.spinner.show()
+        if (this.seeNewPhotoTypePromotion == false) {
+          this.updateTypePromotion()
+          Swal.fire({
+            title: 'Guardado',
+            text: "¡Tu tipo de promoción ha sido actualizada!",
+            icon: 'success',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+        } else if (this.seeNewPhotoTypePromotion == true) {
+          this._uploadImages.uploadImages(this.fileImagePromCategory, 'allies', 'typePromotion')
+            .then(urlImage => {
+              this.promotionArray['imageTypePromotion'] = urlImage
+              this.updateTypePromotion()
+
+              Swal.fire({
+                title: 'Guardado!',
+                text: "¡Tu nueva categoría de promoción ha sido actualizada!",
+                icon: 'success',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              })
+
+            }).catch(err => {
+              this.spinner.hide();
+              Swal.fire({
+                title: "Ha ocurrido un error al subir la imagen",
+                icon: "error",
+                confirmButtonColor: '#542b81'
+              })
+            })
+
+        }
+
       }
     })
   }
@@ -1123,7 +1270,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
                 this.promotionArray['photo'] = this.urlDish
                 this.promotionArray['idAllies'] = localStorage.getItem('idAlly')
-                //console.log("Array FINAL: ", this.promotionArray);
                 this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
                   this.editDish.idPromotion.push(message._id)
                   this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {

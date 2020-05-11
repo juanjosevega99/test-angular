@@ -202,7 +202,7 @@
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
                             (click)="handleBoxCategories()"> Cancelar</button>
 
-                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
+                        <button *ngIf="buttonGuardarCat" class="btn1 btn btn-outline-primary" type="button"
                             (click)="addCategory(otherCat)"> Guardar</button>
 
                         <button *ngIf="addcategoryButton" (click)="handleBoxCategories()"
@@ -285,8 +285,10 @@
                         <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
                             (click)="handleBoxCategories()"> Cancelar</button>
 
-                        <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                            (click)="addCategoryPromo(otherCat)"> Guardar</button>
+                        <button *ngIf="buttonGuardarCat" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="addCategoryPromo()"> Guardar</button>
+                        <button *ngIf="buttonUpdateCat" class="btn1 btn btn-outline-primary" type="button"
+                            (click)="UpdateCategoryPromo()"> Actualizar</button>
 
                         <button *ngIf="addcategoryButton" (click)="handleBoxCategories()"
                             class="btn1 btn btn-outline-primary">
@@ -296,7 +298,11 @@
                             class="btn1 btn btn-outline-primary">
                             Borrar
                         </button>
-                        <div *ngIf="selectAgainarray" class="form-group row" style="margin-top: 2rem;">
+                        <button *ngIf="addcategoryButton" (click)="editPromotion(promotionArray.name)" type="button"
+                            class="btn1 btn btn-outline-primary"  >
+                            Editar
+                        </button>
+                        <div *ngIf="imgTypePromotion" class="form-group row" style="margin-top: 2rem;">
                             <div class="col-md-7">
                                 <div class="row align-items-center ">
                                     <div class="photo">
