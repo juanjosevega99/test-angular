@@ -35,7 +35,6 @@ export class AuthFireServiceService {
     this.firebaseAuth.auth.signOut()
       .then(res => this.route.navigate(['log'])
       ).catch(err => {
-        console.log(err)
       }
       );
   }
@@ -52,11 +51,9 @@ export class AuthFireServiceService {
     firebase.auth().onAuthStateChanged(user => {
 
       if (user) {
-        console.log("usuario logeado", user.email);
         return true;
 
       } else {
-        console.log("usuario no logeado");
         return false;
       }
 

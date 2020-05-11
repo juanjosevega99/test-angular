@@ -611,7 +611,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                     finalize(() => {
                       ref.getDownloadURL().subscribe(urlImage => {
                         this.urlDish = urlImage;
-                        console.log(this.urlDish);
+
                         this.promotionArray['photo'] = this.urlDish
                         this.promotionService.putPromotion(realId, this.promotionArray).subscribe(res => {
                           this.loading = false;
@@ -1072,7 +1072,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             finalize(() => {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlDish = urlImage;
-                console.log(this.urlDish);
+
                 this.preDish['imageDishe'] = this.urlDish
                 this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
                   this.spinner.hide();
@@ -1120,7 +1120,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
             finalize(() => {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlDish = urlImage;
-                console.log(this.urlDish);
+
                 this.promotionArray['photo'] = this.urlDish
                 this.promotionArray['idAllies'] = localStorage.getItem('idAlly')
                 //console.log("Array FINAL: ", this.promotionArray);

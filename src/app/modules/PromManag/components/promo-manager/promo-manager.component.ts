@@ -296,8 +296,6 @@ export class PromoManagerComponent implements OnInit {
       }
     }
 
-    /* console.log("campos llenos: ", count);
-    console.log('valueGenerate', this.generalsearch); */
 
     if (count > 0 && count < 2 && !this.generalsearch) {
 

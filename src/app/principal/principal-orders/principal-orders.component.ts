@@ -447,7 +447,6 @@ export class PrincipalOrdersComponent implements OnInit {
     
     
     if (this.clearnextbypromo ) {
-      console.log("limpiand");
       
       this.cleancolors();
       this.clearnextbypromo = false;
@@ -520,7 +519,6 @@ export class PrincipalOrdersComponent implements OnInit {
 
         if (rese.date === this.datereservation && rese.hour['id'] === id) {
 
-          console.log("reesrva para liberar", rese);
           this.tableswithreservations.push(rese)
           this.setColorHour("#ffb6b9", rese);
           // this.hourreservation.id = -1;}
@@ -551,8 +549,6 @@ export class PrincipalOrdersComponent implements OnInit {
 
   getTables(event, id) {
 
-    console.log("longitud del array", this.tableswithreservations.length);
-    
     // variable to know if hours is the a promotions
     let hour = this.tableswithreservations.filter(reserva => reserva.tables['id'] === (id + 't'));
 
@@ -577,14 +573,12 @@ export class PrincipalOrdersComponent implements OnInit {
     this.clearPerson();
 
     if (hour.length) {
-      console.log("esta es la mesa a liberar", hour);
       this.reservationOndaySelected = hour[0];
       this.idEvent = this.reservationOndaySelected['_id'];
       this.clearPerson("#ffb6b9", hour[0]);
 
     } else {
       this.idEvent = '';
-      console.log("la mesa esta libre");
       this.reservationOndaySelected = { _id: '', date: '', hour: { id: '' }, people: {}, tables: {}, idHeadquart: '' }
       
     }

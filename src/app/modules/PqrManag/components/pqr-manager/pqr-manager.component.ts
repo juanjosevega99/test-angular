@@ -202,7 +202,6 @@ export class PqrManagerComponent implements OnInit {
       const d = new Date(date);
       n = d.toISOString().split("T")[0];
     } catch{
-      console.log(date);
 
     }
     return n;

@@ -85,7 +85,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   showDetail() {
-    console.log("clic en item");
     this.showdetail = !this.showdetail;
   }
 
@@ -104,7 +103,6 @@ export class OrderComponent implements OnInit, OnDestroy {
     
     this.spinner.show()
     this.domiciliaries.getDomiciliaryProfileByHead(this.order.idHeadquarter).subscribe( (domiciliary: any[])=>{
-    console.log(domiciliary);
 
       this.domiciliariesprofiles = domiciliary;
       

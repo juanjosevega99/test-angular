@@ -39,13 +39,11 @@ export class PrincipalPageComponent implements OnInit {
     this.reservaService.getReservas().subscribe((reservas)=>{
       this.reservas = reservas;
       this.hours();
-      console.log(this.reservas);
     })
 
     this.pedidoService.getPedidos().subscribe((pedidos)=>{
       this.pedidos= pedidos;
       this.spinner.hide();
-      console.log(this.pedidos);
     })
 
     this.hoursObj = {a: "12:0",b: "12:30",c: "13:0",d: "13:30",e: "14:0",f: "14:30",

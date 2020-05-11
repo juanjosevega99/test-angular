@@ -35,16 +35,6 @@ export class LoginFormComponent implements OnInit {
 
   }
 
-  success(position:any) {
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
-    console.log(latitude, longitude);
-    
-  };
-
-   error() {
-    console.log("error en la localización");
-  };
 
   login() {
     this.spinner.show();
