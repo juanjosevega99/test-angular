@@ -1,12 +1,13 @@
 export const environment = {
   production: true,
   firebase : {
-    apiKey: "AIzaSyC4pTBwEQ5fVuStF1FtFLeLtTswvUYB5a4",
-    authDomain: "tifiwebapp.firebaseapp.com",
-    databaseURL: "https://tifiwebapp.firebaseio.com",
-    projectId: "tifiwebapp",
-    storageBucket: "tifiwebapp.appspot.com",
-    messagingSenderId: "882165751714",
-    appId: "1:882165751714:web:e8939fcbe5ede7ad405cfb"
+    apiKey: "AIzaSyBIijq_OeJTy1RpKrSgsbt7LC7E0pMElBA",
+    authDomain: "tifiweb.firebaseapp.com",
+    databaseURL: "https://tifiweb.firebaseio.com",
+    projectId: "tifiweb",
+    storageBucket: "tifiweb.appspot.com",
+    messagingSenderId: "505010110029",
+    appId: "1:505010110029:web:6c833903b1c06d938da604",
+    measurementId: "G-MHFJRC1QX5"
   }
 };
