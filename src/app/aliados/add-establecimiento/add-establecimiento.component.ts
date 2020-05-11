@@ -67,7 +67,7 @@ export class AddEstablecimientoComponent implements OnInit {
 
   onImagesSelected($event) {
     let input = $event.target;
-    console.log($event)
+    
     let image = "";
     if (input.files && input.files[0]) {
       var reader = new FileReader();
@@ -100,7 +100,6 @@ export class AddEstablecimientoComponent implements OnInit {
     this.TypeEstablishment.push(this.newEstablishment)
   }
   putColor(termino:any){
-    console.log(termino)
   }
   handleBoxCategory():boolean{
     if (this.otherCatSelect) {

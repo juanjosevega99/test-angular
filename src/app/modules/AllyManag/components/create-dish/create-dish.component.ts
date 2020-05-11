@@ -219,10 +219,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     clearTimeout(this.tickFunction);
   }
 
-  back() {
-    console.log(this.promotion);
-  }
-
   gotopromotion() {
 
     const url = this._location.path();
