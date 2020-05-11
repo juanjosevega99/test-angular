@@ -6,7 +6,7 @@
     <form novalidate="" class="row" (ngSubmit)="saveHq(shape)" #shape="ngForm">
 
 
-        <a  (click)="goBackHeadquarterOptions()" class="d-flex mr-2">
+        <a (click)="goBackHeadquarterOptions()" class="d-flex mr-2">
             <img src="assets/icons/Back.png" class="tifi-icon-back">
         </a>
 
@@ -33,9 +33,8 @@
                         <select *ngIf="otherLocationSelect" class="form-control" name="locationHq" #locationHq="ngModel"
                             [(ngModel)]="preHeadquarters.ubication" required
                             [ngClass]="{'is-invalid': (!locationHq.valid && locationHq.touched ),'is-valid':(locationHq.valid) }">
-                        
-                            <option *ngFor="let list of Location"
-                            [ngValue]= "list.name">
+
+                            <option *ngFor="let list of Location" [ngValue]="list.name">
                                 {{list.name}}
                             </option>
                         </select>
@@ -61,8 +60,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Piso</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" min="0" placeholder="Piso" name="numberFloor" #floorHq="ngModel"
-                        pattern="[0-9]{1,3}" required [(ngModel)]="preHeadquarters.numberFloor"
+                    <input class="form-control" type="text" min="0" placeholder="Piso" name="numberFloor"
+                        #floorHq="ngModel" pattern="[0-9]{1,3}" required [(ngModel)]="preHeadquarters.numberFloor"
                         [ngClass]="{'is-invalid': (!floorHq.valid && floorHq.touched || floorHq.errors?.pattern ),'is-valid':(floorHq.valid) }">
                     <div *ngIf="floorHq.errors?.required" class="invalid-feedback">*Este campo es requerido
                     </div>
@@ -75,8 +74,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Local</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Local" name="local" #stallHq="ngModel"
-                        required min="0" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="preHeadquarters.local"
+                    <input class="form-control" type="text" placeholder="Local" name="local" #stallHq="ngModel" required
+                        min="0" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="preHeadquarters.local"
                         [ngClass]="{'is-invalid': (!stallHq.valid && stallHq.touched || stallHq.errors?.pattern ),'is-valid':(stallHq.valid) }">
                     <div *ngIf="stallHq.errors?.required" class="invalid-feedback">*Este campo es requerido
                     </div>
@@ -88,8 +87,8 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Contacto general</label>
                 <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Contacto general" name="generalContact" required
-                        #generalHq="ngModel" [(ngModel)]="preHeadquarters.generalContact" minlength="3"
+                    <input class="form-control" type="text" placeholder="Contacto general" name="generalContact"
+                        required #generalHq="ngModel" [(ngModel)]="preHeadquarters.generalContact" minlength="3"
                         [ngClass]="{'is-invalid': (!generalHq.valid && generalHq.touched ),'is-valid':(generalHq.valid) }">
                     <div class="invalid-feedback">*Este campo es requerido </div>
                     <div class="valid-feedback">Ok!</div>
@@ -165,12 +164,6 @@
                     </div>
                 </div>
             </div>
-        </section>
-
-
-
-        <section class="col-10 col-sm-10 col-md-10 col-lg-5 col-xl-5">
-
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios prestados</label>
                 <div class="col-md-7">
@@ -180,22 +173,24 @@
                             <!-- {{service.name}} -->
                         </label>
                         <input class="form-check-input" type="checkbox" [checked]="service.select"
-                            (change)="selectedService($event,i)" [value]="service.name" >
+                            (change)="selectedService($event,i)" [value]="service.name">
                     </div>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-md-5  col-lg-5 col-form-label">Costo por reserva/pedido</label>
-                <div class="col-md-7 col-lg-7 d-flex flex-column" >
+                <div class="col-md-7 col-lg-7 d-flex flex-column">
                     <div class="form-check form-check-inline" *ngFor="let x of cost; let position = index">
-                        <div *ngIf="preHeadquarters['principarlServices'][position]?.checked" style="margin-top: 0.8rem;">
+                        <div *ngIf="preHeadquarters['principarlServices'][position]?.checked"
+                            style="margin-top: 0.8rem;">
                             <label>
                                 <img src={{x.img}} height="30px" width="30px">
                             </label>
                             <input class="reserva form-control" type="text" (change)="writeCost($event,position)"
-                                [id]=x.name name="{{x.name}}" [(ngModel)]="preHeadquarters.costPerService[position].value" required #cost="ngModel" min="0"
-                                placeholder="$2500" pattern="[0-9]{3,6}"
+                                [id]=x.name name="{{x.name}}"
+                                [(ngModel)]="preHeadquarters.costPerService[position].value" required #cost="ngModel"
+                                min="0" placeholder="$2500" pattern="[0-9]{3,6}"
                                 [ngClass]="{'is-invalid': (!cost.valid && cost.touched || cost.errors?.pattern ),'is-valid':(cost.valid) }">
                         </div>
 
@@ -206,6 +201,12 @@
                     </div>
                 </div>
             </div>
+
+        </section>
+
+
+
+        <section class="col-10 col-sm-10 col-md-10 col-lg-5 col-xl-5">
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios adicionales</label>
@@ -218,18 +219,20 @@
                             <img id={{i}} src={{x.img}} height="25px" width="25px" #imageService>
                             {{x.name}}
                         </label>
-                       
+
                     </div>
                     <a class="ml-4">
-                        <input class="form-check-input " type="checkbox" [checked]="otherChecked" (click)="handleBoxOtherservice()">
+                        <input class="form-check-input " type="checkbox" [checked]="otherChecked"
+                            (click)="handleBoxOtherservice()">
                         <label class="form-check-label servicio">
                             <img src='assets/icons/info.png' height="25px" width="25px">
                             otro
                         </label>
                         <div *ngIf="othersServiceInput">
-                            <input class="col-md-9 col-form-label mr-2 form-control" name="otherService"  #otherService="ngModel" id="id" 
-                            placeholder="Nombre del servicio" [ngClass]="{'is-invalid': (!otherService.valid && otherService.touched),'is-valid':(otherService.valid) }"
-                            [(ngModel)]="other" required>
+                            <input class="col-md-9 col-form-label mr-2 form-control" name="otherService"
+                                #otherService="ngModel" id="id" placeholder="Nombre del servicio"
+                                [ngClass]="{'is-invalid': (!otherService.valid && otherService.touched),'is-valid':(otherService.valid) }"
+                                [(ngModel)]="other" required>
                             <div class="row">
                                 <div class="upload-btn-wrapper">
                                     <div *ngIf="alertBadExtensionImageCoupon" class="alert alert-danger" role="alert">
@@ -242,7 +245,7 @@
                                 <button type="button" class="btn btn-outline-primary"
                                     (click)="addNewServiceadd()">Añadir
                                 </button>
-                                
+
                             </div>
                             <div *ngIf="loadingServicesAditionals" class="fa-3x text-center">
                                 <i class="fas fa-spinner fa-pulse"></i>
@@ -340,6 +343,18 @@
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Ubicación</label>
+                <div class="col-md-7">
+                    <agm-map (mapClick)="addMarker($event)" [latitude]="lat" [longitude]="lng" [zoom]= "10">
+                        <agm-marker *ngFor="let marker of markers, let i = index" 
+                        [latitude]="marker.lat" [longitude]="marker.lng"
+                        > 
+                        
+                    </agm-marker>
+                      </agm-map>
+                </div>
+            </div>
 
         </section>
 
@@ -349,10 +364,12 @@
                 <div class="form-group row" style="margin-bottom: 5rem;">
                     <label class="">&nbsp;</label>
                     <div class="input-group">
-                        <button *ngIf="!edit" [disabled]="shape.invalid" type="submit" class="btn btn-outline-primary" id="btnguardar">
+                        <button *ngIf="!edit" [disabled]="shape.invalid" type="submit" class="btn btn-outline-primary"
+                            id="btnguardar">
                             Guardar
                         </button>
-                        <button *ngIf="edit" (click)="updateHeadquarter()" [disabled]="!shape.valid" type="button" class="btn btn-outline-primary" id="btnguardar">
+                        <button *ngIf="edit" (click)="updateHeadquarter()" [disabled]="!shape.valid" type="button"
+                            class="btn btn-outline-primary" id="btnguardar">
                             Actualizar
                         </button>
                     </div>

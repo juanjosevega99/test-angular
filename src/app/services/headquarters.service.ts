@@ -57,7 +57,8 @@ export class HeadquartersService {
               chargeHC: headquarters.chargeHC,
               mobileHC: headquarters.mobileHC,
               telephoneHC: headquarters.telephoneHC,
-              emailHC: headquarters.emailHC
+              emailHC: headquarters.emailHC,
+              markerLocation: headquarters.markerLocation,
             };
             return obj;
           })
