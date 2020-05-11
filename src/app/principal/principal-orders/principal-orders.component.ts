@@ -145,7 +145,7 @@ export class PrincipalOrdersComponent implements OnInit {
         let ordersInDay = this.calendarEvents.filter(resin => resin.date === reservation.date);
 
         if (!ordersInDay.length) {
-          this.calendarEvents.push({ publicId: reservation._id, title: "reservado", date: reservation.date, target: reservation.date });
+          this.calendarEvents.push({ publicId: reservation._id, title: "reservas", date: reservation.date, target: reservation.date });
         }
         this.Reservations.push(reservation);
 
@@ -405,7 +405,7 @@ export class PrincipalOrdersComponent implements OnInit {
         let ordersInDay = this.calendarEvents.filter(resin => resin.date === res.date);
 
         if (!ordersInDay.length) {
-          this.calendarEvents.push({ publicId: res._id, title: 'Reservado', date: res['date'], target: res['date'] });
+          this.calendarEvents.push({ publicId: res._id, title: 'Reservas', date: res['date'], target: res['date'] });
         }
 
       });
@@ -443,33 +443,34 @@ export class PrincipalOrdersComponent implements OnInit {
 
   handleDateClick(event) {
 
-    if (this.clearnextbypromo) {
+    this.idEvent = '';
+    
+    
+    if (this.clearnextbypromo ) {
       console.log("limpiand");
-
+      
       this.cleancolors();
       this.clearnextbypromo = false;
     }
-
+    
     // event is a object { publicId:"", target:"" } or is a event of date with event{dateSrt:""}
     if (this.calendarEvents.length) {
       const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
-
+      
       if (lastevent.publicId == " ") {
-
+        
         this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
       }
     }
-
+    
     // setting date of event
     this.datereservation = event.target ? event.target : event.dateStr;
-
     // variable to save all reservations on day
     this.hourswithreservations = this.Reservations.filter((res: reservation) => res.date === this.datereservation);
-    // setting the id event's is necessary to use in setFree()  Reservation
-    this.idEvent = event.publicId ? event.publicId : "";
 
     // this event should not id, because is a generic event only for see
     let objdate = { publicId: " ", title: 'programar', date: this.datereservation, target: this.datereservation }
+
     this.calendarEvents.push(objdate);
 
 
@@ -489,6 +490,10 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
   getHour(event, id) {
+
+    // setting the id event's is necessary to use in setFree()  Reservation and it is fixed en gettables fucntion
+    this.idEvent = '';
+    this.tableswithreservations = []
 
     if (this.idButton) {
 
@@ -568,13 +573,17 @@ export class PrincipalOrdersComponent implements OnInit {
 
     this.Tablereservation.value = event.target.textContent;
     this.Tablereservation.id = this.idTable;
+
     this.clearPerson();
+
     if (hour.length) {
       console.log("esta es la mesa a liberar", hour);
       this.reservationOndaySelected = hour[0];
+      this.idEvent = this.reservationOndaySelected['_id'];
       this.clearPerson("#ffb6b9", hour[0]);
 
     } else {
+      this.idEvent = '';
       console.log("la mesa esta libre");
       this.reservationOndaySelected = { _id: '', date: '', hour: { id: '' }, people: {}, tables: {}, idHeadquart: '' }
       
@@ -759,7 +768,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
             Swal.fire({
 
-              title: 'No existen reservas para la fecha',
+              title: 'No existen reservas para la mesa',
               icon: 'warning',
               // showCancelButton: true,
               confirmButtonColor: '#542b81',
