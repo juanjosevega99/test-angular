@@ -18,8 +18,8 @@ export class AllyManagerComponent implements OnInit {
   table: FormGroup;
 
   //flags to redirect: headquarters and promotions
-  manageHq= false;
-  manageProm= true;
+  manageHq = false;
+  manageProm = true;
 
   //variable to get headquaerters
 
@@ -34,12 +34,12 @@ export class AllyManagerComponent implements OnInit {
   //variable of don't results
   noResults = false
   loadingAllies = false;
- 
-   // array for search headquuarters
-   arrayHeadquarter: any;
+
+  // array for search headquuarters
+  arrayHeadquarter: any;
   //variables for general search
   generalsearch: string = "";
-  
+
   constructor(
     private _alliesService: AlliesService,
     private _attentionScheduleService: AttentionScheduleService,
@@ -47,14 +47,14 @@ export class AllyManagerComponent implements OnInit {
     private _router: Router,
     private _saveLocalStorageService: SaveLocalStorageService,
     private activatedRoute: ActivatedRoute) {
-      
-      //clean local storage  for ally and headquarter
-      this._saveLocalStorageService.saveLocalStorageIdAlly("");
-      this._saveLocalStorageService.saveLocalStorageIdHeadquarter("");
-      
-      
-      //inicialization for charging the data of a profile to edit
-      this.activatedRoute.params.subscribe(params => {
+
+    //clean local storage  for ally and headquarter
+    this._saveLocalStorageService.saveLocalStorageIdAlly("");
+    this._saveLocalStorageService.saveLocalStorageIdHeadquarter("");
+
+
+    //inicialization for charging the data of a profile to edit
+    this.activatedRoute.params.subscribe(params => {
       let identificator = params['id']
       if (identificator == -1) {
         this.manageHq = true;
@@ -64,10 +64,10 @@ export class AllyManagerComponent implements OnInit {
         this.manageHq = false;
       }
     })
-    
+
     // inicialization date
     this.today = new Date()
-    this.date = this.today.toLocaleString('es-ES',{weekday:'long'});
+    this.date = this.today.toLocaleString('es-ES', { weekday: 'long' });
     // convert the first letter to capital  
     let day = this.date.charAt(0).toUpperCase().concat(this.date.substring(1, this.date.length));
 
@@ -80,68 +80,73 @@ export class AllyManagerComponent implements OnInit {
     this.loadingAllies = true;
     this._alliesService.getAllies().subscribe(allies => {
 
-      allies.forEach((ally: Allies, index) => {
-        let attentionSchedule: any = "";
-        let headquartersByIdAlly = [];
+      if (allies.length) {
 
-        this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
-          .subscribe((schedule) => {
-            let dayDb = schedule.attentionSchedule.find(e => e.day == day)
-            let msgSchedule = `${dayDb.from} - ${dayDb.to} `
-            attentionSchedule = msgSchedule
-          })
-
+        allies.forEach((ally: Allies, index) => {
+          let attentionSchedule: any = "";
+          let headquartersByIdAlly = [];
+  
+          this._attentionScheduleService.getAttentionSchedulesById(ally.idAttentionSchedule)
+            .subscribe((schedule) => {
+              let dayDb = schedule.attentionSchedule.find(e => e.day == day)
+              let msgSchedule = `${dayDb.from} - ${dayDb.to} `
+              attentionSchedule = msgSchedule
+            })
+  
           this._headquartService.getHeadquarterByAllIdAlly(ally.id).subscribe(headquarter => {
-              this.arrayHeadquarter = headquarter
-              this.arrayHeadquarter.forEach(element => {
-                let obj = {
-                  id: element._id,
-                  name: element.name
-                }
-                headquartersByIdAlly.push(obj)
-              });
-           })
-
-        this._headquartService.getHeadquarterByIdAlly(ally.id).subscribe((services: any[]) => {
-          
-          let obj: any = {}
-          
-          obj = {
-            idAlly: ally.id,
-            code: ally.nit,
-            logo: ally.logo,
-            nameEstablishment: ally.name,
-            numberHeadquarters: ally.NumberOfLocations,
-            allyType: ally.typeAlly,
-            mealType: ally.nameMealsCategories,
-            schedules : attentionSchedule,
-            nameHq : headquartersByIdAlly
+            this.arrayHeadquarter = headquarter
+            this.arrayHeadquarter.forEach(element => {
+              let obj = {
+                id: element._id,
+                name: element.name
+              }
+              headquartersByIdAlly.push(obj)
+            });
+          })
+  
+          this._headquartService.getHeadquarterByIdAlly(ally.id).subscribe((services: any[]) => {
+  
+            let obj: any = {}
+  
+            obj = {
+              idAlly: ally.id,
+              code: ally.nit,
+              logo: ally.logo,
+              nameEstablishment: ally.name,
+              numberHeadquarters: ally.NumberOfLocations,
+              allyType: ally.typeAlly,
+              mealType: ally.nameMealsCategories,
+              schedules: attentionSchedule,
+              nameHq: headquartersByIdAlly
+            }
+  
+            if (services) {
+              obj.services = services
+              obj.url1 = services[0] ? "assets/icons/" + services[0].value + ".png" : ""
+              obj.url2 = services[1] ? "assets/icons/" + services[1].value + ".png" : ""
+              obj.url3 = services[2] ? "assets/icons/" + services[2].value + ".png" : ""
+            } else {
+              obj['services'] = null;
+            }
+            this.arrayAllyManager.push(obj);
+          })
+  
+          if (index === (allies.length - 1)) {
+            this.loadingAllies = false;
           }
-          
-          if (services) {
-            obj.services = services
-            obj.url1 = services[0] ? "assets/icons/" + services[0].value + ".png" : ""
-            obj.url2 = services[1] ? "assets/icons/" + services[1].value + ".png" : ""
-            obj.url3 = services[2] ? "assets/icons/" + services[2].value + ".png" : ""
-          } else {
-            obj['services'] = null;
-          }
-          this.arrayAllyManager.push(obj);
+  
         })
-
-        if( index === (allies.length - 1) ){
-          this.loadingAllies = false;
-        }
-       
-       })
+      } else {
+        this.loadingAllies = false;
+      }
 
     })
   }
   ngOnInit() {
 
   }
-   //method for a specific search
-   search() {
+  //method for a specific search
+  search() {
 
     let objsearch = {
       code: "",
@@ -174,7 +179,7 @@ export class AllyManagerComponent implements OnInit {
         return (myRegex.test(item.code) || myRegex.test(item.nameEstablishment) ||
           myRegex.test(item.nameTypeOfCoupon) || myRegex.test(item.allyType) ||
           myRegex.test(item.mealType) || myRegex.test(item.schedules) || myRegex.test(item.numberHeadquarters))
-          
+
       })
     // condition by when don't exit results in the table
     if (this.newArray.length == 0) {
@@ -187,13 +192,13 @@ export class AllyManagerComponent implements OnInit {
   }
 
   //method Get in Option Ally
-  getInHeadquarts(idAlly:string, i){
+  getInHeadquarts(idAlly: string, i) {
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
-    this._router.navigate( ['/main','headquarts',i] )
+    this._router.navigate(['/main', 'headquarts', i])
   }
 
   //method for charging promotions by Ally
-  promosByAlly(idAlly:string, i){
+  promosByAlly(idAlly: string, i) {
     this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
     this._router.navigate(['/main', 'promoManager'])
   }

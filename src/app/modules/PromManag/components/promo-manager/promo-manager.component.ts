@@ -57,8 +57,9 @@ export class PromoManagerComponent implements OnInit {
     //inicialization of dishes
     this.dishPromoArray = [];
     this.loadingDishes = true;
+
     this.dishesService.getDishesByIdAlly(localStorage.getItem('idAlly')).subscribe(res => {
-      if (res.length > 0) {
+      if (res.length) {
         res.forEach((dish: Dishes) => {
           if (dish.idPromotion != null) {
             for (let item = 0; item < dish.idPromotion.length; item++) {
