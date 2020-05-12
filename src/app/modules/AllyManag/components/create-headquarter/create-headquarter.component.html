@@ -248,15 +248,29 @@
                                 </button>
 
                             </div>
-                            <div *ngIf="loadingServicesAditionals" class="fa-3x text-center">
-                                <i class="fas fa-spinner fa-pulse"></i>
-                            </div>
                             <div *ngIf="otherService.errors?.required" class="invalid-feedback">
                                 *Este campo es requerido
                             </div>
                             <div class="valid-feedback">Ok!</div>
                         </div>
                     </a>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Tipo de plan</label>
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="form-check form-check-inline" *ngFor="let typeOfPlan of typeOfPlans;let i=index">
+                        <input class="form-check-input" type="checkbox" [checked]="typeOfPlan.select"
+                            (click)="getTypeOfPlans(nameTypeOfPlan.textContent,imageTypeOfPlan.src,i,$event)"
+                            (change)="selectedTypeOfPlans($event,i,imageTypeOfPlan.src)" [value]="typeOfPlan.name">
+                        <label class="form-check-label servicio" #nameTypeOfPlan>
+                            <img id={{i}} src={{typeOfPlan.img}} height="25px" width="25px" #imageTypeOfPlan>
+                            {{typeOfPlan.name}}
+                        </label>
+
+                    </div>
+            
                 </div>
 
             </div>

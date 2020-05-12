@@ -50,6 +50,7 @@ export class CreateHeadquarterComponent implements OnInit {
     principarlServices: [],
     costPerService: [{ id: "Pídelo", value: "" }, { id: "Resérvalo", value: "" }, { id: "Llévalo", value: "" }],
     aditionalServices: [],
+    typeOfPlans: [],
     averageDeliveryTime: null,
     headquartersContact: null,
     chargeHC: null,
@@ -70,6 +71,7 @@ export class CreateHeadquarterComponent implements OnInit {
   services: any[] = [];
   cost: any[] = [];
   aditionalServices: any[] = [];
+  typeOfPlans: any[] = [];
   checkboxOther: boolean = true;
   othersServiceInput: boolean = false;
 
@@ -77,6 +79,9 @@ export class CreateHeadquarterComponent implements OnInit {
   collectionAddService: any[] = [];
 
   nameAlli: any[] = [];
+  // variables of type Of plans
+  ArrayTypeOfPlanChecked: any[] = [];
+
   //variables of idAlly
   idAlly: number;
   idAllyLocalStorage: string;
@@ -88,8 +93,6 @@ export class CreateHeadquarterComponent implements OnInit {
   edit: boolean
   // Variables of alerts
   alertBadExtensionImageCoupon = false
-  // flag for loading
-  loadingServicesAditionals = false;
   //varibles by latitude and length for ubication headquarter
   markers: Marker[] = [];
   lat = 4.6482837;
@@ -109,7 +112,7 @@ export class CreateHeadquarterComponent implements OnInit {
     private _uploadImages: UploadImagesService,
     private spinner: NgxSpinnerService) {
 
-    
+
 
     //get Ally's id of LocalStorage
     this.idAllyLocalStorage = this._saveLocalStorageService.getLocalStorageIdAlly();
@@ -121,7 +124,7 @@ export class CreateHeadquarterComponent implements OnInit {
     this._activateRoute.params.subscribe(params => {
       this.idAlly = params['id']
     });
-  
+
     // get geolocation 
       navigator.geolocation.getCurrentPosition(pos => {
         this.lat = pos.coords.latitude
@@ -165,6 +168,9 @@ export class CreateHeadquarterComponent implements OnInit {
     { name: 'Mesa exterior', img: 'assets/icons/people-table.png', select: false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png', select: false }, { name: 'Show en vivo', img: 'assets/icons/dance.png', select: false },
     { name: 'Zona de fumadores', img: 'assets/icons/no-smoking.png', select: false }, { name: 'Carta braile', img: 'assets/icons/braille.png', select: false }]
 
+    this.typeOfPlans = [{ name: 'Amigos', img: 'assets/icons/parking.png', select: false }, { name: 'Empresarial', img: 'assets/icons/cocktail.png', select: false }, { name: 'Familiar', img: 'assets/icons/wi-fi-zone.png', select: false },
+    { name: 'Pareja', img: 'assets/icons/people-table.png', select: false }]
+
     this.cost = [{ name: 'Pídelo', img: 'assets/icons/Pídelo.png' }, { name: 'Resérvalo', img: 'assets/icons/Resérvalo.png' }, { name: 'Llévalo', img: 'assets/icons/Llévalo.png' }]
   }
 
@@ -176,9 +182,9 @@ export class CreateHeadquarterComponent implements OnInit {
     const coords = event.coords
     const newMarker = new Marker(coords.lat, coords.lng);
     this.markers[0] = newMarker;
-    
+
   }
-  
+
   goBackHeadquarterOptions() {
     if (localStorage.getItem('idHeadquarter')) {
       localStorage.removeItem('idHeadquarter');
@@ -209,7 +215,7 @@ export class CreateHeadquarterComponent implements OnInit {
         this.edit = true
         this.preHeadquarters = res;
         res.principarlServices.forEach((principalService) => {
-          if(principalService){
+          if (principalService) {
             let service = this.services.find(ser => ser.name === principalService.value);
             service.select = principalService.checked;
           }
@@ -227,11 +233,25 @@ export class CreateHeadquarterComponent implements OnInit {
           }
 
         })
-      }, err =>{
+
+        res.typeOfPlans.forEach((typeOfPlan) => {
+          if (typeOfPlan) {
+            let typePlan = this.typeOfPlans.find(add => add.name == typeOfPlan.name);
+
+            if (!typePlan) {
+              let obj = { name: typeOfPlan.name, img: typeOfPlan.img, select: true }
+              this.typeOfPlans.push(obj)
+            } else {
+              typePlan.select = true
+            }
+          }
+
+        })
+      }, err => {
         this.spinner.hide();
         Swal.fire({
-          title:"ha ocurrido un error",
-          icon:"error"
+          title: "ha ocurrido un error",
+          icon: "error"
         })
       })
     }
@@ -253,6 +273,24 @@ export class CreateHeadquarterComponent implements OnInit {
       }
     } else if (checked == false) {
       this.ArrayseviceChecked.splice(position, 1)
+    }
+  }
+  //method for adding selected type of plan in a new array
+  getTypeOfPlans(nameTypeOfPlan: String, imageTypeOfPlan: String, position: number, event) {
+    let typeOfPlanChecked: Object = {
+      name: nameTypeOfPlan.trim(),
+      img: imageTypeOfPlan
+    }
+    const checked = event.target.checked;
+
+    if (checked === true) {
+      if (this.ArrayTypeOfPlanChecked[position]) {
+        this.ArrayTypeOfPlanChecked[position] = typeOfPlanChecked;
+      } else {
+        this.ArrayTypeOfPlanChecked.push(typeOfPlanChecked)
+      }
+    } else if (checked === false) {
+      this.ArrayTypeOfPlanChecked.splice(position, 1)
     }
   }
 
@@ -281,9 +319,17 @@ export class CreateHeadquarterComponent implements OnInit {
     const name = event.target.value;
     event.target.value = name;
 
-    // this.preHeadquarters['aditionalServices'][pos] = { name, checked, image }
     this.aditionalServices[pos] = { name, select, img };
 
+  }
+  //method for seeing the type of plans selected
+  selectedTypeOfPlans(event, pos: number, img) {
+    const select = event.target.checked;
+    event.target.checked = select;
+    const name = event.target.value;
+    event.target.value = name;
+
+    this.typeOfPlans[pos] = { name, select, img };
   }
 
   //method for showing and hiding the input of a new additional service
@@ -383,9 +429,8 @@ export class CreateHeadquarterComponent implements OnInit {
         this.preHeadquarters['markerLocation'] = this.markers;
 
         this.ArrayseviceChecked.forEach((element, index) => {
-
+          //method for upload new services to fireBase
           let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name)
-
           if (servicesChecked) {
             this._uploadImages.uploadImages(servicesChecked.fileImage, 'allies', 'additionalServices')
               .then(urlImage => {
@@ -394,6 +439,7 @@ export class CreateHeadquarterComponent implements OnInit {
                 if (index == (this.ArrayseviceChecked.length - 1)) {
 
                   this.preHeadquarters['aditionalServices'] = this.ArrayseviceChecked
+                  this.preHeadquarters['typeOfPlans'] = this.ArrayTypeOfPlanChecked
 
                   this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
                     this.spinner.hide()
@@ -410,11 +456,11 @@ export class CreateHeadquarterComponent implements OnInit {
                     })
                   })
                 }
-              }).catch(err=>{
+              }).catch(err => {
                 this.spinner.hide();
                 Swal.fire({
-                  title:"Ha ocurrido un error",
-                  icon:"error"
+                  title: "Ha ocurrido un error",
+                  icon: "error"
                 })
               })
 
@@ -424,6 +470,7 @@ export class CreateHeadquarterComponent implements OnInit {
               let aditionals = this.aditionalServices.filter( service => service.select == true );
               this.preHeadquarters['aditionalServices'] = aditionals;
 
+              this.preHeadquarters['typeOfPlans'] = this.ArrayTypeOfPlanChecked
               this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
                 this.spinner.hide()
                 Swal.fire({
@@ -437,11 +484,11 @@ export class CreateHeadquarterComponent implements OnInit {
                     this._router.navigate(['/main', 'headquarts', this.idAlly]);
                   }
                 })
-              }, err =>{
+              }, err => {
                 this.spinner.hide();
                 Swal.fire({
-                  title:"ha ocurrido un error actualizando la sede",
-                  icon:"error"
+                  title: "ha ocurrido un error actualizando la sede",
+                  icon: "error"
                 })
               })
             }
@@ -469,7 +516,7 @@ export class CreateHeadquarterComponent implements OnInit {
           this._router.navigate(['/main', 'headquarts', this.idAlly]);
         }
       })
-    }, err =>{
+    }, err => {
       this.spinner.hide();
     })
   }
@@ -488,8 +535,9 @@ export class CreateHeadquarterComponent implements OnInit {
       if (result.value) {
         this.spinner.show()
         this.preHeadquarters['markerLocation'] = this.markers
+
         this.preHeadquarters['principarlServices'].forEach((ser, i) => {
-          if(ser){
+          if (ser) {
             if (ser.checked == false) {
               let cost = this.preHeadquarters['costPerService']
               cost[i].value = ""
@@ -509,7 +557,11 @@ export class CreateHeadquarterComponent implements OnInit {
 
                   if (index == (this.ArrayseviceChecked.length - 1)) {
                     this.spinner.hide();
-                    this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
+                    this.preHeadquarters['aditionalServices'] = this.preHeadquarters['aditionalServices'].concat(this.ArrayseviceChecked)
+                    // method for call of typeOfPlan in true
+                    let typeOfPlanChecked = this.typeOfPlans.filter(element => element.select == true);
+                    this.preHeadquarters['typeOfPlans'] = typeOfPlanChecked
+                    //-------//
                     this.updateNewServices();
                   }
                 })
@@ -517,6 +569,8 @@ export class CreateHeadquarterComponent implements OnInit {
               if (index == (this.ArrayseviceChecked.length - 1)) {
                 let servicesChecked = this.aditionalServices.filter(element => element.select == true);
                 this.preHeadquarters['aditionalServices'] = servicesChecked;
+                let typeOfPlanChecked = this.typeOfPlans.filter(element => element.select == true);
+                this.preHeadquarters['typeOfPlans'] = typeOfPlanChecked
                 this.updateNewServices();
               }
             }
@@ -527,6 +581,8 @@ export class CreateHeadquarterComponent implements OnInit {
         } else {
           let servicesChecked = this.aditionalServices.filter(element => element.select == true);
           this.preHeadquarters['aditionalServices'] = servicesChecked
+          let typeOfPlanChecked = this.typeOfPlans.filter(element => element.select == true);
+          this.preHeadquarters['typeOfPlans'] = typeOfPlanChecked
           this.updateNewServices()
         }
 
