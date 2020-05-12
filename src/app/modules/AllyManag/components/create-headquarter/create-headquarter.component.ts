@@ -95,8 +95,8 @@ export class CreateHeadquarterComponent implements OnInit {
   alertBadExtensionImageCoupon = false
   //varibles by latitude and length for ubication headquarter
   markers: Marker[] = [];
-  lat: number;
-  lng: number;
+  lat = 4.6482837;
+  lng = -74.2478921;
 
 
   constructor(
@@ -126,17 +126,21 @@ export class CreateHeadquarterComponent implements OnInit {
     });
 
     // get geolocation 
-    navigator.geolocation.getCurrentPosition(pos => {
-      this.lat = pos.coords.latitude
-      this.lng = pos.coords.longitude
-
-      const newMarker = new Marker(this.lat, this.lng);
-      this.markers.push(newMarker);
-
-
-    }, error => console.log(error)
-    )
-
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.lat = pos.coords.latitude
+        this.lng = pos.coords.longitude
+   
+        const newMarker = new Marker(this.lat, this.lng);
+        this.markers.push(newMarker);
+  
+        // this.preHeadquarters['markerLocation'] = this.markers[0]
+  
+      }, error => {
+        const newMarker = new Marker(4.6482837,-74.2478921);
+        // this.markers.push(newMarker);
+      }
+      )   
+    
     //flag to change button save and update
     this.edit = false
 
@@ -150,8 +154,7 @@ export class CreateHeadquarterComponent implements OnInit {
           }
           this.Location.push(loc)
         });
-        loc['name'] = "BOGOTÁ"
-        this.Location.push(loc)
+
         if (this.preHeadquarters['ubication']) {
           let location: any = this.Location.find((e: any) => e.name === this.preHeadquarters['ubication'])
           this.preHeadquarters['ubication'] = location.name;
@@ -199,10 +202,15 @@ export class CreateHeadquarterComponent implements OnInit {
   loadIdHeadquarter() {
     if (localStorage.getItem('idHeadquarter')) {
       this.headquarters.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(res => {
-        if (res.markerLocation[0]) {
-          const newMarker = new Marker(res.markerLocation[0].lat, res.markerLocation[0].lng);
-          this.markers[0] = newMarker
-        }
+      if (res.markerLocation[0]) {
+        
+        // center map
+        this.lat = res.markerLocation[0].lat;
+        this.lng = res.markerLocation[0].lng;
+        
+        const newMarker = new Marker(res.markerLocation[0].lat, res.markerLocation[0].lng);
+        this.markers[0] = newMarker
+      }
 
         this.edit = true
         this.preHeadquarters = res;
@@ -257,13 +265,13 @@ export class CreateHeadquarterComponent implements OnInit {
     }
     const checked = event.target.checked;
 
-    if (checked === true) {
+    if (checked == true) {
       if (this.ArrayseviceChecked[position]) {
         this.ArrayseviceChecked[position] = seviceChecked;
       } else {
         this.ArrayseviceChecked.push(seviceChecked)
       }
-    } else if (checked === false) {
+    } else if (checked == false) {
       this.ArrayseviceChecked.splice(position, 1)
     }
   }
@@ -381,11 +389,14 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for saving the new headquarter
   saveHq() {
+
     this.preHeadquarters['idAllies'] = this.idAllyLocalStorage;
     this.allyService.getAlliesById(this.idAllyLocalStorage).subscribe(allie => {
       this.preHeadquarters['nameAllies'] = allie.name
     })
+
     let selecctService = this.preHeadquarters['principarlServices'].filter(service => service.checked == true)
+
     if (selecctService.length > 0) {
       this.swallSaveHeadquarter()
 
@@ -413,11 +424,12 @@ export class CreateHeadquarterComponent implements OnInit {
 
       if (result.value) {
         this.spinner.show()
-        this.preHeadquarters['markerLocation'] = this.markers
+
+        this.preHeadquarters['markerLocation'] = this.markers;
+
         this.ArrayseviceChecked.forEach((element, index) => {
           //method for upload new services to fireBase
           let servicesChecked = this.arrayOtherServiceSave.find(service => service.name == element.name)
-          // ------ //
           if (servicesChecked) {
             this._uploadImages.uploadImages(servicesChecked.fileImage, 'allies', 'additionalServices')
               .then(urlImage => {
@@ -453,7 +465,10 @@ export class CreateHeadquarterComponent implements OnInit {
 
           } else {
             if (index == (this.ArrayseviceChecked.length - 1)) {
-              this.preHeadquarters['aditionalServices'] = this.ArrayseviceChecked
+
+              let aditionals = this.aditionalServices.filter( service => service.select == true );
+              this.preHeadquarters['aditionalServices'] = aditionals;
+
               this.preHeadquarters['typeOfPlans'] = this.ArrayTypeOfPlanChecked
               this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
                 this.spinner.hide()

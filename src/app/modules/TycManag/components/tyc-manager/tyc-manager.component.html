@@ -90,12 +90,10 @@
                     </div>
 
                 </td>
-                <tr>
-                    
-                    <td *ngIf="noResults" colspan="7">
+                <tr>                    
+                    <td *ngIf="!newArray.length" colspan="9">
                         <a> No se encontraron resultados </a>
-                    </td>
-                    
+                    </td>                    
                 </tr>
             </tbody>
         </table>
