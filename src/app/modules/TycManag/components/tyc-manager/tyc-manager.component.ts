@@ -60,7 +60,7 @@ export class TycManagerComponent implements OnInit {
     this.tycGettting = [];
     this.newArray = this.tycGettting;
     this.tycManegerService.getTermsAndConditions().subscribe(res => {
-      if (res.length != 0) {
+      if (res.length ) {
         res.forEach((tyc: TermsAndConditions, index) => {
           const obj: TermsAndConditions = {};
           obj.id = tyc.id

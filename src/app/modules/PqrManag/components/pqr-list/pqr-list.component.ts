@@ -86,10 +86,9 @@ export class PqrListComponent implements OnInit {
   loadPqrs() {
     this.loadingPqrs = true;
 
-    if (this.profile.nameCharge.toLocaleLowerCase() != "administradortifi") {
       this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
 
-        if (res.length > 0) {
+        if (res.length) {
 
           res.forEach((order: any, index) => {
 
@@ -106,27 +105,7 @@ export class PqrListComponent implements OnInit {
           this.loadingPqrs = false;
         }
       })
-    } else {
-
-      this.pqrlistservice.getPqrs().subscribe(res => {
-
-        if (res.length > 0) {
-
-          res.forEach((order: any, index) => {
-
-            if (order.idUser) {
-              this.formaterPqr(order);
-            }
-
-            if (index === (res.length - 1)) {
-              this.loadingPqrs = false;
-            }
-          })
-        } else {
-          this.loadingPqrs = false;
-        }
-      })
-    }
+    
 
   }
 
@@ -264,7 +243,7 @@ export class PqrListComponent implements OnInit {
       })
 
       obj.id = order.id,
-        obj.date = this.convertDate(order.date);
+      obj.date = this.convertDate(order.date);
       obj.nameUser = user.name;
       obj.email = user.email;
       obj.phone = user.phone;

@@ -189,40 +189,46 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
     this.userservice.getUsers().subscribe((users) => {
 
-      users.forEach((user: Users, index) => {
+      if(users.length){
 
-        this.orderservice.getChargeByUserId(user.id).subscribe(res => {
-
-          const obj: OrderByUser = new OrderByUser();
-          obj.idUser = user.id;
-          obj.name = user.name;
-          obj.email = user.email;
-          obj.phone = user.phone;
-          obj.birthday = this.convertDate(user.birthday);
-          obj.gender = user.gender;
-          obj.idsPromos = user.idsPromos;
-
-          if (res.length > 0) {
-
-            res.forEach((order: Orders) => {
-              obj.nameAllie = order.nameAllies;
-              obj.nameHeadquarter = order.nameHeadquartes;
-              obj.usability = order.orderValue ? 1 : 0;
-              obj.purchaseAmount = order.orderValue;
-              obj.registerDate = this.convertDate(order.dateAndHourDelivey);
-            })
-
-          } else {
-            obj.registerDate = '-';
-          }
-          this.usergetting.push(obj);
-
-          if (index == (users.length - 1)) {
-            this.loadingUsers = false;
-          }
-
+        users.forEach((user: Users, index) => {
+  
+          this.orderservice.getChargeByUserId(user.id).subscribe(res => {
+  
+            const obj: OrderByUser = new OrderByUser();
+            obj.idUser = user.id;
+            obj.name = user.name;
+            obj.email = user.email;
+            obj.phone = user.phone;
+            obj.birthday = this.convertDate(user.birthday);
+            obj.gender = user.gender;
+            obj.idsPromos = user.idsPromos;
+  
+            if (res.length > 0) {
+  
+              res.forEach((order: Orders) => {
+                obj.nameAllie = order.nameAllies;
+                obj.nameHeadquarter = order.nameHeadquartes;
+                obj.usability = order.orderValue ? 1 : 0;
+                obj.purchaseAmount = order.orderValue;
+                obj.registerDate = this.convertDate(order.dateAndHourDelivey);
+              })
+  
+            } else {
+              obj.registerDate = '-';
+            }
+            this.usergetting.push(obj);
+  
+            if (index == (users.length - 1)) {
+              this.loadingUsers = false;
+            }
+  
+          })
         })
-      })
+      }else{
+        this.loadingUsers = false;
+      }
+
     })
 
     this.newdateArray = this.usergetting;
