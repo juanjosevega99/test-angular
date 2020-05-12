@@ -165,8 +165,8 @@ export class CreateHeadquarterComponent implements OnInit {
     { name: 'Mesa exterior', img: 'assets/icons/people-table.png', select: false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png', select: false }, { name: 'Show en vivo', img: 'assets/icons/dance.png', select: false },
     { name: 'Zona de fumadores', img: 'assets/icons/no-smoking.png', select: false }, { name: 'Carta braile', img: 'assets/icons/braille.png', select: false }]
 
-    this.typeOfPlans = [{ name: 'Amigos', img: 'assets/icons/parking.png', select: false }, { name: 'Empresarial', img: 'assets/icons/cocktail.png', select: false }, { name: 'Familiar', img: 'assets/icons/wi-fi-zone.png', select: false },
-    { name: 'Pareja', img: 'assets/icons/people-table.png', select: false }]
+    this.typeOfPlans = [{ name: 'Amigos', select: false }, { name: 'Empresarial', select: false }, 
+    { name: 'Familiar', select: false },{ name: 'Pareja', select: false }]
 
     this.cost = [{ name: 'Pídelo', img: 'assets/icons/Pídelo.png' }, { name: 'Resérvalo', img: 'assets/icons/Resérvalo.png' }, { name: 'Llévalo', img: 'assets/icons/Llévalo.png' }]
   }
@@ -231,7 +231,7 @@ export class CreateHeadquarterComponent implements OnInit {
             let typePlan = this.typeOfPlans.find(add => add.name == typeOfPlan.name);
 
             if (!typePlan) {
-              let obj = { name: typeOfPlan.name, img: typeOfPlan.img, select: true }
+              let obj = { name: typeOfPlan.name, select: true }
               this.typeOfPlans.push(obj)
             } else {
               typePlan.select = true
@@ -268,10 +268,9 @@ export class CreateHeadquarterComponent implements OnInit {
     }
   }
   //method for adding selected type of plan in a new array
-  getTypeOfPlans(nameTypeOfPlan: String, imageTypeOfPlan: String, position: number, event) {
+  getTypeOfPlans(nameTypeOfPlan: String, position: number, event) {
     let typeOfPlanChecked: Object = {
       name: nameTypeOfPlan.trim(),
-      img: imageTypeOfPlan
     }
     const checked = event.target.checked;
 
@@ -315,13 +314,13 @@ export class CreateHeadquarterComponent implements OnInit {
 
   }
   //method for seeing the type of plans selected
-  selectedTypeOfPlans(event, pos: number, img) {
+  selectedTypeOfPlans(event, pos: number) {
     const select = event.target.checked;
     event.target.checked = select;
     const name = event.target.value;
     event.target.value = name;
 
-    this.typeOfPlans[pos] = { name, select, img };
+    this.typeOfPlans[pos] = { name, select };
   }
 
   //method for showing and hiding the input of a new additional service

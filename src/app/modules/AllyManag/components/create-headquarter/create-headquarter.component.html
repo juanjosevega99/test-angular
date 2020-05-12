@@ -261,10 +261,9 @@
                 <div class="col-md-7 d-flex flex-column">
                     <div class="form-check form-check-inline" *ngFor="let typeOfPlan of typeOfPlans;let i=index">
                         <input class="form-check-input" type="checkbox" [checked]="typeOfPlan.select"
-                            (click)="getTypeOfPlans(nameTypeOfPlan.textContent,imageTypeOfPlan.src,i,$event)"
-                            (change)="selectedTypeOfPlans($event,i,imageTypeOfPlan.src)" [value]="typeOfPlan.name">
+                            (click)="getTypeOfPlans(nameTypeOfPlan.textContent,i,$event)"
+                            (change)="selectedTypeOfPlans($event,i)" [value]="typeOfPlan.name">
                         <label class="form-check-label servicio" #nameTypeOfPlan>
-                            <img id={{i}} src={{typeOfPlan.img}} height="25px" width="25px" #imageTypeOfPlan>
                             {{typeOfPlan.name}}
                         </label>
 
