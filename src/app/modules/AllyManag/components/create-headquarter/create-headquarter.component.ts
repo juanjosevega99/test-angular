@@ -177,6 +177,7 @@ export class CreateHeadquarterComponent implements OnInit {
   ngOnInit() {
 
   }
+  //method for adding new place in the Map
   addMarker(event) {
 
     const coords = event.coords
