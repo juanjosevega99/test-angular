@@ -9,7 +9,7 @@ import { Headquarters } from "../models/Headquarters";
   providedIn: "root"
 })
 export class HeadquartersService {
-  constructor(private httpclient: HttpClient) {}
+  constructor(private httpclient: HttpClient) { }
 
   postHeadquarter(headquarter): Observable<Headquarters> {
     return this.httpclient.post<Headquarters>(
@@ -18,7 +18,7 @@ export class HeadquartersService {
     );
   }
 
-  putHeadquarter(id,headquarter) {
+  putHeadquarter(id, headquarter) {
     return this.httpclient.put(environment.UrlBase + "headquarters/" + id,
       headquarter
     );
@@ -52,6 +52,7 @@ export class HeadquartersService {
               principarlServices: headquarters.principarlServices,
               costPerService: headquarters.costPerService,
               aditionalServices: headquarters.aditionalServices,
+              typeOfPlans: headquarters.typeOfPlans,
               averageDeliveryTime: headquarters.averageDeliveryTime,
               headquartersContact: headquarters.headquartersContact,
               chargeHC: headquarters.chargeHC,
@@ -68,41 +69,42 @@ export class HeadquartersService {
 
   getHeadquarterById(id): Observable<any> {
     return this.httpclient.get<Headquarters>(environment.UrlBase + "headquarters/" + id)
-      // .pipe(
-      //   map((headquarters: any)=> {
-      //       let obj = {
-      //         id: headquarters._id,
-      //         idAllies: headquarters.idAllies,
-      //         nameAllies: headquarters.nameAllies,
-      //         name: headquarters.name,
-      //         ubication: headquarters.ubication,
-      //         address: headquarters.address,
-      //         numberFloor: headquarters.numberFloor,
-      //         local: headquarters.local,
-      //         generalContact: headquarters.generalContact,
-      //         chargeGC: headquarters.chargeGC,
-      //         mobileGC: headquarters.mobileGC,
-      //         telephoneGC: headquarters.telephoneGC,
-      //         principarlServices: headquarters.principarlServices,
-      //         costPerService: headquarters.costPerService,
-      //         aditionalServices: headquarters.aditionalServices,
-      //         averageDeliveryTime: headquarters.averageDeliveryTime,
-      //         headquartersContact: headquarters.headquartersContact,
-      //         chargeHC: headquarters.chargeHC,
-      //         mobileHC: headquarters.mobileHC,
-      //         telephoneHC: headquarters.telephoneHC,
-      //         emailHC: headquarters.emailHC
-      //       };
-      //       return obj;
-      //     }
-      //   )
-      // );
+    // .pipe(
+    //   map((headquarters: any)=> {
+    //       let obj = {
+    //         id: headquarters._id,
+    //         idAllies: headquarters.idAllies,
+    //         nameAllies: headquarters.nameAllies,
+    //         name: headquarters.name,
+    //         ubication: headquarters.ubication,
+    //         address: headquarters.address,
+    //         numberFloor: headquarters.numberFloor,
+    //         local: headquarters.local,
+    //         generalContact: headquarters.generalContact,
+    //         chargeGC: headquarters.chargeGC,
+    //         mobileGC: headquarters.mobileGC,
+    //         telephoneGC: headquarters.telephoneGC,
+    //         principarlServices: headquarters.principarlServices,
+    //         costPerService: headquarters.costPerService,
+    //         aditionalServices: headquarters.aditionalServices,
+    //         typeOfPlans: headquarters.typeOfPlans,
+    //         averageDeliveryTime: headquarters.averageDeliveryTime,
+    //         headquartersContact: headquarters.headquartersContact,
+    //         chargeHC: headquarters.chargeHC,
+    //         mobileHC: headquarters.mobileHC,
+    //         telephoneHC: headquarters.telephoneHC,
+    //         emailHC: headquarters.emailHC
+    //       };
+    //       return obj;
+    //     }
+    //   )
+    // );
   }
 
-  getHeadquarterByIdAlly(idAlly){
+  getHeadquarterByIdAlly(idAlly) {
     return this.httpclient.get(environment.UrlBase + "headquarters/ally/" + idAlly)
   }
-  getHeadquarterByAllIdAlly(idAlly){
+  getHeadquarterByAllIdAlly(idAlly) {
     return this.httpclient.get(environment.UrlBase + "headquarters/allAlly/" + idAlly)
   }
 
