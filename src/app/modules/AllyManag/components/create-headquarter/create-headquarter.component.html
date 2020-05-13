@@ -37,6 +37,7 @@
                             <option *ngFor="let list of Location" [ngValue]="list.name">
                                 {{list.name}}
                             </option>
+                            <option value="BOGOTÁ">BOGOTÁ</option>
                         </select>
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
@@ -247,15 +248,28 @@
                                 </button>
 
                             </div>
-                            <div *ngIf="loadingServicesAditionals" class="fa-3x text-center">
-                                <i class="fas fa-spinner fa-pulse"></i>
-                            </div>
                             <div *ngIf="otherService.errors?.required" class="invalid-feedback">
                                 *Este campo es requerido
                             </div>
                             <div class="valid-feedback">Ok!</div>
                         </div>
                     </a>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Tipo de plan</label>
+                <div class="col-md-7 d-flex flex-column">
+                    <div class="form-check form-check-inline" *ngFor="let typeOfPlan of typeOfPlans;let i=index">
+                        <input class="form-check-input" type="checkbox" [checked]="typeOfPlan.select"
+                            (click)="getTypeOfPlans(nameTypeOfPlan.textContent,i,$event)"
+                            (change)="selectedTypeOfPlans($event,i)" [value]="typeOfPlan.name">
+                        <label class="form-check-label servicio" #nameTypeOfPlan>
+                            {{typeOfPlan.name}}
+                        </label>
+
+                    </div>
+            
                 </div>
 
             </div>
@@ -346,7 +360,7 @@
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Ubicación</label>
                 <div class="col-md-7">
-                    <agm-map (mapClick)="addMarker($event)" [latitude]="lat" [longitude]="lng" [zoom]= "10">
+                    <agm-map (mapClick)="addMarker($event)" [latitude]="lat" [longitude]="lng" [zoom]= "12">
                         <agm-marker *ngFor="let marker of markers" 
                         [latitude]="marker.lat" [longitude]="marker.lng"
                         > 

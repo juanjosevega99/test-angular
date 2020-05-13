@@ -16,6 +16,7 @@ export class Headquarters {
     principarlServices?:string[];
     costPerService?:string[];
     aditionalServices?:string[];
+    typeOfPlans?: string[];
     averageDeliveryTime?:string;
     headquartersContact?:string;
     chargeHC?:string;

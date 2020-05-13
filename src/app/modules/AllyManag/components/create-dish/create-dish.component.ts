@@ -18,6 +18,7 @@ import { CouponsService } from "src/app/services/coupons.service"
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Location } from '@angular/common';
 import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
+import { error } from 'util';
 
 
 @Component({
@@ -370,7 +371,6 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   }
   deleteCategoryPromo() {
     if (this.promotionArray['name']) {
-      // let categorySelected = this.promotionArray['name']
       this.swallDeleteCatPromo(this.promotionArray['name'])
       
     }else{
@@ -981,28 +981,42 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.value) {
+        this.spinner.show()
         this.promotionCategory.getPromotionCategory().subscribe(promC => {
           this.promotionsCategories = promC;
-          this.promotionsCategories.forEach((element: any) => {
+          this.promotionsCategories.forEach((element: any, index) => {
             let promo: any = {
               id: element.id,
-              name: element.name
+              name: element.name,
+              image: element.imageTypePromotion
             }
             if (promo.name == categorySelected) {
-              this.promotionCategory.deletePromotionCategory(promo.id).subscribe(() => {
-                this.promotionCategory.getPromotionCategory().subscribe(promos => {
-                  this.promotionsCategories = promos;
+               
+                let urlImg = 'assets/allies/typePromotion/' + promo.image.split("%")[3].split("?")[0].slice(2);
+                this._uploadImages.DeleteImage(urlImg).then(res=>{
+                  this.promotionCategory.deletePromotionCategory(promo.id).subscribe(() => {
+                    this.promotionCategory.getPromotionCategory().subscribe(promos => {
+                      this.promotionsCategories = promos;
+                    })
+                    this.spinner.hide()
+                    Swal.fire({
+                      title: '¡Eliminado!',
+                      icon: 'success',
+                      confirmButtonColor: '#542b81',
+                      confirmButtonText: 'Ok!'
+                    })
+                  })
+  
+                }).catch(error=> {
+                  console.log("Se producio el siguiente error:" + error)
+                  this.spinner.hide()
                 })
-              })
+              
+
             }
           });
         })
-        Swal.fire({
-          title: '¡Eliminado!',
-          icon: 'success',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        })
+        
       }
     })
   }
