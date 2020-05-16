@@ -75,6 +75,8 @@ import { NotificationsPqrsComponent } from './components/notifications-pqrs/noti
 
 // Angular google maps
 import { AgmCoreModule } from '@agm/core';
+import { FrequentQuestionsManagComponent } from './modules/TycManag/frequent-questions-manag/frequent-questions-manag.component';
+import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-questions-manag/create-frequent-questions/create-frequent-questions.component';
 
 @NgModule({
   declarations: [
@@ -126,7 +128,9 @@ import { AgmCoreModule } from '@agm/core';
     CreateBannerComponent,
     CreateTycComponent,
     NotificationsOrdersComponent,
-    NotificationsPqrsComponent
+    NotificationsPqrsComponent,
+    FrequentQuestionsManagComponent,
+    CreateFrequentQuestionsComponent,
 
   ],
   imports: [

@@ -3,8 +3,8 @@
 </ngx-spinner>
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row">
-        <div style="width: 5%;" class="d-flex align-items-center">
-            <a [routerLink]="['/main','options']" class="d-flex">
+        <div style="width: 5%;" class="d-flex align-items-center" (click)="goBack()">
+            <a  class="d-flex">
                 <img src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
@@ -19,39 +19,25 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                        <section class="col-md-3  " style="flex-direction: column;">
-                            <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                                <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [formGroup]="table">
-                                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                                        <li class="nav-item mr-md-2">
-                                            <input placeholder="Buscar tipo de TyC..." class="form-control text-center"
-                                                type="text" (keyup)="search()" 
-                                                formControlName="nameTypeTyc">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </section>
-                        <section class="col-md-4  "
+                        <section class="col-md-6  "
                             style="flex-direction: column;">
                             <nav class="navbar navbar-expand-sm navbar-light bg-light">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
                                     <li class="nav-item container-fluid d-flex">
                                         <input (keyup)="search()" class="form-control text-center"
-                                            id="general" type="text" placeholder="Buscar Tyc..." #general
+                                            id="general" type="text" placeholder="Buscar por preguntas frecuentes" #general
                                             [(ngModel)]="generalsearch">
                                     </li>
                                 </ul>
                             </nav>
                         </section>
-                        <section class="col-md-5 col-5" >
+                        <section class="col-6" >
                             <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-center ">
                                 <ul class="navbar-nav mr-md-auto mt-2 mt-lg-0">
                                     <li class="nav-item">
-                                        <a [routerLink]="[ '/main/createTycManager', -1 ]"
-                                            class="btn btn-outline-primary" style="margin-right:0.5rem ; ">Crear Tyc</a>
-                                        <a [routerLink]="[ '/main/frequentQuestionsManag' ]"
-                                            class="btn btn-outline-primary">Crear preguntas frecuentes</a>
+                                        <a [routerLink]="[ '/main/CreateFrequentQuestions', -1 ]"
+                                            class="btn btn-outline-primary" style="margin-right:0.5rem ; ">Crear pregunta frecuente</a>
+                                        
                                 </ul>
                             </nav>
 
@@ -66,8 +52,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="text-center">Nombre TyC</th>
-                    <th class="text-center">Tipo de TyC</th>
+                    <th class="text-center">Pregunta frecuente</th>
                     <th class="text-center">Descripción</th>
                     <th class="text-center" colspan="2"> </th>
                 </tr>
@@ -75,14 +60,13 @@
             <tbody class="mt-5">
                 <tr *ngFor="let tyc of newArray; let i = index " class="text-center">
                     <td>{{tyc.name}}</td>
-                    <td>{{tyc.nameTypeTyc}}</td>                   
                     <td>{{tyc.description}}</td>                   
                     <td>
                         <button (click)="deleteTyc(tyc.id)" class="btn"> <i class="far fa-trash-alt"></i> 
                         </button>
                     </td>
                     <td>
-                        <button (click)="goToEditTyc(tyc.id, i)" class="btn"> <i class="far fa-edit"></i>
+                        <button (click)="goToEditFrequentQuestions(tyc.id, i)" class="btn"> <i class="far fa-edit"></i>
                         </button>
                     </td>
                 </tr>
