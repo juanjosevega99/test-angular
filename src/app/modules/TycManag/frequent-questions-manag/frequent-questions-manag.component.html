@@ -3,9 +3,9 @@
 </ngx-spinner>
 <div class="compenetsstyle px-5 pt-5 " style="background-color: #e9e7e7;">
     <div class="row">
-        <div style="width: 5%;" class="d-flex align-items-center" (click)="goBack()">
+        <div style="width: 5%;" class="d-flex align-items-center"  (click)="goBack()">
             <a  class="d-flex">
-                <img src="assets/icons/Back.png" class="tifi-icon-back">
+                <img  src="assets/icons/Back.png" class="tifi-icon-back">
             </a>
         </div>
         <section class="col-11">
@@ -59,7 +59,7 @@
             </thead>
             <tbody class="mt-5">
                 <tr *ngFor="let tyc of newArray; let i = index " class="text-center">
-                    <td>{{tyc.name}}</td>
+                    <td>{{tyc.typeFrequentQuestion}}</td>
                     <td>{{tyc.description}}</td>                   
                     <td>
                         <button (click)="deleteTyc(tyc.id)" class="btn"> <i class="far fa-trash-alt"></i> 

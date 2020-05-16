@@ -1,1 +1,155 @@
-<p>create-frequent-questions works!</p>
+<ngx-spinner bdOpacity=0.6 bdColor="rgba(255,255,255,0.6)" size="medium" color="rgb(207,44,126)" type="ball-atom"
+    [fullScreen]="true">
+</ngx-spinner>
+<div class="compenetsstyle">
+    <form novalidate="" class="row  animated fadeIn " (ngSubmit)="saveFrequentQuestions(shape)" #shape="ngForm">
+
+        <a class="d-flex mr-2">
+            <img (click)="goBack()" src="assets/icons/Back.png " class="tifi-icon-back">
+        </a>
+
+        <section class="col-9">
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Preguntas frecuentes</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+
+                        <select class="form-control mr-2" name="nameFrequentQuestions" #nameFrequentQuestions="ngModel"
+                            required [ngClass]="{'is-invalid': (!nameFrequentQuestions.valid ) && 
+                            nameFrequentQuestions.touched ,'is-valid':(nameFrequentQuestions.valid) }"
+                            [(ngModel)]="preFrequentQuestions.typeFrequentQuestion"
+                            (change)="seeNameFrequentQuestion(nameFrequentQuestions.value)">
+
+                            <option *ngFor="let question of questions;">
+                                {{question}}
+                            </option>
+                        </select>
+
+                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Descripción</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 10rem;" name="description" #description="ngModel"
+                            id="id" placeholder="Descripción"
+                            [ngClass]="{'is-invalid': (!description.valid && description.touched),'is-valid':(description.valid) }"
+                            [(ngModel)]="preFrequentQuestions.description" rows="2" required></textarea>
+                        <div *ngIf="description.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="flagHowPromworks" class="form-group row">
+                <label class="col-md-5 col-form-label">¿Cómo funciona una promoción?</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 7rem;" name="howPromworks" #howPromworks="ngModel"
+                            id="id"
+                            [ngClass]="{'is-invalid': (!howPromworks.valid && howPromworks.touched),'is-valid':(howPromworks.valid) }"
+                            [(ngModel)]="preFrequentQuestions.howPromworks" rows="2" required></textarea>
+                        <div *ngIf="howPromworks.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="flagHowUseProm" class="form-group row">
+                <label class="col-md-5 col-form-label">¿Cómo usar una promoción?</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 7rem;" name="howUseProm" #howUseProm="ngModel"
+                            id="id"
+                            [ngClass]="{'is-invalid': (!howUseProm.valid && howUseProm.touched),'is-valid':(howUseProm.valid) }"
+                            [(ngModel)]="preFrequentQuestions.howUseProm" rows="2" required></textarea>
+                        <div *ngIf="howUseProm.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="flagHowFindPromo" class="form-group row">
+                <label class="col-md-5 col-form-label">¿Cómo encontrar promociones?</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 7rem;" name="howFindPromo" #howFindPromo="ngModel"
+                            id="id"
+                            [ngClass]="{'is-invalid': (!howFindPromo.valid && howFindPromo.touched),'is-valid':(howFindPromo.valid) }"
+                            [(ngModel)]="preFrequentQuestions.howFindPromo" rows="2" required></textarea>
+                        <div *ngIf="howFindPromo.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="flagHowCouponWorks" class="form-group row">
+                <label class="col-md-5 col-form-label">¿Cómo funciona un cupón?</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 7rem;" name="howCouponWorks" #howCouponWorks="ngModel"
+                            id="id"
+                            [ngClass]="{'is-invalid': (!howCouponWorks.valid && howCouponWorks.touched),'is-valid':(howCouponWorks.valid) }"
+                            [(ngModel)]="preFrequentQuestions.howCouponWorks" rows="2" required></textarea>
+                        <div *ngIf="howCouponWorks.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="flagHowUseCoupon" class="form-group row">
+                <label class="col-md-5 col-form-label">¿Cómo usar cupón?</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 7rem;" name="howUseCoupon" #howUseCoupon="ngModel"
+                            id="id"
+                            [ngClass]="{'is-invalid': (!howUseCoupon.valid && howUseCoupon.touched),'is-valid':(howUseCoupon.valid) }"
+                            [(ngModel)]="preFrequentQuestions.howUseCoupon" rows="2" required></textarea>
+                        <div *ngIf="howUseCoupon.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="flagHowGetCoupon" class="form-group row">
+                <label class="col-md-5 col-form-label">¿Cómo obtener cupones?</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <textarea class="form-control" style="height: 7rem;" name="howGetCoupon" #howGetCoupon="ngModel"
+                            id="id"
+                            [ngClass]="{'is-invalid': (!howGetCoupon.valid && howGetCoupon.touched),'is-valid':(howGetCoupon.valid) }"
+                            [(ngModel)]="preFrequentQuestions.howGetCoupon" rows="2" required></textarea>
+                        <div *ngIf="howGetCoupon.errors?.required" class="invalid-feedback">
+                            *Este campo es requerido
+                        </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </section>
+
+        <section class="col-12 d-flex" style="justify-content: center;">
+
+            <button *ngIf="!buttonPut" [disabled]="!shape.valid" type="submit"
+                class="btn btn-outline-primary btn-lg">Guardar</button>
+            <button *ngIf="buttonPut" [disabled]="!shape.valid" type="button" (click)="swallUpdateFrequentQuestions()"
+                class="btn btn-outline-primary btn-lg">Actualizar</button>
+        </section>
+
+    </form>
+
+
+</div>

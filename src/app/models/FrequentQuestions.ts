@@ -1,6 +1,6 @@
 export class FrequentQuestions {
     id?:string;
-    typeFrequentQuestion?: string[];
+    typeFrequentQuestion?: string;
     description?: string;
     howPromworks?: string;
     howUseProm?: string;

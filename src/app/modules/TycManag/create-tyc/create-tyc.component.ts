@@ -32,7 +32,8 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   //variable for the loading
   loading: boolean;
 
-  constructor(private _router: Router,
+  constructor(
+    private _router: Router,
     private activatedRoute: ActivatedRoute,
     private saveLocalStorageService: SaveLocalStorageService,
     private tycManagerService: TermsAndConditionsService,
@@ -94,54 +95,7 @@ export class CreateTycComponent implements OnInit, OnDestroy {
   saveTyc() {
     this.swallSaveTyc()
   }
-  // //sweet alerts for save and delete typeTyc
-  // swallSaveTypeTyc(newTypeTyc: any) {
-  //   Swal.fire({
-  //     title: '¿Estás seguro?',
-  //     text: "¡de que deseas guardar este nuevo término y condición!",
-  //     icon: 'question',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#542b81',
-  //     cancelButtonColor: '#542b81',
-  //     confirmButtonText: 'Si, guardar!'
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       this.typeTycService.postTypeTermsAndConditions(newTypeTyc).subscribe(() => {
-  //         this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
-  //           this.typeTyC = tyC;
-  //         })
-  //       })
-  //       Swal.fire(
-  //         'Guardado!',
-  //         'Tu nuevo término y condición ha sido creado',
-  //         'success',
-  //       )
-  //     }
-  //   })
-  // }
-  // swallDeleteTypeTyc(typeTycSelected: string) {
-  //   Swal.fire({
-  //     title: '¿Estás seguro?',
-  //     text: "¡de que deseas eliminar este término y condición!",
-  //     icon: 'question',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#542b81',
-  //     cancelButtonColor: '#542b81',
-  //     confirmButtonText: 'Si, eliminar!'
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       this.typeTycService.deleteTypeTermsAndConditions(typeTycSelected).subscribe(() => {
-  //         this.typeTycService.getTypeTermsAndConditions().subscribe(tyC => {
-  //           this.typeTyC = tyC;
-  //         })
-  //       })
-  //       Swal.fire(
-  //         'Eliminado!',
-  //         'success',
-  //       )
-  //     }
-  //   })
-  // }
+  //swalls 
   swallSaveTyc() {
     Swal.fire({
       title: '¿Estás seguro?',
