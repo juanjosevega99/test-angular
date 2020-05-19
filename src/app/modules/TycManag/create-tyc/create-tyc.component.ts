@@ -108,17 +108,20 @@ export class CreateTycComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.value) {
         this.spinner.show()
-        this.tycManagerService.postTermAndCondition(this.preTyc).subscribe(()=> this.spinner.hide())
-        Swal.fire({
-          title: 'Guardado',
-          text: "¡Tus nuevos términos y condiciones han sido creados!",
-          icon: 'success',
-          confirmButtonColor: '#542b81',
-          confirmButtonText: 'Ok!'
-        }).then((result) => {
-          if (result.value) {
-            this._router.navigate(['/main', 'tycManager',]);
-          }
+        this.tycManagerService.postTermAndCondition(this.preTyc).subscribe(()=> {
+          this.spinner.hide()
+          Swal.fire({
+            title: 'Guardado',
+            text: "¡Tus nuevos términos y condiciones han sido creados!",
+            icon: 'success',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          }).then((result) => {
+            if (result.value) {
+              this._router.navigate(['/main', 'tycManager',]);
+            }
+          })
+
         })
       }
     })
