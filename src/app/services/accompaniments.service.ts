@@ -33,6 +33,7 @@ export class AccompanimentsService {
             preparationTimeNumber: accompaniments.preparationTimeNumber,
             preparationTimeUnity: accompaniments.preparationTimeUnity,
             idAllies : accompaniments.idAllies,
+
           };
           return obj;
         }

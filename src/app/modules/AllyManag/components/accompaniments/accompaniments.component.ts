@@ -44,6 +44,10 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   sectionSelected: String = null;
   sectionId: String = null;
   sectiontoUpdate = {};
+  newCategory:any = {
+    name: '',
+    multiSelect:false 
+  }
 
   //variable for preparation time
   time: String[] = [];
@@ -112,7 +116,6 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           obj.creationDate = this.convertDate(accompaniment.creationDate);
           obj.modificationDate = this.convertDate(accompaniment.modificationDate)
           obj.state = accompaniment.state
-
           this.personList.push(obj)
         }
       }
@@ -188,7 +191,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
                       this.accompanimetsOfPromo[index] = accomp
                       this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
                       this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
-
+                      
                     }
                   }
                   this.loading = false;
@@ -652,7 +655,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           preparationTimeUnity: dish.preparationTimeUnity,
           accompanimentValue: dish.accompanimentValue,
           numberOfModifications: dish.numberOfModifications + 1,
-          modificationDate: new Date()
+          modificationDate: new Date(),
         }
         this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res => {
           this.loading = false;
@@ -787,7 +790,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   add() {
     this.flag = true
     const obj = {
-      id: '', quantity: 0, unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "0", numberOfModifications: 0,
+      id: '', quantity: 0, unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false , preparationTimeNumber: "0", numberOfModifications: 0,
       preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
         state: "active",
         check: false
@@ -820,6 +823,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
     }
   }
 
+
   changeValue2(id: number, property: string, event: any) {
     let editField = event.target.textContent;
     this.newAccompanimentList[id][property] = editField;
@@ -837,6 +841,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
       this.newAccompanimentList[id]['accompanimentValue'] = 0;
     }
   }
+
 
   changeStateA(id: number, property: string, event) {
     this.newAccompanimentList[id][property][0]["check"] = !this.newAccompanimentList[id][property][0]["check"];
@@ -914,12 +919,19 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //SECTIONS OF ACCOMPANIMENTS
   //==========================
 
+  changeValuecheckMultiselectSections( event: any) {
+    let editField = event.target.checked;
+    this.newCategory['multiSelect'] = editField;
+    if (editField == false) {
+      this.newCategory['multiSelect'] = false;
+    }
+  }
+
   //CRD -- Methos of sections: CREATE ,READ, UPDATE AND DELETE 
   addSection(name: String) {
     let newitem = name;
-    let newCategory: object = {
-      name: newitem
-    }
+    this.newCategory.name = newitem
+    
     if (newitem == undefined) {
       Swal.fire({
         title: 'Error',
@@ -929,7 +941,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
         confirmButtonText: 'Ok!'
       })
     } else {
-      this.swallVerifyName(newCategory)
+      this.swallVerifyName(this.newCategory)
     }
   }
 
@@ -984,7 +996,6 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   swallSaveOtherSection(newCategory) {
-
     this.sectionService.postSection(newCategory).subscribe(() => {
       this.sectionService.getSections().subscribe(section => {
         this.sections = section;

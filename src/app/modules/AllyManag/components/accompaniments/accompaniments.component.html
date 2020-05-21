@@ -61,8 +61,10 @@
                                     Inactivo
                                 </label>
                             </div>
+
                         </div>
                     </div>
+
                 </section>
 
                 <section class="col-4 overflow-auto">
@@ -71,10 +73,15 @@
                             <li class="nav-item">
                                 <input style="width: 100%;" class="form-control text-center" id="general"
                                     [(ngModel)]="otherSection" type="text" name="otherSection" type="text"
-                                    placeholder="Nueva sección"></li>
+                                    placeholder="Nueva sección">
+                                <input type="checkbox" class="m-1"
+                                    (change)="changeValuecheckMultiselectSections($event)"
+                                    [checked]="newCategory.multiSelect">
+                            </li>
                             <li class="nav-item">
-                                <button class="btn btn-outline-primary ml-2" (click)="addSection(otherSection)">Añadir
-                                    nueva sección</button>
+                                <button class="btn btn-outline-primary ml-2" (click)="addSection(otherSection)">
+                                    Añadir nueva sección
+                                </button>
                             </li>
                         </ul>
                     </nav>
@@ -111,7 +118,7 @@
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Acompañamiento</th>
                         <th class="text-center">Sección</th>
-                        <th class="text-center">Costo Adicional?</th>
+                        <th class="text-center">¿Costo Adicional?</th>
                         <th class="text-center" colspan="2">T. de preparación</th>
                         <th class="text-center">Precio</th>
                         <th class="text-center">F. creación</th>
@@ -141,8 +148,8 @@
                         </td>
                         <td>
                             <div class="radio radio-danger m-2 form-check-inline">
-                                <input [checked]="!accompPromo.state[0].check" value="inactive" type="radio"
-                                disabled name={{index}} id="stateAI">
+                                <input [checked]="!accompPromo.state[0].check" value="inactive" type="radio" disabled
+                                    name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"></label>
                             </div>
                         </td>
@@ -172,7 +179,7 @@
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Acompañamiento</th>
                         <th class="text-center">Sección</th>
-                        <th class="text-center">Costo Adicional?</th>
+                        <th class="text-center">¿Costo Adicional?</th>
                         <th class="text-center" colspan="2">T. de preparación</th>
                         <th class="text-center">Precio</th>
                         <th class="text-center">F. creación</th>
@@ -185,10 +192,12 @@
                     </tr>
                     <tr *ngFor="let person of personList; let id = index">
                         <td>
-                            <span class="text-center" contenteditable="true" (blur)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
+                            <span class="text-center" contenteditable="true"
+                                (blur)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
                         </td>
                         <td>
-                            <span class="text-center" contenteditable="true" (blur)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
+                            <span class="text-center" contenteditable="true"
+                                (blur)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
                         </td>
                         <td>
                             <span contenteditable="true" class="text-center"
@@ -204,8 +213,9 @@
                             </select>
                         </td>
                         <td>
-                            <input type="checkbox" class="m-1" (change)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
-                                 [checked]="person.typeOfAccompaniment">
+                            <input type="checkbox" class="m-1"
+                                (change)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
+                                [checked]="person.typeOfAccompaniment">
                         </td>
                         <td>
                             <span class="text-center" contenteditable="true"
@@ -270,7 +280,7 @@
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Acompañamiento</th>
                         <th class="text-center">Sección</th>
-                        <th class="text-center">Costo Adicional?</th>
+                        <th class="text-center">¿Costo Adicional?</th>
                         <th class="text-center" colspan="2">T. de preparación</th>
                         <th class="text-center">Precio</th>
                         <th class="text-center">F. ingreso</th>
@@ -296,7 +306,8 @@
                             </select>
                         </td>
                         <td>
-                            <input [checked]="dish.typeOfAccompaniment" (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
+                            <input [checked]="dish.typeOfAccompaniment"
+                                (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
                         </td>
                         <td>
                             <span contenteditable="true"
@@ -326,15 +337,15 @@
                         </td>
                         <td>
                             <div class="radio radio-success m-2  form-check-inline">
-                                <input (click)="changeStateA(id, 'state', $event)"
-                                    [checked]="dish.state[0].check" type="radio" name={{index}} id="stateAI">
+                                <input (click)="changeStateA(id, 'state', $event)" [checked]="dish.state[0].check"
+                                    type="radio" name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"></label>
                             </div>
                         </td>
                         <td>
                             <div class="radio radio-danger m-2 form-check-inline">
-                                <input (click)="changeStateA(id, 'state', $event)"
-                                    [checked]="!dish.state[0].check" type="radio" name={{index}} id="stateAI">
+                                <input (click)="changeStateA(id, 'state', $event)" [checked]="!dish.state[0].check"
+                                    type="radio" name={{index}} id="stateAI">
                                 <label style="font-size: 15px;"> </label>
                             </div>
                         </td>
