@@ -33,7 +33,7 @@ export class AccompanimentsService {
             preparationTimeNumber: accompaniments.preparationTimeNumber,
             preparationTimeUnity: accompaniments.preparationTimeUnity,
             idAllies : accompaniments.idAllies,
-
+            multiSelect: accompaniments.multiSelect,
           };
           return obj;
         }
@@ -73,6 +73,7 @@ export class AccompanimentsService {
               preparationTimeNumber: accompaniments.preparationTimeNumber,
               preparationTimeUnity: accompaniments.preparationTimeUnity,
               idAllies : accompaniments.idAllies,
+              multiSelect: accompaniments.multiSelect,
             };
             return obj;
           })
@@ -102,6 +103,7 @@ export class AccompanimentsService {
               preparationTimeNumber: accompaniments.preparationTimeNumber,
               preparationTimeUnity: accompaniments.preparationTimeUnity,
               idAllies : accompaniments.idAllies,
+              multiSelect: accompaniments.multiSelect,
             };
             return obj;
           })
@@ -129,6 +131,7 @@ export class AccompanimentsService {
             preparationTimeNumber: accompaniments.preparationTimeNumber,
             preparationTimeUnity: accompaniments.preparationTimeUnity,
             idAllies : accompaniments.idAllies,
+            multiSelect: accompaniments.multiSelect,
           };
           return obj;
         })

@@ -77,6 +77,7 @@
                                 <input type="checkbox" class="m-1"
                                     (change)="changeValuecheckMultiselectSections($event)"
                                     [checked]="newCategory.multiSelect">
+                                <label>Seleción multiple</label>
                             </li>
                             <li class="nav-item">
                                 <button class="btn btn-outline-primary ml-2" (click)="addSection(otherSection)">
@@ -205,18 +206,19 @@
                         </td>
                         <td>
                             <select #nameSection (change)="changeValueSelect1(id, 'nameTypeSection', nameSection.value)"
-                                class="input-group-text">
+                                class="input-group-text" >
                                 <option selected>{{person.nameTypeSection}}</option>
                                 <option *ngFor="let section of sections">
                                     {{section.name}}
                                 </option>
                             </select>
                         </td>
-                        <td>
+                        <td  >
                             <input type="checkbox" class="m-1"
                                 (change)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
                                 [checked]="person.typeOfAccompaniment">
                         </td>
+                
                         <td>
                             <span class="text-center" contenteditable="true"
                                 (blur)="changeValue(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>

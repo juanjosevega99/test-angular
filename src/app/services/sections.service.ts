@@ -60,4 +60,20 @@ export class SectionsService {
         )
       );
   }
+  getSectionByName(name): Observable<any[]> {
+    return this.httpclient
+      .get<Sections[]>(environment.UrlBase + "sections/nameSection/" + name)
+      .pipe(
+        map((sections: any[]) =>
+          sections.map(sections => {
+            let obj = {
+              id: sections._id,
+              name: sections.name,
+              multiSelect: sections.multiSelect,
+            };
+            return obj;
+          })
+        )
+      );
+  }
 }

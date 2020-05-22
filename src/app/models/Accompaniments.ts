@@ -14,4 +14,5 @@ export class Accompaniments {
     idTypeSection?:string;
     nameTypeSection?:string;
     idAllies?:string;
+    multiSelect?:boolean;
 }

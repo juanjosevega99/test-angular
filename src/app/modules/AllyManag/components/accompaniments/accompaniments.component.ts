@@ -44,9 +44,9 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   sectionSelected: String = null;
   sectionId: String = null;
   sectiontoUpdate = {};
-  newCategory:any = {
+  newCategory: any = {
     name: '',
-    multiSelect:false 
+    multiSelect: false
   }
 
   //variable for preparation time
@@ -116,6 +116,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           obj.creationDate = this.convertDate(accompaniment.creationDate);
           obj.modificationDate = this.convertDate(accompaniment.modificationDate)
           obj.state = accompaniment.state
+          obj.multiSelect = accompaniment.multiSelect
           this.personList.push(obj)
         }
       }
@@ -191,7 +192,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
                       this.accompanimetsOfPromo[index] = accomp
                       this.accompanimetsOfPromo[index].creationDate = this.convertDate(accomp.creationDate)
                       this.accompanimetsOfPromo[index].modificationDate = this.convertDate(accomp.modificationDate)
-                      
+
                     }
                   }
                   this.loading = false;
@@ -632,6 +633,24 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   }
 
   update(id: any) {
+    this.sectionService.getSectionByName(this.personList[id].nameTypeSection).subscribe((section: any) => {
+      if (section[0].multiSelect == true) {
+        if (this.personList[id].typeOfAccompaniment) {
+          this.swallUpdateAccompainament(id)
+        }else {
+          Swal.fire({
+            text: "¡Esta sección es de selección multiple y necesita un costo adiconal!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
+        }
+      }
+    })
+
+  }
+
+  swallUpdateAccompainament(id){
     Swal.fire({
       title: '¿Estás seguro?',
       text: "de que deseas actualizar este accompañamiento!",
@@ -656,6 +675,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
           accompanimentValue: dish.accompanimentValue,
           numberOfModifications: dish.numberOfModifications + 1,
           modificationDate: new Date(),
+          multiSelect: dish.multiSelect,
         }
         this.accompanimentService.putAccompaniment(dish.id, accompaniment).subscribe(res => {
           this.loading = false;
@@ -670,14 +690,30 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               this.flag = false
             }
           })
+        })
+      }
+    })
+  }
+
+  addNewAcc() {
+
+    this.sectionService.getSectionByName(this.newAccompanimentList[0].nameTypeSection).subscribe((section: any) => {
+      if (section[0].multiSelect == true) {
+        if (this.newAccompanimentList[0].typeOfAccompaniment) {
+          this.swallSaveNewAcco()
+        }else {
+          Swal.fire({
+            text: "¡Esta sección es de selección multiple y necesita un costo adiconal!",
+            icon: 'warning',
+            confirmButtonColor: '#542b81',
+            confirmButtonText: 'Ok!'
+          })
         }
-        )
       }
     })
 
   }
-
-  addNewAcc() {
+  swallSaveNewAcco(){
     Swal.fire({
       title: '¿Estás seguro?',
       text: "de que deseas guardar estos nuevos acompañamientos!",
@@ -712,7 +748,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             if (nameExist < 0) {
               noExist = true;
               res.idAllies = localStorage.getItem("idAlly")
-
+              
               this.accompanimentService.postAccompaniment(res).subscribe((accomp: any) => {
                 accomp.creationDate = this.convertDate(accomp.creationDate)
                 accomp.modificationDate = this.convertDate(accomp.modificationDate)
@@ -724,7 +760,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
               nameReal = res.name;
             }
 
-            if(index == (this.newAccompanimentList.length-1) ){
+            if (index == (this.newAccompanimentList.length - 1)) {
 
               this.swallNewAcco(noExist, exist, nameReal);
             }
@@ -734,7 +770,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
             Swal.fire({
               title: "Algunos campos estan vacios",
               text: "Asegurate de llenar todos los campos como 'cantidad', 'unidad', 'nombre de acompañamiento', el costo adicional será cero en caso de selecionarlo y no colocar ningun valor ",
-              confirmButtonColor:"#542b81"
+              confirmButtonColor: "#542b81"
             })
           }
 
@@ -790,7 +826,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   add() {
     this.flag = true
     const obj = {
-      id: '', quantity: 0, unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false , preparationTimeNumber: "0", numberOfModifications: 0,
+      id: '', quantity: 0, unitMeasurement: '', name: '', nameTypeSection: 'Bebida', typeOfAccompaniment: false, preparationTimeNumber: "0", numberOfModifications: 0,
       preparationTimeUnity: 'minutos', accompanimentValue: 0, state: [{
         state: "active",
         check: false
@@ -813,6 +849,15 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
 
   changeValueSelect1(id: number, property: string, value: string) {
     this.personList[id][property] = value;
+    this.sectionService.getSectionByName(value).subscribe((section: any) => {
+      if (section[0].multiSelect == true) {
+        // this.personList[id]['typeOfAccompaniment'] = true 
+        this.personList[id]['multiSelect'] = true
+      } else {
+        // this.personList[id]['typeOfAccompaniment'] = false
+        this.personList[id]['multiSelect'] = false
+      }
+    })
   }
 
   changeValuecheck1(id: number, property: string, event: any) {
@@ -832,6 +877,13 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   changeValueSelect(id: number, property: string, value: string) {
     //console.log(value);
     this.newAccompanimentList[id][property] = value;
+    this.sectionService.getSectionByName(value).subscribe((section: any) => {
+      if (section[0].multiSelect == true) {
+        this.newAccompanimentList[id]['multiSelect'] = true
+      } else {
+        this.newAccompanimentList[id]['multiSelect'] = false
+      }
+    })
   }
 
   changeValuecheck(id: number, property: string, event: any) {
@@ -919,7 +971,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   //SECTIONS OF ACCOMPANIMENTS
   //==========================
 
-  changeValuecheckMultiselectSections( event: any) {
+  changeValuecheckMultiselectSections(event: any) {
     let editField = event.target.checked;
     this.newCategory['multiSelect'] = editField;
     if (editField == false) {
@@ -931,7 +983,7 @@ export class AccompanimentsComponent implements OnInit, OnDestroy {
   addSection(name: String) {
     let newitem = name;
     this.newCategory.name = newitem
-    
+
     if (newitem == undefined) {
       Swal.fire({
         title: 'Error',
