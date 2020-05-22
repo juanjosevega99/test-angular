@@ -38,6 +38,7 @@ export class CreateHeadquarterComponent implements OnInit {
     nameAllies: null,
     name: null,
     ubication: null,
+    zone: '' ,
     address: null,
     numberFloor: null,
     local: null,
@@ -74,6 +75,7 @@ export class CreateHeadquarterComponent implements OnInit {
   typeOfPlans: any[] = [];
   checkboxOther: boolean = true;
   othersServiceInput: boolean = false;
+  zones = ['Norte','Centro', 'Este', 'Oeste', 'Sur']
 
   ArrayseviceChecked: any[] = [];
   collectionAddService: any[] = [];
@@ -97,6 +99,7 @@ export class CreateHeadquarterComponent implements OnInit {
   markers: Marker[] = [];
   lat = 4.6482837;
   lng = -74.2478921;
+  
 
 
   constructor(
@@ -551,9 +554,6 @@ export class CreateHeadquarterComponent implements OnInit {
         let typeOfPlanChecked = this.typeOfPlans.filter(element => element.select == true);
         this.preHeadquarters['typeOfPlans'] = typeOfPlanChecked
 
-        console.log("update", this.typeOfPlans, this.preHeadquarters.typeOfPlans);
-        
-
         if (this.ArrayseviceChecked.length > 0) {
           this.spinner.show();
           this.ArrayseviceChecked.forEach((element, index) => {
@@ -587,7 +587,7 @@ export class CreateHeadquarterComponent implements OnInit {
         } else {
           let servicesChecked = this.aditionalServices.filter(element => element.select == true);
           this.preHeadquarters['aditionalServices'] = servicesChecked
-          // let typeOfPlanChecked = this.typeOfPlans.filter(element => element.select == true);
+          // let typeOfPlanChecked = this.typeOfPlans.filter(element => element.select == true);  
           // this.preHeadquarters['typeOfPlans'] = typeOfPlanChecked
           this.updateNewServices()
         }

@@ -46,6 +46,26 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Zona</label>
+                <div class="col-md-7">
+                    <div class="input-group">
+
+                        <select class="form-control mr-2" name="zoneHeadquarters" #zoneHeadquarters="ngModel"
+                            required [ngClass]="{'is-invalid': (!zoneHeadquarters.valid ) && 
+                            zoneHeadquarters.touched ,'is-valid':(zoneHeadquarters.valid) }"
+                            [(ngModel)]="preHeadquarters.zone">
+
+                            <option *ngFor="let zone of zones;">
+                                {{zone}}
+                            </option>
+                        </select>
+
+                        <div class="invalid-feedback">*Este campo es requerido </div>
+                        <div class="valid-feedback">Ok!</div>
+                    </div>
+                </div>
+            </div>
 
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Dirección</label>

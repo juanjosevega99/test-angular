@@ -24,4 +24,5 @@ export class Headquarters {
     telephoneHC?:string;
     emailHC?:string;
     markerLocation?: string[];
+    zone?:string;
 }
