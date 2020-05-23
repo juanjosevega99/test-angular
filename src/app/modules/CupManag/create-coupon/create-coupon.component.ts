@@ -93,10 +93,16 @@ export class CreateCouponComponent implements OnInit {
   arrayTyc: any;
    //variables for general search
    generalsearch: string = "";
-  // All Flags 
+  
+   // All Flags 
   //flags of type Coupons
-  timeCreation = true
-  finishDate = true
+  flagAlly = false
+  flagHeadquartes = false
+  flagDishes = false
+  expirationTime = false
+  finishDate = false
+  flagUnitAvailable = false
+  
   //flag by state swall
   upload: boolean = false;
   // Variables of alerts
@@ -124,7 +130,7 @@ export class CreateCouponComponent implements OnInit {
     private spinner: NgxSpinnerService) {
 
     //flags
-    this.loading = true;
+    // this.loading = true;
     this.buttonPut = true;
     this.seeNewPhoto = false;
     this.State = [{
@@ -143,7 +149,7 @@ export class CreateCouponComponent implements OnInit {
       if (identificator != -1) {
         this.getCoupon(idCoupon)
       } else if (identificator == -1) {
-        this.loading = false
+        this.spinner.hide()
         this.buttonPut = false
       }
       this.idParams = identificator
@@ -179,11 +185,71 @@ export class CreateCouponComponent implements OnInit {
   }
   //obtain coupon selected for update
   getCoupon(idCoupon: string) {
-    this.loading
+    this.spinner.show()
     this.couponsServices.getCouponById(idCoupon).subscribe(coupon => {
       this.preCoupon = coupon
-      this.loading = false;
+      switch (this.preCoupon['nameTypeOfCoupon']) {
+        
+        case '2x1':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true,
+          this.spinner.hide()
+
+        case 'Fechas Especiales':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true,
+          this.spinner.hide()
+
+        case 'Happy Hour':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true,
+          this.spinner.hide()
+
+        case 'Descuentos':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = false,
+          this.finishDate = false,
+          this.flagUnitAvailable = true,
+          this.spinner.hide()
+        
+        case 'Bienvenida':
+          return this.flagAlly = false,
+          this.flagHeadquartes = false,
+          this.flagDishes = false,
+          this.expirationTime = false,
+          this.finishDate = false,
+          this.flagUnitAvailable = false,
+          this.preCoupon['numberOfUnits'] = 1,
+          this.preCoupon['numberOfCouponsAvailable'] = 1,
+          this.spinner.hide()
+      
+        default:
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true,
+          this.spinner.hide()
+      }
+      
+      
     })
+    
   }
 
   //see Name ally for show headquarter
@@ -245,32 +311,66 @@ export class CreateCouponComponent implements OnInit {
       }
     })
   }
-  seeNameTypeCoupon(selected: any) {
+  seeNameTypeCoupon(idTypeCoupon: string) {
 
-    this.typeCoupon.forEach(element => {
-      if (selected == element.id) {
-        this.preCoupon['nameTypeOfCoupon'] = element.name
+    this.typeCouponService.getTypeCouponById(idTypeCoupon).subscribe(typeCoupon=>{
+      this.preCoupon['nameTypeOfCoupon'] = typeCoupon.name
+      switch (typeCoupon.name) {
+        
+        case '2x1':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true
 
+        case 'Fechas Especiales':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true
 
-        if (element.name == "2x1") {
-          return this.timeCreation = true, this.finishDate = true
+        case 'Happy Hour':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true
 
-        }
-        if (element.name == "Fechas Especiales") {
-          return this.timeCreation = true, this.finishDate = true
+        case 'Descuentos':
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = false,
+          this.finishDate = false,
+          this.flagUnitAvailable = true
+        
+        case 'Bienvenida':
+          return this.flagAlly = false,
+          this.flagHeadquartes = false,
+          this.flagDishes = false,
+          this.expirationTime = false,
+          this.finishDate = false,
+          this.flagUnitAvailable = false,
+          this.preCoupon['numberOfUnits'] = 1,
+          this.preCoupon['numberOfCouponsAvailable'] = 1
 
-        }
-        if (element.name == "Descuentos") {
-          return this.timeCreation = false, this.finishDate = false
-
-        }
-        if (element.name == "Happy Hour") {
-          return this.timeCreation = true, this.finishDate = true
-
-        }
-
+      
+        default:
+          return this.flagAlly = true,
+          this.flagHeadquartes = true,
+          this.flagDishes = true,
+          this.expirationTime = true,
+          this.finishDate = true,
+          this.flagUnitAvailable = true
       }
+      
     })
+
   }
   //Method for selecting the state
   selectedState(valueA, checkedA, valueB, checkedB) {
@@ -606,19 +706,20 @@ export class CreateCouponComponent implements OnInit {
                 this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
               });
               this.spinner.hide()
+              Swal.fire({
+                title: 'Eliminado',
+                text: "¡Tu cupón ha sido eliminado!",
+                icon: 'success',
+                confirmButtonColor: '#542b81',
+                confirmButtonText: 'Ok!'
+              }).then((result) => {
+                if (result.value) {
+                  this._router.navigate(['/main', 'couponManager',]);
+                }
+              })
             })          
           })
-          Swal.fire({
-            title: 'Eliminado',
-            text: "¡Tu cupón ha sido eliminado!",
-            icon: 'success',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          }).then((result) => {
-            if (result.value) {
-              this._router.navigate(['/main', 'couponManager',]);
-            }
-          })
+          
         }
       })
     }

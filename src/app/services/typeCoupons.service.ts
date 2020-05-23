@@ -44,18 +44,17 @@ import { TypeCoupon } from "../models/typeCoupons";
       );
     }
     
-    getTypeCouponById(id): Observable<any[]> {
+    getTypeCouponById(id): Observable<TypeCoupon> {
       return this.httpclient
-        .get<TypeCoupon[]>(environment.UrlBase + "type-coupones/" + id)
+        .get<TypeCoupon>(environment.UrlBase + "type-coupones/" + id)
         .pipe(
-          map((typeCoupones: any[]) =>
-            typeCoupones.map(typeCoupones => {
+          map((typeCoupones: TypeCoupon) => {
               let obj = {
                 id: typeCoupones.id,
                 name: typeCoupones.name
               };
               return obj;
-            })
+            }
           )
         );
     }
