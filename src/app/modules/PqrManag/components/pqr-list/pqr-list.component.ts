@@ -86,27 +86,49 @@ export class PqrListComponent implements OnInit {
   loadPqrs() {
     this.loadingPqrs = true;
 
-      this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
-
+    if (this.profile.nameCharge == "administradorTIFI") {
+      
+      this.pqrlistservice.getPqrsWithOutHeadQ().subscribe(res => {
+  
         if (res.length) {
-
+  
           res.forEach((order: any, index) => {
-
+  
             if (order.idUser) {
               this.formaterPqr(order);
             }
-
+  
             if (index === (res.length - 1)) {
               this.loadingPqrs = false;
             }
-
+  
           })
         } else {
           this.loadingPqrs = false;
         }
       })
-    
-
+        
+    }else{
+      this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
+  
+        if (res.length) {
+  
+          res.forEach((order: any, index) => {
+  
+            if (order.idUser) {
+              this.formaterPqr(order);
+            }
+  
+            if (index === (res.length - 1)) {
+              this.loadingPqrs = false;
+            }
+  
+          })
+        } else {
+          this.loadingPqrs = false;
+        }
+      })
+    }
   }
 
   // =====================================
@@ -236,11 +258,15 @@ export class PqrListComponent implements OnInit {
 
     this.userService.getUserById(order.idUser).subscribe((user: Users) => {
       const obj: Pqrs = {};
-
-      this.headservice.getHeadquarterById(order.idHeadquarter).subscribe(head => {
-        obj.nameHeadquarter = head.name;
-        obj.nameAllie = head.nameAllies;
-      })
+      if (order.idHeadquarter) {
+        this.headservice.getHeadquarterById(order.idHeadquarter).subscribe(head => {
+          obj.nameHeadquarter = head.name;
+          obj.nameAllie = head.nameAllies;
+        })
+      }else{
+         obj.nameHeadquarter = 'Pregunta frecuente';
+         obj.nameAllie = 'Pregunta frecuente'
+      }
 
       obj.id = order.id,
       obj.date = this.convertDate(order.date);

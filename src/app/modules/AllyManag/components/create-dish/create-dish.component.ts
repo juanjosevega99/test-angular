@@ -18,8 +18,8 @@ import { CouponsService } from "src/app/services/coupons.service"
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Location } from '@angular/common';
 import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
-import { error } from 'util';
-
+import { HeadquartersService } from "src/app/services/headquarters.service";
+import { AlliesService } from "src/app/services/allies.service";
 
 @Component({
   selector: 'app-create-dish',
@@ -77,6 +77,9 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     reference: null,
     numberOfModifications: 0,
     idAllies: null,
+    nameAllie: null,
+    idHeadquarter:null,
+    nameHeadquarter:null,
     flag: false,
   }
 
@@ -148,7 +151,9 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService,
     private spinner: NgxSpinnerService, private _location: Location,
     private couponsService: CouponsService,
-    private _uploadImages: UploadImagesService) {
+    private _uploadImages: UploadImagesService,
+    private headquartersService: HeadquartersService,
+    private alliesService : AlliesService) {
 
     //flags
     this.loading = true;
@@ -224,6 +229,15 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       this.tickFunction = setInterval(() => this.tick(), 30000);
       this.tick();
     }
+    this.headquartersService.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(headquarter => {
+      // headquarter.for //hacer un servicio
+      this.promotionArray['idHeadquarter'] = localStorage.getItem('idHeadquarter')
+      this.promotionArray['nameHeadquarter'] = headquarter.name
+    })
+    this.alliesService.getAlliesById(localStorage.getItem('idAlly')).subscribe(ally=>{
+      this.promotionArray['nameAllie'] = ally.name
+    })
+
   }
 
   ngOnDestroy() {

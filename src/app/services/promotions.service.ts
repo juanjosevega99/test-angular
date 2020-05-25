@@ -9,7 +9,7 @@ import { Promotions } from "../models/Promotions";
   providedIn: "root"
 })
 export class PromotionsService {
-  constructor(private httpclient: HttpClient) {}
+  constructor(private httpclient: HttpClient) { }
 
   postPromotion(promotion): Observable<Promotions> {
     return this.httpclient.post<Promotions>(
@@ -17,8 +17,8 @@ export class PromotionsService {
       promotion
     );
   }
-  
-  putPromotion(id , promotion) {
+
+  putPromotion(id, promotion) {
     return this.httpclient.put(
       environment.UrlBase + "promotions/" + id,
       promotion
@@ -48,10 +48,13 @@ export class PromotionsService {
               description: promotions.description,
               preparationTime: promotions.preparationTime,
               reference: promotions.reference,
-              numberOfModifications : promotions.numberOfModifications,
+              numberOfModifications: promotions.numberOfModifications,
               idAccompaniments: promotions.idAccompaniments,
-              idAllies : promotions.idAllies,
-              flag : promotions.flag,
+              idAllies: promotions.idAllies,
+              nameAllie: promotions.nameAllie,
+              idHeadquarter: promotions.idHeadquarter,
+              nameHeadquarter: promotions.idHeadquarter,
+              flag: promotions.flag,
             };
             return obj;
           })
@@ -61,33 +64,7 @@ export class PromotionsService {
 
   getPromotionById(id): Observable<any> {
     return this.httpclient.get<Promotions>(environment.UrlBase + "promotions/" + id)
-      /* .pipe(
-        map((promotions: any[]) =>
-          promotions.map(promotions => {
-            let obj = {
-              id: promotions._id,
-              state: promotions.state,
-              promotionStartDate: promotions.promotionStartDate,
-              endDatePromotion: promotions.endDatePromotion,
-              name: promotions.name,
-              idname: promotions.idname,
-              price: promotions.price,
-              photo: promotions.photo,
-              description: promotions.description,
-              preparationTime: promotions.preparationTime,
-              reference: promotions.reference,
-              numberOfModifications : promotions.numberOfModifications,
-              idAccompaniments: promotions.idAccompaniments
-            };
-            return obj;
-          })
-        )
-      ); */
-  }
-  
-  getAllPromotionsByAlly(idAllies) : Observable<Promotions[]>{
-    return this.httpclient.get<Promotions[]>(environment.UrlBase + "promotions/promotionsbyally/" + idAllies)
-    .pipe(
+    /* .pipe(
       map((promotions: any[]) =>
         promotions.map(promotions => {
           let obj = {
@@ -97,20 +74,53 @@ export class PromotionsService {
             endDatePromotion: promotions.endDatePromotion,
             name: promotions.name,
             idname: promotions.idname,
-            imageTypePromotion: promotions.imageTypePromotion,
             price: promotions.price,
             photo: promotions.photo,
             description: promotions.description,
             preparationTime: promotions.preparationTime,
             reference: promotions.reference,
             numberOfModifications : promotions.numberOfModifications,
-            idAccompaniments: promotions.idAccompaniments,
-            idAllies : promotions.idAllies,
-            flag : promotions.flag,
+            idAccompaniments: promotions.idAccompaniments
+            idAllies: promotions.idAllies,
+            nameAllie:promotions.nameAllie,
+            idHeadquarter: promotions.idHeadquarter,
+            nameHeadquarter: promotions.idHeadquarter,
           };
           return obj;
         })
       )
-    );
+    ); */
+  }
+
+  getAllPromotionsByAlly(idAllies): Observable<Promotions[]> {
+    return this.httpclient.get<Promotions[]>(environment.UrlBase + "promotions/promotionsbyally/" + idAllies)
+      .pipe(
+        map((promotions: any[]) =>
+          promotions.map(promotions => {
+            let obj = {
+              id: promotions._id,
+              state: promotions.state,
+              promotionStartDate: promotions.promotionStartDate,
+              endDatePromotion: promotions.endDatePromotion,
+              name: promotions.name,
+              idname: promotions.idname,
+              imageTypePromotion: promotions.imageTypePromotion,
+              price: promotions.price,
+              photo: promotions.photo,
+              description: promotions.description,
+              preparationTime: promotions.preparationTime,
+              reference: promotions.reference,
+              numberOfModifications: promotions.numberOfModifications,
+              idAccompaniments: promotions.idAccompaniments,
+              idAllies: promotions.idAllies,
+              nameAllie: promotions.nameAllie,
+              idHeadquarter: promotions.idHeadquarter,
+              nameHeadquarter: promotions.idHeadquarter,
+              flag: promotions.flag,
+            };
+            return obj;
+          })
+        )
+      );
   }
 }

@@ -17,4 +17,8 @@ export class Pqrs {
     reply?:string;
     emailReply?:String;
     typeOfService?:string;
+    typeEvent?: string;
+    idnameTypeEvent?: string;
+    nameTypeEvent?: string; 
+    problemType?: string;
 }
