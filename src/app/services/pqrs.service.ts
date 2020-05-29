@@ -76,7 +76,11 @@ export class PqrsService {
             description: pqrs.description,
             reply: pqrs.reply,
             date: pqrs.date,
-            typeOfService: pqrs.typeOfService
+            typeOfService: pqrs.typeOfService,
+            problemType: pqrs.problemType,
+            typeEvent: pqrs.typeEvent,
+            nameTypeEvent: pqrs.nameTypeEvent,
+            idnameTypeEvent: pqrs.nameTypeEvent,
           };
           return obj;
         })
@@ -93,9 +97,27 @@ export class PqrsService {
       )
   }
 
-
   updatePqr(idPqr:string, body: any){
     return this.httpclient.put( environment.UrlBase + "pqrs/" + idPqr, body  );
+  }
+  getPqrsWithOutHeadQ(): Observable<any[]> {
+    return this.httpclient.get<Pqrs[]>(environment.UrlBase + "pqrs/pqrswh/" ).pipe(
+      map((pqrs: any[]) =>
+        pqrs.map(pqrs => {
+          let obj = {
+            reply: pqrs.reply,
+            emailReply: pqrs.emailReply,
+            id: pqrs._id,
+            idUser: pqrs.idUser,
+            email: pqrs.email,
+            description: pqrs.description,
+            state: pqrs.state,
+            date: pqrs.date,
+          };
+          return obj;
+        })
+      )
+    );
   }
   
 }

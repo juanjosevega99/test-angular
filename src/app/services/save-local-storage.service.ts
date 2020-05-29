@@ -49,5 +49,13 @@ export class SaveLocalStorageService {
     let idTyc = localStorage.getItem("idTyc")
     return idTyc;
   }
+  saveLocalStorageIdFrequentQuestion(idFrequentQuestion: string) {
+    localStorage.setItem("idFrequentQuestion", idFrequentQuestion)
+  }
+
+  getLocalStorageIdFrequentQuestion() {
+    let idFrequentQuestion = localStorage.getItem("idFrequentQuestion")
+    return idFrequentQuestion;
+  }
 
 }

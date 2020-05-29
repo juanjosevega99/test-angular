@@ -26,6 +26,8 @@ import { PqrManagerComponent } from './modules/PqrManag/components/pqr-manager/p
 import { BannerManagerComponent } from './modules/BannerManag/components/banner-manager/banner-manager.component';
 import { TycManagerComponent } from './modules/TycManag/components/tyc-manager/tyc-manager.component';
 import { CreateTycComponent } from './modules/TycManag/create-tyc/create-tyc.component';
+import { FrequentQuestionsManagComponent } from './modules/TycManag/frequent-questions-manag/frequent-questions-manag.component';
+import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-questions-manag/create-frequent-questions/create-frequent-questions.component';
 import { LoginFormComponent } from './shared/login-form/login-form.component';
 import { ResestPasswordComponent } from './shared/resest-password/resest-password.component';
 import { MainComponent } from './components/main/main.component';
@@ -45,7 +47,6 @@ import { GuardCAGService } from './services/guards/guard-cag.service';
 import { GuardPqrService } from './services/guards/guard-pqr.service';
 import { GuardContadorService } from './services/guards/guard-contador.service';
 import { CreateBannerComponent } from './modules/BannerManag/components/create-banner/create-banner.component';
-
 
 const routes: Routes = [
   {
@@ -88,6 +89,9 @@ const routes: Routes = [
       { path: "tycManager", component: TycManagerComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createTycManager/:id", component: CreateTycComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "editTycManager/:id", component: CreateTycComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "frequentQuestionsManag", component: FrequentQuestionsManagComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "CreateFrequentQuestions/:id", component: CreateFrequentQuestionsComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "editFrequentQuestions/:id", component: CreateFrequentQuestionsComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "add-sede", component: AddSedeComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "createHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "editHeadquarter/:id", component: CreateHeadquarterComponent, canActivate: [ GuardAdminTifiService ] },

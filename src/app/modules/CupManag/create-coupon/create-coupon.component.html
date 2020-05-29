@@ -74,50 +74,6 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Entidad</label>
-                <div class="col-md-7">
-                    <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
-                        nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.idAllies"
-                        (change)="seeNameAlly(nameAllies.value)">
-
-                        <option *ngFor="let ally of arrayAllies" [ngValue]=ally.id>
-                            {{ally.name}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Sede</label>
-                <div class="col-md-7">
-                    <select class="form-control mr-2" name="nameHeadquarters" #nameHeadquarters="ngModel" required
-                        [ngClass]="{'is-invalid': (!nameHeadquarters.valid ) && 
-                        nameHeadquarters.touched ,'is-valid':(nameHeadquarters.valid) }"
-                        [(ngModel)]="preCoupon.idHeadquarters" (change)="seeNameHeadquarter(nameHeadquarters.value)">
-
-                        <option *ngFor="let headquarter of headquartersByIdAlly;" [ngValue]=" headquarter.id">
-                            {{headquarter.name}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Platos</label>
-                <div class="col-md-7">
-                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required 
-                    [ngClass]="{'is-invalid': (!idDish.valid ) && 
-                        idDish.touched ,'is-valid':(idDish.valid) }" [(ngModel)]="preCoupon.idDishes"
-                        (change)="seeNameDish(idDish.value)">
-                        <option value="" selected>Seleccione</option>
-
-                        <option *ngFor="let dish of dishesByIdHeadquarter;" [ngValue]="dish.id">
-                            {{dish.name}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label class="col-md-5 col-form-label">Tipo de cupón</label>
                 <div class="col-md-7">
                     <div class="input-group">
@@ -157,7 +113,51 @@
                     </div>
                 </div>
             </div>
+            <div *ngIf="flagAlly" class="form-group row">
+                <label class="col-md-5 col-form-label">Entidad</label>
+                <div class="col-md-7">
+                    <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
+                        nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.idAllies"
+                        (change)="seeNameAlly(nameAllies.value)">
 
+                        <option *ngFor="let ally of arrayAllies" [ngValue]=ally.id>
+                            {{ally.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="flagHeadquartes" class="form-group row">
+                <label class="col-md-5 col-form-label">Sede</label>
+                <div class="col-md-7">
+                    <select class="form-control mr-2" name="nameHeadquarters" #nameHeadquarters="ngModel" required
+                        [ngClass]="{'is-invalid': (!nameHeadquarters.valid ) && 
+                        nameHeadquarters.touched ,'is-valid':(nameHeadquarters.valid) }"
+                        [(ngModel)]="preCoupon.idHeadquarters" (change)="seeNameHeadquarter(nameHeadquarters.value)">
+
+                        <option *ngFor="let headquarter of headquartersByIdAlly;" [ngValue]=" headquarter.id">
+                            {{headquarter.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div *ngIf="flagDishes" class="form-group row">
+                <label class="col-md-5 col-form-label">Platos</label>
+                <div class="col-md-7">
+                    <select class="form-control mr-2" name="idDish" #idDish="ngModel" required 
+                    [ngClass]="{'is-invalid': (!idDish.valid ) && 
+                        idDish.touched ,'is-valid':(idDish.valid) }" [(ngModel)]="preCoupon.idDishes"
+                        (change)="seeNameDish(idDish.value)">
+                        <option value="" selected>Seleccione</option>
+
+                        <option *ngFor="let dish of dishesByIdHeadquarter;" [ngValue]="dish.id">
+                            {{dish.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">%Descuento</label>
                 <div class="col-md-7">
@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="timeCreation" class="form-group row">
+            <div *ngIf="expirationTime" class="form-group row">
                 <label class="col-md-5 col-form-label">Hora de caducidad </label>
                 <div class="col-md-7">
                     <ngb-timepicker name="dfn" [(ngModel)]="preCoupon.expirationTime[0]" #expirationTime="ngModel"
@@ -218,7 +218,7 @@
                     <div class="valid-feedback">Ok!</div>
                 </div>
             </div>
-            <div class="form-group row">
+            <div *ngIf="flagUnitAvailable" class="form-group row">
                 <label class="col-md-5 col-form-label">Unidades disponibles</label>
                 <div class="col-md-7">
                     <input class="form-control" type="text" name="numberOfUnits" #numberOfUnits="ngModel"

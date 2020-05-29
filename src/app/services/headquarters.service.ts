@@ -60,6 +60,7 @@ export class HeadquartersService {
               telephoneHC: headquarters.telephoneHC,
               emailHC: headquarters.emailHC,
               markerLocation: headquarters.markerLocation,
+              zone:headquarters.zone,
             };
             return obj;
           })
@@ -77,6 +78,7 @@ export class HeadquartersService {
     //         nameAllies: headquarters.nameAllies,
     //         name: headquarters.name,
     //         ubication: headquarters.ubication,
+    //         zone:headquarters.zone,
     //         address: headquarters.address,
     //         numberFloor: headquarters.numberFloor,
     //         local: headquarters.local,

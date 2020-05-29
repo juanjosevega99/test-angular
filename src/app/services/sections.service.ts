@@ -19,7 +19,7 @@ export class SectionsService {
     );
   }
 
-  putSection(id,section){
+  putSection(id, section) {
     return this.httpclient.put(environment.UrlBase + "sections/" + id,
       section
     );
@@ -35,7 +35,8 @@ export class SectionsService {
         sections.map(sections => {
           let obj = {
             id: sections._id,
-            name: sections.name
+            name: sections.name,
+            multiSelect: sections.multiSelect,
           };
           return obj;
         })
@@ -51,7 +52,24 @@ export class SectionsService {
           sections.map(sections => {
             let obj = {
               id: sections.id,
-              name: sections.name
+              name: sections.name,
+              multiSelect: sections.multiSelect,
+            };
+            return obj;
+          })
+        )
+      );
+  }
+  getSectionByName(name): Observable<any[]> {
+    return this.httpclient
+      .get<Sections[]>(environment.UrlBase + "sections/nameSection/" + name)
+      .pipe(
+        map((sections: any[]) =>
+          sections.map(sections => {
+            let obj = {
+              id: sections._id,
+              name: sections.name,
+              multiSelect: sections.multiSelect,
             };
             return obj;
           })

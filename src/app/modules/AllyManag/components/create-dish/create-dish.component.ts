@@ -18,8 +18,9 @@ import { CouponsService } from "src/app/services/coupons.service"
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Location } from '@angular/common';
 import { UploadImagesService } from "src/app/services/providers/uploadImages.service";
-import { error } from 'util';
-
+import { HeadquartersService } from "src/app/services/headquarters.service";
+import { AlliesService } from "src/app/services/allies.service";
+import { UsersService } from "src/app/services/users.service";
 
 @Component({
   selector: 'app-create-dish',
@@ -77,6 +78,9 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     reference: null,
     numberOfModifications: 0,
     idAllies: null,
+    nameAllie: null,
+    idHeadquarter:null,
+    nameHeadquarter:null,
     flag: false,
   }
 
@@ -148,7 +152,10 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     private promotionService: PromotionsService, private saveLocalStorageService: SaveLocalStorageService,
     private spinner: NgxSpinnerService, private _location: Location,
     private couponsService: CouponsService,
-    private _uploadImages: UploadImagesService) {
+    private _uploadImages: UploadImagesService,
+    private headquartersService: HeadquartersService,
+    private alliesService : AlliesService,
+    private userService: UsersService){
 
     //flags
     this.loading = true;
@@ -224,6 +231,15 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       this.tickFunction = setInterval(() => this.tick(), 30000);
       this.tick();
     }
+    this.headquartersService.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(headquarter => {
+      // headquarter.for //hacer un servicio
+      this.promotionArray['idHeadquarter'] = localStorage.getItem('idHeadquarter')
+      this.promotionArray['nameHeadquarter'] = headquarter.name
+    })
+    this.alliesService.getAlliesById(localStorage.getItem('idAlly')).subscribe(ally=>{
+      this.promotionArray['nameAllie'] = ally.name
+    })
+
   }
 
   ngOnDestroy() {
@@ -748,6 +764,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
               if (result.value) {
                 this.loading = true;
                 this.promotionService.deletePromotion(realId).subscribe(message => {
+                  //delete promotion of dish
                   this.chargeDishes.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(res => {
                     res.forEach(dish => {
                       if (dish.idPromotion.length) {
@@ -758,6 +775,29 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                               idPromotion: dish.idPromotion
                             }
                             this.chargeDishes.putDishe(dish.id, newids).subscribe(res => { })
+                          }
+                        }
+                      }
+                    })
+                  })
+                  //delete promotion of user
+                  this.userService.getUsers().subscribe(res => {
+                    res.forEach(user => {
+                      if (user.idsPromos.length) {
+                        for (let index = 0; index < user.idsPromos.length; index++) {
+                          if (realId == user.idsPromos[index]) {
+                            user.idsPromos.splice(index, 1)
+                            let newids: any = {
+                              idsPromos: user.idsPromos
+                            }
+                            this.userService.putUsers(user.id, newids).subscribe(res => { 
+                              Swal.fire({
+                                text: `¡La promoción del usruario ${user.name} ha sido eliminada!`,
+                                icon: 'success',
+                                confirmButtonColor: '#542b81',
+                                confirmButtonText: 'Ok!'
+                              })
+                             })
                           }
                         }
                       }
@@ -1283,7 +1323,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 this.urlDish = urlImage;
 
                 this.promotionArray['photo'] = this.urlDish
-                this.promotionArray['idAllies'] = localStorage.getItem('idAlly')
+                this.promotionArray['idAllies'] = localStorage.getItem('idAlly') 
                 this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
                   this.editDish.idPromotion.push(message._id)
                   this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {
