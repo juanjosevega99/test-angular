@@ -112,7 +112,7 @@
                     <td>{{coupon.description}}</td>
 
                     <td>{{convertDate(coupon.creationDate)}}</td>
-                    <td>{{ convertDate(coupon.creationDate)}}</td>
+                    <td>{{ convertDate(coupon.expirationDate)}}</td>
                     <td>
                         <div class="radio radio-success m-2 form-check-inline">
                             <input [checked]="coupon.state" type="radio" (click)="changestate(coupon.id)">
