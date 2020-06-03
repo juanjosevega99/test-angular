@@ -47,8 +47,7 @@ export class BannersService {
             name: banners.name,
             imageBanner: banners.imageBanner,
             code: banners.code,
-            typeOfBanner: banners.typeOfBanner
-          };
+            informative: banners.informative,          };
           return obj;
         })
       )
@@ -72,7 +71,7 @@ export class BannersService {
           name: banners.name,
           imageBanner: banners.imageBanner,
           code: banners.code,
-          typeOfBanner: banners.typeOfBanner
+          informative: banners.informative,
         };
         return obj;
       })

@@ -65,12 +65,23 @@ export class CreateBannerComponent implements OnInit {
       'idHeadquarters': new FormControl('', Validators.required),
       'description': new FormControl('', [Validators.maxLength(100)]),
       'name': new FormControl('', Validators.required),
+      'informative': new FormControl(false ),
       'imageBanner': new FormControl('')
     })
 
   }
 
   ngOnInit() {
+  }
+  
+  changeValuecheckInformative(event: any) {
+    let editField = event.target.checked;
+    this.formulary.controls['informative'].setValue(editField)
+    // this.newCategory['multiSelect'] = editField;
+    if (editField == false) {
+    this.formulary.controls['informative'].setValue(false)
+      // this.newCategory['multiSelect'] = false;
+    }
   }
 
   loadAllies() {
@@ -104,6 +115,7 @@ export class CreateBannerComponent implements OnInit {
       this.showinfocontent = true;
       return
     }
+    console.log('aray banner',this.formulary.value)
 
     Swal.fire({
       title: "¿Desea guardar la información?",
@@ -228,9 +240,9 @@ export class CreateBannerComponent implements OnInit {
     Banner.nameHeadquarters = this.heads.find(headquartes => headquartes._id == this.formulary.value.idHeadquarters)['name'];
     Banner.description = this.formulary.value.description;
     Banner.name = this.formulary.value.name;
+    Banner.informative = this.formulary.value.informative;
     Banner.imageBanner = this.formulary.value.imageBanner;
     Banner.code = this.formulary.value.code;
-    Banner.typeOfBanner = '';
 
     return Banner;
   }
@@ -277,6 +289,7 @@ export class CreateBannerComponent implements OnInit {
       'idHeadquarters': this.editBanner.idHeadquarters,
       'description': this.editBanner.description,
       'name': this.editBanner.name,
+      'informative': this.editBanner.informative,
       'imageBanner': this.editBanner.imageBanner
     })
   }

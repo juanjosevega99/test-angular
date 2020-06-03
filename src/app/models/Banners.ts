@@ -12,5 +12,5 @@ export class Banners {
     name?:string;
     imageBanner?:string;
     code?:string;
-    typeOfBanner?:string;
+    informative?: boolean;
 }
