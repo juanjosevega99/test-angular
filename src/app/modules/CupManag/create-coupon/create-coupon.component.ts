@@ -76,7 +76,7 @@ export class CreateCouponComponent implements OnInit {
   dishesByIdHeadquarter: any[] = [];
 
   //array for search couponsAvailable by idCoupon
-  couponsAvailableByIdCoupon : any;
+  couponsAvailableByIdCoupon: any;
   //variable for upload images
   fileImageCoupon: any;
   // urlImagedish: any;
@@ -86,15 +86,15 @@ export class CreateCouponComponent implements OnInit {
   idParams: number;
   buttonPut: boolean;
   seeNewPhoto: boolean;
-  
+
   // variables for collection Tyc
   tycGettting: TermsAndConditions[] = [];
   newArray = this.tycGettting;
   arrayTyc: any;
-   //variables for general search
-   generalsearch: string = "";
-  
-   // All Flags 
+  //variables for general search
+  generalsearch: string = "";
+
+  // All Flags 
   //flags of type Coupons
   flagAlly = false
   flagHeadquartes = false
@@ -102,7 +102,7 @@ export class CreateCouponComponent implements OnInit {
   expirationTime = false
   finishDate = false
   flagUnitAvailable = false
-  
+
   //flag by state swall
   upload: boolean = false;
   // Variables of alerts
@@ -111,10 +111,10 @@ export class CreateCouponComponent implements OnInit {
   meridian = true;
   //variable for the loading
   loading: boolean;
-  loadingTable :boolean;
+  loadingTable: boolean;
   // flag dont result
   noResults = false;
-  
+
   constructor(
     private _router: Router,
     private activatedRoute: ActivatedRoute,
@@ -189,67 +189,77 @@ export class CreateCouponComponent implements OnInit {
     this.couponsServices.getCouponById(idCoupon).subscribe(coupon => {
       this.preCoupon = coupon
       switch (this.preCoupon['nameTypeOfCoupon']) {
-        
+
         case '2x1':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true,
-          this.spinner.hide()
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true,
+            this.spinner.hide()
 
         case 'Fechas Especiales':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true,
-          this.spinner.hide()
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true,
+            this.spinner.hide()
 
         case 'Happy Hour':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true,
-          this.spinner.hide()
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true,
+            this.spinner.hide()
 
         case 'Descuentos':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = false,
-          this.finishDate = false,
-          this.flagUnitAvailable = true,
-          this.spinner.hide()
-        
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = false,
+            this.finishDate = false,
+            this.flagUnitAvailable = true,
+            this.spinner.hide()
+
         case 'Bienvenida':
           return this.flagAlly = false,
-          this.flagHeadquartes = false,
-          this.flagDishes = false,
-          this.expirationTime = false,
-          this.finishDate = false,
-          this.flagUnitAvailable = false,
-          this.preCoupon['numberOfUnits'] = 1,
-          this.preCoupon['numberOfCouponsAvailable'] = 1,
-          this.spinner.hide()
-      
+            this.flagHeadquartes = false,
+            this.flagDishes = false,
+            this.expirationTime = false,
+            this.finishDate = false,
+            this.flagUnitAvailable = false,
+            this.preCoupon['numberOfUnits'] = 1,
+            this.preCoupon['numberOfCouponsAvailable'] = 1,
+            this.spinner.hide()
+        case 'Referido':
+          return this.flagAlly = false,
+            this.flagHeadquartes = false,
+            this.flagDishes = false,
+            this.expirationTime = false,
+            this.finishDate = false,
+            this.flagUnitAvailable = false,
+            this.preCoupon['numberOfUnits'] = 1,
+            this.preCoupon['numberOfCouponsAvailable'] = 1,
+            this.spinner.hide()
+
         default:
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true,
-          this.spinner.hide()
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true,
+            this.spinner.hide()
       }
-      
-      
+
+
     })
-    
+
   }
 
   //see Name ally for show headquarter
@@ -313,62 +323,72 @@ export class CreateCouponComponent implements OnInit {
   }
   seeNameTypeCoupon(idTypeCoupon: string) {
 
-    this.typeCouponService.getTypeCouponById(idTypeCoupon).subscribe(typeCoupon=>{
+    this.typeCouponService.getTypeCouponById(idTypeCoupon).subscribe(typeCoupon => {
       this.preCoupon['nameTypeOfCoupon'] = typeCoupon.name
       switch (typeCoupon.name) {
-        
+
         case '2x1':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true
 
         case 'Fechas Especiales':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true
 
         case 'Happy Hour':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true
 
         case 'Descuentos':
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = false,
-          this.finishDate = false,
-          this.flagUnitAvailable = true
-        
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = false,
+            this.finishDate = false,
+            this.flagUnitAvailable = true
+
         case 'Bienvenida':
           return this.flagAlly = false,
-          this.flagHeadquartes = false,
-          this.flagDishes = false,
-          this.expirationTime = false,
-          this.finishDate = false,
-          this.flagUnitAvailable = false,
-          this.preCoupon['numberOfUnits'] = 1,
-          this.preCoupon['numberOfCouponsAvailable'] = 1
+            this.flagHeadquartes = false,
+            this.flagDishes = false,
+            this.expirationTime = false,
+            this.finishDate = false,
+            this.flagUnitAvailable = false,
+            this.preCoupon['numberOfUnits'] = 1,
+            this.preCoupon['numberOfCouponsAvailable'] = 1
 
-      
+        case 'Referido':
+          return this.flagAlly = false,
+            this.flagHeadquartes = false,
+            this.flagDishes = false,
+            this.expirationTime = false,
+            this.finishDate = false,
+            this.flagUnitAvailable = false,
+            this.preCoupon['numberOfUnits'] = 1,
+            this.preCoupon['numberOfCouponsAvailable'] = 1,
+            this.spinner.hide()
+
         default:
           return this.flagAlly = true,
-          this.flagHeadquartes = true,
-          this.flagDishes = true,
-          this.expirationTime = true,
-          this.finishDate = true,
-          this.flagUnitAvailable = true
+            this.flagHeadquartes = true,
+            this.flagDishes = true,
+            this.expirationTime = true,
+            this.finishDate = true,
+            this.flagUnitAvailable = true
       }
-      
+
     })
 
   }
@@ -458,13 +478,13 @@ export class CreateCouponComponent implements OnInit {
     }
     return this.fileImageCoupon = input.files[0]
   }
-// method for modal TyC
+  // method for modal TyC
 
   makeObjTycManager() {
     this.loadingTable = true
     this.tycGettting = [];
     this.newArray = this.tycGettting;
-    this.tycManegerService.getTermsAndConditions().subscribe((res:any) => {
+    this.tycManegerService.getTermsAndConditions().subscribe((res: any) => {
       this.arrayTyc = res;
       let arrayTycCoupons = this.arrayTyc.filter((tyc) => tyc.nameTypeTyc == 'Términos y condiciones cupones')
       if (arrayTycCoupons.length != 0) {
@@ -475,18 +495,18 @@ export class CreateCouponComponent implements OnInit {
           obj.nameTypeTyc = tyc.nameTypeTyc
           obj.description = tyc.description
 
-          this.tycGettting.push(obj)          
-          if(index === (res.length -1)){
+          this.tycGettting.push(obj)
+          if (index === (res.length - 1)) {
             this.loadingTable = false;
           }
         });
-      }else {
-        this.loadingTable=false
-        this.noResults = true 
+      } else {
+        this.loadingTable = false
+        this.noResults = true
       }
     })
   }
-  addTycToCoupon(idTyc:string, nameTyc:string){
+  addTycToCoupon(idTyc: string, nameTyc: string) {
     this.preCoupon['idTermsAndConditions'] = idTyc
     this.preCoupon['nameTermsAndConditions'] = nameTyc
   }
@@ -581,7 +601,7 @@ export class CreateCouponComponent implements OnInit {
               let idCoupon = coupon._id;
               this.generateCoupons(idCoupon)
               this.spinner.hide()
-              
+
             })
 
             if (this.upload == true) {
@@ -615,7 +635,7 @@ export class CreateCouponComponent implements OnInit {
     let objCoupon: any = this.preCoupon
     objCoupon.id = this.identificatorbyRoot
     objCoupon.numberOfCouponsAvailable = this.preCoupon['numberOfUnits']
-    this.couponsServices.putCoupon(objCoupon).subscribe(()=> this.spinner.hide())
+    this.couponsServices.putCoupon(objCoupon).subscribe(() => this.spinner.hide())
   }
 
   //swall for update collection Coupon
@@ -697,52 +717,52 @@ export class CreateCouponComponent implements OnInit {
         if (result.value) {
           this.spinner.show()
           let urlImg = 'assets/adminCoupon/coupon/' + this.preCoupon['imageCoupon'].split("%")[3].split("?")[0].slice(2);
-          this._uploadImages.DeleteImage(urlImg).then(res =>{
+          this._uploadImages.DeleteImage(urlImg).then(res => {
             this.couponsServices.deleteCoupon(this.identificatorbyRoot).subscribe()
             this.couponsAvilableService.getCouponAvailableByIdCoupon(this.identificatorbyRoot)
-            .subscribe( couponAvailable => {
-              this.couponsAvailableByIdCoupon = couponAvailable
-              this.couponsAvailableByIdCoupon.forEach(element => {
-                this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
-              });
-              this.spinner.hide()
-              Swal.fire({
-                title: 'Eliminado',
-                text: "¡Tu cupón ha sido eliminado!",
-                icon: 'success',
-                confirmButtonColor: '#542b81',
-                confirmButtonText: 'Ok!'
-              }).then((result) => {
-                if (result.value) {
-                  this._router.navigate(['/main', 'couponManager',]);
-                }
+              .subscribe(couponAvailable => {
+                this.couponsAvailableByIdCoupon = couponAvailable
+                this.couponsAvailableByIdCoupon.forEach(element => {
+                  this.couponsAvilableService.deleteCouponAvailable(element._id).subscribe()
+                });
+                this.spinner.hide()
+                Swal.fire({
+                  title: 'Eliminado',
+                  text: "¡Tu cupón ha sido eliminado!",
+                  icon: 'success',
+                  confirmButtonColor: '#542b81',
+                  confirmButtonText: 'Ok!'
+                }).then((result) => {
+                  if (result.value) {
+                    this._router.navigate(['/main', 'couponManager',]);
+                  }
+                })
               })
-            })          
           })
-          
+
         }
       })
     }
   }
-    //method for a specific search
-    search() {
-      
-      var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
-  
-      this.newArray = this.tycGettting.
-        filter(function (item) {
-          //We test each element of the object to see if one string matches the regexp.
-          return (myRegex.test(item.name) || myRegex.test(item.description))
-        })
-      // condition by when don't exit results in the table
-      if (this.newArray.length == 0) {
-        this.noResults = true;
-  
-      } else {
-        this.noResults = false;
-      }
-  
+  //method for a specific search
+  search() {
+
+    var myRegex = new RegExp('.*' + this.generalsearch.toLowerCase() + '.*', 'gi');
+
+    this.newArray = this.tycGettting.
+      filter(function (item) {
+        //We test each element of the object to see if one string matches the regexp.
+        return (myRegex.test(item.name) || myRegex.test(item.description))
+      })
+    // condition by when don't exit results in the table
+    if (this.newArray.length == 0) {
+      this.noResults = true;
+
+    } else {
+      this.noResults = false;
     }
-  
+
+  }
+
 
 }

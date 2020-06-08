@@ -1,5 +1,5 @@
 <ngx-spinner bdOpacity=0.6 bdColor="rgba(255,255,255,0.6)" size="medium" color="rgb(207,44,126)" type="ball-atom"
-  [fullScreen]="false">
+    [fullScreen]="false">
 </ngx-spinner>
 <div class="compenetsstyle ">
 
@@ -13,16 +13,14 @@
             <label for="exampleInputEmail1">Estado</label>
             <div class="row-form-radios" id="exampleInputEmail1">
                 <div class="radio radio-success m-2 form-check form-check-inline">
-                    <input class="form-check-input " type="radio" (click)="changeState()"
-                        [checked]="state">
+                    <input class="form-check-input " type="radio" (click)="changeState()" [checked]="state">
                     <label for="radio3">
                         Activo
                     </label>
                 </div>
 
                 <div class="radio radio-danger m-2 form-check form-check-inline">
-                    <input class="form-check-input" type="radio" (click)="changeState()"
-                        [checked]="!state">
+                    <input class="form-check-input" type="radio" (click)="changeState()" [checked]="!state">
                     <label for="radio4">
                         Inactivo
                     </label>
@@ -45,7 +43,7 @@
 
         <div class="row-form">
             <label for="exampleInputPassword1">Fecha creación</label>
-            <p  class="form-control" id="exampleInputPassword1"> {{formulary.value.creationDate}} </p>
+            <p class="form-control" id="exampleInputPassword1"> {{formulary.value.creationDate}} </p>
         </div>
 
         <div class="row-form">
@@ -66,7 +64,8 @@
 
         <div class="row-form">
             <label for="exampleInputPassword1">Establecimiento</label>
-            <select class="form-control" (change)="loadHeads()" id="exampleFormControlSelect1" formControlName="idAllies">
+            <select class="form-control" (change)="loadHeads()" id="exampleFormControlSelect1"
+                formControlName="idAllies">
                 <option value="">selecione</option>
                 <option *ngFor="let ally of allies" [value]="ally.id">{{ ally.name }}</option>
             </select>
@@ -81,32 +80,43 @@
         </div>
         <div class="row-form">
             <label for="exampleFormControlTextarea1">Descripción</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                formControlName="description" placeholder="Descripción del banner..."></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="description"
+                placeholder="Descripción del banner..."></textarea>
             <!-- <input type="text" class="form-control" id="exampleInputPassword1"  > -->
         </div>
         <div class="row-form">
             <label for="exampleInputPassword1">Nombre</label>
-            <input type="text" class="form-control" placeholder="Nombre del banner" id="exampleInputPassword1" formControlName="name">
+            <input type="text" class="form-control" placeholder="Nombre del banner" id="exampleInputPassword1"
+                formControlName="name">
         </div>
+        <div class="row-form">
+            <label for="exampleInputPassword1" >Banner informativo</label>
+            <div class="row-form-radios" id="exampleInputEmail1"> 
+                <input type="checkbox" class="m-1" (change)="changeValuecheckInformative($event)"
+                    [checked]="formulary.get('informative').value">
+            </div>
+        </div>
+        
 
         <div class="container-fluid d-flex justify-content-center mt-4">
             <button type="button" class="btn btn-primary" (click)="saveBanner()">Guardar</button>
         </div>
 
-        <div *ngIf="showinfocontent" class="showalert" >Todos los campos deben estar Diligenciados</div>
+        <div *ngIf="showinfocontent" class="showalert">Todos los campos deben estar Diligenciados</div>
         <!-- <div *ngIf="showinfocontent" class="showalert" >Solo ingrese caracteres váidos</div> -->
     </form>
     <div class="form-img">
 
         <figure class="figure">
-            <img [src]=" editBanner.imageBanner ? editBanner.imageBanner: 'assets/img/antojo.png'" class="figure-img img-fluid rounded" alt="..." id='photo'>
+            <img [src]=" editBanner.imageBanner ? editBanner.imageBanner: 'assets/img/antojo.png'"
+                class="figure-img img-fluid rounded" alt="..." id='photo'>
         </figure>
 
-        <input style="display: none;" type="file" class=" btn btn-primary" id="inputGroupFile04" (change)="photoSelected($event)">
+        <input style="display: none;" type="file" class=" btn btn-primary" id="inputGroupFile04"
+            (change)="photoSelected($event)">
         <label class="btn btn-primary" for="inputGroupFile04">Cargar Imagen</label>
         <div class="showalert" *ngIf="showimgalert">Seleccione una Imagen valida</div>
-        <div *ngIf="!editBanner.imageBanner" class="showalert" >Seleccione una imagen</div>
+        <div *ngIf="!editBanner.imageBanner" class="showalert">Seleccione una imagen</div>
     </div>
 
 </div>
