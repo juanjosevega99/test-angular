@@ -157,7 +157,7 @@ import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-qu
     FullCalendarModule,
     BrowserModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDW9z4LhQ4-4zS0ysMcxaM9gAvRMD0zmtc'
+      apiKey: 'AIzaSyDj-zGjpPk4Zbic3Uv_CSemyKU3Gsoo28U'
     })
     
     
