@@ -3,6 +3,7 @@ import { AuthFireServiceService } from '../../services/providers/auth-fire-servi
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProfilesService } from '../../services/profiles.service';
+import { AuthService } from '../../services/auth.service'
 import Swal from 'sweetalert2';
 
 
@@ -22,8 +23,7 @@ export class LoginFormComponent implements OnInit {
 
   loading: boolean = false;
 
-  constructor(public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService,
-    private serviceProfile: ProfilesService) {}
+  constructor( private authService:AuthService, public authentication: AuthFireServiceService, public route: Router, private spinner: NgxSpinnerService, private serviceProfile: ProfilesService) {}
 
   ngOnInit() {
     // this.signError = true;
@@ -36,65 +36,17 @@ export class LoginFormComponent implements OnInit {
   }
 
 
-  login() {
-    this.spinner.show();
-    this.authentication.login(this.email, this.pass)
-      .then(res => {
+  async login() {
+    this.spinner.show()
 
-        let userlogged = res.user;
+    try {
+      const user = await this.authService.login(this.email, this.pass).toPromise()
 
-        // console.log(res);
-        this.serviceProfile.getProfileById(userlogged.uid).subscribe((profileservice) => {
-
-          // console.log("en el login", profileservice);          
-          if (profileservice) {
-
-            let profile = {
-              id: profileservice['_id'],
-              idAllies: profileservice.idAllies,
-              nameAllie: profileservice.nameAllie,
-              idHeadquarter: profileservice.idHeadquarter,
-              nameHeadquarter: profileservice.nameHeadquarter,
-              nameCharge: profileservice.nameCharge,
-              permis: profileservice.permis,
-              photo: profileservice.photo,
-              email: profileservice.email,
-              name: profileservice.name
-            }
-
-            localStorage.setItem('profile', JSON.stringify(profile));
-
-            this.spinner.hide();
-
-            // console.log(profileservice.nameCharge.toLocaleLowerCase());
-            this.navigateProfile(profileservice);
-
-          } else {
-            this.spinner.hide();
-            Swal.fire({
-              title: "No es posible iniciar sesión, por favor comunicate con soporte",
-              icon: 'warning'
-            })
-          }
-
-        }, err => {
-          this.spinner.hide();
-          Swal.fire(
-            "Comprueba tu conexión a internet"
-          )
-        })
-
-      }).catch(err => {
-
-        this.spinner.hide();
-        this.signError = true;
-
-      }
-      );
-
-    this.email = '';
-    this.pass = '';
-
+      console.log('USER', user)
+    } catch (error) {
+      this.spinner.hide()
+      this.signError = true
+    }
   }
 
   navigateProfile(profileservice) {

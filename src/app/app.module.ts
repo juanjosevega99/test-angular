@@ -78,6 +78,10 @@ import { AgmCoreModule } from '@agm/core';
 import { FrequentQuestionsManagComponent } from './modules/TycManag/frequent-questions-manag/frequent-questions-manag.component';
 import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-questions-manag/create-frequent-questions/create-frequent-questions.component';
 
+
+
+import { AuthService } from './services/auth.service'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -164,7 +168,8 @@ import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-qu
   ],
   providers: [
     UploadImagesService,
-    LocationServiceService
+    LocationServiceService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
