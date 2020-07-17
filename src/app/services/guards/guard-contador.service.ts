@@ -11,13 +11,13 @@ export class GuardContadorService implements CanActivate {
 
   canActivate() {
 
-    let profilest = localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : {nameCharge:''};
+    let profilest = localStorage.getItem('tifi_user') ? JSON.parse(localStorage.getItem('tifi_user')) : {nameCharge:''};
 
-    if (profilest.nameCharge.toLocaleLowerCase() == "cajero" ||
-        profilest.nameCharge.toLocaleLowerCase() == "administradorpdv" ||
-        profilest.nameCharge.toLocaleLowerCase() == "gerentegeneral"||
-        profilest.nameCharge.toLocaleLowerCase() == "administradortifi"||
-        profilest.nameCharge.toLocaleLowerCase() == "contador") {
+    if (profilest.role.name == "cajero" ||
+        profilest.role.name == "administradorpdv" ||
+        profilest.role.name == "gerentegeneral"||
+        profilest.role.name == "Administrator"||
+        profilest.role.name == "contador") {
 
       return true;
 

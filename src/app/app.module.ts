@@ -17,7 +17,6 @@ import { PrincipalPageComponent } from "./principal/principal-page/principal-pag
 import { ProgressBarModule } from "angular-progress-bar";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { DpDatePickerModule } from "ng2-date-picker";
-import { HttpClientModule } from "@angular/common/http";
 import { MainMenuComponent } from './menu/main-menu/main-menu.component';
 import { ListAliadosComponent } from './aliados/list-aliados/list-aliados/list-aliados.component';
 import { AddEstablecimientoComponent } from './aliados/add-establecimiento/add-establecimiento.component';
@@ -49,7 +48,7 @@ import { CreateAllyComponent } from './modules/AllyManag/components/create-ally/
 import { MainComponent } from './components/main/main.component';
 import { HeadquartersOptionsComponent } from './modules/AllyManag/components/headquarters-options/headquarters-options.component';
 import { CreateHeadquarterComponent } from './modules/AllyManag/components/create-headquarter/create-headquarter.component';
-import {NgxPrintModule} from 'ngx-print';
+import { NgxPrintModule } from 'ngx-print';
 import { EditMenuComponent } from './modules/AllyManag/components/edit-menu/edit-menu.component';
 import { CreateDishComponent } from './modules/AllyManag/components/create-dish/create-dish.component';
 import { AccompanimentsComponent } from './modules/AllyManag/components/accompaniments/accompaniments.component';
@@ -78,9 +77,12 @@ import { AgmCoreModule } from '@agm/core';
 import { FrequentQuestionsManagComponent } from './modules/TycManag/frequent-questions-manag/frequent-questions-manag.component';
 import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-questions-manag/create-frequent-questions/create-frequent-questions.component';
 
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AuthService } from './services/auth.service'
+
+import { ErrorInterceptor } from './helpers/error.interceptor'
+import { JwtInterceptor } from './helpers/jwt.interceptor'
 
 @NgModule({
   declarations: [
@@ -169,7 +171,9 @@ import { AuthService } from './services/auth.service'
   providers: [
     UploadImagesService,
     LocationServiceService,
-    AuthService
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

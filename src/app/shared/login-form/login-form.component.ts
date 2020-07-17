@@ -28,9 +28,11 @@ export class LoginFormComponent implements OnInit {
   ngOnInit() {
     // this.signError = true;
 
-    if (localStorage.getItem('profile')) {
-      let profile = JSON.parse(localStorage.getItem('profile'));
-      this.navigateProfile(profile);
+    if (localStorage.getItem('tifi_user')) {
+      let profile = JSON.parse(localStorage.getItem('tifi_user'));
+      // this.navigateProfile(profile);
+
+      this.route.navigate(['main/options'])
     }
 
   }
@@ -41,8 +43,12 @@ export class LoginFormComponent implements OnInit {
 
     try {
       const user = await this.authService.login(this.email, this.pass).toPromise()
+      this.spinner.hide()
 
       console.log('USER', user)
+
+      this.route.navigate(['main/options'])
+
     } catch (error) {
       this.spinner.hide()
       this.signError = true

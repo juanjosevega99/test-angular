@@ -12,15 +12,15 @@ export class ShowContentService {
   showMenus(): profileStorage {
     let profile: profileStorage = new profileStorage();
 
-    let profilest = JSON.parse(localStorage.getItem('profile'));
+    let profilest = JSON.parse(localStorage.getItem('tifi_user'))
 
-    profile.nameAllie = profilest.nameAllie;
-    profile.nameHeadquarter = profilest['nameHeadquarter'];
-    profile.idHeadquarter = profilest['idHeadquarter'];
-    profile.id = profilest['id'];
-    profile.nameCharge = profilest.nameCharge;
-    profile.idAllies = profilest.idAllies;
-    profile.photo = profilest.photo;
+    profile.nameAllie = 'test';
+    profile.nameHeadquarter = profilest.headquarter.name;
+    profile.idHeadquarter = profilest.headquarter._id;
+    profile.id = profilest.id;
+    profile.nameCharge = profilest.role.name;
+    profile.idAllies = profilest.headquarter.idAllies;
+    profile.photo = 'default.png';
     profile.email = profilest.email;
     profile.name = profilest.name;
 
@@ -39,7 +39,7 @@ export class ShowContentService {
 
     }
 
-    switch (profilest['nameCharge']) {
+    switch (profilest.role.name) {
 
       case 'cajero':
       case 'GerenteGeneral':
@@ -51,7 +51,7 @@ export class ShowContentService {
       case 'contador':
         showContent.reports = true;
         break;
-      case 'administradorTIFI':
+      case 'Administrator':
         showContent.options = true;
         break;
 

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { AuthFireServiceService } from '../../services/providers/auth-fire-service.service';
 import { profileStorage } from '../../models/ProfileStorage';
 import { ShowContentService } from 'src/app/services/providers/show-content.service';
 import Swal from 'sweetalert2';
+
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'app-side-bar',
@@ -24,7 +27,7 @@ export class SideBarComponent implements OnInit {
 
   profile: profileStorage;
 
-  constructor(public firebaseservise: AuthFireServiceService, private showmenu: ShowContentService) {
+  constructor(private router: Router, public firebaseservise: AuthFireServiceService, private showmenu: ShowContentService, private authenticationService: AuthService) {
 
     // get profile localstorage
     // let profile = JSON.parse(localStorage.getItem('profile'));
@@ -71,8 +74,8 @@ export class SideBarComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         
-        this.firebaseservise.signOut();
-        localStorage.removeItem('profile');
+        this.authenticationService.logout();
+        this.router.navigate(['/log/loginForm'])
       }
     })
 

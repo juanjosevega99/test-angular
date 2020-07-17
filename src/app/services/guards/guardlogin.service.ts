@@ -11,7 +11,7 @@ export class GuardloginService implements CanActivate {
 
   canActivate( next:ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
 
-    let profilest = localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : null;
+    let profilest = localStorage.getItem('tifi_user') ? JSON.parse(localStorage.getItem('tifi_user')) : null;
 
     if (profilest) {
       
