@@ -12,10 +12,10 @@ export class GuardAdminTifiService implements CanActivate {
 
   canActivate() {
     
-    let profilest = localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : {nameCharge:''};
+    let profilest = localStorage.getItem('tifi_user') ? JSON.parse(localStorage.getItem('tifi_user')) : {nameCharge:''};
 
 
-    if (profilest.nameCharge.toLocaleLowerCase() == "administradortifi") {
+    if (profilest.role.name === "Administrator") {
 
       return true;
 

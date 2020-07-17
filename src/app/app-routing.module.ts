@@ -58,7 +58,6 @@ const routes: Routes = [
       { path: "reset_password", component: ResestPasswordComponent },
       { path: "forget", component: LoginForgetComponent },
       { path: "loginForm", component: LoginFormComponent },
-
       { path: "**", redirectTo: "loginForm", pathMatch: 'full' },
 
     ]

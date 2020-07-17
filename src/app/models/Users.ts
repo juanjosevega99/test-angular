@@ -10,4 +10,7 @@ export class Users{
     promotions?:string[];
     location?:string;
     idsPromos?:string[];
+    access_token?: string
+    role?: Object
+    headquarter?: object
 }
