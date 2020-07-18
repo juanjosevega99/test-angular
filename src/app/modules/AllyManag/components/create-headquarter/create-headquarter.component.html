@@ -34,10 +34,10 @@
                             [(ngModel)]="preHeadquarters.ubication" required
                             [ngClass]="{'is-invalid': (!locationHq.valid && locationHq.touched ),'is-valid':(locationHq.valid) }">
 
+                            <option value="BOGOTÁ">BOGOTÁ</option>
                             <option *ngFor="let list of Location" [ngValue]="list.name">
                                 {{list.name}}
                             </option>
-                            <option value="BOGOTÁ">BOGOTÁ</option>
                         </select>
 
                         <div class="invalid-feedback">*Este campo es requerido </div>
@@ -168,23 +168,6 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label class="col-md-5 col-form-label">Código sede</label>
-                <div class="col-md-7">
-                    <input class="form-control" type="text" placeholder="Ej: 444444-1"
-                        pattern="[0-9a-zA-Z]{6}[ -][0-9a-zA-Z]{1}" #codeHq="ngModel"
-                        [ngClass]="{'is-invalid': (!codeHq.valid && codeHq.touched) || codeHq.errors?.pattern ,'is-valid':(codeHq.valid) }"
-                        name="code" [(ngModel)]="preHeadquarters.code" required>
-                    <div class="col-md-9">
-                        <div class="form-control-feedback">
-                            <small> *Formato(7 carácteres): 444444-1 </small>
-                        </div>
-                    </div>
-                    <div *ngIf=" codeHq.errors?.required" class="invalid-feedback">*Este campo es requerido</div>
-                    <div *ngIf=" codeHq.errors?.pattern" class="invalid-feedback">*El campo no tiene formato válido
-                    </div>
-                </div>
-            </div>
             <div class="form-group row">
                 <label class="col-md-5 col-form-label">Servicios prestados</label>
                 <div class="col-md-7">
