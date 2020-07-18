@@ -149,14 +149,19 @@ export class CreateHeadquarterComponent implements OnInit {
 
     this.locationService.getLocations()
       .subscribe((data: any) => {
+        let places = []
         let loc: any = {}
-        this.Location = data.facet_groups[0].facets
+
+        places = data.facet_groups[0].facets
+
         data.records.forEach((element: any) => {
           loc = {
             name: element.fields.empty1
           }
-          this.Location.push(loc)
+          places.push(loc)
         });
+
+        this.Location = places.sort((a, b) => b.name - a.name)
 
         if (this.preHeadquarters['ubication']) {
           let location = this.Location.find((e: any) => e.name === this.preHeadquarters['ubication'])
@@ -395,7 +400,6 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for saving the new headquarter
   saveHq() {
-
     this.preHeadquarters['idAllies'] = this.idAllyLocalStorage;
     this.allyService.getAlliesById(this.idAllyLocalStorage).subscribe(allie => {
       this.preHeadquarters['nameAllies'] = allie.name
@@ -446,11 +450,14 @@ export class CreateHeadquarterComponent implements OnInit {
                   this.preHeadquarters['aditionalServices'] = this.ArrayseviceChecked
                   this.preHeadquarters['typeOfPlans'] = this.ArrayTypeOfPlanChecked
 
-                  this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
+                  this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(data => {
                     this.spinner.hide()
+
+                    console.log('data', data)
+
                     Swal.fire({
                       title: 'Guardado',
-                      text: "Tu nueva sede ha sido creada!",
+                      text: `Tu nueva sede ha sido creada <br> Codigo de la sede: <b>${data.code}</b>`,
                       icon: 'success',
                       confirmButtonColor: '#542b81',
                       confirmButtonText: 'Ok!'
@@ -476,11 +483,14 @@ export class CreateHeadquarterComponent implements OnInit {
               this.preHeadquarters['aditionalServices'] = aditionals;
 
               this.preHeadquarters['typeOfPlans'] = this.ArrayTypeOfPlanChecked
-              this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(message => {
+              this.headquarters.postHeadquarter(this.preHeadquarters).subscribe(data => {
                 this.spinner.hide()
+
+                console.log('data', data)
+
                 Swal.fire({
                   title: 'Guardado',
-                  text: "Tu nueva sede ha sido creada!",
+                  html: `Tu nueva sede ha sido creada <br> Codigo de la sede: <b>${data.code}</b>`,
                   icon: 'success',
                   confirmButtonColor: '#542b81',
                   confirmButtonText: 'Ok!'
