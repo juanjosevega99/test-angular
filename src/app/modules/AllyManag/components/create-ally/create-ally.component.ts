@@ -35,6 +35,7 @@ export class CreateAllyComponent implements OnInit {
 
   //variable for color
   color: String = "#000000";
+  colorPanel: String = "#000000";
 
   //Variables of upload Logo to firebase
   urlLogo: any;
@@ -184,6 +185,8 @@ export class CreateAllyComponent implements OnInit {
   getAlly(id: string) {
     this.loading;
     this.allieService.getAlliesById(id).subscribe(ally => {
+      this.color = ally.color
+      this.colorPanel = ally.color
       this.forma.setValue(ally)
       ally.imagesAllies.forEach(routeImage =>{
         let obj = {
@@ -202,6 +205,7 @@ export class CreateAllyComponent implements OnInit {
         this.loading = false;
       })
     })
+
     this.headquartersService.getHeadquarterByIdAlly(id).subscribe(services=>{
       this.arrayServicesByAlly = services;
       let arrayServicesReserved = this.arrayServicesByAlly.filter(service=> {
@@ -210,6 +214,7 @@ export class CreateAllyComponent implements OnInit {
           return service.value == "Resérvalo"
         }
       })
+
       if (arrayServicesReserved.length != 0){
         this.disableImagesAlly = false
       } else{

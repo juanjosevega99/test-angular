@@ -129,7 +129,7 @@
                                                         <input class="form-control mr-2" style="width: 75%;" type="text"
                                                                 [value]="color">
 
-                                                        <input type="color" (change)="getColour($event)">
+                                                        <input type="color" [value]="colorPanel" (change)="getColour($event)">
                                                 </div>
                                         </div>
                                 </div>
@@ -400,14 +400,10 @@
                                                                 </div>
 
                                                                 <div class="upload-btn-wrapper mt-3  ">
-                                                                        <button
-                                                                                class=" container  btn btn-outline-primary" [disabled]="disableImagesAlly">
-                                                                                Adjuntar archivos {{contImage}}
-                                                                                
+                                                                        <button class=" container  btn btn-outline-primary" >
+                                                                            Adjuntar archivos {{contImage}}
                                                                         </button>
-                                                                        <input type="file" name="photo"
-                                                                                (change)="onImagesSelected($event)"
-                                                                                [disabled]="disableImagesAlly" />
+                                                                        <input type="file" name="photo" (change)="onImagesSelected($event)"/>
                                                                 </div>
 
                                                         </div>
