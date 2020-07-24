@@ -117,7 +117,7 @@
                 <label class="col-md-5 col-form-label">Entidad</label>
                 <div class="col-md-7">
                     <select class="form-control mr-2" name="nameAllies" #nameAllies="ngModel" required [ngClass]="{'is-invalid': (!nameAllies.valid )  && 
-                        nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.idAllies"
+                        nameAllies.touched ,'is-valid':(nameAllies.valid) }" [(ngModel)]="preCoupon.allyId"
                         (change)="seeNameAlly(nameAllies.value)">
 
                         <option *ngFor="let ally of arrayAllies" [ngValue]=ally.id>

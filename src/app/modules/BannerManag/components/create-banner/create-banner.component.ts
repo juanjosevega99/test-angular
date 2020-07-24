@@ -46,8 +46,8 @@ export class CreateBannerComponent implements OnInit {
     if (this.activate.params['_value'].id) {
       this.bannerService.getBannerById(this.activate.params['_value'].id).subscribe((banner: Banners) => {
         this.editBanner = banner;
-        this.loadHeads(banner.idAllies);
-        this.formulary.value['idAllies'] = banner.idAllies;
+        this.loadHeads(banner.allyId);
+        this.formulary.value['allyId'] = banner.allyId;
         this.setDataEdit();
       });
 
@@ -61,7 +61,7 @@ export class CreateBannerComponent implements OnInit {
       'state': new FormControl(this.state, Validators.required),
       'creationDate': new FormControl(this.today, [Validators.required, Validators.maxLength(11)]),
       'expirationDate': new FormControl('', [Validators.required]),
-      'idAllies': new FormControl('', Validators.required),
+      'allyId': new FormControl('', Validators.required),
       'idHeadquarters': new FormControl('', Validators.required),
       'description': new FormControl('', [Validators.maxLength(100)]),
       'name': new FormControl('', Validators.required),
@@ -90,11 +90,11 @@ export class CreateBannerComponent implements OnInit {
 
   loadHeads(id?: string) {
 
-    let idally = id ? id : this.formulary.value.idAllies;
+    let allyId = id ? id : this.formulary.value.allyId;
     this.heads = [];
 
-    if (idally) {
-      this.headService.getHeadquarterByAllIdAlly(idally).subscribe((heads: any) => this.heads = heads);
+    if (allyId) {
+      this.headService.getHeadquarterByAllIdAlly(allyId).subscribe((heads: any) => this.heads = heads);
     }
 
   }
@@ -230,12 +230,12 @@ export class CreateBannerComponent implements OnInit {
     creationDate = creationDate.split("/");
 
     let Banner: Banners = new Banners;
-    Banner.logo = this.allies.find(ally => ally.id == this.formulary.value.idAllies)['logo'];
+    Banner.logo = this.allies.find(ally => ally.id == this.formulary.value.allyId)['logo'];
     Banner.state = this.state;
     Banner.creationDate = new Date(creationDate[2], creationDate[1] - 1, creationDate[0]);
     Banner.expirationDate = new Date(date);
-    Banner.idAllies = this.formulary.value.idAllies;
-    Banner.nameAllies = this.allies.find(ally => ally.id == this.formulary.value.idAllies)['name'];
+    Banner.allyId = this.formulary.value.allyId;
+    Banner.nameAllies = this.allies.find(ally => ally.id == this.formulary.value.allyId)['name'];
     Banner.idHeadquarters = this.formulary.value.idHeadquarters;
     Banner.nameHeadquarters = this.heads.find(headquartes => headquartes._id == this.formulary.value.idHeadquarters)['name'];
     Banner.description = this.formulary.value.description;
@@ -285,7 +285,7 @@ export class CreateBannerComponent implements OnInit {
       'state': this.editBanner.state,
       'creationDate': this.convertDate(this.editBanner.creationDate),
       'expirationDate': this.expirationDate,
-      'idAllies': this.editBanner.idAllies,
+      'allyId': this.editBanner.allyId,
       'idHeadquarters': this.editBanner.idHeadquarters,
       'description': this.editBanner.description,
       'name': this.editBanner.name,

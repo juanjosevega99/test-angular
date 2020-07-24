@@ -4,7 +4,7 @@ export class Banners {
     state?:boolean;
     creationDate?:Date;
     expirationDate?:Date;
-    idAllies?:string;
+    allyId?:string;
     nameAllies?:string;
     idHeadquarters?:string;
     nameHeadquarters?:string;

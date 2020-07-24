@@ -14,7 +14,7 @@ export class GuardCAGService implements CanActivate {
 
     let profilest = localStorage.getItem('tifi_user') ? JSON.parse(localStorage.getItem('tifi_user')) : {nameCharge:''};
     
-    if (profilest.role.name == "cajero" ||
+    if (profilest.role.name == "Cajero" ||
         profilest.role.name == "administradorpdv" ||
         profilest.role.name == "gerentegeneral"||
         profilest.role.name == "Administrator") {

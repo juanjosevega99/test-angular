@@ -24,14 +24,14 @@ export class NotificationsOrdersComponent implements OnInit {
     this.wesocket.listen('newOrder').subscribe((res: Orders) => {
 
       // console.log("desde server", res);
-      if (res.idHeadquartes == this.profile.idHeadquarter) {
+      if (res.idHeadquartes == this.profile.headquarterId) {
         this.loadNotificationsOrders;
       }
     });
   }
 
   loadNotificationsOrders(){
-    this.serviceOrders.getOrdersByAllyHead(this.profile.idHeadquarter).subscribe((orders: Orders[]) => {
+    this.serviceOrders.getOrdersByAllyHead(this.profile.headquarterId).subscribe((orders: Orders[]) => {
 
       let numorders = orders.filter( order => order.orderStatus == 'pending' ); 
       this.ordersNotifications = numorders.length;

@@ -1,5 +1,5 @@
 export class ReportGenerate{
-    idHeadquarter?:string;
+    headquarterId?:string;
     ally?:String;
     location?:string;
     codeOrder?:string;

@@ -32,7 +32,7 @@ export class AccompanimentsService {
             nameTypeSection: accompaniments.nameTypeSection,
             preparationTimeNumber: accompaniments.preparationTimeNumber,
             preparationTimeUnity: accompaniments.preparationTimeUnity,
-            idAllies : accompaniments.idAllies,
+            allyId : accompaniments.allyId,
             multiSelect: accompaniments.multiSelect,
           };
           return obj;
@@ -72,7 +72,7 @@ export class AccompanimentsService {
               nameTypeSection: accompaniments.nameTypeSection,
               preparationTimeNumber: accompaniments.preparationTimeNumber,
               preparationTimeUnity: accompaniments.preparationTimeUnity,
-              idAllies : accompaniments.idAllies,
+              allyId : accompaniments.allyId,
               multiSelect: accompaniments.multiSelect,
             };
             return obj;
@@ -102,7 +102,7 @@ export class AccompanimentsService {
               nameTypeSection: accompaniments.nameTypeSection,
               preparationTimeNumber: accompaniments.preparationTimeNumber,
               preparationTimeUnity: accompaniments.preparationTimeUnity,
-              idAllies : accompaniments.idAllies,
+              allyId : accompaniments.allyId,
               multiSelect: accompaniments.multiSelect,
             };
             return obj;
@@ -111,8 +111,8 @@ export class AccompanimentsService {
       ); */
   }
 
-  getAllAccompanimentsByAlly(idAllies):Observable<Accompaniments[]>{
-    return this.httpclient.get<Accompaniments[]>(environment.UrlBase + "accompaniments/accompanimentsbyally/" + idAllies).pipe(
+  getAllAccompanimentsByAlly(allyId):Observable<Accompaniments[]>{
+    return this.httpclient.get<Accompaniments[]>(environment.UrlBase + "accompaniments/accompanimentsbyally/" + allyId).pipe(
       map((accompaniments: any[]) =>
         accompaniments.map(accompaniments => {
           let obj = {
@@ -130,7 +130,7 @@ export class AccompanimentsService {
             nameTypeSection: accompaniments.nameTypeSection,
             preparationTimeNumber: accompaniments.preparationTimeNumber,
             preparationTimeUnity: accompaniments.preparationTimeUnity,
-            idAllies : accompaniments.idAllies,
+            allyId : accompaniments.allyId,
             multiSelect: accompaniments.multiSelect,
           };
           return obj;

@@ -102,7 +102,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   openCalification(viewcalification) {
     
     this.spinner.show()
-    this.domiciliaries.getDomiciliaryProfileByHead(this.order.idHeadquarter).subscribe( (domiciliary: any[])=>{
+    this.domiciliaries.getDomiciliaryProfileByHead(this.order.headquarterId).subscribe( (domiciliary: any[])=>{
 
       this.domiciliariesprofiles = domiciliary;
       

@@ -76,7 +76,7 @@ export class PqrListComponent implements OnInit {
 
   ngOnInit() {
     this.websocket.listen('newPqr').subscribe((pqr: Pqrs) => {
-      if (pqr.idHeadquarter == this.profile.idHeadquarter) {
+      if (pqr.headquarterId == this.profile.headquarterId) {
         pqr.id = pqr['_id'];
         this.formaterPqr(pqr);
       }
@@ -109,7 +109,7 @@ export class PqrListComponent implements OnInit {
       })
         
     }else{
-      this.pqrlistservice.getPqrsByHead(this.profile.idHeadquarter).subscribe(res => {
+      this.pqrlistservice.getPqrsByHead(this.profile.headquarterId).subscribe(res => {
   
         if (res.length) {
   
@@ -258,8 +258,8 @@ export class PqrListComponent implements OnInit {
 
     this.userService.getUserById(order.idUser).subscribe((user: Users) => {
       const obj: Pqrs = {};
-      if (order.idHeadquarter) {
-        this.headservice.getHeadquarterById(order.idHeadquarter).subscribe(head => {
+      if (order.headquarterId) {
+        this.headservice.getHeadquarterById(order.headquarterId).subscribe(head => {
           obj.nameHeadquarter = head.name;
           obj.nameAllie = head.nameAllies;
         })

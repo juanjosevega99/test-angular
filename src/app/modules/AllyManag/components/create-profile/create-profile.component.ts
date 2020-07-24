@@ -25,9 +25,9 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   preProfile: Object = {
     state: [],
     numberOfModifications: 0,
-    idAllies: null,
+    allyId: null,
     nameAllie: null,
-    idHeadquarter: null,
+    headquarterId: null,
     nameHeadquarter: null,
     idCharge: null,
     nameCharge: null,
@@ -45,9 +45,9 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     entryDate: null,
     modificationDate: null,
     numberOfModifications: 0,
-    idAllies: null,
+    allyId: null,
     nameAllie: null,
-    idHeadquarter: null,
+    headquarterId: null,
     nameHeadquarter: null,
     idCharge: null,
     nameCharge: null,
@@ -138,15 +138,15 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
         this.loading = false
         this.buttonPut = false
         //Load name of Ally and Headquarter
-        if (localStorage.getItem('idAlly') && localStorage.getItem('idHeadquarter')) {
+        if (localStorage.getItem('allyId') && localStorage.getItem('headquarterId')) {
 
-          this.preProfile["idAllies"] = localStorage.getItem('idAlly');
-          this.allyService.getAlliesById(localStorage.getItem('idAlly')).subscribe(ally => {
+          this.preProfile["allyId"] = localStorage.getItem('allyId');
+          this.allyService.getAlliesById(localStorage.getItem('allyId')).subscribe(ally => {
             this.preProfile["nameAllie"] = ally.name;
           })
 
-          this.preProfile["idHeadquarter"] = localStorage.getItem('idHeadquarter');
-          this.headquarterService.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(hq => {
+          this.preProfile["headquarterId"] = localStorage.getItem('headquarterId');
+          this.headquarterService.getHeadquarterById(localStorage.getItem('headquarterId')).subscribe(hq => {
             this.preProfile["nameHeadquarter"] = hq.name;
           })
 
@@ -189,7 +189,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     this.loading;
 
     if (Number.isInteger(id / 1)) {
-      this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
+      this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(profiles => {
         let profile: Profiles = {}
 
         profile = profiles[id]
@@ -220,7 +220,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
         confirmButtonText: 'Ok!'
       })
     } else {
-      this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
+      this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(profiles => {
         let profile: ProfileList = {}
         profile = profiles[this.identificatorbyRoot]
         let realId = profile._id
@@ -353,16 +353,16 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
 
   //putProfile
   putProfile() {
-    this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
+    this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(profiles => {
       let profile: Profiles = {};
       profile = profiles[this.identificatorbyRoot];
       let realId = profile._id;
       this.editProfile.state = this.preProfile['state'];
       this.editProfile.entryDate = profile.entryDate;
       this.editProfile.modificationDate = this.today;
-      this.editProfile.idAllies = profile.idAllies;
+      this.editProfile.allyId = profile.allyId;
       this.editProfile.nameAllie = profile.nameAllie;
-      this.editProfile.idHeadquarter = profile.idHeadquarter;
+      this.editProfile.headquarterId = profile.headquarterId;
       this.editProfile.nameHeadquarter = profile.nameHeadquarter;
       this.editProfile.idCharge = this.preProfile['idCharge'];
       this.editProfile.nameCharge = this.preProfile['nameCharge'];
@@ -564,7 +564,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       if (result.value) {
         //console.log("Array FINAL: ", this.editProfile);
         this.loading = true;
-        this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(profiles => {
+        this.chargeProfiles.getAllUsersbyIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(profiles => {
           let profile: Profiles = {};
           profile = profiles[this.identificatorbyRoot];
           this.editProfile.numberOfModifications = this.preProfile['numberOfModifications'] + 1;

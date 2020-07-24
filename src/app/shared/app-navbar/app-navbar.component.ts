@@ -19,7 +19,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
   constructor( private showcontentservice: ShowContentService, private allyservice: AlliesService) { 
     this.profile =  this.showcontentservice.showMenus();
-    this.allyservice.getAlliesById( this.profile.idAllies ).subscribe( ally =>{
+    this.allyservice.getAlliesById( this.profile.allyId ).subscribe( ally =>{
       this.photoAlly = ally['logo'];
     })
   }

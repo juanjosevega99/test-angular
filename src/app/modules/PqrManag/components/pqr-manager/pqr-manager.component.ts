@@ -60,7 +60,7 @@ export class PqrManagerComponent implements OnInit {
     this.pqrservice.getCPqrsById(res.id).subscribe(
       (pqr: any) => {
 
-        this.headService.getHeadquarterById( pqr.idHeadquarter ).subscribe( head=>{
+        this.headService.getHeadquarterById( pqr.headquarterId ).subscribe( head=>{
           this.infoUSer.nameHeadquarter = head.name;
           this.infoUSer.nameAllie = head.nameAllies;
           this.location = head.ubication;

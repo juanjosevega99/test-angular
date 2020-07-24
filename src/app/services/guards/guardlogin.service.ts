@@ -13,11 +13,10 @@ export class GuardloginService implements CanActivate {
 
     let profilest = localStorage.getItem('tifi_user') ? JSON.parse(localStorage.getItem('tifi_user')) : null;
 
-    if (profilest) {
-      
+    if (profilest) {      
       return true;
-
     } else {
+      console.log('Entro aqui')
 
       return false;
     }

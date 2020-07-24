@@ -4,9 +4,9 @@ export class ProfileList {
     entryDate?:string;
     modificationDate?:string;
     numberOfModifications?:number;
-    idAllies?:string;
+    allyId?:string;
     nameAllie?:string;
-    idHeadquarter?:string;
+    headquarterId?:string;
     nameHeadquarter?:string;
     idCharge?:string;
     nameCharge?:string;

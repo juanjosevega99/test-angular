@@ -50,10 +50,10 @@ export class PromotionsService {
               reference: promotions.reference,
               numberOfModifications: promotions.numberOfModifications,
               idAccompaniments: promotions.idAccompaniments,
-              idAllies: promotions.idAllies,
+              allyId: promotions.allyId,
               nameAllie: promotions.nameAllie,
-              idHeadquarter: promotions.idHeadquarter,
-              nameHeadquarter: promotions.idHeadquarter,
+              headquarterId: promotions.headquarterId,
+              nameHeadquarter: promotions.headquarterId,
               flag: promotions.flag,
             };
             return obj;
@@ -81,10 +81,10 @@ export class PromotionsService {
             reference: promotions.reference,
             numberOfModifications : promotions.numberOfModifications,
             idAccompaniments: promotions.idAccompaniments
-            idAllies: promotions.idAllies,
+            allyId: promotions.allyId,
             nameAllie:promotions.nameAllie,
-            idHeadquarter: promotions.idHeadquarter,
-            nameHeadquarter: promotions.idHeadquarter,
+            headquarterId: promotions.headquarterId,
+            nameHeadquarter: promotions.headquarterId,
           };
           return obj;
         })
@@ -92,8 +92,8 @@ export class PromotionsService {
     ); */
   }
 
-  getAllPromotionsByAlly(idAllies): Observable<Promotions[]> {
-    return this.httpclient.get<Promotions[]>(environment.UrlBase + "promotions/promotionsbyally/" + idAllies)
+  getAllPromotionsByAlly(allyId): Observable<Promotions[]> {
+    return this.httpclient.get<Promotions[]>(environment.UrlBase + "promotions/promotionsbyally/" + allyId)
       .pipe(
         map((promotions: any[]) =>
           promotions.map(promotions => {
@@ -112,10 +112,10 @@ export class PromotionsService {
               reference: promotions.reference,
               numberOfModifications: promotions.numberOfModifications,
               idAccompaniments: promotions.idAccompaniments,
-              idAllies: promotions.idAllies,
+              allyId: promotions.allyId,
               nameAllie: promotions.nameAllie,
-              idHeadquarter: promotions.idHeadquarter,
-              nameHeadquarter: promotions.idHeadquarter,
+              headquarterId: promotions.headquarterId,
+              nameHeadquarter: promotions.headquarterId,
               flag: promotions.flag,
             };
             return obj;

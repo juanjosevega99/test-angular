@@ -29,10 +29,9 @@ export class LoginFormComponent implements OnInit {
     // this.signError = true;
 
     if (localStorage.getItem('tifi_user')) {
-      let profile = JSON.parse(localStorage.getItem('tifi_user'));
-      // this.navigateProfile(profile);
-
-      this.route.navigate(['main/options'])
+      let user = JSON.parse(localStorage.getItem('tifi_user'));
+      console.log('PROFILE HERE', user)
+      this.navigateRoles(user.role.name)
     }
 
   }
@@ -42,12 +41,12 @@ export class LoginFormComponent implements OnInit {
     this.spinner.show()
 
     try {
-      const user = await this.authService.login(this.email, this.pass).toPromise()
+      const user:any = await this.authService.login(this.email, this.pass).toPromise()
       this.spinner.hide()
 
       console.log('USER', user)
 
-      this.route.navigate(['main/options'])
+      this.navigateRoles(user.role.name)
 
     } catch (error) {
       this.spinner.hide()
@@ -55,10 +54,10 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  navigateProfile(profileservice) {
-    switch (profileservice.nameCharge.toLocaleLowerCase()) {
+  navigateRoles(role) {
+    switch (role) {
 
-      case 'cajero':
+      case 'Cajero':
       case 'administradorpdv':
       case 'gerentegeneral':
         this.route.navigate(['main/principal-orders']);
@@ -73,6 +72,7 @@ export class LoginFormComponent implements OnInit {
         break;
 
       default:
+        console.log('entro correctamente')
         this.route.navigate(['main/options']);
         break;
     }

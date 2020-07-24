@@ -42,7 +42,7 @@ export class OrderRecordsByUserService {
               password: orderrecordsbyuser.password,
               idAllie: orderrecordsbyuser.idAllie,
               nameAllie: orderrecordsbyuser.nameAllie,
-              idHeadquarter: orderrecordsbyuser.idHeadquarter,
+              headquarterId: orderrecordsbyuser.headquarterId,
               nameHeadquarter: orderrecordsbyuser.nameHeadquarter,
               usability: orderrecordsbyuser.usability,
               purchaseAmount: orderrecordsbyuser.purchaseAmount
@@ -68,7 +68,7 @@ export class OrderRecordsByUserService {
         password: orderrecordsbyuser.password,
         idAllie: orderrecordsbyuser.idAllie,
         nameAllie: orderrecordsbyuser.nameAllie,
-        idHeadquarter: orderrecordsbyuser.idHeadquarter,
+        headquarterId: orderrecordsbyuser.headquarterId,
         nameHeadquarter: orderrecordsbyuser.nameHeadquarter,
         usability: orderrecordsbyuser.usability,
         purchaseAmount: orderrecordsbyuser.purchaseAmount

@@ -65,7 +65,7 @@
         <div class="row-form">
             <label for="exampleInputPassword1">Establecimiento</label>
             <select class="form-control" (change)="loadHeads()" id="exampleFormControlSelect1"
-                formControlName="idAllies">
+                formControlName="allyId">
                 <option value="">selecione</option>
                 <option *ngFor="let ally of allies" [value]="ally.id">{{ ally.name }}</option>
             </select>

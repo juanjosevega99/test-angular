@@ -40,9 +40,9 @@ export class ProfilesService {
               entryDate: profiles.entryDate,
               modificationDate: profiles.modificationDate,
               numberOfModifications: profiles.numberOfModifications,
-              idAllies: profiles.idAllies,
+              allyId: profiles.allyId,
               nameAllie: profiles.nameAllie,
-              idHeadquarter: profiles.idHeadquarter,
+              headquarterId: profiles.headquarterId,
               nameHeadquarter: profiles.nameHeadquarter,
               idCharge: profiles.idCharge,
               nameCharge: profiles.nameCharge,
@@ -70,9 +70,9 @@ export class ProfilesService {
       //         entryDate: profiles.entryDate,
       //         modificationDate: profiles.modificationDate,
       //         numberOfModifications: profiles.numberOfModifications,
-      //         idAllies: profiles.idAllies,
+      //         allyId: profiles.allyId,
       //         nameAllie: profiles.nameAllie,
-      //         idHeadquarter: profiles.idHeadquarter,
+      //         headquarterId: profiles.headquarterId,
       //         nameHeadquarter: profiles.nameHeadquarter,
       //         idCharge: profiles.idCharge,
       //         nameCharge: profiles.nameCharge,
@@ -101,9 +101,9 @@ export class ProfilesService {
               entryDate: profiles.entryDate,
               modificationDate: profiles.modificationDate,
               numberOfModifications: profiles.numberOfModifications,
-              idAllies: profiles.idAllies,
+              allyId: profiles.allyId,
               nameAllie: profiles.nameAllie,
-              idHeadquarter: profiles.idHeadquarter,
+              headquarterId: profiles.headquarterId,
               nameHeadquarter: profiles.nameHeadquarter,
               idCharge: profiles.idCharge,
               nameCharge: profiles.nameCharge,
@@ -121,8 +121,8 @@ export class ProfilesService {
       );
   }
 
-  getAllUsersbyIdHeadquarter(idHeadquarter){
-    return this.httpclient.get(environment.UrlBase + "profiles/profilesbyhq/" + idHeadquarter)
+  getAllUsersbyIdHeadquarter(headquarterId){
+    return this.httpclient.get(environment.UrlBase + "profiles/profilesbyhq/" + headquarterId)
   }
 
 }

@@ -2,7 +2,7 @@ export class Orders {
     id?:string;
     code?:string;
     idUser?:string;
-    idAllies?:string;
+    allyId?:string;
     nameAllies?:string;
     idHeadquartes?:string;
     nameHeadquartes?:string;

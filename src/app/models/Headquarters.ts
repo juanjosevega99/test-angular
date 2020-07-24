@@ -1,6 +1,6 @@
 export class Headquarters {
     id?:string;
-    idAllies?:string;
+    allyId?:string;
     nameAllies?:string;
     name?:string;
     ubication?:string;

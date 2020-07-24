@@ -25,7 +25,7 @@ export class CreateCouponComponent implements OnInit {
     state: [],
     createDate: [],
     creationTime: [],
-    idAllies: null,
+    allyId: null,
     nameAllies: null,
     idHeadquarters: null,
     nameHeadquarters: null,
@@ -167,10 +167,10 @@ export class CreateCouponComponent implements OnInit {
     this.alliesServices.getAllies().subscribe(ally => {
       this.arrayAllies = ally
 
-      if (this.preCoupon['idAllies']) {
-        var dbAlly = this.arrayAllies.find(element => element.id === this.preCoupon['idAllies'])
-        this.preCoupon['idAllies'] = dbAlly.id
-        this.seeNameAlly(this.preCoupon['idAllies'])
+      if (this.preCoupon['allyId']) {
+        var dbAlly = this.arrayAllies.find(element => element.id === this.preCoupon['allyId'])
+        this.preCoupon['allyId'] = dbAlly.id
+        this.seeNameAlly(this.preCoupon['allyId'])
 
       }
     })

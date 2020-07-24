@@ -25,8 +25,8 @@ export class ProfileComponent implements OnInit {
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
 
-  //variables of idAlly
-  idAlly: number;
+  //variables of allyId
+  allyId: number;
 
   //flag loading
   loading= false;
@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
       //console.log('Parametro', params['id']);
-      this.idAlly = params['id']
+      this.allyId = params['id']
     });
 
     
@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit {
     this.newArray = this.profilesgetting;
 
     //inicialization of profiles
-    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
+    this.profilesService.getAllUsersbyIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(res => {
       if (Object.keys(res).length) {
         for (let x in res) {
           let profile: Profiles
@@ -95,7 +95,7 @@ export class ProfileComponent implements OnInit {
 
 
   goBackHeadquarterOptions() {
-    this._router.navigate(['/main', 'headquarts', this.idAlly])
+    this._router.navigate(['/main', 'headquarts', this.allyId])
   }
   //method to convert the modification date
   convertDate(date: Date): string {

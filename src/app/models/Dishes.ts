@@ -9,10 +9,10 @@ export class Dishes {
     numberOfModifications?:number;
     state?:string[];
     price?:number;
-    imageDishe?:string;
+    imageDish?:string;
     description?:string;
     preparationTime?:string[];
     idAccompaniments?:string[];
     idPromotion?:string[];
-    idHeadquarter?:string;
+    headquarterId?:string;
 }

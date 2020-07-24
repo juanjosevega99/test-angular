@@ -1,14 +1,15 @@
 export class profileStorage {
 
     id?: string = '';
-    idAllies?: string = '';
+    allyId?: string = '';
     nameAllie?: string = 'kfc';
-    idHeadquarter?: string = '';
+    headquarterId?: string = '';
     nameHeadquarter?: string = '';
     nameCharge?: string = '';
     photo?: string = '';
     email?: string = '';
     name?: string = '';
+    role?: string = ''
     showContent?: content = {
         options: false,
         principal: false,

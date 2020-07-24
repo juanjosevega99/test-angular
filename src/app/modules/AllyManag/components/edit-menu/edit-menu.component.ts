@@ -39,8 +39,8 @@ export class EditMenuComponent {
 
   state: any[] = [];
 
-  //variables of idAlly
-  idAlly: number;
+  //variables of allyId
+  allyId: number;
   loadingDishes = false;
   noDishes: boolean;
   noResults: boolean;
@@ -52,7 +52,7 @@ export class EditMenuComponent {
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
       // console.log('Parametro', params['id']);
-      this.idAlly = params['id']
+      this.allyId = params['id']
     });
 
     //inicialization of the table
@@ -72,7 +72,7 @@ export class EditMenuComponent {
 
 
   goBackHeadquarterOptions() {
-    this._router.navigate(['/main', 'headquarts', this.idAlly])
+    this._router.navigate(['/main', 'headquarts', this.allyId])
   }
 
   //methods to convert the modification date
@@ -95,7 +95,7 @@ export class EditMenuComponent {
 
 
     /* this.dishesService.getDishes().subscribe(res => { */
-      this.dishesService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(res => {
+      this.dishesService.getDishesByIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(res => {
 
         if (Object.keys(res).length) {
           for (let x in res) {
@@ -107,7 +107,7 @@ export class EditMenuComponent {
             obj.reference = dish.reference;
             obj.nameDishesCategories = dish.nameDishesCategories;
             obj.name = dish.name;
-            obj.imageDishe = dish.imageDishe;
+            obj.imageDish = dish.imageDish;
             obj.price = dish.price;
             obj.modificationDateDay = this.convertDateday(dish.modificationDate);
             obj.modificationDateTime = this.convertDatetime(dish.modificationDate)
@@ -130,7 +130,7 @@ export class EditMenuComponent {
           obj.reference = dish.reference;
           obj.nameDishesCategories = dish.nameDishesCategories;
           obj.name = dish.name;
-          obj.imageDishe = dish.imageDishe;
+          obj.imageDish = dish.imageDish;
           obj.price = dish.price;
           obj.modificationDateDay = this.convertDateday(dish.modificationDate);
           obj.modificationDateTime = this.convertDatetime(dish.modificationDate)
@@ -264,7 +264,7 @@ export class EditMenuComponent {
       if (result.value) {
         this.loadingDishes = true;
         this.dishesService.putDishe(idDish, newState).subscribe(res => {
-          this.dishesService.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dish => {
+          this.dishesService.getDishesByIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(dish => {
             this.dishesgetting = dish
             this.loadingDishes = false;
             Swal.fire({

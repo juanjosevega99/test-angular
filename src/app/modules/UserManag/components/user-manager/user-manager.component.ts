@@ -886,10 +886,10 @@ export class UserManagerComponent implements OnInit, OnDestroy {
 
     this.loadingPromos = true;
     this.dishPromoArray = [];
-    const idAlly = event.target.value;
-    if(idAlly){
+    const allyId = event.target.value;
+    if(allyId){
 
-      this.dishesService.getDishesByIdAlly(idAlly).subscribe(res => {
+      this.dishesService.getDishesByIdAlly(allyId).subscribe(res => {
         if (res.length > 0) {
           res.forEach((dish: Dishes) => {
             if (dish.idPromotion != null) {

@@ -33,7 +33,7 @@ export class OrderByUser{
     gender?:string;
     password?:string;
     idAllie?:string;
-    idHeadquarter?:string;
+    headquarterId?:string;
     usability?:number = 0;
     selected?:boolean = false;
     idsPromos?:string[];

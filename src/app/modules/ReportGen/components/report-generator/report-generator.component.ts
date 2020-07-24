@@ -119,7 +119,7 @@ export class ReportGeneratorComponent implements OnInit {
   loadUserAndOrders() {
     this.loadingUsers = true;
 
-    this.orderservice.getOrdersByAllyHead(this.profile.idHeadquarter).subscribe((orders: Orders[]) => {
+    this.orderservice.getOrdersByAllyHead(this.profile.headquarterId).subscribe((orders: Orders[]) => {
 
       if (orders.length > 0) {
 
@@ -133,7 +133,7 @@ export class ReportGeneratorComponent implements OnInit {
 
               if (headq) {
 
-                obj.idHeadquarter = order.idHeadquartes;
+                obj.headquarterId = order.idHeadquartes;
                 obj.location = headq.ubication;
                 obj.codeOrder = order.code;
                 obj.client = user.name + " " + user.lastname;
@@ -158,7 +158,7 @@ export class ReportGeneratorComponent implements OnInit {
                 }
 
                 // ally
-                this.allyservice.getAlliesById(this.profile.idAllies).subscribe((ally: any) => {
+                this.allyservice.getAlliesById(this.profile.allyId).subscribe((ally: any) => {
                   obj.ally = ally.name;
                   obj.percent = ally.intermediationPercentage;
                   obj.valueIntermediation = parseFloat((ally.intermediationPercentage * (order.orderValue - obj.costReservationIva) / 100).toFixed());
@@ -242,7 +242,7 @@ export class ReportGeneratorComponent implements OnInit {
         auxnamearray.push(auxname);
       })
 
-      objpdf.idHeadquarter = obj.idHeadquarter.slice(17, obj.idHeadquarter.length);
+      objpdf.headquarterId = obj.headquarterId.slice(17, obj.headquarterId.length);
       objpdf.ally = obj.ally;
       objpdf.location = obj.location;
       objpdf.codeOrder = obj.codeOrder;
@@ -316,7 +316,7 @@ export class ReportGeneratorComponent implements OnInit {
         auxnamearray.push(auxname);
       })
 
-      objpdf.idHeadquarter = obj.idHeadquarter.slice(17, obj.idHeadquarter.length);
+      objpdf.headquarterId = obj.headquarterId.slice(17, obj.headquarterId.length);
       objpdf.ally = obj.ally;
       objpdf.location = obj.location;
       objpdf.codeOrder = obj.codeOrder;

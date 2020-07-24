@@ -84,6 +84,17 @@ import { AuthService } from './services/auth.service'
 import { ErrorInterceptor } from './helpers/error.interceptor'
 import { JwtInterceptor } from './helpers/jwt.interceptor'
 
+import { AccompanimentComponent } from './components/accompaniment/accompaniment.component'
+
+
+// material angular
+import {MatGridListModule} from '@angular/material/grid-list'
+import {MatCardModule} from '@angular/material/card'
+import {MatButtonModule} from '@angular/material/button'
+import {MatInputModule} from '@angular/material/input';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTableModule} from '@angular/material/table';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -137,7 +148,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor'
     NotificationsPqrsComponent,
     FrequentQuestionsManagComponent,
     CreateFrequentQuestionsComponent,
-
+    AccompanimentComponent
   ],
   imports: [
     HttpClientModule,
@@ -162,11 +173,15 @@ import { JwtInterceptor } from './helpers/jwt.interceptor'
     TooltipModule,
     FullCalendarModule,
     BrowserModule,
+    MatGridListModule,
+    MatCardModule,
+    MatButtonModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatTableModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDj-zGjpPk4Zbic3Uv_CSemyKU3Gsoo28U'
-    })
-    
-    
+    })    
   ],
   providers: [
     UploadImagesService,

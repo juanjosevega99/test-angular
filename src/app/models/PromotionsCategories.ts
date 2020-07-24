@@ -1,6 +1,6 @@
 export class PromotionsCategories {
     id?:string;
-    idAlly:string;
+    allyId:string;
     name?:string;
     imageTypePromotion?:string;
 }

@@ -40,12 +40,12 @@ export class DishesService {
             numberOfModifications: dishes.numberOfModifications,
             state: dishes.state,
             price: dishes.price,
-            imageDishe: dishes.imageDishe,
+            imageDish: dishes.imageDish,
             description: dishes.description,
             preparationTime: dishes.preparationTime,
             idAccompaniments: dishes.idAccompaniments,
             idPromotion: dishes.idPromotion,
-            idHeadquarter : dishes.idHeadquarter
+            headquarterId : dishes.headquarterId
           };
           return obj;
         })
@@ -67,20 +67,20 @@ export class DishesService {
           numberOfModifications: dish.numberOfModifications,
           state: dish.state,
           price: dish.price,
-          imageDishe: dish.imageDishe,
+          imageDish: dish.imageDish,
           description: dish.description,
           preparationTime: dish.preparationTime,
           idAccompaniments: dish.idAccompaniments,
           idPromotion: dish.idPromotion,
-          idHeadquarter : dish.idHeadquarter
+          headquarterId : dish.headquarterId
         };
         return obj;        
       } )
     )
   }
 
-  getDishesByIdHeadquarter(idHeadquarter): Observable<Dishes[]>{
-    return this.httpclient.get<Dishes[]>(environment.UrlBase + "dishes/headquarter/" + idHeadquarter).pipe(
+  getDishesByIdHeadquarter(headquarterId): Observable<Dishes[]>{
+    return this.httpclient.get<Dishes[]>(environment.UrlBase + "dishes/headquarter/" + headquarterId).pipe(
       map((dishes: any[]) =>
         dishes.map(dishes => {
           let obj = {
@@ -94,12 +94,12 @@ export class DishesService {
             numberOfModifications: dishes.numberOfModifications,
             state: dishes.state,
             price: dishes.price,
-            imageDishe: dishes.imageDishe,
+            imageDish: dishes.imageDish,
             description: dishes.description,
             preparationTime: dishes.preparationTime,
             idAccompaniments: dishes.idAccompaniments,
             idPromotion: dishes.idPromotion,
-            idHeadquarter : dishes.idHeadquarter
+            headquarterId : dishes.headquarterId
           };
           return obj;
         })
@@ -107,8 +107,8 @@ export class DishesService {
     );
   }
 
-  getDishesByIdAlly(idAlly):Observable<any[]>{
-    return this.httpclient.get<Dishes[]>(environment.UrlBase + "dishes/ally/" + idAlly).pipe(
+  getDishesByIdAlly(allyId):Observable<any[]>{
+    return this.httpclient.get<Dishes[]>(environment.UrlBase + "dishes/ally/" + allyId).pipe(
       map((dishes: any[]) =>
         dishes.map(dishes => {
           let obj = {
@@ -122,12 +122,12 @@ export class DishesService {
             numberOfModifications: dishes.numberOfModifications,
             state: dishes.state,
             price: dishes.price,
-            imageDishe: dishes.imageDishe,
+            imageDish: dishes.imageDish,
             description: dishes.description,
             preparationTime: dishes.preparationTime,
             idAccompaniments: dishes.idAccompaniments,
             idPromotion: dishes.idPromotion,
-            idHeadquarter : dishes.idHeadquarter
+            headquarterId : dishes.headquarterId
           };
           return obj;
         })

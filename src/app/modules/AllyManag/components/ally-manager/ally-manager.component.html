@@ -87,8 +87,8 @@
                 <tr *ngFor="let ally of newArray; let i = index " class="text-center">
                     <td> {{ally.code}} </td>
                     <td><img [src]="ally.logo" alt="" class="sizeLogo"> </td>
-                    <td> <button type="button" class="btn btn-link" *ngIf="manageHq" (click)="getInHeadquarts(ally.idAlly, i)" > {{ally.nameEstablishment}} </button>
-                        <button type="button" class="btn btn-link" *ngIf="manageProm" (click)="promosByAlly(ally.idAlly, i)"   > {{ally.nameEstablishment}} </button><!-- [routerLink]="['/main', 'promoManager']" -->
+                    <td> <button type="button" class="btn btn-link" *ngIf="manageHq" (click)="getInHeadquarts(ally.allyId, i)" > {{ally.nameEstablishment}} </button>
+                        <button type="button" class="btn btn-link" *ngIf="manageProm" (click)="promosByAlly(ally.allyId, i)"   > {{ally.nameEstablishment}} </button><!-- [routerLink]="['/main', 'promoManager']" -->
                         <button type="button" class="btn btn-link" *ngIf="managePromfromUser" [routerLink]="['/main','userManager','promoManager']"> {{ally.nameEstablishment}} </button>
                     </td>
                     <td> {{ally.numberHeadquarters}} </td>
@@ -110,7 +110,7 @@
                     <td> {{ally.schedules}} </td>
 
                     <td>
-                        <a class="btn" (click)="editAlly(ally.idAlly, i)"> <i class="far fa-edit"></i> </a>
+                        <a class="btn" (click)="editAlly(ally.allyId, i)"> <i class="far fa-edit"></i> </a>
                     </td>
 
                 </tr>

@@ -38,12 +38,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     reference: null,
     name: null,
     price: null,
-    imageDishe: null,
+    imageDish: null,
     description: null,
     preparationTime: [],
     idAccompaniments: [],
     idPromotion: [],
-    idHeadquarter: null
+    headquarterId: null
   }
 
   editDish: Dishes = {
@@ -55,7 +55,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     numberOfModifications: null,
     state: [],
     price: null,
-    imageDishe: null,
+    imageDish: null,
     description: null,
     preparationTime: null,
     idAccompaniments: [],
@@ -64,7 +64,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
 
   promotionArray: Object = {
     id: null,
-    idAlly: null,
+    allyId: null,
     state: [],
     promotionStartDate: [],
     endDatePromotion: [],
@@ -77,9 +77,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     preparationTime: [],
     reference: null,
     numberOfModifications: 0,
-    idAllies: null,
     nameAllie: null,
-    idHeadquarter:null,
+    headquarterId:null,
     nameHeadquarter:null,
     flag: false,
   }
@@ -231,12 +230,12 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       this.tickFunction = setInterval(() => this.tick(), 30000);
       this.tick();
     }
-    this.headquartersService.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(headquarter => {
+    this.headquartersService.getHeadquarterById(localStorage.getItem('headquarterId')).subscribe(headquarter => {
       // headquarter.for //hacer un servicio
-      this.promotionArray['idHeadquarter'] = localStorage.getItem('idHeadquarter')
+      this.promotionArray['headquarterId'] = localStorage.getItem('headquarterId')
       this.promotionArray['nameHeadquarter'] = headquarter.name
     })
-    this.alliesService.getAlliesById(localStorage.getItem('idAlly')).subscribe(ally=>{
+    this.alliesService.getAlliesById(localStorage.getItem('allyId')).subscribe(ally=>{
       this.promotionArray['nameAllie'] = ally.name
     })
 
@@ -276,7 +275,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     this.chargeDishes.getDisheById(this.editDish['id']).subscribe(dish => {
 
       if (this.editDish.state[0]['check'] === dish.state[0]['check'] && this.editDish.idDishesCategories === dish.idDishesCategories && this.editDish.reference === dish.reference
-        && this.editDish.name === dish.name && this.editDish.price === dish.price && this.editDish.imageDishe === dish.imageDishe && this.editDish.description === dish.description
+        && this.editDish.name === dish.name && this.editDish.price === dish.price && this.editDish.imageDish === dish.imageDish && this.editDish.description === dish.description
         && this.editDish.preparationTime[0] === dish.preparationTime[0] && this.editDish.preparationTime[1] === dish.preparationTime[1]) {
 
         this._router.navigate(rute)
@@ -413,7 +412,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     /* this.chargeDishes.getDishes().subscribe(dishes => { */
-    this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
+    this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(dishes => {
       let dish: Dishes = {}
       dish = dishes[id]
 
@@ -765,7 +764,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 this.loading = true;
                 this.promotionService.deletePromotion(realId).subscribe(message => {
                   //delete promotion of dish
-                  this.chargeDishes.getDishesByIdAlly(localStorage.getItem("idAlly")).subscribe(res => {
+                  this.chargeDishes.getDishesByIdAlly(localStorage.getItem("allyId")).subscribe(res => {
                     res.forEach(dish => {
                       if (dish.idPromotion.length) {
                         for (let index = 0; index < dish.idPromotion.length; index++) {
@@ -850,7 +849,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
         confirmButtonText: 'Ok!'
       })
     } else {
-      this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
+      this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(dishes => {
         let dish: DishList = {}
         dish = dishes[this.identificatorbyRoot]
         let realId = dish.id
@@ -895,7 +894,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
           .then(urlImage => {
             this.promotionArray['imageTypePromotion'] = urlImage
             let newCategory: object = {
-              idAlly: localStorage.getItem('idAlly'),
+              allyId: localStorage.getItem('allyId'),
               name: this.otherCat,
               imageTypePromotion: urlImage
             }
@@ -938,7 +937,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   updateTypePromotion() {
     let objTypePromotion: any = {
       id: this.promotionArray['idname'],
-      idAlly: localStorage.getItem('idAlly'),
+      allyId: localStorage.getItem('allyId'),
       name: this.otherCat,
       imageTypePromotion: this.promotionArray['imageTypePromotion']
     }
@@ -1140,15 +1139,15 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       if (result.value) {
 
         this.spinner.show();
-        this.preDish['idAlly'] = localStorage.getItem('idAlly');
-        this.preDish['idHeadquarter'] = localStorage.getItem('idHeadquarter');
+        this.preDish['allyId'] = localStorage.getItem('allyId');
+        this.preDish['headquarterId'] = localStorage.getItem('headquarterId');
         const id: Guid = Guid.create();
         const file = this.fileImagedish;
 
         this._uploadImages.uploadImages(this.fileImagedish, 'allies', 'menu')
           .then(urlImage => {
             this.upload = true;
-            this.preDish['imageDishe'] = urlImage
+            this.preDish['imageDish'] = urlImage
             this.chargeDishes.postDishe(this.preDish).subscribe(message => {
               this.spinner.hide();
 
@@ -1195,7 +1194,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.value) {
 
-        let urlImg = 'assets/allies/menu/' + this.preDish['imageDishe'].split("%")[3].split("?")[0].slice(2);
+        let urlImg = 'assets/allies/menu/' + this.preDish['imageDish'].split("%")[3].split("?")[0].slice(2);
         this._uploadImages.DeleteImage(urlImg).then(res => {
           this.chargeDishes.deleteDishe(realId).subscribe(message => {
             Swal.fire({
@@ -1237,7 +1236,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   async updateDish(rute: string[]) {
     this.spinner.show();
 
-    await this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("idHeadquarter")).subscribe(dishes => {
+    await this.chargeDishes.getDishesByIdHeadquarter(localStorage.getItem("headquarterId")).subscribe(dishes => {
 
       let dish: Dishes = {};
       dish = dishes[this.identificatorbyRoot];
@@ -1274,7 +1273,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
               ref.getDownloadURL().subscribe(urlImage => {
                 this.urlDish = urlImage;
 
-                this.preDish['imageDishe'] = this.urlDish
+                this.preDish['imageDish'] = this.urlDish
                 this.chargeDishes.putDishe(realId, this.editDish).subscribe(res => {
                   this.spinner.hide();
 
@@ -1323,7 +1322,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
                 this.urlDish = urlImage;
 
                 this.promotionArray['photo'] = this.urlDish
-                this.promotionArray['idAllies'] = localStorage.getItem('idAlly') 
+                this.promotionArray['allyId'] = localStorage.getItem('allyId') 
                 this.promotionService.postPromotion(this.promotionArray).subscribe((message: any) => {
                   this.editDish.idPromotion.push(message._id)
                   this.chargeDishes.putDishe(this.editDish.id, this.editDish).subscribe(res => {

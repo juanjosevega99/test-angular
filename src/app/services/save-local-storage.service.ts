@@ -7,22 +7,22 @@ export class SaveLocalStorageService {
 
   constructor() { }
 
-  saveLocalStorageIdAlly(idAlly: string) {
-    localStorage.setItem("idAlly", idAlly)
+  saveLocalStorageIdAlly(allyId: string) {
+    localStorage.setItem("allyId", allyId)
   }
 
   getLocalStorageIdAlly() {
-    let idAlly = localStorage.getItem("idAlly")
-    return idAlly;
+    let allyId = localStorage.getItem("allyId")
+    return allyId;
   }
 
-  saveLocalStorageIdHeadquarter(idHeadquarter: string) {
-    localStorage.setItem("idHeadquarter", idHeadquarter)
+  saveLocalStorageIdHeadquarter(headquarterId: string) {
+    localStorage.setItem("headquarterId", headquarterId)
   }
 
   getLocalStorageIdHeadquarter() {
-    let idHeadquarter = localStorage.getItem("idHeadquarter")
-    return idHeadquarter;
+    let headquarterId = localStorage.getItem("headquarterId")
+    return headquarterId;
   }
   saveLocalStorageIdCoupon(idCoupon: string) {
     localStorage.setItem("idCoupon", idCoupon)

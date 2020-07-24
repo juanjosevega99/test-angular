@@ -13,6 +13,8 @@ export class OptionsComponent {
 
   constructor( private showmenu: ShowContentService ) {
 
+    console.log('Aqui estoy1')
+
     this.profile = this.showmenu.showMenus();
 
    }

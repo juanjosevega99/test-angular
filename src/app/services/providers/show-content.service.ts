@@ -15,11 +15,11 @@ export class ShowContentService {
     let profilest = JSON.parse(localStorage.getItem('tifi_user'))
 
     profile.nameAllie = 'test';
-    profile.nameHeadquarter = profilest.headquarter.name;
-    profile.idHeadquarter = profilest.headquarter._id;
+    profile.nameHeadquarter = profilest.headquarter ? profilest.headquarter.name : null;
+    profile.headquarterId =  profilest.headquarter ? profilest.headquarter._id : null;
     profile.id = profilest.id;
     profile.nameCharge = profilest.role.name;
-    profile.idAllies = profilest.headquarter.idAllies;
+    profile.allyId =  profilest.headquarter ? profilest.headquarter.allyId : null;
     profile.photo = 'default.png';
     profile.email = profilest.email;
     profile.name = profilest.name;

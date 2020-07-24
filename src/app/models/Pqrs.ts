@@ -8,9 +8,9 @@ export class Pqrs {
     gender?:string;
     birthday?:String;
     phone?:string;
-    idAllies?:string;
+    allyId?:string;
     nameAllie?:string;
-    idHeadquarter?:string;
+    headquarterId?:string;
     nameHeadquarter?:string;
     state?:boolean;
     description?:string;

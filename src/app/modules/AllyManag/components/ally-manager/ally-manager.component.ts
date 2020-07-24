@@ -109,7 +109,7 @@ export class AllyManagerComponent implements OnInit {
             let obj: any = {}
   
             obj = {
-              idAlly: ally.id,
+              allyId: ally.id,
               code: ally.nit,
               logo: ally.logo,
               nameEstablishment: ally.name,
@@ -192,20 +192,20 @@ export class AllyManagerComponent implements OnInit {
   }
 
   //method Get in Option Ally
-  getInHeadquarts(idAlly: string, i) {
-    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+  getInHeadquarts(allyId: string, i) {
+    this._saveLocalStorageService.saveLocalStorageIdAlly(allyId)
     this._router.navigate(['/main', 'headquarts', i])
   }
 
   //method for charging promotions by Ally
-  promosByAlly(idAlly: string, i) {
-    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+  promosByAlly(allyId: string, i) {
+    this._saveLocalStorageService.saveLocalStorageIdAlly(allyId)
     this._router.navigate(['/main', 'promoManager'])
   }
 
   //method edit ally
-  editAlly(idAlly: string, i) {
-    this._saveLocalStorageService.saveLocalStorageIdAlly(idAlly)
+  editAlly(allyId: string, i) {
+    this._saveLocalStorageService.saveLocalStorageIdAlly(allyId)
     this._router.navigate(['/main', 'editAlly', i])
 
   }

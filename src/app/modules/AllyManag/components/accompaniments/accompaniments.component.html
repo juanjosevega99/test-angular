@@ -1,394 +1,52 @@
+
 <div class="compenetsstyle" style="background-color: #e9e7e7;">
+  <div style="width:5%;" class="d-flex align-items-center justify-content-center">
+      <a (click)="goBack()" class="d-flex">
+        <img src="assets/icons/Back.png" class="tifi-icon-back">
+      </a>
+  </div>
 
-    <form novalidate="" class="row">
+  <br>
 
-        <div style="width:5%;" class="d-flex align-items-center justify-content-center">
-            <a (click)="goBack()" class="d-flex">
-                <img src="assets/icons/Back.png" class="tifi-icon-back">
-            </a>
-        </div>
 
-        <section style="width: 90%;">
-            <div class="filerControl px-1">
+  <mat-grid-list cols="12">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Crear grupo de acompañamientos</mat-card-title>
+        <mat-card-subtitle>Detalle del grupo de acompañamientos</mat-card-subtitle>
+      </mat-card-header>
+      <hr>
+      <mat-card-content class="content-model">
+        <form class="example-form">
+          <mat-grid-list cols="12">
+            <mat-grid-tile colspan="8">
+              <mat-form-field class="example-full-width">
+                <mat-label>Nombre grupo:</mat-label>
+                <input matInput [(ngModel)]="groupName" name="groupName" placeholder="Ej. Bebidas">
+              </mat-form-field>
+            </mat-grid-tile>
 
-                <section class="col-4 overflow-auto mr-1" style="flex-direction: column;">
-                    <nav class="navbar navbar-expand-sm navbar-light bg-light overflow-auto">
-                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                            <li *ngFor="let section of sections" class="nav-item">
-                                <button class="mr-2 btn btn-outline-primary"
-                                    (click)="seeValue(section.name,section.id)">{{section.name}}</button>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="form-group">
-                        <div class="input-group mt-2">
-                            <div class="inputWithIcon mr-2">
-                                <input class="form-control" type="text" placeholder="Selecciona la categoría" #new
-                                    value="{{sectionSelected}}" name="new">
-                                <i class="far fa-edit" aria-hidden="true"></i>
-                            </div>
-                            <button class="btn1 btn btn-outline-primary mr-2" (click)="deleteSection()">
-                                Borrar
-                            </button>
-                            <button class="btn1 btn btn-outline-primary" (click)="updateSection(new.value)">
-                                Guardar cambios
-                            </button>
-                        </div>
-                    </div>
-                </section>
+            <mat-grid-tile colspan="4">
+              <mat-slide-toggle [(ngModel)]="multipleOption" name="multipleOption" color="primary">Opcion multiple</mat-slide-toggle>
+            </mat-grid-tile>
+        
+          </mat-grid-list>
+        </form>
+      </mat-card-content>
+      <hr>
+      <mat-card-actions class="btn-container">
+        <button mat-raised-button (click)="addGroup()" color="primary">Agregar</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-list>
 
-                <section class="col-4 overflow-auto mr-1" style="flex-direction: column;">
-                    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 container-fluid d-flex">
-                            <li class="nav-item container-fluid d-flex">
-                                <input (keyup)="searchbyterm(general.value)" name="general"
-                                    class="form-control text-center" id="general" type="text"
-                                    placeholder="Buscar acompañamiento ..." #general [(ngModel)]="generalsearch">
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="form-group">
-                        <div class="input-group mt-3" style="justify-content: center;">
-                            <div class="radio radio-success m-2 form-check form-check-inline">
-                                <input class="form-check-input " type="radio" checked>
-                                <label style="font-size: 15px;">
-                                    Activo
-                                </label>
-                            </div>
-                            <div class="radio radio-danger m-2 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" checked>
-                                <label style="font-size: 15px;">
-                                    Inactivo
-                                </label>
-                            </div>
+  <br>
 
-                        </div>
-                    </div>
+  <app-accompaniment [groupName]="groupName" [multipleOption]="multipleOption" (AddAcompaniment)="updateInfo($event)"></app-accompaniment>
 
-                </section>
 
-                <section class="col-4 overflow-auto">
-                    <nav class="navbar navbar-expand-sm navbar-light bg-light overflow-auto">
-                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                            <li class="nav-item">
-                                <input style="width: 100%;" class="form-control text-center" id="general"
-                                    [(ngModel)]="otherSection" type="text" name="otherSection" type="text"
-                                    placeholder="Nueva sección">
-                                <input type="checkbox" class="m-1"
-                                    (change)="changeValuecheckMultiselectSections($event)"
-                                    [checked]="newCategory.multiSelect">
-                                <label>Selección multiple</label>
-                            </li>
-                            <li class="nav-item">
-                                <button class="btn btn-outline-primary ml-2" (click)="addSection(otherSection)">
-                                    Añadir nueva sección
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                    <!-- <div class="form-group">
-                        <div class="input-group mt-2">
-                            <p class="mr-2">Personalización del <br>nombre de la sección</p>
-                                <select *ngIf="arrayCategorySelect" class="form-control mr-2" >
-                                    <option>
-                                        hi
-                                    </option>
-                                </select>
-                                <input *ngIf="otherCategoryInput">
-                                <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                                (click)="handleBoxOther()"> Cancelar</button>
-    
-                            <button *ngIf="selectAgainarray" class="btn1 btn btn-outline-primary" type="button"
-                                (click)="addCategory(otherCat)"> Guardar</button>
-                            <button *ngIf="addcategoryButton" class="btn1 btn btn-outline-primary mr-2" (click)="handleBoxOther()">
-                                Otro
-                            </button>
-                        </div>
-                    </div> -->
-                </section>
-            </div>
-        </section>
-    </form>
-    <form (ngSubmit)="saveAccompaniments()" novalidate="">
-        <div id="table" class="table-editable">
-
-            <div *ngIf="promoAccompaniments" class="form-group tableFixHead mt-5">
-                <table class="table table-bordered  table-responsive-md table-striped text-center">
-                    <tr>
-                        <th class="text-center">Cantidad</th>
-                        <th class="text-center">Unidad</th>
-                        <th class="text-center">Acompañamiento</th>
-                        <th class="text-center">Sección</th>
-                        <th class="text-center">¿Costo Adicional?</th>
-                        <th class="text-center" colspan="2">T. de preparación</th>
-                        <th class="text-center">Precio</th>
-                        <th class="text-center">F. creación</th>
-                        <th class="text-center">F. modificación</th>
-                        <th class="text-center"># modificaciones</th>
-                        <th class="text-center" colspan="2">Estado</th>
-                        <th class="text-center">Eliminar</th>
-                    </tr>
-                    <tr *ngFor="let accompPromo of accompanimetsOfPromo; let id = index">
-                        <td>{{accompPromo.quantity}}</td>
-                        <td>{{accompPromo.unitMeasurement}}</td>
-                        <td>{{accompPromo.name}}</td>
-                        <td>{{accompPromo.nameTypeSection}}</td>
-                        <td><input disabled [checked]="accompPromo.typeOfAccompaniment" type="checkbox"></td>
-                        <td>{{accompPromo.preparationTimeNumber}}</td>
-                        <td>{{accompPromo.preparationTimeUnity}}</td>
-                        <td>{{accompPromo.accompanimentValue}}</td>
-                        <td>{{accompPromo.creationDate}}</td>
-                        <td>{{accompPromo.modificationDate}}</td>
-                        <td>{{accompPromo.numberOfModifications}}</td>
-                        <td>
-                            <div class="radio radio-success m-2  form-check-inline">
-                                <input [checked]="accompPromo.state[0].check" value="active" type="radio" name={{index}}
-                                    disabled id="stateA">
-                                <label style="font-size: 15px;"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="radio radio-danger m-2 form-check-inline">
-                                <input [checked]="!accompPromo.state[0].check" value="inactive" type="radio" disabled
-                                    name={{index}} id="stateAI">
-                                <label style="font-size: 15px;"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="table-remove">
-                                <a (click)="removeAccompanimentOfPromo(id)"><i class="fas fa-trash"></i></a>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr *ngIf=" !accompanimetsOfPromo.length && !loading ">
-                        <td colspan="14">No has añadido acompañamientos!!</td>
-                    </tr>
-                    <tr>
-                        <td colspan="14">
-                            <div *ngIf="loading" class="fa-3x text-center">
-                                <i class="fas fa-spinner fa-pulse"></i>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div *ngIf="!promoAccompaniments" class="form-group tableFixHead mt-5">
-
-                <table *ngIf="!flag" class="table table-bordered  table-responsive-md table-striped text-center">
-                    <tr>
-                        <th class="text-center">Cantidad</th>
-                        <th class="text-center">Unidad</th>
-                        <th class="text-center">Acompañamiento</th>
-                        <th class="text-center">Sección</th>
-                        <th class="text-center">¿Costo Adicional?</th>
-                        <th class="text-center" colspan="2">T. de preparación</th>
-                        <th class="text-center">Precio</th>
-                        <th class="text-center">F. creación</th>
-                        <th class="text-center">F. modificación</th>
-                        <th class="text-center"># modificaciones</th>
-                        <th class="text-center" colspan="2">Estado</th>
-                        <th class="text-center">Añadir</th>
-                        <th class="text-center">Actualizar</th>
-                        <th class="text-center">Eliminar</th>
-                    </tr>
-                    <tr *ngFor="let person of personList; let id = index">
-                        <td>
-                            <span class="text-center" contenteditable="true"
-                                (blur)="changeValue(id, 'quantity', $event)">{{person.quantity}}</span>
-                        </td>
-                        <td>
-                            <span class="text-center" contenteditable="true"
-                                (blur)="changeValue(id, 'unitMeasurement', $event)">{{person.unitMeasurement}}</span>
-                        </td>
-                        <td>
-                            <span contenteditable="true" class="text-center"
-                                (blur)="changeValue(id, 'name', $event)">{{person.name}}</span>
-                        </td>
-                        <td>
-                            <select #nameSection (change)="changeValueSelect1(id, 'nameTypeSection', nameSection.value)"
-                                class="input-group-text" >
-                                <option selected>{{person.nameTypeSection}}</option>
-                                <option *ngFor="let section of sections">
-                                    {{section.name}}
-                                </option>
-                            </select>
-                        </td>
-                        <td  >
-                            <input type="checkbox" class="m-1"
-                                (change)="changeValuecheck1(id, 'typeOfAccompaniment',$event)"
-                                [checked]="person.typeOfAccompaniment">
-                        </td>
-                
-                        <td>
-                            <span class="text-center" contenteditable="true"
-                                (blur)="changeValue(id, 'preparationTimeNumber', $event)">{{person.preparationTimeNumber}}</span>
-                        </td>
-                        <td>
-                            <select #unityTime (click)="changeValueSelect1(id, 'preparationTimeUnity',unityTime.value)"
-                                class="input-group-text ">
-                                <option selected>{{person.preparationTimeUnity}}</option>
-                                <option *ngFor="let time of time">
-                                    {{time}}
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <span class="text-center" *ngIf="person.typeOfAccompaniment" contenteditable="true"
-                                (blur)="changeValue(id, 'accompanimentValue', $event)">{{person.accompanimentValue}}</span>
-                        </td>
-                        <td>{{person.creationDate}}</td>
-                        <td>{{person.modificationDate}}</td>
-                        <td>{{person.numberOfModifications}}</td>
-                        <td>
-                            <div class="radio radio-success m-2  form-check-inline">
-                                <input [checked]="person.state[0].check" value="active" type="radio" name={{index}}
-                                    (click)="changeStateI(id,'state',$event)" id="stateA">
-                                <label style="font-size: 15px;">
-
-                                </label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="radio radio-danger m-2 form-check-inline">
-                                <input [checked]="!person.state[0].check" value="inactive" type="radio"
-                                    (click)="changeStateI(id,'state',$event)" name={{index}} id="stateAI">
-                                <label style="font-size: 15px;">
-
-                                </label>
-                            </div>
-                        </td>
-                        <td><input type="checkbox" class="m-1" (change)="selectedOne($event, id)"></td>
-                        <td>
-                            <a (click)="update(id)"><i class="fas fa-save"></i></a>
-                        </td>
-                        <td>
-                            <span class="table-remove">
-                                <a (click)="remove(id)"><i class="fas fa-trash"></i></a>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="16">
-                            <div *ngIf="loading" class="fa-3x text-center">
-                                <i class="fas fa-spinner fa-pulse"></i>
-                            </div>
-                        </td>
-                    </tr>
-
-                </table>
-                <table *ngIf="flag" class="table table-bordered  table-responsive-md table-striped text-center">
-                    <tr>
-                        <th class="text-center">Cantidad</th>
-                        <th class="text-center">Unidad</th>
-                        <th class="text-center">Acompañamiento</th>
-                        <th class="text-center">Sección</th>
-                        <th class="text-center">¿Costo Adicional?</th>
-                        <th class="text-center" colspan="2">T. de preparación</th>
-                        <th class="text-center">Precio</th>
-                        <th class="text-center">F. ingreso</th>
-                        <th class="text-center">F. modificación</th>
-                        <th class="text-center" colspan="2">Estado</th>
-                    </tr>
-                    <tr *ngFor="let dish of newAccompanimentList; let id = index">
-                        <td>
-                            <span (keyup)="changeValue2(id, 'quantity', $event)" contenteditable="true"></span>
-                        </td>
-                        <td>
-                            <span contenteditable="true" (keyup)="changeValue2(id, 'unitMeasurement', $event)"></span>
-                        </td>
-                        <td>
-                            <span contenteditable="true" (keyup)="changeValue2(id, 'name', $event)"></span>
-                        </td>
-                        <td>
-                            <select #nameSection (click)="changeValueSelect(id, 'nameTypeSection',nameSection.value)"
-                                class="input-group-text">
-                                <option *ngFor="let section of sections">
-                                    {{section.name}}
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <input [checked]="dish.typeOfAccompaniment"
-                                (click)="changeValuecheck(id, 'typeOfAccompaniment', $event)" type="checkbox">
-                        </td>
-                        <td>
-                            <span contenteditable="true"
-                                (keyup)="changeValue2(id, 'preparationTimeNumber', $event)"></span>
-                        </td>
-                        <td>
-                            <select #unityTime (click)="changeValueSelect(id, 'preparationTimeUnity',unityTime.value)"
-                                class="input-group-text ">
-                                <option *ngFor="let time of time">
-                                    {{time}}
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <span *ngIf="dish.typeOfAccompaniment" contenteditable="true"
-                                (keyup)="changeValue2(id, 'accompanimentValue', $event)"></span>
-                        </td>
-                        <td>
-                            <p class="text-center">
-                                {{date}}
-                            </p>
-                        </td>
-                        <td>
-                            <p class="text-center">
-                                {{date}}
-                            </p>
-                        </td>
-                        <td>
-                            <div class="radio radio-success m-2  form-check-inline">
-                                <input (click)="changeStateA(id, 'state', $event)" [checked]="dish.state[0].check"
-                                    type="radio" name={{index}} id="stateAI">
-                                <label style="font-size: 15px;"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="radio radio-danger m-2 form-check-inline">
-                                <input (click)="changeStateA(id, 'state', $event)" [checked]="!dish.state[0].check"
-                                    type="radio" name={{index}} id="stateAI">
-                                <label style="font-size: 15px;"> </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="12">
-                            <div *ngIf="loading" class="fa-3x text-center">
-                                <i class="fas fa-spinner fa-pulse"></i>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <section class="col-12 d-flex mt-4 justify-content form-group">
-                <div *ngIf="!flag" class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button *ngIf="promoAccompaniments" (click)="removeAllAccompanimentOfPromo()" type="button"
-                        class="btn btn-outline-primary btn-lg">No hay
-                        acompañamientos</button>
-                    <button *ngIf="!promoAccompaniments" type="button" (click)="back()"
-                        class="btn btn-outline-primary btn-lg">Volver</button>
-                </div>
-                <div *ngIf="flag" class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button type="button" (click)="cancelAdd()" class="btn btn-outline-primary btn-lg">Cancelar</button>
-                </div>
-                <div class="col-md-4 col-sm-5 d-flex" style="justify-content:center;">
-                    <button *ngIf="!promoAccompaniments && !flag" (click)="add()" type="button"
-                        class="btn btn-outline-primary btn-lg">
-                        Nuevo acompañamiento</button>
-                    <button *ngIf="promoAccompaniments" (click)="seeList()" type="button"
-                        class="btn btn-outline-primary btn-lg">
-                        Ver todos</button>
-                </div>
-                <!-- <div *ngIf="!flag" class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-                    <button type="submit" class="btn btn-outline-primary btn-lg">Guardar</button>
-                </div> -->
-                <div *ngIf="flag" class="col-md-4 col-sm-12 d-flex" style="justify-content:center;">
-                    <button type="button" (click)="addNewAcc()" class="btn btn-outline-primary btn-lg">Añadir</button>
-                </div>
-            </section>
-
-        </div>
-    </form>
+  <mat-grid-list cols="12" class="btn-container">
+    <hr>
+    <button mat-raised-button color="primary">Guardar Todo</button>
+  </mat-grid-list>
 </div>

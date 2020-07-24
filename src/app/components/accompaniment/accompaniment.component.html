@@ -1,0 +1,68 @@
+<mat-grid-list cols="12">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>Crear acompañamientos para {{ groupName }}</mat-card-title>
+      <mat-card-subtitle *ngIf="multipleOption">Opcion multiple</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="!multipleOption">Sola una Opcion</mat-card-subtitle>
+    </mat-card-header>
+    <hr>
+    <mat-card-content class="content-model">
+      <form class="example-form">
+        <mat-grid-list cols="12">
+          <mat-grid-tile colspan="6">
+            <mat-form-field class="example-full-width">
+              <mat-label>Nombre acompañamiento:</mat-label>
+              <input matInput placeholder="Ej. Cocacola" [(ngModel)]="nameAccompaniment" name="nameAccompaniment">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="4">
+            <mat-form-field class="example-full-width">
+              <mat-label>Precio:</mat-label>
+              <input matInput placeholder="Precio" type="number" [(ngModel)]="priceAccompaniment" name="priceAccompaniment">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <button mat-raised-button (click)="addAcompanimentSubmit()" color="primary">Agregar</button>
+          </mat-grid-tile>
+      
+        </mat-grid-list>
+
+        <hr>
+
+        <mat-grid-list cols="12">
+          <mat-table [(dataSource)]="dataSource" class="mat-elevation-z8">
+            <!-- Position Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Nombre acompañamiento </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+          
+            <!-- Name Column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+            </ng-container>
+          
+            <!-- Weight Column -->
+            <ng-container matColumnDef="action">
+              <mat-header-cell *matHeaderCellDef> Accion </mat-header-cell>
+              <mat-cell *matCellDef="let element"> 
+                <button mat-raised-button color="warn">Eliminar</button>
+              </mat-cell>
+            </ng-container>
+          
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+        </mat-grid-list>
+        
+      </form>
+    </mat-card-content>
+    <hr>
+    <mat-card-actions class="btn-container">
+      <button mat-raised-button color="warn">Eliminar</button>
+    </mat-card-actions>
+  </mat-card>
+</mat-grid-list>

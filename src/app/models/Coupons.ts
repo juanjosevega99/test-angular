@@ -3,7 +3,7 @@ export class Coupons {
     state?:string[];
     createDate?:string[];
     creationTime?:string[];
-    idAllies?:string;
+    allyId?:string;
     nameAllies?:string;
     idHeadquarters?:string;
     nameHeadquarters?:string;

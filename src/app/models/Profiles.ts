@@ -5,9 +5,9 @@ export class Profiles {
   entryDate?:Date;
   modificationDate?:Date;
   numberOfModifications?:number;
-  idAllies?:string;
+  allyId?:string;
   nameAllie?:string;
-  idHeadquarter?:string;
+  headquarterId?:string;
   nameHeadquarter?:string;
   idCharge?:string;
   nameCharge?:string;

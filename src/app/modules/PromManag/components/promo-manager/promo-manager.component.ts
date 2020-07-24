@@ -58,14 +58,14 @@ export class PromoManagerComponent implements OnInit {
     this.dishPromoArray = [];
     this.loadingDishes = true;
 
-    this.dishesService.getDishesByIdAlly(localStorage.getItem('idAlly')).subscribe(res => {
+    this.dishesService.getDishesByIdAlly(localStorage.getItem('allyId')).subscribe(res => {
       if (res.length) {
         res.forEach((dish: Dishes) => {
           if (dish.idPromotion != null) {
             for (let item = 0; item < dish.idPromotion.length; item++) {
               let iditem = dish.idPromotion[item];
 
-              this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(res => {
+              this.promoService.getAllPromotionsByAlly(localStorage.getItem('allyId')).subscribe(res => {
                 if (res.length) {
                   res.forEach((promo: Promotions) => {
                     if (iditem == promo.id) {
@@ -199,7 +199,7 @@ export class PromoManagerComponent implements OnInit {
 
   //method for very the dates
   verifyDate(idDish, i) {
-    this.promoService.getAllPromotionsByAlly(localStorage.getItem('idAlly')).subscribe(promos => {
+    this.promoService.getAllPromotionsByAlly(localStorage.getItem('allyId')).subscribe(promos => {
 
       let promo = promos[i]
 
@@ -412,7 +412,7 @@ export class PromoManagerComponent implements OnInit {
         this.loadingDishes = true;
         this.promoService.putPromotion(idDish, newstate).subscribe(res => {
 
-          this.promoService.getAllPromotionsByAlly(localStorage.getItem("idAlly")).subscribe(dish => {
+          this.promoService.getAllPromotionsByAlly(localStorage.getItem("allyId")).subscribe(dish => {
             this.loadingDishes = false;
             Swal.fire({
               text: "Estado actualizado!!",

@@ -36,7 +36,7 @@ export class PromotionsCategoriesService {
         promotioncategory.map(promotionscategories => {
           let obj = {
             id: promotionscategories._id,
-            idAlly: promotionscategories.idAlly,
+            allyId: promotionscategories.allyId,
             name: promotionscategories.name,
             imageTypePromotion: promotionscategories.imageTypePromotion
           };
@@ -53,7 +53,7 @@ export class PromotionsCategoriesService {
         map((promotionscategories: PromotionsCategories) => {
             let obj = {
               id: id,
-              idAlly: promotionscategories.idAlly,
+              allyId: promotionscategories.allyId,
               name: promotionscategories.name,
               imageTypePromotion: promotionscategories.imageTypePromotion
             };

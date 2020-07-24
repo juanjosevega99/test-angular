@@ -121,9 +121,11 @@ export class PrincipalOrdersComponent implements OnInit {
     this.orders2 = this.orders;
 
 
-    this.wesocket.listen('newOrder').subscribe((res: Orders) => {
+    this.wesocket.listen('newOrder').subscribe((res: any) => {
 
-      if (res.idHeadquartes == this.profile.idHeadquarter) {
+      console.log('res', res)
+
+      if (res.idHeadquartes == this.profile.headquarterId) {
         this.formatOrderUnit(res);
         this.orderList(this.orders);
 
@@ -134,7 +136,7 @@ export class PrincipalOrdersComponent implements OnInit {
 
       const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
 
-      if (this.profile.idHeadquarter == reservation.idHeadquart) {
+      if (this.profile.headquarterId == reservation.idHeadquart) {
 
         if (lastevent.publicId == " ") {
 
@@ -158,7 +160,7 @@ export class PrincipalOrdersComponent implements OnInit {
   }
 
   loadDishes() {
-    this.dishService.getDishesByIdAlly(this.profile.idAllies).subscribe((dishes: Dishes[]) => {
+    this.dishService.getDishesByIdAlly(this.profile.allyId).subscribe((dishes: Dishes[]) => {
       let diss = [];
       dishes.forEach(dis => {
 
@@ -259,8 +261,8 @@ export class PrincipalOrdersComponent implements OnInit {
     let order = {
       code: "R-05",
       idUser: "5e1f18008f7efe00172e5037",
-      idAllies: this.profile.idAllies,
-      idHeadquartes: this.profile.idHeadquarter,
+      allyId: this.profile.allyId,
+      idHeadquartes: this.profile.headquarterId,
       idDishe: idDishesa,
       typeOfServiceobj: reservation['_id'],
       typeOfService: { type: reservation['type'], tables: reservation['tables']['value'] },
@@ -397,7 +399,7 @@ export class PrincipalOrdersComponent implements OnInit {
     this.calendarEvents = [];
     this.Reservations = [];
 
-    this.reservationService.getReservationsByHeadquart(this.profile.idHeadquarter).subscribe((reservations: reservation[]) => {
+    this.reservationService.getReservationsByHeadquart(this.profile.headquarterId).subscribe((reservations: reservation[]) => {
 
       this.Reservations = reservations;
       this.Reservations.forEach((res: reservation) => {
@@ -814,7 +816,7 @@ export class PrincipalOrdersComponent implements OnInit {
     reservation.hour = this.hourreservation;
     reservation.tables = this.Tablereservation;
     reservation.people = this.Peoplereservation;
-    reservation.idHeadquart = this.profile.idHeadquarter;
+    reservation.idHeadquart = this.profile.headquarterId;
     // this.resetIds();
 
     Swal.fire({
@@ -863,7 +865,7 @@ export class PrincipalOrdersComponent implements OnInit {
   formaterOrders() {
     this.orders2 = [];
     this.orders = [];
-    this.serviceOrders.getOrdersByAllyHead(this.profile.idHeadquarter).subscribe((orders: Orders[]) => {
+    this.serviceOrders.getOrdersByAllyHead(this.profile.headquarterId).subscribe((orders: Orders[]) => {
 
       orders.forEach(order => {
         this.formatOrderUnit(order);
@@ -879,9 +881,9 @@ export class PrincipalOrdersComponent implements OnInit {
 
     let ordertosave: OrderByUser = {};
     this.userservice.getUserById(order.idUser).subscribe((user: Users) => {
-      ordertosave.idHeadquarter = order.idHeadquartes;
-      ordertosave.code = order.code;
-      ordertosave.id = order.id ? order.id : order._id;
+      ordertosave.headquarterId = order.order.headquarterId;
+      ordertosave.code = order.order.id;
+      ordertosave.id = order._id;
       ordertosave.name = user.name + " " + user.lastname;
       ordertosave.typeOfServiceobj = order.typeOfServiceobj; //new change is nesscesary to order :)
       ordertosave.typeOfService = order.typeOfService['type'] == 'reservalo' ? order.typeOfService['type'] + " " + order.typeOfService['tables'] + " mesas" : order.typeOfService['type'];

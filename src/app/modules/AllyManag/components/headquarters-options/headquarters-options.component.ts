@@ -16,13 +16,13 @@ import { Allies } from 'src/app/models/Allies';
 })
 export class HeadquartersOptionsComponent implements OnInit {
 
-  //variables of idAlly
-  idAlly: number;
+  //variables of allyId
+  allyId: number;
   identificador:number;
   // array for search headquuarters
   arrayHeadquarter: any;
   headquartersByIdAlly: any[] = [];
-  idHeadquarter: string;
+  headquarterId: string;
   // flags
   alertDontRegisters = false;
   //enbles options headquarters
@@ -36,16 +36,16 @@ export class HeadquartersOptionsComponent implements OnInit {
     private _activateRoute: ActivatedRoute,
     private _saveLocalStorageService: SaveLocalStorageService) {
 
-    //inicialization local storage IdAlly
+    //inicialization local storage allyId
     this._saveLocalStorageService.saveLocalStorageIdAlly;
 
     //inicialization for charging the data of an Ally to headquarter
     this._activateRoute.params.subscribe(params => {
 
-      let idAlly = this._saveLocalStorageService.getLocalStorageIdAlly();
+      let allyId = this._saveLocalStorageService.getLocalStorageIdAlly();
      this.identificador = params['id']
 
-      this.headquarterService.getHeadquarterByAllIdAlly(idAlly).subscribe(headquarter => {
+      this.headquarterService.getHeadquarterByAllIdAlly(allyId).subscribe(headquarter => {
         if (headquarter != "") {
           this.arrayHeadquarter = headquarter
           this.arrayHeadquarter.forEach(element => {
@@ -70,7 +70,7 @@ export class HeadquartersOptionsComponent implements OnInit {
   seeNameHeadquarter(selected: any) {
 
     this.headquartersByIdAlly.forEach(element => {
-      if (this.idHeadquarter == element.id) {
+      if (this.headquarterId == element.id) {
         this._saveLocalStorageService.saveLocalStorageIdHeadquarter(element.id)
         this.enableInfHeadquarter= false;
         this.enableEditMenu = false;
@@ -86,7 +86,7 @@ export class HeadquartersOptionsComponent implements OnInit {
   //     let realId = allie.id
   //     this.headquarterService.getHeadquarters().subscribe(headquarters => {
   //       headquarters.forEach((headquarters: Headquarters) => {
-  //         if (headquarters.idAllies == realId) {
+  //         if (headquarters.allyId == realId) {
   //           const dates: Headquarters = {};
   //           dates.id = headquarters.id;
   //           dates.name = headquarters.name
@@ -98,8 +98,8 @@ export class HeadquartersOptionsComponent implements OnInit {
   //   })
   // }
   createHeadquart() {
-    if(localStorage.getItem('idHeadquarter')){
-      localStorage.removeItem('idHeadquarter');
+    if(localStorage.getItem('headquarterId')){
+      localStorage.removeItem('headquarterId');
     }
     this._router.navigate(['/main', 'createHeadquarter', this.identificador])
   }

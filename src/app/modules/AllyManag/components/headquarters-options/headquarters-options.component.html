@@ -10,7 +10,7 @@
 
         <div class="input-group" style=" width: 13rem;">
 
-            <select name="nameHeadquarters" #nameHeadquarters="ngModel" [(ngModel)]="idHeadquarter" class="form-control"
+            <select name="nameHeadquarters" #nameHeadquarters="ngModel" [(ngModel)]="headquarterId" class="form-control"
                 (change)="seeNameHeadquarter()">
 
                 <option *ngFor="let hq of headquartersByIdAlly" [ngValue]="hq.id">

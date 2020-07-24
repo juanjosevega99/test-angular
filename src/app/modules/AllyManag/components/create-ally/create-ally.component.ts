@@ -93,10 +93,10 @@ export class CreateAllyComponent implements OnInit {
 
     //inicialization for charging the data of an Ally to edit
     this._activateRoute.params.subscribe(params => {
-      let idAlly = this._saveLocalStorageService.getLocalStorageIdAlly();
+      let allyId = this._saveLocalStorageService.getLocalStorageIdAlly();
       let identificator = params['id']
       if (identificator != -1) {
-        this.getAlly(idAlly)
+        this.getAlly(allyId)
 
       } else {
         this.loading = false
@@ -104,7 +104,7 @@ export class CreateAllyComponent implements OnInit {
         this.disableImagesAlly= true;
       }
       this.idParams = identificator;
-      this.identificatorbyRoot = idAlly;
+      this.identificatorbyRoot = allyId;
 
     })
 

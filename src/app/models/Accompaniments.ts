@@ -13,6 +13,6 @@ export class Accompaniments {
     accompanimentValue?: number;
     idTypeSection?:string;
     nameTypeSection?:string;
-    idAllies?:string;
+    allyId?:string;
     multiSelect?:boolean;
 }

@@ -34,7 +34,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //Object that saves all data of the form
   preHeadquarters={
-    idAllies: null,
+    allyId: null,
     nameAllies: null,
     name: null,
     ubication: null,
@@ -84,8 +84,8 @@ export class CreateHeadquarterComponent implements OnInit {
   // variables of type Of plans
   ArrayTypeOfPlanChecked: any[] = [];
 
-  //variables of idAlly
-  idAlly: number;
+  //variables of allyId
+  allyId: number;
   idAllyLocalStorage: string;
   //variable for aditional services
   otherServiceSave: any;
@@ -125,7 +125,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
     //get Ally's parameter
     this._activateRoute.params.subscribe(params => {
-      this.idAlly = params['id']
+      this.allyId = params['id']
     });
 
     // get geolocation 
@@ -195,10 +195,10 @@ export class CreateHeadquarterComponent implements OnInit {
   }
 
   goBackHeadquarterOptions() {
-    if (localStorage.getItem('idHeadquarter')) {
-      localStorage.removeItem('idHeadquarter');
+    if (localStorage.getItem('headquarterId')) {
+      localStorage.removeItem('headquarterId');
     }
-    this._router.navigate(['/main', 'headquarts', this.idAlly])
+    this._router.navigate(['/main', 'headquarts', this.allyId])
   }
 
   getNameAlly() {
@@ -209,8 +209,8 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for load the headquarter id
   loadIdHeadquarter() {
-    if (localStorage.getItem('idHeadquarter')) {
-      this.headquarters.getHeadquarterById(localStorage.getItem('idHeadquarter')).subscribe(res => {
+    if (localStorage.getItem('headquarterId')) {
+      this.headquarters.getHeadquarterById(localStorage.getItem('headquarterId')).subscribe(res => {
         if (res.markerLocation[0]) {
 
           // center map
@@ -400,7 +400,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
   //method for saving the new headquarter
   saveHq() {
-    this.preHeadquarters['idAllies'] = this.idAllyLocalStorage;
+    this.preHeadquarters['allyId'] = this.idAllyLocalStorage;
     this.allyService.getAlliesById(this.idAllyLocalStorage).subscribe(allie => {
       this.preHeadquarters['nameAllies'] = allie.name
     })
@@ -463,7 +463,7 @@ export class CreateHeadquarterComponent implements OnInit {
                       confirmButtonText: 'Ok!'
                     }).then((result) => {
                       if (result.value) {
-                        this._router.navigate(['/main', 'headquarts', this.idAlly]);
+                        this._router.navigate(['/main', 'headquarts', this.allyId]);
                       }
                     })
                   })
@@ -496,7 +496,7 @@ export class CreateHeadquarterComponent implements OnInit {
                   confirmButtonText: 'Ok!'
                 }).then((result) => {
                   if (result.value) {
-                    this._router.navigate(['/main', 'headquarts', this.idAlly]);
+                    this._router.navigate(['/main', 'headquarts', this.allyId]);
                   }
                 })
               }, err => {
@@ -517,7 +517,7 @@ export class CreateHeadquarterComponent implements OnInit {
   updateNewServices() {
     this.spinner.show()
 
-    let id = localStorage.getItem('idHeadquarter')
+    let id = localStorage.getItem('headquarterId')
     this.headquarters.putHeadquarter(id, this.preHeadquarters).subscribe(message => {
       this.spinner.hide()
       Swal.fire({
@@ -528,7 +528,7 @@ export class CreateHeadquarterComponent implements OnInit {
         confirmButtonText: 'Ok!'
       }).then((result) => {
         if (result.value) {
-          this._router.navigate(['/main', 'headquarts', this.idAlly]);
+          this._router.navigate(['/main', 'headquarts', this.allyId]);
         }
       })
     }, err => {
@@ -620,7 +620,7 @@ export class CreateHeadquarterComponent implements OnInit {
       confirmButtonText: 'Si, cancelar!'
     }).then((result) => {
       if (result.value) {
-        this._router.navigate(['/main', 'headquarts', this.idAlly]);
+        this._router.navigate(['/main', 'headquarts', this.allyId]);
       }
     })
   }
