@@ -2,8 +2,9 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { map } from "rxjs/operators";
+import { map, retry } from "rxjs/operators";
 import { Profiles } from '../models/Profiles';
+import { Headquarters } from '../models/Headquarters';
 
 @Injectable({
   providedIn: "root"
@@ -12,10 +13,15 @@ export class ProfilesService {
   constructor(private httpclient: HttpClient) {}
 
   postProfile(profile): Observable<Profiles> {
-    return this.httpclient.post<Profiles>(
-      environment.UrlBase + "profiles",
+    return this.httpclient.post(
+      environment.UrlBase + "users/createUser",
       profile
     );
+  }
+
+  getUsersByHeadQuarterId(headquarterId) {
+    const url = `${environment.UrlBase}headquartersHasUsers/headquarterId/${headquarterId}`
+    return this.httpclient.get(url).pipe(retry(3))
   }
 
   putProfile(id,profile) {

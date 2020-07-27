@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  users:any = []
 
   //object that saves the values of the table
   table: FormGroup;
@@ -24,6 +25,7 @@ export class ProfileComponent implements OnInit {
   newArray = this.profilesgetting;
   newArrarSearch: Profiles[] = [];
   filteredArray: ProfileList[] = [];
+  headquarterId: string
 
   //variables of allyId
   allyId: number;
@@ -35,7 +37,10 @@ export class ProfileComponent implements OnInit {
 
   constructor(private profilesService: ProfilesService,
     private _router: Router,
-    private _activateRoute: ActivatedRoute, ) {
+    private _activateRoute: ActivatedRoute) {
+
+    this.headquarterId = localStorage.getItem('headquarterId')
+
     this.table = new FormGroup({
       "identification": new FormControl(),
       "name": new FormControl(),
@@ -55,7 +60,13 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getUsers()
+  }
 
+  async getUsers() {
+    const users = await this.profilesService.getUsersByHeadQuarterId(this.headquarterId).toPromise()
+    console.log('users', users)
+    this.users = users
   }
 
   loadProfiles() {

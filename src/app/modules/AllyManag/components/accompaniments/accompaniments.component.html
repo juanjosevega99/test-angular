@@ -27,7 +27,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="4">
-              <mat-slide-toggle [(ngModel)]="multipleOption" name="multipleOption" color="primary">Opcion multiple</mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="multiple" name="multiple" color="primary">Opcion multiple</mat-slide-toggle>
             </mat-grid-tile>
         
           </mat-grid-list>
@@ -42,11 +42,10 @@
 
   <br>
 
-  <app-accompaniment [groupName]="groupName" [multipleOption]="multipleOption" (AddAcompaniment)="updateInfo($event)"></app-accompaniment>
-
+  <ng-template appDynamicAccompaniment></ng-template>
 
   <mat-grid-list cols="12" class="btn-container">
     <hr>
-    <button mat-raised-button color="primary">Guardar Todo</button>
+    <button mat-raised-button (click)="saveAll()" [disabled]="accompanimentsGlobal.length === 0" color="primary">Guardar Todo</button>
   </mat-grid-list>
 </div>

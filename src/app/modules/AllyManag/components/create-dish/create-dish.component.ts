@@ -267,7 +267,8 @@ export class CreateDishComponent implements OnInit, OnDestroy {
   }
 
   routeAccompaniments() {
-    this.ifChanges(['/main', 'accompaniments', this.identificatorbyRoot]);
+    this._router.navigate(['/main', 'accompaniments', this.editDish.id])
+    // this.ifChanges(['/main', 'accompaniments', this.identificatorbyRoot]);
   }
 
   // if changes function verify if cahnges in dish and get question if you want to sava changes
@@ -417,6 +418,7 @@ export class CreateDishComponent implements OnInit, OnDestroy {
       dish = dishes[id]
 
       this.editDish = dish;
+      console.log('dish', dish)
       this.preDish = dish;
       this.loading = false;
       this.tickEdit();

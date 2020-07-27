@@ -80,6 +80,7 @@ import { CreateFrequentQuestionsComponent } from './modules/TycManag/frequent-qu
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AuthService } from './services/auth.service'
+import { RolesService } from './services/roles.service'
 
 import { ErrorInterceptor } from './helpers/error.interceptor'
 import { JwtInterceptor } from './helpers/jwt.interceptor'
@@ -94,6 +95,7 @@ import {MatButtonModule} from '@angular/material/button'
 import {MatInputModule} from '@angular/material/input';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTableModule} from '@angular/material/table';
+import { DynamicAccompanimentDirective } from './directives/dynamic-accompaniment.directive';
 
 @NgModule({
   declarations: [
@@ -148,7 +150,8 @@ import {MatTableModule} from '@angular/material/table';
     NotificationsPqrsComponent,
     FrequentQuestionsManagComponent,
     CreateFrequentQuestionsComponent,
-    AccompanimentComponent
+    AccompanimentComponent,
+    DynamicAccompanimentDirective
   ],
   imports: [
     HttpClientModule,
@@ -183,10 +186,14 @@ import {MatTableModule} from '@angular/material/table';
       apiKey: 'AIzaSyDj-zGjpPk4Zbic3Uv_CSemyKU3Gsoo28U'
     })    
   ],
+  entryComponents: [
+    AccompanimentComponent
+  ],
   providers: [
     UploadImagesService,
     LocationServiceService,
     AuthService,
+    RolesService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

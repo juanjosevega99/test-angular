@@ -65,46 +65,25 @@
         <table>
             <thead >
                 <tr>
-                    <th class="text-center">Perfil</th>
-                    <th class="text-center">Cédula</th>
+                    <th class="text-center">Role</th>
+                    <th class="text-center">Email</th>
                     <th class="text-center">Nombre</th>
                     <th class="text-center">Foto</th>
                     <th class="text-center">Sede</th>
-                    <th class="text-center">Fecha de ingreso</th>
-                    <th class="text-center">Fecha de modificación</th>
-                    <th class="text-center">Número de modificaciones</th>
-                    <th class="text-center" colspan="2">Estado</th>
+                    <th class="text-center">Fecha creacion</th>
+                    <th class="text-center">Estado</th>
                     <th class="text-center"> </th>
                 </tr>
             </thead>
             <tbody  class="mt-5">
-                <tr *ngFor="let prof of newArray; let i = index " class="text-center">
-                    <td>{{prof.nameCharge}}</td>
-                    <td>{{prof.identification}}</td>
-                    <td>{{prof.name}}</td>
-                    <td> <img src={{prof.photo}} alt="" class="sizeLogo mx-2"></td>
-                    <td>{{prof.nameHeadquarter}}</td>
-                    <td>{{prof.entryDate}}</td>
-                    <td>{{prof.modificationDate}}</td>
-                    <td>{{prof.numberOfModifications}}</td>
-                    <td>
-                        <div class="radio radio-success m-2 form-check-inline">
-                            <input [checked]="prof.state[0].check" value="{{prof._id}}" type="radio" name={{i}}
-                                id="state" #active (click)="changeStateA(active.value)">
-                            <label style="font-size: 15px;">
-                                Activo
-                            </label>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="radio radio-danger m-2 form-check-inline">
-                            <input [checked]="prof.state[1].check" value="{{prof._id}}" type="radio" name={{i}}
-                                id="state" #inactive (click)="changeStateI(inactive.value)">
-                            <label style="font-size: 15px;">
-                                Inactivo
-                            </label>
-                        </div>
-                    </td>
+                <tr *ngFor="let prof of users; let i = index " class="text-center">
+                    <td>{{ prof.userId.roleId.name }}</td>
+                    <td>{{ prof.userId.email }}</td>
+                    <td>{{ prof.userId.name }} {{ prof.userId.lastname }}</td>
+                    <td> <img src={{prof.userId.photo}} alt="" class="sizeLogo mx-2"></td>
+                    <td>{{prof.headquarterId.name}}</td>
+                    <td>{{ prof.userId.created_at }}</td>
+                    <td>{{ prof.userId.status }}</td>
                     <td>
                         <a [routerLink]="[ '/main/createProfile', i ]"  class="btn"> <i class="far fa-edit"></i> </a><!--(click)="seeI(prof.id)" [routerLink]="[ '/main/createProfile', prof.id ]" -->
                     </td>
@@ -116,11 +95,8 @@
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="noResults && ! newArray.length ">
+                <tr *ngIf="noResults && ! users.length ">
                     <td colspan="14"> No se encontraron resultados!</td>
-                </tr>
-                <tr *ngIf="noProfiles">
-                    <td colspan="14">No existen perfiles registrados para esta sede!!</td>
                 </tr>
             </tbody>
         </table>

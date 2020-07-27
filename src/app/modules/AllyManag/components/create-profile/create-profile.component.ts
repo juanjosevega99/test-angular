@@ -16,12 +16,16 @@ import { AlliesService } from 'src/app/services/allies.service';
 import { HeadquartersService } from 'src/app/services/headquarters.service';
 import { Location } from '@angular/common';
 
+import { RolesService } from '../../../../services/roles.service'
+
 @Component({
   selector: 'app-create-profile',
   templateUrl: './create-profile.component.html',
   styleUrls: ['./create-profile.component.scss']
 })
 export class CreateProfileComponent implements OnInit, OnDestroy {
+  roles:any= []
+
   preProfile: Object = {
     state: [],
     numberOfModifications: 0,
@@ -35,6 +39,9 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     permis: null,
     identification: null,
     name: null,
+    lastname: null,
+    password: null,
+    roleId: null,
     email: null,
     photo: null
   }
@@ -108,6 +115,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     private profileCategory: ProfilesCategoriesService,
     private allyService: AlliesService,
     private headquarterService: HeadquartersService,
+    private rolesService:RolesService,
     private _location: Location) {
     //flags
     this.loading = true;
@@ -163,6 +171,7 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getRoles()
     this.tick();
     this.timeTick = setInterval(() => this.tick(), 20000);
   }
@@ -440,7 +449,6 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
   }
 
   swallSave() {
-
     Swal.fire({
       title: '¿Estás seguro?',
       text: "de que deseas guardar los cambios!",
@@ -450,7 +458,6 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
       cancelButtonColor: '#542b81',
       confirmButtonText: 'Si, guardar!'
     }).then((result) => {
-
       if (result.value) {
         this.loading = true;
         // console.log("Array FINAL: ", this.preProfile);
@@ -459,63 +466,35 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
         const filePath = `assets/allies/profiles/${id}`;
         
         const ref = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, file);
 
-        this.firebaseservice.SignUp(this.preProfile['email'], this.preProfile['identification']).then(response => {
+        task.snapshotChanges().pipe(finalize(() => {
+            ref.getDownloadURL().subscribe(urlImage => {
 
-          const task = this.storage.upload(filePath, file);
-          // console.log(response.user.uid);
+              this.urlPorfile = urlImage;
+              this.preProfile['photo'] = this.urlPorfile;
 
-          task.snapshotChanges().pipe(
+              console.log('this.preProfile', this.preProfile)
 
-            finalize(() => {
+              this.profiles.postProfile(this.preProfile).subscribe(message => {
 
-              ref.getDownloadURL().subscribe(urlImage => {
-
-                this.urlPorfile = urlImage;
-                // console.log(this.urlPorfile);
-                this.preProfile['photo'] = this.urlPorfile;
-                this.preProfile['idFirebase'] = response.user.uid;
-                this.preProfile['_id'] = response.user.uid;
-
-                this.profiles.postProfile(this.preProfile).subscribe(message => {
-
-                  this.loading = false;
-                  Swal.fire({
-                    title: 'Guardado',
-                    text: "Tu nuevo perfil ha sido creado!",
-                    icon: 'success',
-                    confirmButtonColor: '#542b81',
-                    confirmButtonText: 'Ok!'
-                  }).then((result) => {
-                    if (result.value) {
-                      // console.log("usuario resgistrado", message);                      
-                      this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
-                    }
-                  })
-
+                this.loading = false;
+                Swal.fire({
+                  title: 'Guardado',
+                  text: "Tu nuevo perfil ha sido creado!",
+                  icon: 'success',
+                  confirmButtonColor: '#542b81',
+                  confirmButtonText: 'Ok!'
+                }).then((result) => {
+                  if (result.value) {
+                    // console.log("usuario resgistrado", message);                      
+                    this._router.navigate(['/main', 'profiles', this.identificatorbyRoot]);
+                  }
                 })
+
               })
-            }
-            )
-          ).subscribe(res => { })
-
-        }).catch(err => {
-          //console.log(err);
-          this.loading = false;
-          Swal.fire({
-            text: `TifiAdmin ${err['message']} `,
-            icon: 'error',
-            confirmButtonColor: '#542b81',
-            confirmButtonText: 'Ok!'
-          })
-          /* Swal.fire(
-          this.loading = false;
-          this.preProfile['email'] = '';
-
-          Swal.fire(
-            `TifiAdmin ${err['message']} `,
-          ) */
-        })
+            })
+          })).subscribe(res => { })
       }
     })
   }
@@ -618,5 +597,12 @@ export class CreateProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-
+  async getRoles() {
+    try {
+      this.roles = await this.rolesService.getAll().toPromise()
+    } catch (error) {
+      alert('error:' + error)
+      console.log('error', error)
+    }
+  }
 }

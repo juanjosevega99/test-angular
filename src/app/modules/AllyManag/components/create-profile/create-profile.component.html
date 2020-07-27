@@ -96,16 +96,16 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-5 col-form-label">Perfil</label>
+                <label class="col-md-5 col-form-label">Rol</label>
                 <div class="col-md-7">
                     <div class="input-group">
                         <!-- *ngIf="arrayCategorySelect" -->
-                        <select class="form-control mr-2" name="nameCharge" #nameCharge="ngModel"
+                        <select class="form-control mr-2" name="roleId" #nameCharge="ngModel"
                             required [ngClass]="{'is-invalid': (!nameCharge.valid ),'is-valid':(nameCharge.valid) }"
-                            [(ngModel)]="preProfile.nameCharge" #select (change)="seeId(select.value)" >
-                            <option selected> {{preProfile.nameCharge}}  </option>
-                            <option *ngFor="let profile of Categories">
-                                {{profile.name}}
+                            [(ngModel)]="preProfile.roleId" #select (change)="seeId(select.value)" >
+                            <option selected> ---  </option>
+                            <option *ngFor="let role of roles" value="{{ role._id }}">
+                                {{ role.name }}
                             </option>
                         </select>
 
@@ -192,6 +192,15 @@
             </div>
 
             <div class="form-group row">
+                <label class="col-md-5 col-form-label">Apellido</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="text" name="lastname" #lastname="ngModel" minlength="3"
+    
+                        [(ngModel)]="preProfile.lastname" required placeholder="Apellido">
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label class="col-md-5 col-form-label">Correo</label>
                 <div class="col-md-7">
                     <input class="form-control" type="email" placeholder="Correo" name="email"
@@ -203,6 +212,14 @@
                     <div *ngIf="email.errors?.pattern" class="invalid-feedback">*El campo no tiene formato de
                         correo</div>
                     <div class="valid-feedback">Ok!</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-5 col-form-label">Password</label>
+                <div class="col-md-7">
+                    <input class="form-control" type="password" placeholder="Password" name="password" #password="ngModel"
+                        [(ngModel)]="preProfile.password" required>
                 </div>
             </div>
 
