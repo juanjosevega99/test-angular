@@ -10,6 +10,6 @@ export const environment = {
     appId: "1:505010110029:web:6c833903b1c06d938da604",
     measurementId: "G-MHFJRC1QX5"
   },
-  UrlBase:"https://tifibackend.herokuapp.com/",
+  UrlBase:"https://tifibackendquality.herokuapp.com/",
   IVA: 0.19
 };

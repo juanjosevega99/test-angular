@@ -170,7 +170,7 @@ export class CreateHeadquarterComponent implements OnInit {
 
       })
 
-    this.services = [{ name: 'Pídelo', img: 'assets/icons/Pídelo.png', select: false }, { name: 'Resérvalo', img: 'assets/icons/Resérvalo.png', select: false }, { name: 'Llévalo', img: 'assets/icons/Llévalo.png', select: false }]
+    this.services = [{ name: 'Pídelo', img: 'assets/icons/pidelo.png', select: false }, { name: 'Resérvalo', img: 'assets/icons/reservalo.png', select: false }, { name: 'Llévalo', img: 'assets/icons/llevalo.png', select: false }]
 
     this.aditionalServices = [{ name: 'Parqueadero', img: 'assets/icons/parking.png', select: false }, { name: 'Barra de tragos', img: 'assets/icons/cocktail.png', select: false }, { name: 'Wifi', img: 'assets/icons/wi-fi-zone.png', select: false },
     { name: 'Mesa exterior', img: 'assets/icons/people-table.png', select: false }, { name: 'Acceso a discapacitados', img: 'assets/icons/discapacity.png', select: false }, { name: 'Show en vivo', img: 'assets/icons/dance.png', select: false },
@@ -179,7 +179,7 @@ export class CreateHeadquarterComponent implements OnInit {
     this.typeOfPlans = [{ name: 'Amigos', select: false }, { name: 'Empresarial', select: false },
     { name: 'Familiar', select: false }, { name: 'Pareja', select: false }]
 
-    this.cost = [{ name: 'Pídelo', img: 'assets/icons/Pídelo.png' }, { name: 'Resérvalo', img: 'assets/icons/Resérvalo.png' }, { name: 'Llévalo', img: 'assets/icons/Llévalo.png' }]
+    this.cost = [{ name: 'Pídelo', img: 'assets/icons/pidelo.png' }, { name: 'Resérvalo', img: 'assets/icons/reservalo.png' }, { name: 'Llévalo', img: 'assets/icons/llevalo.png' }]
   }
 
   ngOnInit() {
