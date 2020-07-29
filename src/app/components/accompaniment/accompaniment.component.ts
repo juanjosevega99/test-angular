@@ -8,10 +8,10 @@ import Swal from 'sweetalert2'
   styleUrls: ['./accompaniment.component.scss']
 })
 export class AccompanimentComponent implements OnInit {
-  @Input() groupName:string = ''
-  @Input() multiple:boolean = false
+  @Input() groupName:string
+  @Input() multiple:boolean
   @Input() detail:[] = []
-  @Input() indexArrayGroup:number = null
+  @Input() indexArrayGroup:number
   @Output() AddAcompanimentEmmiter = new EventEmitter<any>()
   @Output() deleteGroupEmmiter = new EventEmitter<any>()
 
@@ -23,7 +23,7 @@ export class AccompanimentComponent implements OnInit {
   displayedColumns: string[] = ['name', 'price', 'action'];
   elementsTable = []
 
-  constructor(private ref: ChangeDetectorRef) { }
+  constructor(private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
     console.log('this.detail', this.detail)

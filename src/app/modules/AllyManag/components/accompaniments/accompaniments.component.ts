@@ -75,6 +75,8 @@ export class AccompanimentsComponent implements OnInit {
   }
 
   createComponentAccompaniment(data) {
+    console.log('data', data)
+
     const component = this.componentFactoryResolver.resolveComponentFactory(AccompanimentComponent)
     const componentRef = this.dynamicAccompaniment.viewContainerRef.createComponent(component)
 
