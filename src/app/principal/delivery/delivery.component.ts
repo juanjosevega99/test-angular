@@ -27,11 +27,11 @@ import { ShowContentService } from 'src/app/services/providers/show-content.serv
 
 
 @Component({
-  selector: 'app-principal-orders',
-  templateUrl: './principal-orders.component.html',
-  styleUrls: ['./principal-orders.component.scss']
+  selector: 'app-delivery',
+  templateUrl: './delivery.component.html',
+  styleUrls: ['./delivery.component.scss']
 })
-export class PrincipalOrdersComponent implements OnInit {
+export class DeliveryComponent implements OnInit {
 
   // ========================
   // ==== full calendar =====
@@ -122,38 +122,10 @@ export class PrincipalOrdersComponent implements OnInit {
 
 
     this.wesocket.listen('newOrder').subscribe((res: any) => {
-      if (res.order.headquarterId === this.profile.headquarterId) {
-        console.log('res', res)
-        this.formatOrderUnit(res)
-        this.orderList(this.orders)
-      }
+      console.log('res', res)
+      this.formatOrderUnit(res)
+      this.orderList(this.orders)
     })
-
-    this.wesocket.listen("newReservation").subscribe((reservation: reservation) => {
-
-      const lastevent = this.calendarEvents[this.calendarEvents.length - 1];
-
-      if (this.profile.headquarterId == reservation.idHeadquart) {
-
-        if (lastevent.publicId == " ") {
-
-          this.calendarEvents.splice(this.calendarEvents.length - 1, 1);
-          this.datereservation = "";
-        }
-
-        let ordersInDay = this.calendarEvents.filter(resin => resin.date === reservation.date);
-
-        if (!ordersInDay.length) {
-          this.calendarEvents.push({ publicId: reservation._id, title: "reservas", date: reservation.date, target: reservation.date });
-        }
-        this.Reservations.push(reservation);
-
-        this.idEvent = "";
-        this.resetIds();
-
-      }
-    })
-
   }
 
   loadDishes() {
@@ -865,32 +837,36 @@ export class PrincipalOrdersComponent implements OnInit {
     this.serviceOrders.getOrdersByAllyHead(this.profile.headquarterId).subscribe((orders: Orders[]) => {
 
       orders.forEach(order => {
-        this.formatOrderUnit(order);
+        this.formatOrderUnit(order)
       })
-      this.spinner.hide();
-      this.orders2 = this.orders;
+
+      this.spinner.hide()
+      this.orders2 = this.orders
 
     })
 
   }
 
   formatOrderUnit(order) {
+    console.log('order', order)
 
-    let ordertosave: OrderByUser = {};
+    let ordertosave: any = {};
 
-    this.userservice.getUserById(order.order.userId).subscribe((user: Users) => {
-      ordertosave.headquarterId = order.order.headquarterId;
-      ordertosave.code = order.order.code;
-      ordertosave.id = order.order._id;
-      ordertosave.name = user.name + " " + user.lastname;
-      ordertosave.typeOfServiceobj = order.typeOfServiceobj; //new change is nesscesary to order :)
-      ordertosave.typeOfService = 'Pidelo';
-      ordertosave.purchaseAmount = order.orderValue;
-      ordertosave.registerDate = this.convertDate(order.dateAndHourReservation) || '';
-      ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey) || '';
-      ordertosave.DateDelivery = order.dateAndHourDelivey;
-      ordertosave.orderStatus = order.orderStatus;
-    })
+    ordertosave.headquarterId = order.order.headquarterId;
+    ordertosave.code = order.order.code;
+    ordertosave.id = order.order._id;
+    ordertosave.name = order.order.userId.name + " " + order.order.userId.lastname;
+    ordertosave.phone = order.order.userId.phone;
+    ordertosave.allyName = order.order.headquarterId.allyId.name
+    ordertosave.allyAddress = order.order.headquarterId.address
+    ordertosave.address = order.order.address
+    ordertosave.typeOfServiceobj = order.typeOfServiceobj; //new change is nesscesary to order :)
+    ordertosave.typeOfService = 'Pidelo';
+    ordertosave.purchaseAmount = order.orderValue;
+    ordertosave.registerDate = this.convertDate(order.dateAndHourReservation) || '';
+    ordertosave.dateAndHourDelivery = this.convertDate(order.dateAndHourDelivey) || '';
+    ordertosave.DateDelivery = order.dateAndHourDelivey;
+    ordertosave.orderStatus = this.getStatus(order.order.status);
 
     let objdishes = [];
     let timeTotal = 0;
@@ -931,4 +907,25 @@ export class PrincipalOrdersComponent implements OnInit {
     this.orders.push(ordertosave)
   }
 
+  getStatus (status) {
+    let statusReturn
+    switch (status) {
+      case 'IN PREPARATION':
+        statusReturn = 'EN PREPARACION'
+        break;
+
+      case 'ON ROAD':
+        statusReturn = 'EN CAMINO'
+        break;
+
+      case 'DELIVERED':
+        statusReturn = 'ENTREGADO'
+        break;
+    
+      default:
+        break;
+    }
+
+    return statusReturn
+  }
 }

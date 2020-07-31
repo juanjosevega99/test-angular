@@ -52,6 +52,8 @@ export class AccompanimentsComponent implements OnInit {
       detail: []
     }
 
+    console.log('dataToGroupAccompaniment', dataToGroupAccompaniment)
+
     this.accompanimentsGlobal.push(dataToGroupAccompaniment)
 
     dataToGroupAccompaniment.indexArrayGroup = this.accompanimentsGlobal.length - 1

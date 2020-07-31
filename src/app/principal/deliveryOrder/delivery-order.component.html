@@ -6,32 +6,23 @@
 
         <ul (click)="showDetail()" style="cursor: pointer">
             <li>
-                <a>{{order.code}}</a>
+                <a> L - {{order.code}}</a>
             </li>
             <li>
                 <a>{{order.name}}</a>
             </li>
             <li>
-                <img [appTypeServiceImg]="order.typeOfService" class="tifi-icon-order">
-                <a>{{order.typeOfService}} </a>
+                <a>{{order.phone}}</a>
             </li>
             <li>
-                <a>$ {{order.purchaseAmount}}</a>
-            </li>
-            <!--
-            <li>
-                <a>{{order.registerDate}}</a>
+                <a>{{order.allyName}}</a>
             </li>
             <li>
-                <a>{{order.dateAndHourDelivery}}</a>
+                <a>{{order.allyAddress}}</a>
             </li>
-            
-            <li [ngStyle]="{'background-color': expresionColor.backgroundTimer}">
-                <img src="assets/icons/cronometro.png" class="tifi-icon-order">
-                <a>{{order.timeTotalCronometer}}</a>
+            <li>
+                <a>{{order.address}}</a>
             </li>
-            -->
-            
             <li>
                 <a>{{order.orderStatus}}</a>
             </li>

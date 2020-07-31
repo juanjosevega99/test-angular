@@ -61,6 +61,7 @@ import { TooltipModule } from 'ng2-tooltip-directive';
 import { PrincipalOrdersComponent } from './principal/principal-orders/principal-orders.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { OrderComponent } from './principal/order/order.component';
+import { DeliveryOrderComponent } from './principal/deliveryOrder/delivery-order.component';
 import { TypeServiceImgDirective } from './directives/type-service-img.directive';
 import { CronometerStateDirective } from './directives/cronometer-state.directive';
 import { CreateCouponComponent } from './modules/CupManag/create-coupon/create-coupon.component';
@@ -86,6 +87,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor'
 import { JwtInterceptor } from './helpers/jwt.interceptor'
 
 import { AccompanimentComponent } from './components/accompaniment/accompaniment.component'
+import { DeliveryComponent } from './principal/delivery/delivery.component'
 
 
 // material angular
@@ -141,6 +143,7 @@ import { DynamicAccompanimentDirective } from './directives/dynamic-accompanimen
     PrincipalOrdersComponent,
     LoadingComponent,
     OrderComponent,
+    DeliveryOrderComponent,
     TypeServiceImgDirective,
     CronometerStateDirective,
     CreateCouponComponent,
@@ -151,7 +154,8 @@ import { DynamicAccompanimentDirective } from './directives/dynamic-accompanimen
     FrequentQuestionsManagComponent,
     CreateFrequentQuestionsComponent,
     AccompanimentComponent,
-    DynamicAccompanimentDirective
+    DynamicAccompanimentDirective,
+    DeliveryComponent
   ],
   imports: [
     HttpClientModule,

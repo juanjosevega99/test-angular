@@ -48,6 +48,8 @@ import { GuardPqrService } from './services/guards/guard-pqr.service';
 import { GuardContadorService } from './services/guards/guard-contador.service';
 import { CreateBannerComponent } from './modules/BannerManag/components/create-banner/create-banner.component';
 
+import { DeliveryComponent } from './principal/delivery/delivery.component'
+
 const routes: Routes = [
   {
     path: "log",
@@ -70,6 +72,7 @@ const routes: Routes = [
     children: [
 
       { path: "principal", component: PrincipalPageComponent, canActivate: [ GuardAdminTifiService ] },
+      { path: "delivery", component: DeliveryComponent, canActivate: [ GuardAdminTifiService ] },
       { path: "principal-orders", component: PrincipalOrdersComponent, canActivate: [ GuardCAGService ] },
       { path: "options", component: OptionsComponent },
       { path: "userManager/:id", component: UserManagerComponent, canActivate: [ GuardAdminTifiService ] },

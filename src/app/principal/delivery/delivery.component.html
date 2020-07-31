@@ -1,0 +1,43 @@
+<div class="PqrGeneral">
+
+  <div class="compenetsstyle order-list ">
+
+    <div class="filerControl d-flex justify-content-center">
+      <nav class="menu mt-md-2">
+        <ul>
+          <li>
+            <a>Código Pedido</a>
+          </li>
+          <li>
+            <a>Cliente</a>
+          </li>
+          <li>
+            <a>Telefono cliente</a>
+          </li>
+          <li>
+            <a>Aliado</a>
+          </li>
+
+          <li>
+            <a>Recoger</a>
+          </li>
+          
+          <li>
+            <a>Llevar</a>
+          </li>
+          <li>
+            <a>Estado</a>
+          </li>
+          <li style="border: none;">
+            <a>Acciones</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+  
+    <div class="chat" style="margin-top: 1.1rem; flex-flow: column;">
+      <app-delivery-order (indexOrder)="tolast( $event )" [order]="order" [index]="i"
+      *ngFor="let order of orders2; let i = index" style="width: 100%;"></app-delivery-order>
+    </div>
+</div>

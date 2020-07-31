@@ -1,0 +1,250 @@
+@import '../../modules/PqrManag/components/pqr-manager/pqr-manager.component.scss';
+
+.menu{
+    border: 1px solid #9f9f9f36;
+    width: 100%;
+}
+
+.menu li {
+    font-size: .9rem;
+    padding: .1rem;
+    align-items: center;
+    width: 12.5%;
+    border-right: 1px solid #d2d2d2;
+}
+
+.menu li a {
+    margin: 0;
+    text-align: center;
+}
+
+.menu ul {
+    flex-wrap: nowrap;
+}
+
+.compenetsstyle{
+    padding: 1rem;
+    margin: 0;
+}
+
+.headerTables{
+    padding-top: 4.7rem !important;
+}
+.PqrGeneral{
+background-color: #e9e7e7;
+}
+
+.PqrGeneral div {
+    margin: 0;
+    flex-grow: initial;
+    flex-wrap: wrap;
+}
+.filerControl{
+    padding-top: 5rem;
+    border: 1px solid #9f9f9f36;
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+.calendarTables{
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // flex-wrap: wrap;
+    // width: 90%;
+    height: 20rem;
+    background-color:#fff;
+    border-radius: .5rem;
+    color: #9f9f9f;
+    // padding-top: 1rem;
+    // padding-bottom: 1rem;
+    // padding: 5rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    padding-top: 1rem,;
+    overflow: auto;
+}
+
+// .calendarTables div{
+//     flex-grow: 1;
+// }
+
+.sectionTable{
+    height: 33%;
+}
+
+.HoursTable{
+    // width: 90%;
+    overflow: auto;
+    margin-top: .5rem;
+
+}
+
+.HoursTable div{
+    width: 97%;
+    height: 8rem; 
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: .5rem;
+    overflow: auto;
+    // margin-bottom: 1rem;
+    // border: 1px solid #9f9f9f;
+    border-radius: .3rem;
+}
+
+.HoursTable p {
+    margin: 0;
+}
+
+.tablePerson{
+    flex-direction: row;
+    height: 11rem;
+}
+
+.tablePerson div div {
+
+    height: 7rem;
+}
+
+
+.chat{
+    flex-flow: column;
+    height: 31rem;
+    background-color: #fff;
+    padding: .8rem !important;
+}
+
+.btn-outline-success{
+    width: 3rem;
+    height: 3rem;
+    border-radius: .6rem;
+    font-size: .8rem;
+    padding: .1rem;
+    margin: .3rem;
+    font-style: unset;
+    border: 2px solid #9f9f9f;
+    color: #ac0f17;
+}
+.order-list {
+    background-color: #e9e7e7; 
+    width: 65% !important;
+}
+
+.order-table{
+    background-color: #e9e7e7; 
+    width: 35% !important; 
+    padding-left: 0;
+}
+
+
+.button-order{
+    width: 40%;
+    background-color: #001f7f;
+    border-radius: .5rem;
+    color: #fff;
+    padding: 0.3rem;
+    font-weight: bold;
+    margin-top: .4rem;
+}
+
+::ng-deep .fc-content{
+    background-color: #ffb6b9;
+}
+
+::ng-deep .fc-event{
+    background-color: #ffb6b9;
+    border: none;
+}
+
+::ng-deep .fc table {
+    cursor: pointer;
+}
+
+// ::ng-deep .fc-widget-content div {
+//     overflow: hidden !important;
+// }
+// ================================
+// =========medias querys =========
+
+@media ( min-width: 1520px ){
+    .menu li {
+        font-size: 1.1rem;
+        padding: .3rem;
+    }
+    .btn-outline-success{
+        width: 4rem;
+        height: 4rem;
+        border-radius: .6rem;
+        font-size: 1rem;
+    }
+
+    // .headerTables{
+    //     padding-top: 4.7rem !important;
+    // }
+
+    .filerControl{
+        padding-top: 4rem;
+
+    }
+
+}
+
+@media ( max-width: 1040px ){
+    .menu li {
+        font-size: .8rem !important;
+    }
+
+    .calendarTables{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+}
+
+@media ( max-width: 1600px ){
+
+    .calendarTables{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+}
+
+@media ( max-width: 414px ){
+    .filerControl{
+        padding-top: 6rem !important;
+    }
+
+}
+
+@media ( max-width: 760px ){
+    .menu ul {
+        flex-wrap: wrap;
+    }
+
+    .order-list {
+        width: 100% !important;
+    }
+    
+    .order-table{
+        width: 100% !important;
+    }
+
+    .compenetsstyle{
+        padding: 0rem;    
+    }
+
+    .chat{
+        padding: .1rem;
+    }
+    .calendarTables p{
+        font-size: .7rem;
+    }
+
+    .filerControl{
+        padding-top: 4rem;
+
+    }
+}
+
