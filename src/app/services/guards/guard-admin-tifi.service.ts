@@ -7,15 +7,14 @@ import { CanActivate } from '@angular/router';
 export class GuardAdminTifiService implements CanActivate {
 
 
-  constructor() {
-  }
+  constructor() {}
 
   canActivate() {
     
     let profilest = localStorage.getItem('tifi_user') ? JSON.parse(localStorage.getItem('tifi_user')) : {nameCharge:''};
 
 
-    if (profilest.role.name === "Administrator") {
+    if (profilest.role.name === "Administrator" || profilest.role.name === "Domiciliario") {
 
       return true;
 

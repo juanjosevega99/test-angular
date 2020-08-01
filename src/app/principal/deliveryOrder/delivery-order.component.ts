@@ -224,6 +224,7 @@ export class DeliveryOrderComponent implements OnInit, OnDestroy {
   }
   */
 
+  /*
   changeStatusProgressBar() {
 
     let delivery = new Date(this.order.DateDelivery);
@@ -274,6 +275,7 @@ export class DeliveryOrderComponent implements OnInit, OnDestroy {
     }
 
   }
+  */
 
   // ================================
 

@@ -71,6 +71,10 @@ export class LoginFormComponent implements OnInit {
         this.route.navigate(['/main', 'reportGenerator']);
         break;
 
+      case 'Domiciliario':
+        this.route.navigate(['/main', 'delivery']);
+        break;
+
       default:
         console.log('entro correctamente')
         this.route.navigate(['main/options']);
