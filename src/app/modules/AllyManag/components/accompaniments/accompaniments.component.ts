@@ -22,6 +22,7 @@ export class AccompanimentsComponent implements OnInit {
   groupNameTosend:string = ''
   indexArrayGroup:number = null
   multiple:boolean = false
+  limit:number = 0
 
   @ViewChild(DynamicAccompanimentDirective, { static: false }) public dynamicAccompaniment:DynamicAccompanimentDirective
 
@@ -47,9 +48,10 @@ export class AccompanimentsComponent implements OnInit {
     const dataToGroupAccompaniment = {
       groupName: this.groupName,
       multiple:  this.multiple,
+      limit: this.limit,
       indexArrayGroup: 0,
       status: 'ACTIVE',
-      detail: []
+      detail: [],
     }
 
     console.log('dataToGroupAccompaniment', dataToGroupAccompaniment)
@@ -62,6 +64,7 @@ export class AccompanimentsComponent implements OnInit {
 
     this.groupName = ''
     this.multiple = false
+    this.limit = 0
   }
 
   updateInfo(data) {
@@ -84,6 +87,7 @@ export class AccompanimentsComponent implements OnInit {
 
     componentRef.instance.groupName = data.groupName
     componentRef.instance.multiple = data.multiple
+    componentRef.instance.limit = data.limit
     componentRef.instance.indexArrayGroup = data.indexArrayGroup
     componentRef.instance.detail = data.detail
 
@@ -111,7 +115,7 @@ export class AccompanimentsComponent implements OnInit {
       if (res.value) {
         console.log('toSave', this.accompanimentsGlobal)
         try {
-          const response = await this.accompanimentsService.createAccompaniments(this.dishId, this.accompanimentsGlobal).toPromise()
+          await this.accompanimentsService.createAccompaniments(this.dishId, this.accompanimentsGlobal).toPromise()
 
           Swal.fire({
             position: 'center',
@@ -143,6 +147,7 @@ export class AccompanimentsComponent implements OnInit {
         const dataToGroupAccompaniment = {
           groupName: accompaniment.groupName,
           multiple:  accompaniment.multiple,
+          limit:  accompaniment.limit,
           indexArrayGroup: 0,
           status: 'ACTIVE',
           detail: accompaniment.detail
