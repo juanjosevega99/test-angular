@@ -10,6 +10,7 @@ import Swal from 'sweetalert2'
 export class AccompanimentComponent implements OnInit {
   @Input() groupName:string
   @Input() multiple:boolean
+  @Input() limit:number
   @Input() detail:[] = []
   @Input() indexArrayGroup:number
   @Output() AddAcompanimentEmmiter = new EventEmitter<any>()
@@ -26,7 +27,8 @@ export class AccompanimentComponent implements OnInit {
   constructor(private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
-    console.log('this.detail', this.detail)
+    // console.log('this.detail', this.detail)
+    // console.log('this.limit', this.limit)
     this.dataSource.data = this.detail
   }
 
