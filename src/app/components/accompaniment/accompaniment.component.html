@@ -4,6 +4,8 @@
       <mat-card-title>Crear acompañamientos para <b>{{ groupName }}</b>  </mat-card-title>
       <mat-card-subtitle *ngIf="multiple">Opcion multiple</mat-card-subtitle>
       <mat-card-subtitle *ngIf="!multiple">Sola una Opcion</mat-card-subtitle>
+      
+      <mat-card-subtitle *ngIf="limit > 0">Limite: {{ limit }}</mat-card-subtitle>
     </mat-card-header>
     <hr>
     <mat-card-content class="content-model">
