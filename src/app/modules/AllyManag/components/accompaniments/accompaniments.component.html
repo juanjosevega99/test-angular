@@ -19,7 +19,7 @@
       <mat-card-content class="content-model">
         <form class="example-form">
           <mat-grid-list cols="12">
-            <mat-grid-tile colspan="8">
+            <mat-grid-tile colspan="6">
               <mat-form-field class="example-full-width">
                 <mat-label>Nombre grupo:</mat-label>
                 <input matInput [(ngModel)]="groupName" name="groupName" placeholder="Ej. Bebidas">
@@ -29,7 +29,14 @@
             <mat-grid-tile colspan="4">
               <mat-slide-toggle [(ngModel)]="multiple" name="multiple" color="primary">Opcion multiple</mat-slide-toggle>
             </mat-grid-tile>
-        
+
+            <mat-grid-tile colspan="2" *ngIf="multiple">
+              <mat-form-field class="example-full-width">
+                <mat-label>Limite:</mat-label>
+                <input matInput [(ngModel)]="limit" type="number" name="limit" placeholder="Ej. 4">
+              </mat-form-field>
+            </mat-grid-tile>
+
           </mat-grid-list>
         </form>
       </mat-card-content>
